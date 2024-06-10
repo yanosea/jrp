@@ -1,0 +1,5 @@
+# IGNORE FOLDER
+# IGNORE FILE
+jrp
+.DS_Store
+*.log
