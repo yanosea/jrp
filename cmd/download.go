@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"runtime"
 
 	"github.com/spf13/cobra"
 
@@ -20,13 +19,13 @@ You have to download Japanese Wordnet and English WordNet in an sqlite3 database
 jrp will download archive file from the official site and decompress it to the database file.
 
 You can set the directory of the database file to the environment variable "JRP_WORDNETJP_DIR".
-The default directory is "$XDG_DATA_HOME/jrp".
+The default directory is "~/.local/share/jrp" ("$XDG_DATA_HOME/jrp").
 
 Usage:
   jrp download [flags]
 
 Flags:
-  -h, --help   help for download
+  -h, --help   🤝 help for download
 `
 	download_use   = "download"
 	download_short = "📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site."
@@ -73,25 +72,14 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 
 func (o *downloadOption) download() error {
 	// get the directory of wnjpn.db from environment
-	var dbFileDir = os.Getenv(util.JRP_ENV)
-	if dbFileDir == "" {
-		// get home directory
-		var homeDir string
-		if runtime.GOOS == "windows" {
-			homeDir = os.Getenv("USERPROFILE")
-		} else {
-			homeDir = os.Getenv("HOME")
-		}
-		// default path ($XDG_DATA_HOME/jrp)
-		dbFileDir = filepath.Join(homeDir, ".local", "share", "jrp")
-	}
+	var dbFileDirPath = util.GetDBFileDirPath()
 
-	if _, err := os.Stat(dbFileDir); os.IsNotExist(err) {
+	if _, err := os.Stat(dbFileDirPath); os.IsNotExist(err) {
 		// create the directory if it doesn't exist
-		os.MkdirAll(dbFileDir, 0755)
+		os.MkdirAll(dbFileDirPath, 0755)
 	}
 
-	var dbFilePath = filepath.Join(dbFileDir, util.WNJPN_DB_FILE_NAME)
+	var dbFilePath = filepath.Join(dbFileDirPath, util.WNJPN_DB_FILE_NAME)
 	if _, err := os.Stat(dbFilePath); os.IsNotExist(err) {
 		// download the database file if it doesn't exist
 		resp, err := http.Get(util.WNJPN_DB_ARCHIVE_FILE_URL)
