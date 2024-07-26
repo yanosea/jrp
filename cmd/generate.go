@@ -1,15 +1,14 @@
 package cmd
 
 import (
+	"database/sql"
 	"fmt"
 	"io"
 	"math/rand"
 	"time"
 
 	"github.com/spf13/cobra"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
-	"gorm.io/gorm/logger"
+	_ "modernc.org/sqlite"
 
 	"github.com/yanosea/jrp/util"
 )
@@ -42,15 +41,10 @@ You can specify the number of phrases to generate by the flag "-n" or "--number"
 // WordNet Japanese word table structure
 type Word struct {
 	WordID int
-	Lang   string
-	Lemma  string
-	Pron   string
-	Pos    string
-}
-
-// TableName returns the true table name
-func (w *Word) TableName() string {
-	return "word"
+	Lang   sql.NullString
+	Lemma  sql.NullString
+	Pron   sql.NullString
+	Pos    sql.NullString
 }
 
 type generateOption struct {
@@ -89,33 +83,44 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 
 func (o *generateOption) generate() error {
 	// get the directory of wnjpn.db from environment
-	var dbFileDirPath = util.GetDBFileDirPath()
+	dbFileDirPath, err := util.GetDBFileDirPath()
+	if err != nil {
+		return err
+	}
 
 	// connect to the database
-	db, err := gorm.Open(sqlite.Open(dbFileDirPath), &gorm.Config{
-		Logger: logger.Default.LogMode(logger.Error),
-	})
+	db, err := sql.Open("sqlite", "file:"+dbFileDirPath)
 	if err != nil {
-		panic(err)
+		return err
 	}
-	err = db.AutoMigrate(&Word{})
+	defer db.Close()
+
+	// get all rows from the word table where the lang is Japanese and the pos is adjective, verb, or noun
+	rows, err := db.Query("SELECT * FROM word WHERE word.Lang = 'jpn' AND word.Pos in ('a', 'v', 'n')")
 	if err != nil {
-		panic(err)
+		return err
 	}
+	defer rows.Close()
 
-	// get all Japanese words
-	var jpns []Word
-	db.Where(&Word{Lang: "jpn"}).Find(&jpns)
-
-	// filter the words by part of speech
-	var wordsA []Word
-	var wordsB []Word
-	for _, jpn := range jpns {
-		if jpn.Pos == "a" || jpn.Pos == "v" {
-			wordsA = append(wordsA, jpn)
+	allAVNWords := make([]Word, 0)
+	for rows.Next() {
+		var word Word
+		err = rows.Scan(&word.WordID, &word.Lang, &word.Lemma, &word.Pron, &word.Pos)
+		if err != nil {
+			return err
 		}
-		if jpn.Pos == "n" {
-			wordsB = append(wordsB, jpn)
+		allAVNWords = append(allAVNWords, word)
+	}
+
+	// separate the words into adjectives and verbs, and nouns
+	var allAVWords []Word
+	var allNWords []Word
+
+	for _, word := range allAVNWords {
+		if word.Pos.Valid && word.Pos.String == "n" {
+			allNWords = append(allNWords, word)
+		} else {
+			allAVWords = append(allAVWords, word)
 		}
 	}
 
@@ -124,11 +129,11 @@ func (o *generateOption) generate() error {
 
 	// generate the words
 	for i := 0; i < o.Number; i++ {
-		randomIndexA := rand.Intn(len(wordsA))
-		randomIndexB := rand.Intn(len(wordsB))
-		randomWord := wordsA[randomIndexA].Lemma
-		randomWord2 := wordsB[randomIndexB].Lemma
-		fmt.Println(randomWord + randomWord2)
+		randomIndexA := rand.Intn(len(allAVWords))
+		randomIndexB := rand.Intn(len(allNWords))
+		randomWord := allAVWords[randomIndexA]
+		randomWord2 := allNWords[randomIndexB]
+		fmt.Println(randomWord.Lemma.String + randomWord2.Lemma.String)
 	}
 
 	return nil

@@ -37,7 +37,7 @@ jrp will download archive file from the official site and decompress it to the d
 You can set the directory of the database file to the environment variable "JRP_WORDNETJP_DIR".
 The default directory is "$XDG_DATA_HOME/jrp".
 `
-	download_message_already_downloaded = "✅ You are to use jrp!"
+	download_message_already_downloaded = "✅ You are ready to use jrp!"
 )
 
 type downloadOption struct {
@@ -72,16 +72,19 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 
 func (o *downloadOption) download() error {
 	// get the directory of wnjpn.db from environment
-	var dbFileDirPath = util.GetDBFileDirPath()
+	dbFileDirPath, err := util.GetDBFileDirPath()
+	if err != nil {
+		return err
+	}
 
+	// create the directory if it doesn't exist
 	if _, err := os.Stat(dbFileDirPath); os.IsNotExist(err) {
-		// create the directory if it doesn't exist
 		os.MkdirAll(dbFileDirPath, 0755)
 	}
 
+	// download the database file if it doesn't exist
 	var dbFilePath = filepath.Join(dbFileDirPath, util.WNJPN_DB_FILE_NAME)
 	if _, err := os.Stat(dbFilePath); os.IsNotExist(err) {
-		// download the database file if it doesn't exist
 		resp, err := http.Get(util.WNJPN_DB_ARCHIVE_FILE_URL)
 		if err != nil {
 			return err

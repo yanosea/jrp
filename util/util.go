@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"os/user"
 	"path/filepath"
-	"runtime"
 )
 
 func FormatIndent(m string) string {
@@ -28,19 +28,18 @@ func PrintWithWriterBetweenBlankLine(w io.Writer, a ...any) {
 	fmt.Fprintln(w, fmt.Sprintf("\n%s\n", a[0]))
 }
 
-func GetDBFileDirPath() string {
+func GetDBFileDirPath() (string, error) {
+	// check if JRP_ENV is set
 	var dbFileDir = os.Getenv(JRP_ENV)
 	if dbFileDir == "" {
-		// get home directory
-		var homeDir string
-		if runtime.GOOS == "windows" {
-			homeDir = os.Getenv("USERPROFILE")
-		} else {
-			homeDir = os.Getenv("HOME")
+		// get current user
+		user, err := user.Current()
+		if err != nil {
+			return "", err
 		}
 		// default path ($XDG_DATA_HOME/jrp)
-		dbFileDir = filepath.Join(homeDir, ".local", "share", "jrp")
+		dbFileDir = filepath.Join(user.HomeDir, ".local", "share", "jrp")
 	}
 
-	return dbFileDir
+	return filepath.Join(dbFileDir, WNJPN_DB_FILE_NAME), nil
 }

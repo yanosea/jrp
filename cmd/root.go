@@ -106,9 +106,5 @@ func NewRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) {
 		newVersionCommand(glbo),
 	)
 
-	if ro.Number == 0 {
-
-	}
-
 	return cmd, nil
 }
