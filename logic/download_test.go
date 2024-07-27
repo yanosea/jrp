@@ -65,7 +65,7 @@ func TestDownload(t *testing.T) {
 	const testTempFilePath = "/mock/temp/dir/mockedfile.gz"
 	const testDBFilePath = "/mock/path/to/dbfile"
 
-	testCases := []struct {
+	tests := []struct {
 		name         string
 		userProvider UserProvider
 		httpClient   HTTPClient
@@ -156,7 +156,7 @@ func TestDownload(t *testing.T) {
 		},
 	}
 
-	for _, tc := range testCases {
+	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
 			err := Download(tc.userProvider, tc.httpClient, tc.fs)
 			if (err != nil) != tc.wantError {
