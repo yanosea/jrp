@@ -1,0 +1,839 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>cmd: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">github.com/yanosea/jrp/cmd/completion.go (0.0%)</option>
+				
+				<option value="file1">github.com/yanosea/jrp/cmd/completion_bash.go (0.0%)</option>
+				
+				<option value="file2">github.com/yanosea/jrp/cmd/completion_fish.go (0.0%)</option>
+				
+				<option value="file3">github.com/yanosea/jrp/cmd/completion_powershell.go (0.0%)</option>
+				
+				<option value="file4">github.com/yanosea/jrp/cmd/completion_zsh.go (0.0%)</option>
+				
+				<option value="file5">github.com/yanosea/jrp/cmd/download.go (0.0%)</option>
+				
+				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (0.0%)</option>
+				
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (0.0%)</option>
+				
+				<option value="file8">github.com/yanosea/jrp/cmd/version.go (0.0%)</option>
+				
+				<option value="file9">github.com/yanosea/jrp/constant/download.go (0.0%)</option>
+				
+				<option value="file10">github.com/yanosea/jrp/constant/generate.go (0.0%)</option>
+				
+				<option value="file11">github.com/yanosea/jrp/logic/download.go (0.0%)</option>
+				
+				<option value="file12">github.com/yanosea/jrp/logic/generate.go (0.0%)</option>
+				
+				<option value="file13">github.com/yanosea/jrp/main.go (0.0%)</option>
+				
+				<option value="file14">github.com/yanosea/jrp/util/util.go (41.7%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package cmd
+
+import (
+        "github.com/spf13/cobra"
+
+        "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/util"
+)
+
+func newCompletionCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+        cmd := &amp;cobra.Command{
+                Use:   constant.COMPLETION_USE,
+                Short: constant.COMPLETION_SHORT,
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        // if no sub command is specified, print the message and return nil.
+                        util.PrintlnWithWriter(globalOption.Out, constant.COMPLETION_MESSAGE_NO_SUB_COMMAND)
+
+                        return nil
+                }</span>,
+        }
+
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        cmd.SetErr(globalOption.ErrOut)
+        cmd.SetHelpTemplate(constant.COMPLETION_HELP_TEMPLATE)
+
+        cmd.AddCommand(
+                newCompletionBashCommand(globalOption),
+                newCompletionFishCommand(globalOption),
+                newCompletionPowerShellCommand(globalOption),
+                newCompletionZshCommand(globalOption),
+        )
+
+        return cmd</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package cmd
+
+import (
+        "github.com/spf13/cobra"
+
+        "github.com/yanosea/jrp/constant"
+)
+
+func newCompletionBashCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+        cmd := &amp;cobra.Command{
+                Use:   constant.COMPLETION_BASH_USE,
+                Short: constant.COMPLETION_BASH_SHORT,
+                Long:  constant.COMPLETION_BASH_LONG,
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        return cmd.GenBashCompletion(globalOption.Out)
+                }</span>,
+        }
+
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        cmd.SetErr(globalOption.ErrOut)
+        cmd.SetHelpTemplate(constant.COMPLETION_BASH_HELP_TEMPLATE)
+
+        return cmd</span>
+}
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package cmd
+
+import (
+        "github.com/spf13/cobra"
+
+        "github.com/yanosea/jrp/constant"
+)
+
+func newCompletionFishCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+        cmd := &amp;cobra.Command{
+                Use:   constant.COMPLETION_FISH_USE,
+                Short: constant.COMPLETION_FISH_SHORT,
+                Long:  constant.COMPLETION_FISH_LONG,
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        return cmd.GenFishCompletion(globalOption.Out, false)
+                }</span>,
+        }
+
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        cmd.SetErr(globalOption.ErrOut)
+        cmd.SetHelpTemplate(constant.COMPLETION_FISH_HELP_TEMPLATE)
+
+        return cmd</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package cmd
+
+import (
+        "github.com/spf13/cobra"
+
+        "github.com/yanosea/jrp/constant"
+)
+
+func newCompletionPowerShellCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+        cmd := &amp;cobra.Command{
+                Use:   constant.COMPLETION_POWERSHELL_USE,
+                Short: constant.COMPLETION_POWERSHELL_SHORT,
+                Long:  constant.COMPLETION_POWERSHELL_LONG,
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        return cmd.GenPowerShellCompletion(globalOption.Out)
+                }</span>,
+        }
+
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        cmd.SetErr(globalOption.ErrOut)
+        cmd.SetHelpTemplate(constant.COMPLETION_POWERSHELL_HELP_TEMPLATE)
+
+        return cmd</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package cmd
+
+import (
+        "github.com/spf13/cobra"
+
+        "github.com/yanosea/jrp/constant"
+)
+
+func newCompletionZshCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+        cmd := &amp;cobra.Command{
+                Use:   constant.COMPLETION_ZSH_USE,
+                Short: constant.COMPLETION_ZSH_SHORT,
+                Long:  constant.COMPLETION_ZSH_LONG,
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        return cmd.GenZshCompletion(globalOption.Out)
+                }</span>,
+        }
+
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        cmd.SetErr(globalOption.ErrOut)
+        cmd.SetHelpTemplate(constant.COMPLETION_ZSH_HELP_TEMPLATE)
+
+        return cmd</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package cmd
+
+import (
+        "io"
+
+        "github.com/spf13/cobra"
+
+        "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/logic"
+)
+
+type downloadOption struct {
+        Out    io.Writer
+        ErrOut io.Writer
+}
+
+func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+        o := &amp;downloadOption{}
+        cmd := &amp;cobra.Command{
+                Use:     constant.DOWNLOAD_USE,
+                Aliases: constant.GetDownloadAliases(),
+                Short:   constant.DOWNLOAD_SHORT,
+                Long:    constant.DOWNLOAD_LONG,
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        o.Out = globalOption.Out
+                        o.ErrOut = globalOption.ErrOut
+
+                        return o.download()
+                }</span>,
+        }
+
+        <span class="cov0" title="0">cmd.SetOut(o.Out)
+        cmd.SetErr(o.ErrOut)
+        cmd.SetHelpTemplate(constant.DOWNLOAD_HELP_TEMPLATE)
+
+        return cmd</span>
+}
+
+func (o *downloadOption) download() error <span class="cov0" title="0">{
+        if err := logic.Download(); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package cmd
+
+import (
+        "database/sql"
+        "io"
+
+        "github.com/spf13/cobra"
+        _ "modernc.org/sqlite"
+
+        "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/logic"
+)
+
+// WordNet Japanese word table structure
+type Word struct {
+        WordID int
+        Lang   sql.NullString
+        Lemma  sql.NullString
+        Pron   sql.NullString
+        Pos    sql.NullString
+}
+
+type generateOption struct {
+        Args   []string
+        Number int
+
+        Out    io.Writer
+        ErrOut io.Writer
+}
+
+func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+        o := &amp;generateOption{}
+        cmd := &amp;cobra.Command{
+                Use:     constant.GENERATE_USE,
+                Aliases: constant.GetGenerateAliases(),
+                Short:   constant.GENERATE_SHORT,
+                Long:    constant.GENERATE_LONG,
+                Args:    cobra.MaximumNArgs(1),
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        o.Out = globalOption.Out
+                        o.ErrOut = globalOption.ErrOut
+                        o.Args = args
+
+                        return o.generate()
+                }</span>,
+        }
+
+        <span class="cov0" title="0">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
+
+        cmd.SetOut(o.Out)
+        cmd.SetErr(o.ErrOut)
+        cmd.SetHelpTemplate(constant.GENARETE_HELP_TEMPLATE)
+
+        return cmd</span>
+}
+
+func (o *generateOption) generate() error <span class="cov0" title="0">{
+        return logic.Generate(logic.DefineNumber(o.Number, o.Args))
+}</span>
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package cmd
+
+import (
+        "io"
+        "os"
+
+        "github.com/fatih/color"
+        "github.com/spf13/cobra"
+
+        "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/logic"
+        "github.com/yanosea/jrp/util"
+)
+
+var version = "develop"
+
+type GlobalOption struct {
+        Out    io.Writer
+        ErrOut io.Writer
+}
+
+type rootOption struct {
+        Args   []string
+        Number int
+
+        Out    io.Writer
+        ErrOut io.Writer
+}
+
+func Execute() int <span class="cov0" title="0">{
+        o := os.Stdout
+        e := os.Stderr
+
+        rootCmd, err := newRootCommand(o, e)
+        if err != nil </span><span class="cov0" title="0">{
+                util.PrintlnWithWriter(e, color.RedString(err.Error()))
+                return 1
+        }</span>
+
+        <span class="cov0" title="0">if err = rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
+                util.PrintlnWithWriter(e, color.RedString(err.Error()))
+                return 1
+        }</span>
+
+        <span class="cov0" title="0">return 0</span>
+}
+
+func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <span class="cov0" title="0">{
+        glbo := &amp;GlobalOption{
+                Out:    outWriter,
+                ErrOut: errWriter,
+        }
+        ro := &amp;rootOption{}
+
+        cmd := &amp;cobra.Command{
+                Use:           constant.ROOT_USE,
+                Short:         constant.ROOT_SHORT,
+                Long:          constant.ROOT_LONG,
+                Version:       version,
+                SilenceErrors: true,
+                SilenceUsage:  true,
+                Args:          cobra.MaximumNArgs(1),
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        ro.Out = glbo.Out
+                        ro.ErrOut = glbo.ErrOut
+                        ro.Args = args
+
+                        return ro.rootGenerate()
+                }</span>,
+        }
+
+        <span class="cov0" title="0">cmd.PersistentFlags().IntVarP(&amp;ro.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
+
+        cmd.SetOut(outWriter)
+        cmd.SetErr(errWriter)
+        cmd.SetHelpTemplate(constant.ROOT_HELP_TEMPLATE)
+
+        cmd.AddCommand(
+                newCompletionCommand(glbo),
+                newDownloadCommand(glbo),
+                newGenerateCommand(glbo),
+                newVersionCommand(glbo),
+        )
+
+        return cmd, nil</span>
+}
+
+func (o *rootOption) rootGenerate() error <span class="cov0" title="0">{
+        return logic.Generate(logic.DefineNumber(o.Number, o.Args))
+}</span>
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package cmd
+
+import (
+        "fmt"
+
+        "github.com/spf13/cobra"
+
+        "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/util"
+)
+
+func newVersionCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+        cmd := &amp;cobra.Command{
+                Use:   constant.VERSION_USE,
+                Short: constant.VERSION_SHORT,
+                Long:  constant.VERSION_LONG,
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        return globalOption.version()
+                }</span>,
+        }
+
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        cmd.SetErr(globalOption.ErrOut)
+        cmd.SetHelpTemplate(constant.VERSION_HELP_TEMPLATE)
+
+        return cmd</span>
+}
+
+func (g *GlobalOption) version() error <span class="cov0" title="0">{
+        // show version
+        util.PrintlnWithWriter(g.Out, fmt.Sprintf(constant.VERSION_MESSAGE_TEMPLATE, version))
+        return nil
+}</span>
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package constant
+
+const (
+        DOWNLOAD_HELP_TEMPLATE = `📥 Download Japanese Wordnet sqlite3 database file from the official site.
+
+You have to download Japanese Wordnet sqlite3 database file to use jrp at first.
+jrp will download archive file from the official site and decompress it to the database file.
+
+You can set the directory of the database file to the environment variable "JRP_WORDNETJP_DIR".
+The default directory is "~/.local/share/jrp" ("$XDG_DATA_HOME/jrp").
+
+Usage:
+  jrp download [flags]
+
+Flags:
+  -h, --help   🤝 help for download
+`
+        DOWNLOAD_USE   = "download"
+        DOWNLOAD_SHORT = "📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site."
+        DOWNLOAD_LONG  = `📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site.
+
+You have to download Japanese Wordnet and English WordNet in an sqlite3 database to use jrp at first.
+jrp will download archive file from the official site and decompress it to the database file.
+
+You can set the directory of the database file to the environment variable "JRP_WORDNETJP_DIR".
+The default directory is "$XDG_DATA_HOME/jrp".
+`
+        DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED = "✅ You are already ready to use jrp!"
+)
+
+func GetDownloadAliases() []string <span class="cov0" title="0">{
+        return []string{"dl", "d"}
+}</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package constant
+
+const (
+        GENARETE_HELP_TEMPLATE = `✨ Generate Japanese random phrases.
+
+You can specify how many phrases to generate by flag "-n" or "--number" or a number argument.
+If both are provided, the larger number takes precedence.
+
+Usage:
+  jrp generate [flags]
+
+Flags:
+  -n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command.
+  -h, --help      🤝 help for generate
+
+Arguments:
+  number  🔢 number of phrases to generate (e.g: 10).
+`
+        GENERATE_USE   = "generate"
+        GENERATE_SHORT = "✨ Generate Japanese random phrases."
+        GENERATE_LONG  = `✨ Generate Japanese random phrases.
+
+You can generate Japanese random phrase.
+You can specify the number of phrases to generate by the flag "-n" or "--number".
+`
+        GENERATE_FLAG_NUMBER             = "number"
+        GENERATE_FLAG_NUMBER_SHORTHAND   = "n"
+        GENERATE_FLAG_NUMBER_DESCRIPTION = "number of phrases to generate"
+
+        GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED = "📥 You have to execute 'download' to use jrp..."
+        GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS   = "SELECT word.Lemma, word.Pos FROM word WHERE word.Lang = 'jpn' AND word.Pos in ('a', 'v', 'n')"
+)
+
+func GetGenerateAliases() []string <span class="cov0" title="0">{
+        return []string{"gen", "g"}
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package logic
+
+import (
+        "compress/gzip"
+        "fmt"
+        "io"
+        "net/http"
+        "os"
+        "path/filepath"
+
+        "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/util"
+)
+
+func Download() error <span class="cov0" title="0">{
+        // get the directory of wnjpn.db from environment
+        dbFileDirPath, err := util.GetDBFileDirPath()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // create the directory if it doesn't exist
+        <span class="cov0" title="0">if _, err := os.Stat(dbFileDirPath); os.IsNotExist(err) </span><span class="cov0" title="0">{
+                os.MkdirAll(dbFileDirPath, 0755)
+        }</span>
+
+        // download the database file if it doesn't exist
+        <span class="cov0" title="0">var dbFilePath = filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
+        if _, err := os.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov0" title="0">{
+                resp, err := http.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">defer resp.Body.Close()
+
+                // save the downloaded file to a temporary file
+                var tempFilePath = filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
+                out, err := os.Create(tempFilePath)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">defer out.Close()
+                _, err = io.Copy(out, resp.Body)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">_, err = out.Seek(0, 0)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                // decompress the downloaded file
+                <span class="cov0" title="0">r, err := gzip.NewReader(out)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">defer r.Close()
+
+                // save the decompressed file to the database file
+                f, err := os.Create(dbFilePath)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">defer f.Close()
+                _, err = io.Copy(f, r)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                // remove the temporary file
+                <span class="cov0" title="0">err = os.Remove(tempFilePath)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+        }
+
+        // already downloaded
+        <span class="cov0" title="0">fmt.Println(constant.DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED)
+
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package logic
+
+import (
+        "database/sql"
+        "fmt"
+        "io"
+        "math/rand"
+        "os"
+        "path/filepath"
+        "strconv"
+        "time"
+
+        "github.com/fatih/color"
+        _ "modernc.org/sqlite"
+
+        "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/util"
+)
+
+// WordNet Japanese word table structure
+type Word struct {
+        WordID int
+        Lang   sql.NullString
+        Lemma  sql.NullString
+        Pron   sql.NullString
+        Pos    sql.NullString
+}
+
+type generateOption struct {
+        Number int
+
+        Out    io.Writer
+        ErrOut io.Writer
+}
+
+func DefineNumber(num int, args []string) int <span class="cov0" title="0">{
+        if len(args) == 0 </span><span class="cov0" title="0">{
+                return num
+        }</span>
+
+        <span class="cov0" title="0">argNum, err := strconv.Atoi(args[0])
+        if err != nil || argNum &lt;= 0 </span><span class="cov0" title="0">{
+                return num
+        }</span>
+
+        <span class="cov0" title="0">if argNum &gt; num </span><span class="cov0" title="0">{
+                return argNum
+        }</span> else<span class="cov0" title="0"> {
+                return num
+        }</span>
+}
+
+func Generate(num int) error <span class="cov0" title="0">{
+        // get the directory of wnjpn.db from environment
+        dbFileDirPath, err := util.GetDBFileDirPath()
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // end the program if the database file doesn't exist
+        <span class="cov0" title="0">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
+        if _, err := os.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov0" title="0">{
+                fmt.Println(color.YellowString(constant.GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED))
+                return nil
+        }</span>
+
+        // connect to the database
+        <span class="cov0" title="0">db, err := sql.Open("sqlite", "file:"+dbFilePath)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">defer db.Close()
+
+        // get all rows from the word table where the lang is Japanese and the pos is adjective, verb, or noun
+        rows, err := db.Query(constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        allAVNWords := make([]Word, 0)
+        for rows.Next() </span><span class="cov0" title="0">{
+                var word Word
+                err = rows.Scan(&amp;word.Lemma, &amp;word.Pos)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">allAVNWords = append(allAVNWords, word)</span>
+        }
+
+        // separate the words into adjectives and verbs, and nouns
+        <span class="cov0" title="0">var allAVWords []Word
+        var allNWords []Word
+
+        for _, word := range allAVNWords </span><span class="cov0" title="0">{
+                if word.Pos.Valid &amp;&amp; word.Pos.String == "n" </span><span class="cov0" title="0">{
+                        allNWords = append(allNWords, word)
+                }</span> else<span class="cov0" title="0"> {
+                        allAVWords = append(allAVWords, word)
+                }</span>
+        }
+
+        // generate random number
+        <span class="cov0" title="0">rand.New(rand.NewSource(time.Now().UnixNano()))
+
+        // generate the words
+        for i := 0; i &lt; num; i++ </span><span class="cov0" title="0">{
+                randomIndexA := rand.Intn(len(allAVWords))
+                randomIndexB := rand.Intn(len(allNWords))
+                randomWord := allAVWords[randomIndexA]
+                randomWord2 := allNWords[randomIndexB]
+                fmt.Println(randomWord.Lemma.String + randomWord2.Lemma.String)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package main
+
+import (
+        "os"
+
+        "github.com/yanosea/jrp/cmd"
+)
+
+func main() <span class="cov0" title="0">{
+        os.Exit(cmd.Execute())
+}</span>
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package util
+
+import (
+        "fmt"
+        "io"
+        "os"
+        "os/user"
+        "path/filepath"
+
+        "github.com/yanosea/jrp/constant"
+)
+
+func FormatIndent(m string) string <span class="cov8" title="1">{
+        return "  " + m
+}</span>
+
+func PrintlnWithWriter(w io.Writer, a ...any) <span class="cov8" title="1">{
+        fmt.Fprintln(w, fmt.Sprintf("%s", a[0]))
+}</span>
+
+func PrintWithWriterWithBlankLineBelow(w io.Writer, a ...any) <span class="cov8" title="1">{
+        fmt.Fprintln(w, fmt.Sprintf("%s\n", a[0]))
+}</span>
+
+func PrintWithWriterWithBlankLineAbove(w io.Writer, a ...any) <span class="cov8" title="1">{
+        fmt.Fprintln(w, fmt.Sprintf("\n%s", a[0]))
+}</span>
+
+func PrintWithWriterBetweenBlankLine(w io.Writer, a ...any) <span class="cov8" title="1">{
+        fmt.Fprintln(w, fmt.Sprintf("\n%s\n", a[0]))
+}</span>
+
+func GetDBFileDirPath() (string, error) <span class="cov0" title="0">{
+        // check if JRP_ENV is set
+        var dbFileDirPath = os.Getenv(constant.JRP_ENV_WORDNETJP_DIR)
+        if dbFileDirPath == "" </span><span class="cov0" title="0">{
+                // get current user
+                user, err := user.Current()
+                if err != nil </span><span class="cov0" title="0">{
+                        return "", err
+                }</span>
+                // default path ($XDG_DATA_HOME/jrp)
+                <span class="cov0" title="0">dbFileDirPath = filepath.Join(user.HomeDir, ".local", "share", "jrp")</span>
+        }
+
+        <span class="cov0" title="0">return dbFileDirPath, nil</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
