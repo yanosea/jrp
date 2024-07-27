@@ -3,7 +3,6 @@ package cmd
 import (
 	"database/sql"
 	"io"
-	"strconv"
 
 	"github.com/spf13/cobra"
 	_ "modernc.org/sqlite"
@@ -55,30 +54,5 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 }
 
 func (o *generateOption) generate() error {
-	if len(o.Args) == 0 {
-		if err := logic.Generate(o.Number); err != nil {
-			return err
-		}
-		return nil
-	}
-
-	argNum, err := strconv.Atoi(o.Args[0])
-	if err != nil || argNum <= 0 {
-		if err := logic.Generate(o.Number); err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if o.Number == 1 {
-		if err := logic.Generate(argNum); err != nil {
-			return err
-		}
-	} else {
-		if err := logic.Generate(o.Number); err != nil {
-			return err
-		}
-	}
-
-	return nil
+	return logic.Generate(logic.DefineNumber(o.Number, o.Args))
 }

@@ -7,6 +7,7 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/fatih/color"
@@ -30,6 +31,23 @@ type generateOption struct {
 
 	Out    io.Writer
 	ErrOut io.Writer
+}
+
+func DefineNumber(num int, args []string) int {
+	if len(args) == 0 {
+		return num
+	}
+
+	argNum, err := strconv.Atoi(args[0])
+	if err != nil || argNum <= 0 {
+		return num
+	}
+
+	if num == 1 {
+		return argNum
+	} else {
+		return num
+	}
 }
 
 func Generate(num int) error {

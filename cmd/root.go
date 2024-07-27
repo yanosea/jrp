@@ -3,7 +3,6 @@ package cmd
 import (
 	"io"
 	"os"
-	"strconv"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -87,30 +86,5 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) {
 }
 
 func (o *rootOption) rootGenerate() error {
-	if len(o.Args) == 0 {
-		if err := logic.Generate(o.Number); err != nil {
-			return err
-		}
-		return nil
-	}
-
-	argNum, err := strconv.Atoi(o.Args[0])
-	if err != nil || argNum <= 0 {
-		if err := logic.Generate(o.Number); err != nil {
-			return err
-		}
-		return nil
-	}
-
-	if o.Number == 1 {
-		if err := logic.Generate(argNum); err != nil {
-			return err
-		}
-	} else {
-		if err := logic.Generate(o.Number); err != nil {
-			return err
-		}
-	}
-
-	return nil
+	return logic.Generate(logic.DefineNumber(o.Number, o.Args))
 }
