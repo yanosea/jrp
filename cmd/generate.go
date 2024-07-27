@@ -5,37 +5,16 @@ import (
 	"fmt"
 	"io"
 	"math/rand"
+	"os"
+	"path/filepath"
 	"time"
 
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	_ "modernc.org/sqlite"
 
+	"github.com/yanosea/jrp/constant"
 	"github.com/yanosea/jrp/util"
-)
-
-const (
-	genarete_help_template = `✨ Generate Japanese random phrases.
-
-You can generate Japanese random phrase.
-You can specify the number of phrases to generate by the flag "-n" or "--number".
-
-Usage:
-  jrp generate [flags]
-
-Flags:
-	-n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command.
-  -h, --help      🤝 help for generate
-`
-	generate_use   = "generate"
-	generate_short = "✨ Generate Japanese random phrases."
-	generate_long  = `✨ Generate Japanese random phrases.
-
-You can generate Japanese random phrase.
-You can specify the number of phrases to generate by the flag "-n" or "--number".
-`
-	generate_flag_number             = "number"
-	generate_flag_number_shorthand   = "n"
-	generate_flag_number_description = "number of phrases to generate"
 )
 
 // WordNet Japanese word table structure
@@ -57,9 +36,9 @@ type generateOption struct {
 func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 	o := &generateOption{}
 	cmd := &cobra.Command{
-		Use:   generate_use,
-		Short: generate_short,
-		Long:  generate_long,
+		Use:   constant.GENERATE_USE,
+		Short: constant.GENERATE_SHORT,
+		Long:  constant.GENERATE_LONG,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			o.Out = globalOption.Out
@@ -69,14 +48,14 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 		},
 	}
 
-	cmd.PersistentFlags().IntVarP(&o.Number, generate_flag_number, generate_flag_number_shorthand, 1, generate_flag_number_description)
+	cmd.PersistentFlags().IntVarP(&o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
 
 	o.Out = globalOption.Out
 	o.ErrOut = globalOption.ErrOut
 	cmd.SetOut(o.Out)
 	cmd.SetErr(o.ErrOut)
 
-	cmd.SetHelpTemplate(genarete_help_template)
+	cmd.SetHelpTemplate(constant.GENARETE_HELP_TEMPLATE)
 
 	return cmd
 }
@@ -88,15 +67,22 @@ func (o *generateOption) generate() error {
 		return err
 	}
 
+	// end the program if the database file doesn't exist
+	dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
+	if _, err := os.Stat(dbFilePath); os.IsNotExist(err) {
+		fmt.Println(color.YellowString(constant.GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED))
+		return nil
+	}
+
 	// connect to the database
-	db, err := sql.Open("sqlite", "file:"+dbFileDirPath)
+	db, err := sql.Open("sqlite", "file:"+dbFilePath)
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
 	// get all rows from the word table where the lang is Japanese and the pos is adjective, verb, or noun
-	rows, err := db.Query("SELECT * FROM word WHERE word.Lang = 'jpn' AND word.Pos in ('a', 'v', 'n')")
+	rows, err := db.Query(constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS)
 	if err != nil {
 		return err
 	}
@@ -105,7 +91,7 @@ func (o *generateOption) generate() error {
 	allAVNWords := make([]Word, 0)
 	for rows.Next() {
 		var word Word
-		err = rows.Scan(&word.WordID, &word.Lang, &word.Lemma, &word.Pron, &word.Pos)
+		err = rows.Scan(&word.Lemma, &word.Pos)
 		if err != nil {
 			return err
 		}

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"compress/gzip"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -9,35 +10,8 @@ import (
 
 	"github.com/spf13/cobra"
 
+	"github.com/yanosea/jrp/constant"
 	"github.com/yanosea/jrp/util"
-)
-
-const (
-	download_help_template = `📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site.
-
-You have to download Japanese Wordnet and English WordNet in an sqlite3 database to use jrp at first.
-jrp will download archive file from the official site and decompress it to the database file.
-
-You can set the directory of the database file to the environment variable "JRP_WORDNETJP_DIR".
-The default directory is "~/.local/share/jrp" ("$XDG_DATA_HOME/jrp").
-
-Usage:
-  jrp download [flags]
-
-Flags:
-  -h, --help   🤝 help for download
-`
-	download_use   = "download"
-	download_short = "📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site."
-	download_long  = `📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site.
-
-You have to download Japanese Wordnet and English WordNet in an sqlite3 database to use jrp at first.
-jrp will download archive file from the official site and decompress it to the database file.
-
-You can set the directory of the database file to the environment variable "JRP_WORDNETJP_DIR".
-The default directory is "$XDG_DATA_HOME/jrp".
-`
-	download_message_already_downloaded = "✅ You are ready to use jrp!"
 )
 
 type downloadOption struct {
@@ -48,9 +22,9 @@ type downloadOption struct {
 func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 	o := &downloadOption{}
 	cmd := &cobra.Command{
-		Use:   download_use,
-		Short: download_short,
-		Long:  download_long,
+		Use:   constant.DOWNLOAD_USE,
+		Short: constant.DOWNLOAD_SHORT,
+		Long:  constant.DOWNLOAD_LONG,
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			o.Out = globalOption.Out
@@ -65,7 +39,7 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 	cmd.SetOut(o.Out)
 	cmd.SetErr(o.ErrOut)
 
-	cmd.SetHelpTemplate(download_help_template)
+	cmd.SetHelpTemplate(constant.DOWNLOAD_HELP_TEMPLATE)
 
 	return cmd
 }
@@ -83,16 +57,16 @@ func (o *downloadOption) download() error {
 	}
 
 	// download the database file if it doesn't exist
-	var dbFilePath = filepath.Join(dbFileDirPath, util.WNJPN_DB_FILE_NAME)
+	var dbFilePath = filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
 	if _, err := os.Stat(dbFilePath); os.IsNotExist(err) {
-		resp, err := http.Get(util.WNJPN_DB_ARCHIVE_FILE_URL)
+		resp, err := http.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
 		if err != nil {
 			return err
 		}
 		defer resp.Body.Close()
 
 		// save the downloaded file to a temporary file
-		var tempFilePath = filepath.Join(os.TempDir(), util.WNJPN_DB_ARCHIVE_FILE_NAME)
+		var tempFilePath = filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
 		out, err := os.Create(tempFilePath)
 		if err != nil {
 			return err
@@ -131,6 +105,9 @@ func (o *downloadOption) download() error {
 			return err
 		}
 	}
+
+	// already downloaded
+	fmt.Println(constant.DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED)
 
 	return nil
 }

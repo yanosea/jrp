@@ -2,47 +2,15 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-)
 
-const (
-	completion_fish_help_template = `🔧🐟 Generate the autocompletion script for the fish shell.
-
-To load completions in your current shell session:
-
-  jrp completion fish | source
-
-To load completions for every new session, execute once:
-
-  jrp completion fish > ~/.config/fish/completions/jrp.fish
-
-You will need to start a new shell for this setup to take effect.
-
-Usage:
-  jrp completion fish [flags]
-
-Flags:
-  -h, --help   help for fish
-`
-	completion_fish_use   = "fish"
-	completion_fish_short = "🔧🐟 Generate the autocompletion script for the fish shell."
-	completion_fish_long  = `🔧🐟 Generate the autocompletion script for the fish shell.
-
-To load completions in your current shell session:
-
-  jrp completion fish | source
-
-To load completions for every new session, execute once:
-
-  jrp completion fish > ~/.config/fish/completions/jrp.fish
-
-You will need to start a new shell for this setup to take effect.`
+	"github.com/yanosea/jrp/constant"
 )
 
 func newCompletionFishCommand(globalOption *GlobalOption) *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   completion_fish_use,
-		Short: completion_fish_short,
-		Long:  completion_fish_long,
+		Use:   constant.COMPLETION_FISH_USE,
+		Short: constant.COMPLETION_FISH_SHORT,
+		Long:  constant.COMPLETION_FISH_LONG,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return cmd.GenFishCompletion(globalOption.Out, false)
 		},
@@ -51,7 +19,7 @@ func newCompletionFishCommand(globalOption *GlobalOption) *cobra.Command {
 	cmd.SetOut(globalOption.Out)
 	cmd.SetErr(globalOption.ErrOut)
 
-	cmd.SetHelpTemplate(completion_fish_help_template)
+	cmd.SetHelpTemplate(constant.COMPLETION_FISH_HELP_TEMPLATE)
 
 	return cmd
 }

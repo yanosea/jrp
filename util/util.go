@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/user"
 	"path/filepath"
+
+	"github.com/yanosea/jrp/constant"
 )
 
 func FormatIndent(m string) string {
@@ -30,16 +32,16 @@ func PrintWithWriterBetweenBlankLine(w io.Writer, a ...any) {
 
 func GetDBFileDirPath() (string, error) {
 	// check if JRP_ENV is set
-	var dbFileDir = os.Getenv(JRP_ENV)
-	if dbFileDir == "" {
+	var dbFileDirPath = os.Getenv(constant.JRP_ENV_WORDNETJP_DIR)
+	if dbFileDirPath == "" {
 		// get current user
 		user, err := user.Current()
 		if err != nil {
 			return "", err
 		}
 		// default path ($XDG_DATA_HOME/jrp)
-		dbFileDir = filepath.Join(user.HomeDir, ".local", "share", "jrp")
+		dbFileDirPath = filepath.Join(user.HomeDir, ".local", "share", "jrp")
 	}
 
-	return filepath.Join(dbFileDir, WNJPN_DB_FILE_NAME), nil
+	return dbFileDirPath, nil
 }
