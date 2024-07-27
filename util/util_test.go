@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"os/user"
+	"path/filepath"
 	"testing"
 
 	"github.com/yanosea/jrp/constant"
@@ -196,6 +197,7 @@ func (m MockUserProvider) Current() (*user.User, error) {
 }
 
 func TestGetDBFileDirPath(t *testing.T) {
+	var testUser, _ = user.Current()
 	tests := []struct {
 		name         string
 		wordNetJpDir string
@@ -205,15 +207,15 @@ func TestGetDBFileDirPath(t *testing.T) {
 		{
 			name:         "positive testing (no env)",
 			wordNetJpDir: "",
-			want:         "/home/yanosea/.local/share/jrp",
+			want:         filepath.Join(testUser.HomeDir, ".local", "share", "jrp"),
 			wantErr:      false,
 		}, {
 			name:         "positive testing (with env)",
-			wordNetJpDir: "/home/yanosea/jrp",
-			want:         "/home/yanosea/jrp",
+			wordNetJpDir: filepath.Join(testUser.HomeDir, "jrp"),
+			want:         filepath.Join(testUser.HomeDir, "jrp"),
 			wantErr:      false,
 		}, {
-			name:         "negative testing",
+			name:         "negative testing (user.Current() fails)",
 			wordNetJpDir: "",
 			want:         "",
 			wantErr:      true,
@@ -221,6 +223,7 @@ func TestGetDBFileDirPath(t *testing.T) {
 	}
 	for _, tt := range tests {
 		provider := DefaultUserProvider{}
+		os.Unsetenv(constant.JRP_ENV_WORDNETJP_DIR)
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.wordNetJpDir != "" {
 				os.Setenv(constant.JRP_ENV_WORDNETJP_DIR, tt.wordNetJpDir)
@@ -235,7 +238,7 @@ func TestGetDBFileDirPath(t *testing.T) {
 				mockProvider := MockUserProvider{}
 				_, err := GetDBFileDirPath(mockProvider)
 				if err == nil {
-					t.Error("Expected error when user.Current fails, but got nil")
+					t.Error("Expected error when user.Current() fails, but got nil")
 				}
 			}
 		})
