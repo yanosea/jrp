@@ -4,7 +4,7 @@ const (
 	GENARETE_HELP_TEMPLATE = `✨ Generate Japanese random phrases.
 
 You can generate Japanese random phrase.
-You can specify the number of phrases to generate by the flag "-n" or "--number".
+You can specify how many phrases to generate by flag "-n" or "--number" or a number argument.
 
 Usage:
   jrp generate [flags]
@@ -12,6 +12,9 @@ Usage:
 Flags:
   -n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command.
   -h, --help      🤝 help for generate
+
+Arguments:
+  number  🔢 number of phrases to generate (e.g: 10).
 `
 	GENERATE_USE   = "generate"
 	GENERATE_SHORT = "✨ Generate Japanese random phrases."
