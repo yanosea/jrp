@@ -12,6 +12,7 @@ Usage:
 Available Commands:
   download    📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site.
   generate    ✨ Generate Japanese random phrases.
+  help        🤝 Help of jrp.
   completion  🔧 Generate the autocompletion script for the specified shell.
   version     🔖 Show the version of jrp.
 
