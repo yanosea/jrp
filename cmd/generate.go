@@ -31,10 +31,11 @@ type generateOption struct {
 func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 	o := &generateOption{}
 	cmd := &cobra.Command{
-		Use:   constant.GENERATE_USE,
-		Short: constant.GENERATE_SHORT,
-		Long:  constant.GENERATE_LONG,
-		Args:  cobra.MaximumNArgs(1),
+		Use:     constant.GENERATE_USE,
+		Aliases: constant.GetGenerateAliases(),
+		Short:   constant.GENERATE_SHORT,
+		Long:    constant.GENERATE_LONG,
+		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			o.Out = globalOption.Out
 			o.ErrOut = globalOption.ErrOut

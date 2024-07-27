@@ -30,3 +30,7 @@ You can specify the number of phrases to generate by the flag "-n" or "--number"
 	GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED = "📥 You have to execute 'download' to use jrp..."
 	GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS   = "SELECT word.Lemma, word.Pos FROM word WHERE word.Lang = 'jpn' AND word.Pos in ('a', 'v', 'n')"
 )
+
+func GetGenerateAliases() []string {
+	return []string{"gen", "g"}
+}

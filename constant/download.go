@@ -27,3 +27,7 @@ The default directory is "$XDG_DATA_HOME/jrp".
 `
 	DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED = "✅ You are already ready to use jrp!"
 )
+
+func GetDownloadAliases() []string {
+	return []string{"dl", "d"}
+}

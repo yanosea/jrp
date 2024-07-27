@@ -17,9 +17,10 @@ type downloadOption struct {
 func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 	o := &downloadOption{}
 	cmd := &cobra.Command{
-		Use:   constant.DOWNLOAD_USE,
-		Short: constant.DOWNLOAD_SHORT,
-		Long:  constant.DOWNLOAD_LONG,
+		Use:     constant.DOWNLOAD_USE,
+		Aliases: constant.GetDownloadAliases(),
+		Short:   constant.DOWNLOAD_SHORT,
+		Long:    constant.DOWNLOAD_LONG,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			o.Out = globalOption.Out
 			o.ErrOut = globalOption.ErrOut
