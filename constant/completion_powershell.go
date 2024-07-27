@@ -13,7 +13,7 @@ Usage:
   jrp completion powershell [flags]
 
 Flags:
-  -h, --help   help for powershell
+  -h, --help  🤝 help for powershell
 `
 	COMPLETION_POWERSHELL_USE   = "powershell"
 	COMPLETION_POWERSHELL_SHORT = "🔧🪟 Generate the autocompletion script for the powershell shell."

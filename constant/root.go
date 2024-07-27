@@ -1,25 +1,28 @@
 package constant
 
 const (
-	ROOT_HELP_TEMPLATE = `🎲 jrp is the CLI tool to generate random japanese phrases.
+	ROOT_HELP_TEMPLATE = `🎲 jrp is the CLI tool to generate random Japanese phrases.
 
-You can specify how many phrases to generate.
+You can specify how many phrases to generate by the flag number(-n) or a number argument.
 
 Usage:
   jrp [flags]
   jrp [command]
 
-Available Commands:
-  download    📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site.
+Available Subcommands:
+  download    📥 Download Japanese Wordnet sqlite3 database file from the official site.
   generate    ✨ Generate Japanese random phrases.
   help        🤝 Help of jrp.
   completion  🔧 Generate the autocompletion script for the specified shell.
   version     🔖 Show the version of jrp.
 
 Flags:
-  -n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command.
+  -n, --number    🔢 number of phrases to generate (default 1).
   -h, --help      🤝 help for jrp
   -v, --version   🔖 version for jrp
+
+Arguments:
+  number  🔢 number of phrases to generate (e.g: 10).
 
 Use "jrp [command] --help" for more information about a command.
 `

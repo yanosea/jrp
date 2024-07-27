@@ -29,7 +29,7 @@ Usage:
   jrp completion zsh [flags]
 
 Flags:
-  -h, --help   help for zsh
+  -h, --help  🤝 help for zsh
 `
 	COMPLETION_ZSH_USE   = "zsh"
 	COMPLETION_ZSH_SHORT = "🔧🧙 Generate the autocompletion script for the zsh shell."

@@ -17,7 +17,7 @@ Usage:
   jrp completion fish [flags]
 
 Flags:
-  -h, --help   help for fish
+  -h, --help  🤝 help for fish
 `
 	COMPLETION_FISH_USE   = "fish"
 	COMPLETION_FISH_SHORT = "🔧🐟 Generate the autocompletion script for the fish shell."

@@ -1,9 +1,9 @@
 package constant
 
 const (
-	DOWNLOAD_HELP_TEMPLATE = `📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site.
+	DOWNLOAD_HELP_TEMPLATE = `📥 Download Japanese Wordnet sqlite3 database file from the official site.
 
-You have to download Japanese Wordnet and English WordNet in an sqlite3 database to use jrp at first.
+You have to download Japanese Wordnet sqlite3 database file to use jrp at first.
 jrp will download archive file from the official site and decompress it to the database file.
 
 You can set the directory of the database file to the environment variable "JRP_WORDNETJP_DIR".

@@ -26,7 +26,7 @@ Usage:
   jrp completion bash [flags]
 
 Flags:
-  -h, --help   help for bash
+  -h, --help  🤝 help for bash
 `
 	COMPLETION_BASH_USE   = "bash"
 	COMPLETION_BASH_SHORT = "🔧🐚 Generate the autocompletion script for the bash shell."
