@@ -156,11 +156,11 @@ func TestDownload(t *testing.T) {
 		},
 	}
 
-	for _, tc := range tests {
-		t.Run(tc.name, func(t *testing.T) {
-			err := Download(tc.userProvider, tc.httpClient, tc.fs)
-			if (err != nil) != tc.wantError {
-				t.Errorf("Download() error = %v, wantError %v", err, tc.wantError)
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			err := Download(tt.userProvider, tt.httpClient, tt.fs)
+			if (err != nil) != tt.wantError {
+				t.Errorf("Download() error = %v, wantError %v", err, tt.wantError)
 			}
 		})
 	}
