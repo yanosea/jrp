@@ -30,12 +30,12 @@ func PrintWithWriterBetweenBlankLine(w io.Writer, a ...any) {
 	fmt.Fprintln(w, fmt.Sprintf("\n%s\n", a[0]))
 }
 
-func GetDBFileDirPath(provider UserProvider) (string, error) {
+func GetDBFileDirPath(u UserProvider) (string, error) {
 	// check if JRP_ENV is set
 	var dbFileDirPath = os.Getenv(constant.JRP_ENV_WORDNETJP_DIR)
 	if dbFileDirPath == "" {
 		// get current user
-		user, err := provider.Current()
+		user, err := u.Current()
 		if err != nil {
 			return "", err
 		}

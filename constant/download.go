@@ -25,6 +25,7 @@ jrp will download archive file from the official site and decompress it to the d
 You can set the directory of the database file to the environment variable "JRP_WORDNETJP_DIR".
 The default directory is "$XDG_DATA_HOME/jrp".
 `
+	DOWNLOAD_MESSAGE_SUCCEEDED          = "✅ Now, you are ready to use jrp!"
 	DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED = "✅ You are already ready to use jrp!"
 )
 
