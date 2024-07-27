@@ -10,7 +10,7 @@ Usage:
   jrp generate [flags]
 
 Flags:
-	-n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command.
+  -n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command.
   -h, --help      🤝 help for generate
 `
 	GENERATE_USE   = "generate"

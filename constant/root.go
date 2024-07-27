@@ -10,13 +10,13 @@ Usage:
   jrp [command]
 
 Available Commands:
-	download    📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site.
-	generate    ✨ Generate Japanese random phrases.
+  download    📥 Download Japanese Wordnet and English WordNet in an sqlite3 database from the official site.
+  generate    ✨ Generate Japanese random phrases.
   completion  🔧 Generate the autocompletion script for the specified shell.
   version     🔖 Show the version of jrp.
 
 Flags:
-	-n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command.
+  -n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command.
   -h, --help      🤝 help for jrp
   -v, --version   🔖 version for jrp
 
