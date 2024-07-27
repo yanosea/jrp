@@ -6,6 +6,8 @@ import (
 	"github.com/yanosea/jrp/cmd"
 )
 
+var exitFunc = os.Exit
+
 func main() {
-	os.Exit(cmd.Execute())
+	exitFunc(cmd.Execute())
 }
