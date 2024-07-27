@@ -14,7 +14,8 @@ import (
 
 func Download() error {
 	// get the directory of wnjpn.db from environment
-	dbFileDirPath, err := util.GetDBFileDirPath()
+	provider := util.DefaultUserProvider{}
+	dbFileDirPath, err := util.GetDBFileDirPath(provider)
 	if err != nil {
 		return err
 	}

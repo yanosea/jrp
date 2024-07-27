@@ -2,9 +2,13 @@ package util
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"os"
+	"os/user"
 	"testing"
+
+	"github.com/yanosea/jrp/constant"
 )
 
 func TestFormatIndent(t *testing.T) {
@@ -180,6 +184,59 @@ func TestPrintWithWriterBetweenBlankLine(t *testing.T) {
 			PrintWithWriterBetweenBlankLine(tt.args.writer, tt.args.message)
 			if got := buf.String(); got != tt.want {
 				t.Errorf("PrintWithWriterWithBlankLineAbove() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+type MockUserProvider struct{}
+
+func (m MockUserProvider) Current() (*user.User, error) {
+	return nil, errors.New("mock error : Current() failed")
+}
+
+func TestGetDBFileDirPath(t *testing.T) {
+	tests := []struct {
+		name         string
+		wordNetJpDir string
+		want         string
+		wantErr      bool
+	}{
+		{
+			name:         "positive testing (no env)",
+			wordNetJpDir: "",
+			want:         "/home/yanosea/.local/share/jrp",
+			wantErr:      false,
+		}, {
+			name:         "positive testing (with env)",
+			wordNetJpDir: "/home/yanosea/jrp",
+			want:         "/home/yanosea/jrp",
+			wantErr:      false,
+		}, {
+			name:         "negative testing",
+			wordNetJpDir: "",
+			want:         "",
+			wantErr:      true,
+		},
+	}
+	for _, tt := range tests {
+		provider := DefaultUserProvider{}
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.wordNetJpDir != "" {
+				os.Setenv(constant.JRP_ENV_WORDNETJP_DIR, tt.wordNetJpDir)
+				defer os.Unsetenv(constant.JRP_ENV_WORDNETJP_DIR)
+			}
+			got, err := GetDBFileDirPath(provider)
+			if err != nil && !tt.wantErr && got != tt.want {
+				t.Errorf("GetDBFileDirPath() = %v, want %v", got, tt.want)
+				return
+			}
+			if tt.wantErr {
+				mockProvider := MockUserProvider{}
+				_, err := GetDBFileDirPath(mockProvider)
+				if err == nil {
+					t.Error("Expected error when user.Current fails, but got nil")
+				}
 			}
 		})
 	}

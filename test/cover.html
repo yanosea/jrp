@@ -83,7 +83,7 @@
 				
 				<option value="file13">github.com/yanosea/jrp/main.go (0.0%)</option>
 				
-				<option value="file14">github.com/yanosea/jrp/util/util.go (41.7%)</option>
+				<option value="file14">github.com/yanosea/jrp/util/util.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -560,7 +560,8 @@ import (
 
 func Download() error <span class="cov0" title="0">{
         // get the directory of wnjpn.db from environment
-        dbFileDirPath, err := util.GetDBFileDirPath()
+        provider := util.DefaultUserProvider{}
+        dbFileDirPath, err := util.GetDBFileDirPath(provider)
         if err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
@@ -681,7 +682,8 @@ func DefineNumber(num int, args []string) int <span class="cov0" title="0">{
 
 func Generate(num int) error <span class="cov0" title="0">{
         // get the directory of wnjpn.db from environment
-        dbFileDirPath, err := util.GetDBFileDirPath()
+        provider := util.DefaultUserProvider{}
+        dbFileDirPath, err := util.GetDBFileDirPath(provider)
         if err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
@@ -790,21 +792,32 @@ func PrintWithWriterBetweenBlankLine(w io.Writer, a ...any) <span class="cov8" t
         fmt.Fprintln(w, fmt.Sprintf("\n%s\n", a[0]))
 }</span>
 
-func GetDBFileDirPath() (string, error) <span class="cov0" title="0">{
+func GetDBFileDirPath(provider UserProvider) (string, error) <span class="cov8" title="1">{
         // check if JRP_ENV is set
         var dbFileDirPath = os.Getenv(constant.JRP_ENV_WORDNETJP_DIR)
-        if dbFileDirPath == "" </span><span class="cov0" title="0">{
+        if dbFileDirPath == "" </span><span class="cov8" title="1">{
                 // get current user
-                user, err := user.Current()
-                if err != nil </span><span class="cov0" title="0">{
+                user, err := provider.Current()
+                if err != nil </span><span class="cov8" title="1">{
                         return "", err
                 }</span>
                 // default path ($XDG_DATA_HOME/jrp)
-                <span class="cov0" title="0">dbFileDirPath = filepath.Join(user.HomeDir, ".local", "share", "jrp")</span>
+                <span class="cov8" title="1">dbFileDirPath = filepath.Join(user.HomeDir, ".local", "share", "jrp")</span>
         }
 
-        <span class="cov0" title="0">return dbFileDirPath, nil</span>
+        <span class="cov8" title="1">return dbFileDirPath, nil</span>
 }
+
+// for testing
+type UserProvider interface {
+        Current() (*user.User, error)
+}
+
+type DefaultUserProvider struct{}
+
+func (d DefaultUserProvider) Current() (*user.User, error) <span class="cov8" title="1">{
+        return user.Current()
+}</span>
 </pre>
 		
 		</div>
