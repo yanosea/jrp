@@ -4,7 +4,7 @@ const (
 	ROOT_HELP_TEMPLATE = `🎲 jrp is the CLI tool to generate random Japanese phrases.
 
 You can specify how many phrases to generate by flag "-n" or "--number" or a number argument.
-If both are provided, the flag takes precedence over the number argument.
+If both are provided, the larger number takes precedence.
 
 Usage:
   jrp [flags]

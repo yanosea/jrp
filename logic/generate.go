@@ -43,7 +43,7 @@ func DefineNumber(num int, args []string) int {
 		return num
 	}
 
-	if num == 1 {
+	if argNum > num {
 		return argNum
 	} else {
 		return num
