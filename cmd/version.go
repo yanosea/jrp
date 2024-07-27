@@ -21,7 +21,6 @@ func newVersionCommand(globalOption *GlobalOption) *cobra.Command {
 
 	cmd.SetOut(globalOption.Out)
 	cmd.SetErr(globalOption.ErrOut)
-
 	cmd.SetHelpTemplate(constant.VERSION_HELP_TEMPLATE)
 
 	return cmd

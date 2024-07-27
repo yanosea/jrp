@@ -18,7 +18,6 @@ func newCompletionFishCommand(globalOption *GlobalOption) *cobra.Command {
 
 	cmd.SetOut(globalOption.Out)
 	cmd.SetErr(globalOption.ErrOut)
-
 	cmd.SetHelpTemplate(constant.COMPLETION_FISH_HELP_TEMPLATE)
 
 	return cmd

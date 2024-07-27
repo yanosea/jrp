@@ -3,8 +3,8 @@ package constant
 const (
 	GENARETE_HELP_TEMPLATE = `✨ Generate Japanese random phrases.
 
-You can generate Japanese random phrase.
 You can specify how many phrases to generate by flag "-n" or "--number" or a number argument.
+If both are provided, the flag takes precedence over the number argument.
 
 Usage:
   jrp generate [flags]

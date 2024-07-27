@@ -18,7 +18,6 @@ func newCompletionZshCommand(globalOption *GlobalOption) *cobra.Command {
 
 	cmd.SetOut(globalOption.Out)
 	cmd.SetErr(globalOption.ErrOut)
-
 	cmd.SetHelpTemplate(constant.COMPLETION_ZSH_HELP_TEMPLATE)
 
 	return cmd

@@ -18,7 +18,6 @@ func newCompletionBashCommand(globalOption *GlobalOption) *cobra.Command {
 
 	cmd.SetOut(globalOption.Out)
 	cmd.SetErr(globalOption.ErrOut)
-
 	cmd.SetHelpTemplate(constant.COMPLETION_BASH_HELP_TEMPLATE)
 
 	return cmd

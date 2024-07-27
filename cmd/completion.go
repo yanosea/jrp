@@ -12,7 +12,7 @@ func newCompletionCommand(globalOption *GlobalOption) *cobra.Command {
 		Use:   constant.COMPLETION_USE,
 		Short: constant.COMPLETION_SHORT,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// If no sub command is specified, print the message and return nil.
+			// if no sub command is specified, print the message and return nil.
 			util.PrintlnWithWriter(globalOption.Out, constant.COMPLETION_MESSAGE_NO_SUB_COMMAND)
 
 			return nil
@@ -21,7 +21,6 @@ func newCompletionCommand(globalOption *GlobalOption) *cobra.Command {
 
 	cmd.SetOut(globalOption.Out)
 	cmd.SetErr(globalOption.ErrOut)
-
 	cmd.SetHelpTemplate(constant.COMPLETION_HELP_TEMPLATE)
 
 	cmd.AddCommand(
