@@ -37,10 +37,7 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 }
 
 func (o *downloadOption) download() error {
-	u := &logic.DefaultUserProvider{}
-	hc := &logic.DefaultHTTPClient{}
-	fs := &logic.DefaultFileSystem{}
-	if err := logic.Download(u, hc, fs); err != nil {
+	if err := logic.Download(); err != nil {
 		return err
 	}
 	return nil

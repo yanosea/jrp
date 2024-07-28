@@ -52,8 +52,7 @@ func DefineNumber(num int, args []string) int {
 
 func Generate(num int) error {
 	// get the directory of wnjpn.db from environment
-	provider := util.DefaultUserProvider{}
-	dbFileDirPath, err := util.GetDBFileDirPath(provider)
+	dbFileDirPath, err := util.GetDBFileDirPath()
 	if err != nil {
 		return err
 	}
