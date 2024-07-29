@@ -83,7 +83,7 @@
 				
 				<option value="file13">github.com/yanosea/jrp/logic/env.go (100.0%)</option>
 				
-				<option value="file14">github.com/yanosea/jrp/logic/file_system.go (66.7%)</option>
+				<option value="file14">github.com/yanosea/jrp/logic/file_system.go (100.0%)</option>
 				
 				<option value="file15">github.com/yanosea/jrp/logic/generate.go (0.0%)</option>
 				
@@ -719,10 +719,6 @@ type FileSystem interface {
 }
 
 type OSFileSystem struct{}
-
-func (OSFileSystem) MkdirAll(path string, perm os.FileMode) error <span class="cov0" title="0">{
-        return os.MkdirAll(path, perm)
-}</span>
 
 func (OSFileSystem) Create(name string) (*os.File, error) <span class="cov8" title="1">{
         return os.Create(name)

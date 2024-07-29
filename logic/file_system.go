@@ -11,10 +11,6 @@ type FileSystem interface {
 
 type OSFileSystem struct{}
 
-func (OSFileSystem) MkdirAll(path string, perm os.FileMode) error {
-	return os.MkdirAll(path, perm)
-}
-
 func (OSFileSystem) Create(name string) (*os.File, error) {
 	return os.Create(name)
 }
