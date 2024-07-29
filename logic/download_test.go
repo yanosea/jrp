@@ -88,14 +88,14 @@ func TestDownload(t *testing.T) {
 			},
 		}, {
 			name:    "negative testing (os.Create(dbFilePath) fails)",
-			args:    args{e: OsEnv{}, u: OsUser{}, fs: nil, hc: DefaultHttpClient{}, io: DefaultIO{}, gz: DefaultGzip{}, env: filepath.Join(tcu.HomeDir, "jrp")},
+			args:    args{e: OsEnv{}, u: OsUser{}, fs: nil, hc: DefaultHttpClient{}, io: DefaultIO{}, gz: DefaultGzip{}, env: ""},
 			wantErr: true,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mfs := mock_logic.NewMockFileSystem(mockCtrl)
 				tempFilePath := filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
 				tempFile, _ := os.Open(tempFilePath)
 				mfs.EXPECT().Create(tempFilePath).Return(tempFile, nil)
-				dbFilePath := filepath.Join(tt.env, constant.WNJPN_DB_FILE_NAME)
+				dbFilePath := filepath.Join(tcu.HomeDir, ".local", "share", "jrp", constant.WNJPN_DB_FILE_NAME)
 				mfs.EXPECT().Create(dbFilePath).Return(nil, errors.New("failed to create db file"))
 				tt.fs = mfs
 			},
