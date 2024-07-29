@@ -1,16 +1,14 @@
 package logic
 
 import (
-	"compress/gzip"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 
 	"github.com/yanosea/jrp/constant"
 )
 
-func Download(e Env, u User, fs FileSystem, hc HttpClient) error {
+func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error {
 	// get db file directory path
 	dbFileDirPath, err := GetDBFileDirPath(e, u)
 	if err != nil {
@@ -18,13 +16,13 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient) error {
 	}
 
 	// if db file directory does not exist, create it
-	if _, err := fs.Stat(dbFileDirPath); os.IsNotExist(err) {
-		fs.MkdirAll(dbFileDirPath, 0755)
+	if _, err := os.Stat(dbFileDirPath); os.IsNotExist(err) {
+		os.MkdirAll(dbFileDirPath, 0755)
 	}
 
 	// if db file does not exist, download it
 	dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
-	if _, err := fs.Stat(dbFilePath); os.IsNotExist(err) {
+	if _, err := os.Stat(dbFilePath); os.IsNotExist(err) {
 		// download db archive file
 		resp, err := hc.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
 		if err != nil {
@@ -33,7 +31,7 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient) error {
 		defer resp.Body.Close()
 
 		// save db archive file to temporary file
-		tempFilePath := filepath.Join(fs.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
+		tempFilePath := filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
 		out, err := fs.Create(tempFilePath)
 		if err != nil {
 			return err
@@ -42,12 +40,10 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient) error {
 		if _, err := io.Copy(out, resp.Body); err != nil {
 			return err
 		}
-		if _, err := out.Seek(0, 0); err != nil {
-			return err
-		}
+		out.Seek(0, 0)
 
 		// decompress db archive file to db file
-		gz, err := gzip.NewReader(out)
+		gz, err := gz.NewReader(out)
 		if err != nil {
 			return err
 		}

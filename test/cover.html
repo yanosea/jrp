@@ -79,27 +79,35 @@
 				
 				<option value="file11">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
-				<option value="file12">github.com/yanosea/jrp/logic/download.go (77.1%)</option>
+				<option value="file12">github.com/yanosea/jrp/logic/download.go (88.2%)</option>
 				
 				<option value="file13">github.com/yanosea/jrp/logic/env.go (100.0%)</option>
 				
-				<option value="file14">github.com/yanosea/jrp/logic/file_system.go (100.0%)</option>
+				<option value="file14">github.com/yanosea/jrp/logic/file_system.go (66.7%)</option>
 				
 				<option value="file15">github.com/yanosea/jrp/logic/generate.go (0.0%)</option>
 				
-				<option value="file16">github.com/yanosea/jrp/logic/http_client.go (100.0%)</option>
+				<option value="file16">github.com/yanosea/jrp/logic/gzip.go (100.0%)</option>
 				
-				<option value="file17">github.com/yanosea/jrp/logic/user.go (100.0%)</option>
+				<option value="file17">github.com/yanosea/jrp/logic/http_client.go (100.0%)</option>
 				
-				<option value="file18">github.com/yanosea/jrp/main.go (0.0%)</option>
+				<option value="file18">github.com/yanosea/jrp/logic/io.go (100.0%)</option>
 				
-				<option value="file19">github.com/yanosea/jrp/mock/logic/mock_file_system.go (0.0%)</option>
+				<option value="file19">github.com/yanosea/jrp/logic/user.go (100.0%)</option>
 				
-				<option value="file20">github.com/yanosea/jrp/mock/logic/mock_http_client.go (100.0%)</option>
+				<option value="file20">github.com/yanosea/jrp/main.go (0.0%)</option>
 				
-				<option value="file21">github.com/yanosea/jrp/mock/logic/mock_user.go (100.0%)</option>
+				<option value="file21">github.com/yanosea/jrp/mock/logic/mock_file_system.go (64.7%)</option>
 				
-				<option value="file22">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
+				<option value="file22">github.com/yanosea/jrp/mock/logic/mock_gzip.go (100.0%)</option>
+				
+				<option value="file23">github.com/yanosea/jrp/mock/logic/mock_http_client.go (100.0%)</option>
+				
+				<option value="file24">github.com/yanosea/jrp/mock/logic/mock_io.go (100.0%)</option>
+				
+				<option value="file25">github.com/yanosea/jrp/mock/logic/mock_user.go (100.0%)</option>
+				
+				<option value="file26">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -272,6 +280,8 @@ type downloadOption struct {
         User       logic.User
         FileSystem logic.FileSystem
         HttpClient logic.HttpClient
+        IO         logic.IO
+        Gzip       logic.Gzip
 }
 
 func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
@@ -300,7 +310,7 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="
 }
 
 func (o *downloadOption) download() error <span class="cov0" title="0">{
-        if err := logic.Download(o.Env, o.User, o.FileSystem, o.HttpClient); err != nil </span><span class="cov0" title="0">{
+        if err := logic.Download(o.Env, o.User, o.FileSystem, o.HttpClient, o.IO, o.Gzip); err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
         <span class="cov0" title="0">return nil</span>
@@ -608,16 +618,14 @@ func GetDBFileDirPath(e Env, u User) (string, error) <span class="cov8" title="1
 		<pre class="file" id="file12" style="display: none">package logic
 
 import (
-        "compress/gzip"
         "fmt"
-        "io"
         "os"
         "path/filepath"
 
         "github.com/yanosea/jrp/constant"
 )
 
-func Download(e Env, u User, fs FileSystem, hc HttpClient) error <span class="cov8" title="1">{
+func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error <span class="cov8" title="1">{
         // get db file directory path
         dbFileDirPath, err := GetDBFileDirPath(e, u)
         if err != nil </span><span class="cov8" title="1">{
@@ -625,13 +633,13 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient) error <span class="co
         }</span>
 
         // if db file directory does not exist, create it
-        <span class="cov8" title="1">if _, err := fs.Stat(dbFileDirPath); os.IsNotExist(err) </span><span class="cov8" title="1">{
-                fs.MkdirAll(dbFileDirPath, 0755)
+        <span class="cov8" title="1">if _, err := os.Stat(dbFileDirPath); os.IsNotExist(err) </span><span class="cov8" title="1">{
+                os.MkdirAll(dbFileDirPath, 0755)
         }</span>
 
         // if db file does not exist, download it
         <span class="cov8" title="1">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
-        if _, err := fs.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov8" title="1">{
+        if _, err := os.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov8" title="1">{
                 // download db archive file
                 resp, err := hc.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
                 if err != nil </span><span class="cov8" title="1">{
@@ -640,22 +648,20 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient) error <span class="co
                 <span class="cov8" title="1">defer resp.Body.Close()
 
                 // save db archive file to temporary file
-                tempFilePath := filepath.Join(fs.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
+                tempFilePath := filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
                 out, err := fs.Create(tempFilePath)
-                if err != nil </span><span class="cov0" title="0">{
+                if err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
                 <span class="cov8" title="1">defer out.Close()
-                if _, err := io.Copy(out, resp.Body); err != nil </span><span class="cov0" title="0">{
+                if _, err := io.Copy(out, resp.Body); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
-                <span class="cov8" title="1">if _, err := out.Seek(0, 0); err != nil </span><span class="cov0" title="0">{
-                        return err
-                }</span>
+                <span class="cov8" title="1">out.Seek(0, 0)
 
                 // decompress db archive file to db file
-                <span class="cov8" title="1">gz, err := gzip.NewReader(out)
-                if err != nil </span><span class="cov0" title="0">{
+                gz, err := gz.NewReader(out)
+                if err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
                 <span class="cov8" title="1">defer gz.Close()
@@ -708,20 +714,13 @@ import (
 )
 
 type FileSystem interface {
-        Stat(name string) (os.FileInfo, error)
-        MkdirAll(path string, perm os.FileMode) error
         Create(name string) (*os.File, error)
         Remove(name string) error
-        TempDir() string
 }
 
 type OSFileSystem struct{}
 
-func (OSFileSystem) Stat(name string) (os.FileInfo, error) <span class="cov8" title="1">{
-        return os.Stat(name)
-}</span>
-
-func (OSFileSystem) MkdirAll(path string, perm os.FileMode) error <span class="cov8" title="1">{
+func (OSFileSystem) MkdirAll(path string, perm os.FileMode) error <span class="cov0" title="0">{
         return os.MkdirAll(path, perm)
 }</span>
 
@@ -731,10 +730,6 @@ func (OSFileSystem) Create(name string) (*os.File, error) <span class="cov8" tit
 
 func (OSFileSystem) Remove(name string) error <span class="cov8" title="1">{
         return os.Remove(name)
-}</span>
-
-func (OSFileSystem) TempDir() string <span class="cov8" title="1">{
-        return os.TempDir()
 }</span>
 </pre>
 		
@@ -858,6 +853,24 @@ func Generate(e Env, u User, num int) error <span class="cov0" title="0">{
 		<pre class="file" id="file16" style="display: none">package logic
 
 import (
+        "compress/gzip"
+        "io"
+)
+
+type Gzip interface {
+        NewReader(r io.Reader) (io.ReadCloser, error)
+}
+
+type DefaultGzip struct{}
+
+func (DefaultGzip) NewReader(r io.Reader) (io.ReadCloser, error) <span class="cov8" title="1">{
+        return gzip.NewReader(r)
+}</span>
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package logic
+
+import (
         "net/http"
 )
 
@@ -871,7 +884,24 @@ func (DefaultHttpClient) Get(url string) (*http.Response, error) <span class="co
 }</span>
 </pre>
 		
-		<pre class="file" id="file17" style="display: none">package logic
+		<pre class="file" id="file18" style="display: none">package logic
+
+import (
+        "io"
+)
+
+type IO interface {
+        Copy(dst io.Writer, src io.Reader) (int64, error)
+}
+
+type DefaultIO struct{}
+
+func (DefaultIO) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="cov8" title="1">{
+        return io.Copy(dst, src)
+}</span>
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package logic
 
 import (
         "os/user"
@@ -888,7 +918,7 @@ func (u OsUser) Current() (*user.User, error) <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file18" style="display: none">package main
+		<pre class="file" id="file20" style="display: none">package main
 
 import (
         "os"
@@ -901,7 +931,7 @@ func main() <span class="cov0" title="0">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file19" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file21" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: logic/file_system.go
 //
 // Generated by this command:
@@ -931,19 +961,19 @@ type MockFileSystemMockRecorder struct {
 }
 
 // NewMockFileSystem creates a new mock instance.
-func NewMockFileSystem(ctrl *gomock.Controller) *MockFileSystem <span class="cov0" title="0">{
+func NewMockFileSystem(ctrl *gomock.Controller) *MockFileSystem <span class="cov8" title="1">{
         mock := &amp;MockFileSystem{ctrl: ctrl}
         mock.recorder = &amp;MockFileSystemMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockFileSystem) EXPECT() *MockFileSystemMockRecorder <span class="cov0" title="0">{
+func (m *MockFileSystem) EXPECT() *MockFileSystemMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // Create mocks base method.
-func (m *MockFileSystem) Create(name string) (*os.File, error) <span class="cov0" title="0">{
+func (m *MockFileSystem) Create(name string) (*os.File, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Create", name)
         ret0, _ := ret[0].(*os.File)
@@ -952,23 +982,9 @@ func (m *MockFileSystem) Create(name string) (*os.File, error) <span class="cov0
 }</span>
 
 // Create indicates an expected call of Create.
-func (mr *MockFileSystemMockRecorder) Create(name any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockFileSystemMockRecorder) Create(name any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFileSystem)(nil).Create), name)
-}</span>
-
-// MkdirAll mocks base method.
-func (m *MockFileSystem) MkdirAll(path string, perm os.FileMode) error <span class="cov0" title="0">{
-        m.ctrl.T.Helper()
-        ret := m.ctrl.Call(m, "MkdirAll", path, perm)
-        ret0, _ := ret[0].(error)
-        return ret0
-}</span>
-
-// MkdirAll indicates an expected call of MkdirAll.
-func (mr *MockFileSystemMockRecorder) MkdirAll(path, perm any) *gomock.Call <span class="cov0" title="0">{
-        mr.mock.ctrl.T.Helper()
-        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MkdirAll", reflect.TypeOf((*MockFileSystem)(nil).MkdirAll), path, perm)
 }</span>
 
 // Remove mocks base method.
@@ -984,38 +1000,66 @@ func (mr *MockFileSystemMockRecorder) Remove(name any) *gomock.Call <span class=
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFileSystem)(nil).Remove), name)
 }</span>
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: logic/gzip.go
+//
+// Generated by this command:
+//
+//        mockgen -source=logic/gzip.go -destination=mock/logic/mock_gzip.go
+//
 
-// Stat mocks base method.
-func (m *MockFileSystem) Stat(name string) (os.FileInfo, error) <span class="cov0" title="0">{
+// Package mock_logic is a generated GoMock package.
+package mock_logic
+
+import (
+        io "io"
+        reflect "reflect"
+
+        gomock "go.uber.org/mock/gomock"
+)
+
+// MockGzip is a mock of Gzip interface.
+type MockGzip struct {
+        ctrl     *gomock.Controller
+        recorder *MockGzipMockRecorder
+}
+
+// MockGzipMockRecorder is the mock recorder for MockGzip.
+type MockGzipMockRecorder struct {
+        mock *MockGzip
+}
+
+// NewMockGzip creates a new mock instance.
+func NewMockGzip(ctrl *gomock.Controller) *MockGzip <span class="cov8" title="1">{
+        mock := &amp;MockGzip{ctrl: ctrl}
+        mock.recorder = &amp;MockGzipMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockGzip) EXPECT() *MockGzipMockRecorder <span class="cov8" title="1">{
+        return m.recorder
+}</span>
+
+// NewReader mocks base method.
+func (m *MockGzip) NewReader(r io.Reader) (io.ReadCloser, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
-        ret := m.ctrl.Call(m, "Stat", name)
-        ret0, _ := ret[0].(os.FileInfo)
+        ret := m.ctrl.Call(m, "NewReader", r)
+        ret0, _ := ret[0].(io.ReadCloser)
         ret1, _ := ret[1].(error)
         return ret0, ret1
 }</span>
 
-// Stat indicates an expected call of Stat.
-func (mr *MockFileSystemMockRecorder) Stat(name any) *gomock.Call <span class="cov0" title="0">{
+// NewReader indicates an expected call of NewReader.
+func (mr *MockGzipMockRecorder) NewReader(r any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
-        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Stat", reflect.TypeOf((*MockFileSystem)(nil).Stat), name)
-}</span>
-
-// TempDir mocks base method.
-func (m *MockFileSystem) TempDir() string <span class="cov0" title="0">{
-        m.ctrl.T.Helper()
-        ret := m.ctrl.Call(m, "TempDir")
-        ret0, _ := ret[0].(string)
-        return ret0
-}</span>
-
-// TempDir indicates an expected call of TempDir.
-func (mr *MockFileSystemMockRecorder) TempDir() *gomock.Call <span class="cov0" title="0">{
-        mr.mock.ctrl.T.Helper()
-        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TempDir", reflect.TypeOf((*MockFileSystem)(nil).TempDir))
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewReader", reflect.TypeOf((*MockGzip)(nil).NewReader), r)
 }</span>
 </pre>
 		
-		<pre class="file" id="file20" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file23" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: logic/http_client.go
 //
 // Generated by this command:
@@ -1072,7 +1116,64 @@ func (mr *MockHTTPClientMockRecorder) Get(url any) *gomock.Call <span class="cov
 }</span>
 </pre>
 		
-		<pre class="file" id="file21" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file24" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: logic/io.go
+//
+// Generated by this command:
+//
+//        mockgen -source=logic/io.go -destination=mock/logic/mock_io.go
+//
+
+// Package mock_logic is a generated GoMock package.
+package mock_logic
+
+import (
+        io "io"
+        reflect "reflect"
+
+        gomock "go.uber.org/mock/gomock"
+)
+
+// MockIO is a mock of IO interface.
+type MockIO struct {
+        ctrl     *gomock.Controller
+        recorder *MockIOMockRecorder
+}
+
+// MockIOMockRecorder is the mock recorder for MockIO.
+type MockIOMockRecorder struct {
+        mock *MockIO
+}
+
+// NewMockIO creates a new mock instance.
+func NewMockIO(ctrl *gomock.Controller) *MockIO <span class="cov8" title="1">{
+        mock := &amp;MockIO{ctrl: ctrl}
+        mock.recorder = &amp;MockIOMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockIO) EXPECT() *MockIOMockRecorder <span class="cov8" title="1">{
+        return m.recorder
+}</span>
+
+// Copy mocks base method.
+func (m *MockIO) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="cov8" title="1">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Copy", dst, src)
+        ret0, _ := ret[0].(int64)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// Copy indicates an expected call of Copy.
+func (mr *MockIOMockRecorder) Copy(dst, src any) *gomock.Call <span class="cov8" title="1">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Copy", reflect.TypeOf((*MockIO)(nil).Copy), dst, src)
+}</span>
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: logic/user.go
 //
 // Generated by this command:
@@ -1129,7 +1230,7 @@ func (mr *MockUserMockRecorder) Current() *gomock.Call <span class="cov8" title=
 }</span>
 </pre>
 		
-		<pre class="file" id="file22" style="display: none">package util
+		<pre class="file" id="file26" style="display: none">package util
 
 import (
         "fmt"

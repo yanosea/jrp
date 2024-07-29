@@ -17,6 +17,8 @@ type downloadOption struct {
 	User       logic.User
 	FileSystem logic.FileSystem
 	HttpClient logic.HttpClient
+	IO         logic.IO
+	Gzip       logic.Gzip
 }
 
 func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
@@ -45,7 +47,7 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 }
 
 func (o *downloadOption) download() error {
-	if err := logic.Download(o.Env, o.User, o.FileSystem, o.HttpClient); err != nil {
+	if err := logic.Download(o.Env, o.User, o.FileSystem, o.HttpClient, o.IO, o.Gzip); err != nil {
 		return err
 	}
 	return nil

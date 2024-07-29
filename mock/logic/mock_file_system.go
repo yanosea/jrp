@@ -54,20 +54,6 @@ func (mr *MockFileSystemMockRecorder) Create(name any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFileSystem)(nil).Create), name)
 }
 
-// MkdirAll mocks base method.
-func (m *MockFileSystem) MkdirAll(path string, perm os.FileMode) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "MkdirAll", path, perm)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
-
-// MkdirAll indicates an expected call of MkdirAll.
-func (mr *MockFileSystemMockRecorder) MkdirAll(path, perm any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MkdirAll", reflect.TypeOf((*MockFileSystem)(nil).MkdirAll), path, perm)
-}
-
 // Remove mocks base method.
 func (m *MockFileSystem) Remove(name string) error {
 	m.ctrl.T.Helper()
@@ -80,33 +66,4 @@ func (m *MockFileSystem) Remove(name string) error {
 func (mr *MockFileSystemMockRecorder) Remove(name any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFileSystem)(nil).Remove), name)
-}
-
-// Stat mocks base method.
-func (m *MockFileSystem) Stat(name string) (os.FileInfo, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Stat", name)
-	ret0, _ := ret[0].(os.FileInfo)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// Stat indicates an expected call of Stat.
-func (mr *MockFileSystemMockRecorder) Stat(name any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Stat", reflect.TypeOf((*MockFileSystem)(nil).Stat), name)
-}
-
-// TempDir mocks base method.
-func (m *MockFileSystem) TempDir() string {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "TempDir")
-	ret0, _ := ret[0].(string)
-	return ret0
-}
-
-// TempDir indicates an expected call of TempDir.
-func (mr *MockFileSystemMockRecorder) TempDir() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TempDir", reflect.TypeOf((*MockFileSystem)(nil).TempDir))
 }
