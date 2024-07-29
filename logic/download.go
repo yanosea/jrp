@@ -9,11 +9,10 @@ import (
 	"path/filepath"
 
 	"github.com/yanosea/jrp/constant"
-	"github.com/yanosea/jrp/util"
 )
 
-func Download() error {
-	dbFileDirPath, err := util.GetDBFileDirPath()
+func Download(e Env, u User) error {
+	dbFileDirPath, err := GetDBFileDirPath(e, u)
 	if err != nil {
 		return err
 	}

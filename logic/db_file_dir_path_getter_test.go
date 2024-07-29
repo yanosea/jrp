@@ -3,63 +3,75 @@ package logic
 import (
 	"errors"
 	"os"
-	"os/user"
 	"path/filepath"
 	"testing"
 
+	gomock "go.uber.org/mock/gomock"
+
 	"github.com/yanosea/jrp/constant"
+	mock_logic "github.com/yanosea/jrp/mock/logic"
 )
 
-type MockUserProvider struct{}
-
-func (m MockUserProvider) Current() (*user.User, error) {
-	return nil, errors.New("mock error : Current() failed")
-}
-
 func TestGetDBFileDirPath(t *testing.T) {
-	var testUser, _ = user.Current()
+	tu := OsUser{}
+	tcu, _ := tu.Current()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mu := mock_logic.NewMockUser(ctrl)
+	mu.EXPECT().Current().Return(nil, errors.New("some error"))
+	type args struct {
+		e      Env
+		u      User
+		jrpEnv string
+	}
 	tests := []struct {
-		name         string
-		wordNetJpDir string
-		want         string
-		wantErr      bool
+		name    string
+		args    args
+		want    string
+		wantErr bool
 	}{
 		{
-			name:         "positive testing (no env)",
-			wordNetJpDir: "",
-			want:         filepath.Join(testUser.HomeDir, ".local", "share", "jrp"),
-			wantErr:      false,
+			name: "positive testing (no env)",
+			args: args{
+				e:      OsEnv{},
+				u:      tu,
+				jrpEnv: "",
+			},
+			want:    filepath.Join(tcu.HomeDir, ".local", "share", "jrp"),
+			wantErr: false,
 		}, {
-			name:         "positive testing (with env)",
-			wordNetJpDir: filepath.Join(testUser.HomeDir, "jrp"),
-			want:         filepath.Join(testUser.HomeDir, "jrp"),
-			wantErr:      false,
+			name: "positive testing (with env)",
+			args: args{
+				e:      OsEnv{},
+				u:      OsUser{},
+				jrpEnv: filepath.Join(tcu.HomeDir, "jrp"),
+			},
+			want:    filepath.Join(tcu.HomeDir, "jrp"),
+			wantErr: false,
 		}, {
-			name:         "negative testing (user.Current() fails)",
-			wordNetJpDir: "",
-			want:         "",
-			wantErr:      true,
+			name: "negative testing (user.Current() fails)",
+			args: args{
+				e:      OsEnv{},
+				u:      mu,
+				jrpEnv: filepath.Join(tcu.HomeDir, "jrp"),
+			},
+			want:    "",
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
-		provider := DefaultUserProvider{}
-		os.Unsetenv(constant.JRP_ENV_WORDNETJP_DIR)
 		t.Run(tt.name, func(t *testing.T) {
-			if tt.wordNetJpDir != "" {
-				os.Setenv(constant.JRP_ENV_WORDNETJP_DIR, tt.wordNetJpDir)
+			if tt.args.jrpEnv != "" {
+				os.Setenv(constant.JRP_ENV_WORDNETJP_DIR, tt.args.jrpEnv)
 				defer os.Unsetenv(constant.JRP_ENV_WORDNETJP_DIR)
 			}
-			got, err := GetDBFileDirPath(provider)
-			if err != nil && !tt.wantErr && got != tt.want {
-				t.Errorf("GetDBFileDirPath() = %v, want %v", got, tt.want)
+			got, err := GetDBFileDirPath(tt.args.e, tt.args.u)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetDBFileDirPath() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if tt.wantErr {
-				mockProvider := MockUserProvider{}
-				_, err := GetDBFileDirPath(mockProvider)
-				if err == nil {
-					t.Error("Expected error when user.Current() fails, but got nil")
-				}
+			if got != tt.want {
+				t.Errorf("GetDBFileDirPath() = %v, want %v", got, tt.want)
 			}
 		})
 	}

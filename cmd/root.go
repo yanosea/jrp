@@ -23,6 +23,9 @@ type rootOption struct {
 	Args   []string
 	Number int
 
+	e logic.Env
+	u logic.User
+
 	Out    io.Writer
 	ErrOut io.Writer
 }
@@ -86,5 +89,5 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) {
 }
 
 func (o *rootOption) rootGenerate() error {
-	return logic.Generate(logic.DefineNumber(o.Number, o.Args))
+	return logic.Generate(o.e, o.u, logic.DefineNumber(o.Number, o.Args))
 }

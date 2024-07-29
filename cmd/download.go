@@ -10,6 +10,8 @@ import (
 )
 
 type downloadOption struct {
+	e      logic.Env
+	u      logic.User
 	Out    io.Writer
 	ErrOut io.Writer
 }
@@ -37,7 +39,7 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 }
 
 func (o *downloadOption) download() error {
-	if err := logic.Download(); err != nil {
+	if err := logic.Download(o.e, o.u); err != nil {
 		return err
 	}
 	return nil

@@ -14,7 +14,6 @@ import (
 	_ "modernc.org/sqlite"
 
 	"github.com/yanosea/jrp/constant"
-	"github.com/yanosea/jrp/util"
 )
 
 // WordNet Japanese word table structure
@@ -50,9 +49,9 @@ func DefineNumber(num int, args []string) int {
 	}
 }
 
-func Generate(num int) error {
+func Generate(e Env, u User, num int) error {
 	// get the directory of wnjpn.db from environment
-	dbFileDirPath, err := util.GetDBFileDirPath()
+	dbFileDirPath, err := GetDBFileDirPath(e, u)
 	if err != nil {
 		return err
 	}

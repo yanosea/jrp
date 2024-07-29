@@ -24,6 +24,9 @@ type generateOption struct {
 	Args   []string
 	Number int
 
+	e logic.Env
+	u logic.User
+
 	Out    io.Writer
 	ErrOut io.Writer
 }
@@ -55,5 +58,5 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 }
 
 func (o *generateOption) generate() error {
-	return logic.Generate(logic.DefineNumber(o.Number, o.Args))
+	return logic.Generate(o.e, o.u, logic.DefineNumber(o.Number, o.Args))
 }
