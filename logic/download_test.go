@@ -93,7 +93,7 @@ func TestDownload(t *testing.T) {
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mfs := mock_logic.NewMockFileSystem(mockCtrl)
 				tempFilePath := filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
-				tempFile, _ := os.Open(tempFilePath)
+				tempFile, _ := os.Create(tempFilePath)
 				mfs.EXPECT().Create(tempFilePath).Return(tempFile, nil)
 				dbFilePath := filepath.Join(tcu.HomeDir, ".local", "share", "jrp", constant.WNJPN_DB_FILE_NAME)
 				mfs.EXPECT().Create(dbFilePath).Return(nil, errors.New("failed to create db file"))

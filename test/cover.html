@@ -79,7 +79,7 @@
 				
 				<option value="file11">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
-				<option value="file12">github.com/yanosea/jrp/logic/download.go (88.2%)</option>
+				<option value="file12">github.com/yanosea/jrp/logic/download.go (91.2%)</option>
 				
 				<option value="file13">github.com/yanosea/jrp/logic/env.go (100.0%)</option>
 				
@@ -667,7 +667,7 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error
                 <span class="cov8" title="1">defer gz.Close()
 
                 f, err := fs.Create(dbFilePath)
-                if err != nil </span><span class="cov0" title="0">{
+                if err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
                 <span class="cov8" title="1">defer f.Close()
