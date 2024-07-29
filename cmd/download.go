@@ -10,10 +10,11 @@ import (
 )
 
 type downloadOption struct {
-	e      logic.Env
-	u      logic.User
 	Out    io.Writer
 	ErrOut io.Writer
+
+	Env  logic.Env
+	User logic.User
 }
 
 func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
@@ -26,7 +27,8 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			o.Out = globalOption.Out
 			o.ErrOut = globalOption.ErrOut
-
+			o.Env = logic.OsEnv{}
+			o.User = logic.OsUser{}
 			return o.download()
 		},
 	}
@@ -39,7 +41,7 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 }
 
 func (o *downloadOption) download() error {
-	if err := logic.Download(o.e, o.u); err != nil {
+	if err := logic.Download(o.Env, o.User); err != nil {
 		return err
 	}
 	return nil

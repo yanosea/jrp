@@ -23,11 +23,11 @@ type rootOption struct {
 	Args   []string
 	Number int
 
-	e logic.Env
-	u logic.User
-
 	Out    io.Writer
 	ErrOut io.Writer
+
+	Env  logic.Env
+	User logic.User
 }
 
 func Execute() int {
@@ -64,9 +64,11 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) {
 		SilenceUsage:  true,
 		Args:          cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			ro.Args = args
 			ro.Out = glbo.Out
 			ro.ErrOut = glbo.ErrOut
-			ro.Args = args
+			ro.Env = logic.OsEnv{}
+			ro.User = logic.OsUser{}
 
 			return ro.rootGenerate()
 		},
@@ -89,5 +91,5 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) {
 }
 
 func (o *rootOption) rootGenerate() error {
-	return logic.Generate(o.e, o.u, logic.DefineNumber(o.Number, o.Args))
+	return logic.Generate(o.Env, o.User, logic.DefineNumber(o.Number, o.Args))
 }

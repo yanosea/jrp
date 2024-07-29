@@ -15,14 +15,17 @@ import (
 func TestGetDBFileDirPath(t *testing.T) {
 	tu := OsUser{}
 	tcu, _ := tu.Current()
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
+
 	mu := mock_logic.NewMockUser(ctrl)
-	mu.EXPECT().Current().Return(nil, errors.New("some error"))
+	mu.EXPECT().Current().Return(nil, errors.New("failed to get current user"))
+
 	type args struct {
-		e      Env
-		u      User
-		jrpEnv string
+		e   Env
+		u   User
+		env string
 	}
 	tests := []struct {
 		name    string
@@ -31,38 +34,26 @@ func TestGetDBFileDirPath(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "positive testing (no env)",
-			args: args{
-				e:      OsEnv{},
-				u:      tu,
-				jrpEnv: "",
-			},
+			name:    "positive testing (no env)",
+			args:    args{e: OsEnv{}, u: OsUser{}, env: ""},
 			want:    filepath.Join(tcu.HomeDir, ".local", "share", "jrp"),
 			wantErr: false,
 		}, {
-			name: "positive testing (with env)",
-			args: args{
-				e:      OsEnv{},
-				u:      OsUser{},
-				jrpEnv: filepath.Join(tcu.HomeDir, "jrp"),
-			},
+			name:    "positive testing (with env)",
+			args:    args{e: OsEnv{}, u: OsUser{}, env: filepath.Join(tcu.HomeDir, "jrp")},
 			want:    filepath.Join(tcu.HomeDir, "jrp"),
 			wantErr: false,
 		}, {
-			name: "negative testing (user.Current() fails)",
-			args: args{
-				e:      OsEnv{},
-				u:      mu,
-				jrpEnv: filepath.Join(tcu.HomeDir, "jrp"),
-			},
+			name:    "negative testing (user.Current() fails)",
+			args:    args{e: OsEnv{}, u: mu, env: ""},
 			want:    "",
 			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if tt.args.jrpEnv != "" {
-				os.Setenv(constant.JRP_ENV_WORDNETJP_DIR, tt.args.jrpEnv)
+			if tt.args.env != "" {
+				os.Setenv(constant.JRP_ENV_WORDNETJP_DIR, tt.args.env)
 				defer os.Unsetenv(constant.JRP_ENV_WORDNETJP_DIR)
 			}
 			got, err := GetDBFileDirPath(tt.args.e, tt.args.u)

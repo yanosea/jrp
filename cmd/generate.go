@@ -24,11 +24,11 @@ type generateOption struct {
 	Args   []string
 	Number int
 
-	e logic.Env
-	u logic.User
-
 	Out    io.Writer
 	ErrOut io.Writer
+
+	Env  logic.Env
+	User logic.User
 }
 
 func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
@@ -40,9 +40,11 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 		Long:    constant.GENERATE_LONG,
 		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
+			o.Args = args
 			o.Out = globalOption.Out
 			o.ErrOut = globalOption.ErrOut
-			o.Args = args
+			o.Env = logic.OsEnv{}
+			o.User = logic.OsUser{}
 
 			return o.generate()
 		},
@@ -58,5 +60,5 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 }
 
 func (o *generateOption) generate() error {
-	return logic.Generate(o.e, o.u, logic.DefineNumber(o.Number, o.Args))
+	return logic.Generate(o.Env, o.User, logic.DefineNumber(o.Number, o.Args))
 }

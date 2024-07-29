@@ -77,7 +77,7 @@
 				
 				<option value="file10">github.com/yanosea/jrp/constant/generate.go (100.0%)</option>
 				
-				<option value="file11">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (85.7%)</option>
+				<option value="file11">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
 				<option value="file12">github.com/yanosea/jrp/logic/download.go (0.0%)</option>
 				
@@ -91,7 +91,7 @@
 				
 				<option value="file17">github.com/yanosea/jrp/mock/logic/mock_env.go (0.0%)</option>
 				
-				<option value="file18">github.com/yanosea/jrp/mock/logic/mock_user.go (54.5%)</option>
+				<option value="file18">github.com/yanosea/jrp/mock/logic/mock_user.go (100.0%)</option>
 				
 				<option value="file19">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
 				
@@ -259,10 +259,11 @@ import (
 )
 
 type downloadOption struct {
-        e      logic.Env
-        u      logic.User
         Out    io.Writer
         ErrOut io.Writer
+
+        Env  logic.Env
+        User logic.User
 }
 
 func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
@@ -275,7 +276,8 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="
                 RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
                         o.Out = globalOption.Out
                         o.ErrOut = globalOption.ErrOut
-
+                        o.Env = logic.OsEnv{}
+                        o.User = logic.OsUser{}
                         return o.download()
                 }</span>,
         }
@@ -288,7 +290,7 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="
 }
 
 func (o *downloadOption) download() error <span class="cov0" title="0">{
-        if err := logic.Download(o.e, o.u); err != nil </span><span class="cov0" title="0">{
+        if err := logic.Download(o.Env, o.User); err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
         <span class="cov0" title="0">return nil</span>
@@ -321,11 +323,11 @@ type generateOption struct {
         Args   []string
         Number int
 
-        e logic.Env
-        u logic.User
-
         Out    io.Writer
         ErrOut io.Writer
+
+        Env  logic.Env
+        User logic.User
 }
 
 func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
@@ -337,9 +339,11 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="
                 Long:    constant.GENERATE_LONG,
                 Args:    cobra.MaximumNArgs(1),
                 RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        o.Args = args
                         o.Out = globalOption.Out
                         o.ErrOut = globalOption.ErrOut
-                        o.Args = args
+                        o.Env = logic.OsEnv{}
+                        o.User = logic.OsUser{}
 
                         return o.generate()
                 }</span>,
@@ -355,7 +359,7 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="
 }
 
 func (o *generateOption) generate() error <span class="cov0" title="0">{
-        return logic.Generate(o.e, o.u, logic.DefineNumber(o.Number, o.Args))
+        return logic.Generate(o.Env, o.User, logic.DefineNumber(o.Number, o.Args))
 }</span>
 </pre>
 		
@@ -384,11 +388,11 @@ type rootOption struct {
         Args   []string
         Number int
 
-        e logic.Env
-        u logic.User
-
         Out    io.Writer
         ErrOut io.Writer
+
+        Env  logic.Env
+        User logic.User
 }
 
 func Execute() int <span class="cov0" title="0">{
@@ -425,9 +429,11 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
                 SilenceUsage:  true,
                 Args:          cobra.MaximumNArgs(1),
                 RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        ro.Args = args
                         ro.Out = glbo.Out
                         ro.ErrOut = glbo.ErrOut
-                        ro.Args = args
+                        ro.Env = logic.OsEnv{}
+                        ro.User = logic.OsUser{}
 
                         return ro.rootGenerate()
                 }</span>,
@@ -450,7 +456,7 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
 }
 
 func (o *rootOption) rootGenerate() error <span class="cov0" title="0">{
-        return logic.Generate(o.e, o.u, logic.DefineNumber(o.Number, o.Args))
+        return logic.Generate(o.Env, o.User, logic.DefineNumber(o.Number, o.Args))
 }</span>
 </pre>
 		
@@ -572,17 +578,19 @@ import (
 )
 
 func GetDBFileDirPath(e Env, u User) (string, error) <span class="cov8" title="1">{
-        // check if JRP_ENV_WORDNETJP_DIR is set
-        dbFileDirPath := e.Get(constant.JRP_ENV_WORDNETJP_DIR)
-        if dbFileDirPath == "" </span><span class="cov8" title="1">{
-                // get current user
-                currentUser, err := u.Current()
-                if err != nil </span><span class="cov0" title="0">{
-                        return "", err
-                }</span>
-                // set default path ($XDG_DATA_HOME/jrp)
-                <span class="cov8" title="1">dbFileDirPath = filepath.Join(currentUser.HomeDir, ".local", "share", "jrp")</span>
-        }
+        // get current user
+        currentUser, err := u.Current()
+        if err != nil </span><span class="cov8" title="1">{
+                return "", err
+        }</span>
+        // set default path ($XDG_DATA_HOME/jrp)
+        <span class="cov8" title="1">dbFileDirPath := filepath.Join(currentUser.HomeDir, ".local", "share", "jrp")
+        // get JRP_ENV_WORDNETJP_DIR
+        wordNetJpDirPath := e.Get(constant.JRP_ENV_WORDNETJP_DIR)
+        if wordNetJpDirPath != "" </span><span class="cov8" title="1">{
+                dbFileDirPath = wordNetJpDirPath
+        }</span>
+
         <span class="cov8" title="1">return dbFileDirPath, nil</span>
 }
 </pre>
@@ -919,7 +927,7 @@ func (m *MockUser) EXPECT() *MockUserMockRecorder <span class="cov8" title="1">{
 }</span>
 
 // Current mocks base method.
-func (m *MockUser) Current() (*user.User, error) <span class="cov0" title="0">{
+func (m *MockUser) Current() (*user.User, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Current")
         ret0, _ := ret[0].(*user.User)
