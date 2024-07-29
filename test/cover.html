@@ -55,31 +55,45 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/yanosea/jrp/cmd/completion.go (75.0%)</option>
+				<option value="file0">github.com/yanosea/jrp/cmd/completion.go (0.0%)</option>
 				
-				<option value="file1">github.com/yanosea/jrp/cmd/completion_bash.go (83.3%)</option>
+				<option value="file1">github.com/yanosea/jrp/cmd/completion_bash.go (0.0%)</option>
 				
-				<option value="file2">github.com/yanosea/jrp/cmd/completion_fish.go (83.3%)</option>
+				<option value="file2">github.com/yanosea/jrp/cmd/completion_fish.go (0.0%)</option>
 				
-				<option value="file3">github.com/yanosea/jrp/cmd/completion_powershell.go (83.3%)</option>
+				<option value="file3">github.com/yanosea/jrp/cmd/completion_powershell.go (0.0%)</option>
 				
-				<option value="file4">github.com/yanosea/jrp/cmd/completion_zsh.go (83.3%)</option>
+				<option value="file4">github.com/yanosea/jrp/cmd/completion_zsh.go (0.0%)</option>
 				
-				<option value="file5">github.com/yanosea/jrp/cmd/download.go (40.0%)</option>
+				<option value="file5">github.com/yanosea/jrp/cmd/download.go (0.0%)</option>
 				
-				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (58.3%)</option>
+				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (0.0%)</option>
 				
-				<option value="file7">github.com/yanosea/jrp/cmd/root.go (83.3%)</option>
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (0.0%)</option>
 				
-				<option value="file8">github.com/yanosea/jrp/cmd/version.go (62.5%)</option>
+				<option value="file8">github.com/yanosea/jrp/cmd/version.go (0.0%)</option>
 				
 				<option value="file9">github.com/yanosea/jrp/constant/download.go (100.0%)</option>
 				
 				<option value="file10">github.com/yanosea/jrp/constant/generate.go (100.0%)</option>
 				
-				<option value="file11">github.com/yanosea/jrp/main.go (100.0%)</option>
+				<option value="file11">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (85.7%)</option>
 				
-				<option value="file12">github.com/yanosea/jrp/util/util.go (100.0%)</option>
+				<option value="file12">github.com/yanosea/jrp/logic/download.go (0.0%)</option>
+				
+				<option value="file13">github.com/yanosea/jrp/logic/env.go (100.0%)</option>
+				
+				<option value="file14">github.com/yanosea/jrp/logic/generate.go (0.0%)</option>
+				
+				<option value="file15">github.com/yanosea/jrp/logic/user.go (100.0%)</option>
+				
+				<option value="file16">github.com/yanosea/jrp/main.go (0.0%)</option>
+				
+				<option value="file17">github.com/yanosea/jrp/mock/logic/mock_env.go (0.0%)</option>
+				
+				<option value="file18">github.com/yanosea/jrp/mock/logic/mock_user.go (54.5%)</option>
+				
+				<option value="file19">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -102,7 +116,7 @@ import (
         "github.com/yanosea/jrp/util"
 )
 
-func newCompletionCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
+func newCompletionCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
         cmd := &amp;cobra.Command{
                 Use:   constant.COMPLETION_USE,
                 Short: constant.COMPLETION_SHORT,
@@ -114,7 +128,7 @@ func newCompletionCommand(globalOption *GlobalOption) *cobra.Command <span class
                 }</span>,
         }
 
-        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.COMPLETION_HELP_TEMPLATE)
 
@@ -137,7 +151,7 @@ import (
         "github.com/yanosea/jrp/constant"
 )
 
-func newCompletionBashCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
+func newCompletionBashCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
         cmd := &amp;cobra.Command{
                 Use:   constant.COMPLETION_BASH_USE,
                 Short: constant.COMPLETION_BASH_SHORT,
@@ -147,7 +161,7 @@ func newCompletionBashCommand(globalOption *GlobalOption) *cobra.Command <span c
                 }</span>,
         }
 
-        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.COMPLETION_BASH_HELP_TEMPLATE)
 
@@ -163,7 +177,7 @@ import (
         "github.com/yanosea/jrp/constant"
 )
 
-func newCompletionFishCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
+func newCompletionFishCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
         cmd := &amp;cobra.Command{
                 Use:   constant.COMPLETION_FISH_USE,
                 Short: constant.COMPLETION_FISH_SHORT,
@@ -173,7 +187,7 @@ func newCompletionFishCommand(globalOption *GlobalOption) *cobra.Command <span c
                 }</span>,
         }
 
-        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.COMPLETION_FISH_HELP_TEMPLATE)
 
@@ -189,7 +203,7 @@ import (
         "github.com/yanosea/jrp/constant"
 )
 
-func newCompletionPowerShellCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
+func newCompletionPowerShellCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
         cmd := &amp;cobra.Command{
                 Use:   constant.COMPLETION_POWERSHELL_USE,
                 Short: constant.COMPLETION_POWERSHELL_SHORT,
@@ -199,7 +213,7 @@ func newCompletionPowerShellCommand(globalOption *GlobalOption) *cobra.Command <
                 }</span>,
         }
 
-        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.COMPLETION_POWERSHELL_HELP_TEMPLATE)
 
@@ -215,7 +229,7 @@ import (
         "github.com/yanosea/jrp/constant"
 )
 
-func newCompletionZshCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
+func newCompletionZshCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
         cmd := &amp;cobra.Command{
                 Use:   constant.COMPLETION_ZSH_USE,
                 Short: constant.COMPLETION_ZSH_SHORT,
@@ -225,7 +239,7 @@ func newCompletionZshCommand(globalOption *GlobalOption) *cobra.Command <span cl
                 }</span>,
         }
 
-        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.COMPLETION_ZSH_HELP_TEMPLATE)
 
@@ -245,11 +259,13 @@ import (
 )
 
 type downloadOption struct {
+        e      logic.Env
+        u      logic.User
         Out    io.Writer
         ErrOut io.Writer
 }
 
-func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
+func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
         o := &amp;downloadOption{}
         cmd := &amp;cobra.Command{
                 Use:     constant.DOWNLOAD_USE,
@@ -264,7 +280,7 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="
                 }</span>,
         }
 
-        <span class="cov8" title="1">cmd.SetOut(o.Out)
+        <span class="cov0" title="0">cmd.SetOut(o.Out)
         cmd.SetErr(o.ErrOut)
         cmd.SetHelpTemplate(constant.DOWNLOAD_HELP_TEMPLATE)
 
@@ -272,10 +288,7 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="
 }
 
 func (o *downloadOption) download() error <span class="cov0" title="0">{
-        u := &amp;logic.DefaultUserProvider{}
-        hc := &amp;logic.DefaultHTTPClient{}
-        fs := &amp;logic.DefaultFileSystem{}
-        if err := logic.Download(u, hc, fs); err != nil </span><span class="cov0" title="0">{
+        if err := logic.Download(o.e, o.u); err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
         <span class="cov0" title="0">return nil</span>
@@ -308,11 +321,14 @@ type generateOption struct {
         Args   []string
         Number int
 
+        e logic.Env
+        u logic.User
+
         Out    io.Writer
         ErrOut io.Writer
 }
 
-func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
+func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
         o := &amp;generateOption{}
         cmd := &amp;cobra.Command{
                 Use:     constant.GENERATE_USE,
@@ -329,7 +345,7 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="
                 }</span>,
         }
 
-        <span class="cov8" title="1">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
+        <span class="cov0" title="0">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
 
         cmd.SetOut(o.Out)
         cmd.SetErr(o.ErrOut)
@@ -339,7 +355,7 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="
 }
 
 func (o *generateOption) generate() error <span class="cov0" title="0">{
-        return logic.Generate(logic.DefineNumber(o.Number, o.Args))
+        return logic.Generate(o.e, o.u, logic.DefineNumber(o.Number, o.Args))
 }</span>
 </pre>
 		
@@ -368,11 +384,14 @@ type rootOption struct {
         Args   []string
         Number int
 
+        e logic.Env
+        u logic.User
+
         Out    io.Writer
         ErrOut io.Writer
 }
 
-func Execute() int <span class="cov8" title="1">{
+func Execute() int <span class="cov0" title="0">{
         o := os.Stdout
         e := os.Stderr
 
@@ -382,15 +401,15 @@ func Execute() int <span class="cov8" title="1">{
                 return 1
         }</span>
 
-        <span class="cov8" title="1">if err = rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if err = rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
                 util.PrintlnWithWriter(e, color.RedString(err.Error()))
                 return 1
         }</span>
 
-        <span class="cov8" title="1">return 0</span>
+        <span class="cov0" title="0">return 0</span>
 }
 
-func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <span class="cov8" title="1">{
+func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <span class="cov0" title="0">{
         glbo := &amp;GlobalOption{
                 Out:    outWriter,
                 ErrOut: errWriter,
@@ -405,7 +424,7 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
                 SilenceErrors: true,
                 SilenceUsage:  true,
                 Args:          cobra.MaximumNArgs(1),
-                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov8" title="1">{
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
                         ro.Out = glbo.Out
                         ro.ErrOut = glbo.ErrOut
                         ro.Args = args
@@ -414,7 +433,7 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
                 }</span>,
         }
 
-        <span class="cov8" title="1">cmd.PersistentFlags().IntVarP(&amp;ro.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
+        <span class="cov0" title="0">cmd.PersistentFlags().IntVarP(&amp;ro.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
 
         cmd.SetOut(outWriter)
         cmd.SetErr(errWriter)
@@ -430,8 +449,8 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
         return cmd, nil</span>
 }
 
-func (o *rootOption) rootGenerate() error <span class="cov8" title="1">{
-        return logic.Generate(logic.DefineNumber(o.Number, o.Args))
+func (o *rootOption) rootGenerate() error <span class="cov0" title="0">{
+        return logic.Generate(o.e, o.u, logic.DefineNumber(o.Number, o.Args))
 }</span>
 </pre>
 		
@@ -446,7 +465,7 @@ import (
         "github.com/yanosea/jrp/util"
 )
 
-func newVersionCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
+func newVersionCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
         cmd := &amp;cobra.Command{
                 Use:   constant.VERSION_USE,
                 Short: constant.VERSION_SHORT,
@@ -456,7 +475,7 @@ func newVersionCommand(globalOption *GlobalOption) *cobra.Command <span class="c
                 }</span>,
         }
 
-        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
+        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.VERSION_HELP_TEMPLATE)
 
@@ -544,7 +563,253 @@ func GetGenerateAliases() []string <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file11" style="display: none">package main
+		<pre class="file" id="file11" style="display: none">package logic
+
+import (
+        "path/filepath"
+
+        "github.com/yanosea/jrp/constant"
+)
+
+func GetDBFileDirPath(e Env, u User) (string, error) <span class="cov8" title="1">{
+        // check if JRP_ENV_WORDNETJP_DIR is set
+        dbFileDirPath := e.Get(constant.JRP_ENV_WORDNETJP_DIR)
+        if dbFileDirPath == "" </span><span class="cov8" title="1">{
+                // get current user
+                currentUser, err := u.Current()
+                if err != nil </span><span class="cov0" title="0">{
+                        return "", err
+                }</span>
+                // set default path ($XDG_DATA_HOME/jrp)
+                <span class="cov8" title="1">dbFileDirPath = filepath.Join(currentUser.HomeDir, ".local", "share", "jrp")</span>
+        }
+        <span class="cov8" title="1">return dbFileDirPath, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package logic
+
+import (
+        "compress/gzip"
+        "fmt"
+        "io"
+        "net/http"
+        "os"
+        "path/filepath"
+
+        "github.com/yanosea/jrp/constant"
+)
+
+func Download(e Env, u User) error <span class="cov0" title="0">{
+        dbFileDirPath, err := GetDBFileDirPath(e, u)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        <span class="cov0" title="0">if _, err := os.Stat(dbFileDirPath); os.IsNotExist(err) </span><span class="cov0" title="0">{
+                os.MkdirAll(dbFileDirPath, 0755)
+        }</span>
+
+        <span class="cov0" title="0">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
+        if _, err := os.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov0" title="0">{
+                resp, err := http.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">defer resp.Body.Close()
+
+                tempFilePath := filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
+                out, err := os.Create(tempFilePath)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">defer out.Close()
+                if _, err := io.Copy(out, resp.Body); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">if _, err := out.Seek(0, 0); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov0" title="0">gz, err := gzip.NewReader(out)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">defer gz.Close()
+
+                f, err := os.Create(dbFilePath)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">defer f.Close()
+                if _, err := io.Copy(f, gz); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+
+                <span class="cov0" title="0">if err := os.Remove(tempFilePath); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">fmt.Println(constant.DOWNLOAD_MESSAGE_SUCCEEDED)</span>
+        } else<span class="cov0" title="0"> {
+                fmt.Println(constant.DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package logic
+
+import (
+        "os"
+)
+
+type Env interface {
+        Get(key string) string
+}
+
+type OsEnv struct{}
+
+func (e OsEnv) Get(key string) string <span class="cov8" title="1">{
+        return os.Getenv(key)
+}</span>
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package logic
+
+import (
+        "database/sql"
+        "fmt"
+        "io"
+        "math/rand"
+        "os"
+        "path/filepath"
+        "strconv"
+        "time"
+
+        "github.com/fatih/color"
+        _ "modernc.org/sqlite"
+
+        "github.com/yanosea/jrp/constant"
+)
+
+// WordNet Japanese word table structure
+type Word struct {
+        WordID int
+        Lang   sql.NullString
+        Lemma  sql.NullString
+        Pron   sql.NullString
+        Pos    sql.NullString
+}
+
+type generateOption struct {
+        Number int
+
+        Out    io.Writer
+        ErrOut io.Writer
+}
+
+func DefineNumber(num int, args []string) int <span class="cov0" title="0">{
+        if len(args) == 0 </span><span class="cov0" title="0">{
+                return num
+        }</span>
+
+        <span class="cov0" title="0">argNum, err := strconv.Atoi(args[0])
+        if err != nil || argNum &lt;= 0 </span><span class="cov0" title="0">{
+                return num
+        }</span>
+
+        <span class="cov0" title="0">if argNum &gt; num </span><span class="cov0" title="0">{
+                return argNum
+        }</span> else<span class="cov0" title="0"> {
+                return num
+        }</span>
+}
+
+func Generate(e Env, u User, num int) error <span class="cov0" title="0">{
+        // get the directory of wnjpn.db from environment
+        dbFileDirPath, err := GetDBFileDirPath(e, u)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+
+        // end the program if the database file doesn't exist
+        <span class="cov0" title="0">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
+        if _, err := os.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov0" title="0">{
+                fmt.Println(color.YellowString(constant.GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED))
+                return nil
+        }</span>
+
+        // connect to the database
+        <span class="cov0" title="0">db, err := sql.Open("sqlite", "file:"+dbFilePath)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">defer db.Close()
+
+        // get all rows from the word table where the lang is Japanese and the pos is adjective, verb, or noun
+        rows, err := db.Query(constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS)
+        if err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">defer rows.Close()
+
+        allAVNWords := make([]Word, 0)
+        for rows.Next() </span><span class="cov0" title="0">{
+                var word Word
+                err = rows.Scan(&amp;word.Lemma, &amp;word.Pos)
+                if err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov0" title="0">allAVNWords = append(allAVNWords, word)</span>
+        }
+
+        // separate the words into adjectives and verbs, and nouns
+        <span class="cov0" title="0">var allAVWords []Word
+        var allNWords []Word
+
+        for _, word := range allAVNWords </span><span class="cov0" title="0">{
+                if word.Pos.Valid &amp;&amp; word.Pos.String == "n" </span><span class="cov0" title="0">{
+                        allNWords = append(allNWords, word)
+                }</span> else<span class="cov0" title="0"> {
+                        allAVWords = append(allAVWords, word)
+                }</span>
+        }
+
+        // generate random number
+        <span class="cov0" title="0">rand.New(rand.NewSource(time.Now().UnixNano()))
+
+        // generate the words
+        for i := 0; i &lt; num; i++ </span><span class="cov0" title="0">{
+                randomIndexA := rand.Intn(len(allAVWords))
+                randomIndexB := rand.Intn(len(allNWords))
+                randomWord := allAVWords[randomIndexA]
+                randomWord2 := allNWords[randomIndexB]
+                fmt.Println(randomWord.Lemma.String + randomWord2.Lemma.String)
+        }</span>
+
+        <span class="cov0" title="0">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package logic
+
+import (
+        "os/user"
+)
+
+type User interface {
+        Current() (*user.User, error)
+}
+
+type OsUser struct{}
+
+func (u OsUser) Current() (*user.User, error) <span class="cov8" title="1">{
+        return user.Current()
+}</span>
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package main
 
 import (
         "os"
@@ -552,70 +817,132 @@ import (
         "github.com/yanosea/jrp/cmd"
 )
 
-var exitFunc = os.Exit
-
-func main() <span class="cov8" title="1">{
-        exitFunc(cmd.Execute())
+func main() <span class="cov0" title="0">{
+        os.Exit(cmd.Execute())
 }</span>
 </pre>
 		
-		<pre class="file" id="file12" style="display: none">package util
+		<pre class="file" id="file17" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: logic/env.go
+//
+// Generated by this command:
+//
+//        mockgen -source=logic/env.go -destination=mock/logic/mock_env.go
+//
+
+// Package mock_logic is a generated GoMock package.
+package mock_logic
+
+import (
+        reflect "reflect"
+
+        gomock "go.uber.org/mock/gomock"
+)
+
+// MockEnv is a mock of Env interface.
+type MockEnv struct {
+        ctrl     *gomock.Controller
+        recorder *MockEnvMockRecorder
+}
+
+// MockEnvMockRecorder is the mock recorder for MockEnv.
+type MockEnvMockRecorder struct {
+        mock *MockEnv
+}
+
+// NewMockEnv creates a new mock instance.
+func NewMockEnv(ctrl *gomock.Controller) *MockEnv <span class="cov0" title="0">{
+        mock := &amp;MockEnv{ctrl: ctrl}
+        mock.recorder = &amp;MockEnvMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockEnv) EXPECT() *MockEnvMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+// Get mocks base method.
+func (m *MockEnv) Get(key string) string <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Get", key)
+        ret0, _ := ret[0].(string)
+        return ret0
+}</span>
+
+// Get indicates an expected call of Get.
+func (mr *MockEnvMockRecorder) Get(key any) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockEnv)(nil).Get), key)
+}</span>
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: logic/user.go
+//
+// Generated by this command:
+//
+//        mockgen -source=logic/user.go -destination=mock/logic/mock_user.go
+//
+
+// Package mock_logic is a generated GoMock package.
+package mock_logic
+
+import (
+        user "os/user"
+        reflect "reflect"
+
+        gomock "go.uber.org/mock/gomock"
+)
+
+// MockUser is a mock of User interface.
+type MockUser struct {
+        ctrl     *gomock.Controller
+        recorder *MockUserMockRecorder
+}
+
+// MockUserMockRecorder is the mock recorder for MockUser.
+type MockUserMockRecorder struct {
+        mock *MockUser
+}
+
+// NewMockUser creates a new mock instance.
+func NewMockUser(ctrl *gomock.Controller) *MockUser <span class="cov8" title="1">{
+        mock := &amp;MockUser{ctrl: ctrl}
+        mock.recorder = &amp;MockUserMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockUser) EXPECT() *MockUserMockRecorder <span class="cov8" title="1">{
+        return m.recorder
+}</span>
+
+// Current mocks base method.
+func (m *MockUser) Current() (*user.User, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Current")
+        ret0, _ := ret[0].(*user.User)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// Current indicates an expected call of Current.
+func (mr *MockUserMockRecorder) Current() *gomock.Call <span class="cov8" title="1">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Current", reflect.TypeOf((*MockUser)(nil).Current))
+}</span>
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package util
 
 import (
         "fmt"
         "io"
-        "os"
-        "os/user"
-        "path/filepath"
-
-        "github.com/yanosea/jrp/constant"
 )
-
-func FormatIndent(m string) string <span class="cov8" title="1">{
-        return "  " + m
-}</span>
 
 func PrintlnWithWriter(w io.Writer, a ...any) <span class="cov8" title="1">{
         fmt.Fprintln(w, fmt.Sprintf("%s", a[0]))
-}</span>
-
-func PrintWithWriterWithBlankLineBelow(w io.Writer, a ...any) <span class="cov8" title="1">{
-        fmt.Fprintln(w, fmt.Sprintf("%s\n", a[0]))
-}</span>
-
-func PrintWithWriterWithBlankLineAbove(w io.Writer, a ...any) <span class="cov8" title="1">{
-        fmt.Fprintln(w, fmt.Sprintf("\n%s", a[0]))
-}</span>
-
-func PrintWithWriterBetweenBlankLine(w io.Writer, a ...any) <span class="cov8" title="1">{
-        fmt.Fprintln(w, fmt.Sprintf("\n%s\n", a[0]))
-}</span>
-
-func GetDBFileDirPath(u UserProvider) (string, error) <span class="cov8" title="1">{
-        // check if JRP_ENV is set
-        var dbFileDirPath = os.Getenv(constant.JRP_ENV_WORDNETJP_DIR)
-        if dbFileDirPath == "" </span><span class="cov8" title="1">{
-                // get current user
-                user, err := u.Current()
-                if err != nil </span><span class="cov8" title="1">{
-                        return "", err
-                }</span>
-                // default path ($XDG_DATA_HOME/jrp)
-                <span class="cov8" title="1">dbFileDirPath = filepath.Join(user.HomeDir, ".local", "share", "jrp")</span>
-        }
-
-        <span class="cov8" title="1">return dbFileDirPath, nil</span>
-}
-
-// for testing
-type UserProvider interface {
-        Current() (*user.User, error)
-}
-
-type DefaultUserProvider struct{}
-
-func (d DefaultUserProvider) Current() (*user.User, error) <span class="cov8" title="1">{
-        return user.Current()
 }</span>
 </pre>
 		
