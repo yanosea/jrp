@@ -1,5 +1,4 @@
 mode: set
-github.com/yanosea/jrp/main.go:9.13,11.2 1 0
 github.com/yanosea/jrp/cmd/completion.go:10.70,14.55 1 0
 github.com/yanosea/jrp/cmd/completion.go:14.55,19.4 2 0
 github.com/yanosea/jrp/cmd/completion.go:22.2,33.12 5 0
@@ -38,13 +37,10 @@ github.com/yanosea/jrp/cmd/version.go:12.67,17.55 1 0
 github.com/yanosea/jrp/cmd/version.go:17.55,19.4 1 0
 github.com/yanosea/jrp/cmd/version.go:22.2,26.12 4 0
 github.com/yanosea/jrp/cmd/version.go:29.40,33.2 2 0
+github.com/yanosea/jrp/main.go:9.13,11.2 1 0
 github.com/yanosea/jrp/constant/download.go:32.36,34.2 1 1
 github.com/yanosea/jrp/constant/generate.go:34.36,36.2 1 1
 github.com/yanosea/jrp/util/printer.go:8.47,10.2 1 1
-github.com/yanosea/jrp/mock/logic/mock_env.go:30.51,34.2 3 0
-github.com/yanosea/jrp/mock/logic/mock_env.go:37.49,39.2 1 0
-github.com/yanosea/jrp/mock/logic/mock_env.go:42.42,47.2 4 0
-github.com/yanosea/jrp/mock/logic/mock_env.go:50.58,53.2 2 0
 github.com/yanosea/jrp/mock/logic/mock_user.go:31.53,35.2 3 0
 github.com/yanosea/jrp/mock/logic/mock_user.go:38.51,40.2 1 0
 github.com/yanosea/jrp/mock/logic/mock_user.go:43.50,49.2 5 0
@@ -106,10 +102,6 @@ github.com/yanosea/jrp/logic/generate.go:103.2,106.27 2 0
 github.com/yanosea/jrp/logic/generate.go:106.27,112.3 5 0
 github.com/yanosea/jrp/logic/generate.go:114.2,114.12 1 0
 github.com/yanosea/jrp/logic/user.go:13.47,15.2 1 1
-github.com/yanosea/jrp/mock/logic/mock_env.go:30.51,34.2 3 0
-github.com/yanosea/jrp/mock/logic/mock_env.go:37.49,39.2 1 0
-github.com/yanosea/jrp/mock/logic/mock_env.go:42.42,47.2 4 0
-github.com/yanosea/jrp/mock/logic/mock_env.go:50.58,53.2 2 0
 github.com/yanosea/jrp/mock/logic/mock_user.go:31.53,35.2 3 1
 github.com/yanosea/jrp/mock/logic/mock_user.go:38.51,40.2 1 1
 github.com/yanosea/jrp/mock/logic/mock_user.go:43.50,49.2 5 1
