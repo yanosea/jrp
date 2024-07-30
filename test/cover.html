@@ -65,11 +65,11 @@
 				
 				<option value="file4">github.com/yanosea/jrp/cmd/completion_zsh.go (83.3%)</option>
 				
-				<option value="file5">github.com/yanosea/jrp/cmd/download.go (31.6%)</option>
+				<option value="file5">github.com/yanosea/jrp/cmd/download.go (35.3%)</option>
 				
-				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (38.9%)</option>
+				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (43.8%)</option>
 				
-				<option value="file7">github.com/yanosea/jrp/cmd/root.go (83.3%)</option>
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (82.1%)</option>
 				
 				<option value="file8">github.com/yanosea/jrp/cmd/version.go (62.5%)</option>
 				
@@ -277,16 +277,18 @@ type downloadOption struct {
         ErrOut io.Writer
 }
 
-func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
-        o := &amp;downloadOption{}
+func newDownloadCommand(g *GlobalOption) *cobra.Command <span class="cov8" title="1">{
+        o := &amp;downloadOption{
+                Out:    g.Out,
+                ErrOut: g.ErrOut,
+        }
+
         cmd := &amp;cobra.Command{
                 Use:     constant.DOWNLOAD_USE,
                 Aliases: constant.GetDownloadAliases(),
                 Short:   constant.DOWNLOAD_SHORT,
                 Long:    constant.DOWNLOAD_LONG,
                 RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
-                        o.Out = globalOption.Out
-                        o.ErrOut = globalOption.ErrOut
                         return o.download()
                 }</span>,
         }
@@ -318,7 +320,6 @@ func (o *downloadOption) download() error <span class="cov0" title="0">{
 		<pre class="file" id="file6" style="display: none">package cmd
 
 import (
-        "database/sql"
         "io"
 
         "github.com/spf13/cobra"
@@ -328,28 +329,19 @@ import (
         "github.com/yanosea/jrp/logic"
 )
 
-// WordNet Japanese word table structure
-type Word struct {
-        WordID int
-        Lang   sql.NullString
-        Lemma  sql.NullString
-        Pron   sql.NullString
-        Pos    sql.NullString
-}
-
 type generateOption struct {
-        Args   []string
-        Number int
-
         Out    io.Writer
         ErrOut io.Writer
-
-        Env  logic.Env
-        User logic.User
+        Args   []string
+        Number int
 }
 
-func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
-        o := &amp;generateOption{}
+func newGenerateCommand(g *GlobalOption) *cobra.Command <span class="cov8" title="1">{
+        o := &amp;generateOption{
+                Out:    g.Out,
+                ErrOut: g.ErrOut,
+        }
+
         cmd := &amp;cobra.Command{
                 Use:     constant.GENERATE_USE,
                 Aliases: constant.GetGenerateAliases(),
@@ -358,9 +350,6 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="
                 Args:    cobra.MaximumNArgs(1),
                 RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
                         o.Args = args
-                        o.Out = globalOption.Out
-                        o.ErrOut = globalOption.ErrOut
-
                         return o.generate()
                 }</span>,
         }
@@ -410,11 +399,10 @@ type GlobalOption struct {
 }
 
 type rootOption struct {
-        Args   []string
-        Number int
-
         Out    io.Writer
         ErrOut io.Writer
+        Args   []string
+        Number int
 }
 
 func Execute() int <span class="cov8" title="1">{
@@ -435,12 +423,15 @@ func Execute() int <span class="cov8" title="1">{
         <span class="cov8" title="1">return 0</span>
 }
 
-func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <span class="cov8" title="1">{
-        glbo := &amp;GlobalOption{
-                Out:    outWriter,
-                ErrOut: errWriter,
+func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) <span class="cov8" title="1">{
+        g := &amp;GlobalOption{
+                Out:    ow,
+                ErrOut: ew,
         }
-        ro := &amp;rootOption{}
+        o := &amp;rootOption{
+                Out:    g.Out,
+                ErrOut: g.ErrOut,
+        }
 
         cmd := &amp;cobra.Command{
                 Use:           constant.ROOT_USE,
@@ -451,25 +442,22 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
                 SilenceUsage:  true,
                 Args:          cobra.MaximumNArgs(1),
                 RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov8" title="1">{
-                        ro.Args = args
-                        ro.Out = glbo.Out
-                        ro.ErrOut = glbo.ErrOut
-
-                        return ro.rootGenerate()
+                        o.Args = args
+                        return o.rootGenerate()
                 }</span>,
         }
 
-        <span class="cov8" title="1">cmd.PersistentFlags().IntVarP(&amp;ro.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
+        <span class="cov8" title="1">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
 
-        cmd.SetOut(outWriter)
-        cmd.SetErr(errWriter)
+        cmd.SetOut(ow)
+        cmd.SetErr(ew)
         cmd.SetHelpTemplate(constant.ROOT_HELP_TEMPLATE)
 
         cmd.AddCommand(
-                newCompletionCommand(glbo),
-                newDownloadCommand(glbo),
-                newGenerateCommand(glbo),
-                newVersionCommand(glbo),
+                newCompletionCommand(g),
+                newDownloadCommand(g),
+                newGenerateCommand(g),
+                newVersionCommand(g),
         )
 
         return cmd, nil</span>

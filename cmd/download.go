@@ -14,16 +14,18 @@ type downloadOption struct {
 	ErrOut io.Writer
 }
 
-func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
-	o := &downloadOption{}
+func newDownloadCommand(g *GlobalOption) *cobra.Command {
+	o := &downloadOption{
+		Out:    g.Out,
+		ErrOut: g.ErrOut,
+	}
+
 	cmd := &cobra.Command{
 		Use:     constant.DOWNLOAD_USE,
 		Aliases: constant.GetDownloadAliases(),
 		Short:   constant.DOWNLOAD_SHORT,
 		Long:    constant.DOWNLOAD_LONG,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			o.Out = globalOption.Out
-			o.ErrOut = globalOption.ErrOut
 			return o.download()
 		},
 	}

@@ -20,11 +20,10 @@ type GlobalOption struct {
 }
 
 type rootOption struct {
-	Args   []string
-	Number int
-
 	Out    io.Writer
 	ErrOut io.Writer
+	Args   []string
+	Number int
 }
 
 func Execute() int {
@@ -45,12 +44,15 @@ func Execute() int {
 	return 0
 }
 
-func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) {
-	glbo := &GlobalOption{
-		Out:    outWriter,
-		ErrOut: errWriter,
+func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) {
+	g := &GlobalOption{
+		Out:    ow,
+		ErrOut: ew,
 	}
-	ro := &rootOption{}
+	o := &rootOption{
+		Out:    g.Out,
+		ErrOut: g.ErrOut,
+	}
 
 	cmd := &cobra.Command{
 		Use:           constant.ROOT_USE,
@@ -61,25 +63,22 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) {
 		SilenceUsage:  true,
 		Args:          cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			ro.Args = args
-			ro.Out = glbo.Out
-			ro.ErrOut = glbo.ErrOut
-
-			return ro.rootGenerate()
+			o.Args = args
+			return o.rootGenerate()
 		},
 	}
 
-	cmd.PersistentFlags().IntVarP(&ro.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
+	cmd.PersistentFlags().IntVarP(&o.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
 
-	cmd.SetOut(outWriter)
-	cmd.SetErr(errWriter)
+	cmd.SetOut(ow)
+	cmd.SetErr(ew)
 	cmd.SetHelpTemplate(constant.ROOT_HELP_TEMPLATE)
 
 	cmd.AddCommand(
-		newCompletionCommand(glbo),
-		newDownloadCommand(glbo),
-		newGenerateCommand(glbo),
-		newVersionCommand(glbo),
+		newCompletionCommand(g),
+		newDownloadCommand(g),
+		newGenerateCommand(g),
+		newVersionCommand(g),
 	)
 
 	return cmd, nil

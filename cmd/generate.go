@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"database/sql"
 	"io"
 
 	"github.com/spf13/cobra"
@@ -11,28 +10,19 @@ import (
 	"github.com/yanosea/jrp/logic"
 )
 
-// WordNet Japanese word table structure
-type Word struct {
-	WordID int
-	Lang   sql.NullString
-	Lemma  sql.NullString
-	Pron   sql.NullString
-	Pos    sql.NullString
-}
-
 type generateOption struct {
-	Args   []string
-	Number int
-
 	Out    io.Writer
 	ErrOut io.Writer
-
-	Env  logic.Env
-	User logic.User
+	Args   []string
+	Number int
 }
 
-func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
-	o := &generateOption{}
+func newGenerateCommand(g *GlobalOption) *cobra.Command {
+	o := &generateOption{
+		Out:    g.Out,
+		ErrOut: g.ErrOut,
+	}
+
 	cmd := &cobra.Command{
 		Use:     constant.GENERATE_USE,
 		Aliases: constant.GetGenerateAliases(),
@@ -41,9 +31,6 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			o.Args = args
-			o.Out = globalOption.Out
-			o.ErrOut = globalOption.ErrOut
-
 			return o.generate()
 		},
 	}
