@@ -55,23 +55,23 @@
 			<div id="nav">
 				<select id="files">
 				
-				<option value="file0">github.com/yanosea/jrp/cmd/completion.go (0.0%)</option>
+				<option value="file0">github.com/yanosea/jrp/cmd/completion.go (75.0%)</option>
 				
-				<option value="file1">github.com/yanosea/jrp/cmd/completion_bash.go (0.0%)</option>
+				<option value="file1">github.com/yanosea/jrp/cmd/completion_bash.go (83.3%)</option>
 				
-				<option value="file2">github.com/yanosea/jrp/cmd/completion_fish.go (0.0%)</option>
+				<option value="file2">github.com/yanosea/jrp/cmd/completion_fish.go (83.3%)</option>
 				
-				<option value="file3">github.com/yanosea/jrp/cmd/completion_powershell.go (0.0%)</option>
+				<option value="file3">github.com/yanosea/jrp/cmd/completion_powershell.go (83.3%)</option>
 				
-				<option value="file4">github.com/yanosea/jrp/cmd/completion_zsh.go (0.0%)</option>
+				<option value="file4">github.com/yanosea/jrp/cmd/completion_zsh.go (83.3%)</option>
 				
-				<option value="file5">github.com/yanosea/jrp/cmd/download.go (0.0%)</option>
+				<option value="file5">github.com/yanosea/jrp/cmd/download.go (37.5%)</option>
 				
-				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (0.0%)</option>
+				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (50.0%)</option>
 				
-				<option value="file7">github.com/yanosea/jrp/cmd/root.go (0.0%)</option>
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (84.6%)</option>
 				
-				<option value="file8">github.com/yanosea/jrp/cmd/version.go (0.0%)</option>
+				<option value="file8">github.com/yanosea/jrp/cmd/version.go (62.5%)</option>
 				
 				<option value="file9">github.com/yanosea/jrp/constant/download.go (100.0%)</option>
 				
@@ -95,7 +95,7 @@
 				
 				<option value="file19">github.com/yanosea/jrp/logic/user.go (100.0%)</option>
 				
-				<option value="file20">github.com/yanosea/jrp/main.go (0.0%)</option>
+				<option value="file20">github.com/yanosea/jrp/main.go (100.0%)</option>
 				
 				<option value="file21">github.com/yanosea/jrp/mock/logic/mock_file_system.go (100.0%)</option>
 				
@@ -130,7 +130,7 @@ import (
         "github.com/yanosea/jrp/util"
 )
 
-func newCompletionCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+func newCompletionCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
         cmd := &amp;cobra.Command{
                 Use:   constant.COMPLETION_USE,
                 Short: constant.COMPLETION_SHORT,
@@ -142,7 +142,7 @@ func newCompletionCommand(globalOption *GlobalOption) *cobra.Command <span class
                 }</span>,
         }
 
-        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.COMPLETION_HELP_TEMPLATE)
 
@@ -165,7 +165,7 @@ import (
         "github.com/yanosea/jrp/constant"
 )
 
-func newCompletionBashCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+func newCompletionBashCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
         cmd := &amp;cobra.Command{
                 Use:   constant.COMPLETION_BASH_USE,
                 Short: constant.COMPLETION_BASH_SHORT,
@@ -175,7 +175,7 @@ func newCompletionBashCommand(globalOption *GlobalOption) *cobra.Command <span c
                 }</span>,
         }
 
-        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.COMPLETION_BASH_HELP_TEMPLATE)
 
@@ -191,7 +191,7 @@ import (
         "github.com/yanosea/jrp/constant"
 )
 
-func newCompletionFishCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+func newCompletionFishCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
         cmd := &amp;cobra.Command{
                 Use:   constant.COMPLETION_FISH_USE,
                 Short: constant.COMPLETION_FISH_SHORT,
@@ -201,7 +201,7 @@ func newCompletionFishCommand(globalOption *GlobalOption) *cobra.Command <span c
                 }</span>,
         }
 
-        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.COMPLETION_FISH_HELP_TEMPLATE)
 
@@ -217,7 +217,7 @@ import (
         "github.com/yanosea/jrp/constant"
 )
 
-func newCompletionPowerShellCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+func newCompletionPowerShellCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
         cmd := &amp;cobra.Command{
                 Use:   constant.COMPLETION_POWERSHELL_USE,
                 Short: constant.COMPLETION_POWERSHELL_SHORT,
@@ -227,7 +227,7 @@ func newCompletionPowerShellCommand(globalOption *GlobalOption) *cobra.Command <
                 }</span>,
         }
 
-        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.COMPLETION_POWERSHELL_HELP_TEMPLATE)
 
@@ -243,7 +243,7 @@ import (
         "github.com/yanosea/jrp/constant"
 )
 
-func newCompletionZshCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+func newCompletionZshCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
         cmd := &amp;cobra.Command{
                 Use:   constant.COMPLETION_ZSH_USE,
                 Short: constant.COMPLETION_ZSH_SHORT,
@@ -253,7 +253,7 @@ func newCompletionZshCommand(globalOption *GlobalOption) *cobra.Command <span cl
                 }</span>,
         }
 
-        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.COMPLETION_ZSH_HELP_TEMPLATE)
 
@@ -284,7 +284,7 @@ type downloadOption struct {
         Gzip       logic.Gzip
 }
 
-func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
         o := &amp;downloadOption{}
         cmd := &amp;cobra.Command{
                 Use:     constant.DOWNLOAD_USE,
@@ -302,7 +302,7 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="
                 }</span>,
         }
 
-        <span class="cov0" title="0">cmd.SetOut(o.Out)
+        <span class="cov8" title="1">cmd.SetOut(o.Out)
         cmd.SetErr(o.ErrOut)
         cmd.SetHelpTemplate(constant.DOWNLOAD_HELP_TEMPLATE)
 
@@ -350,7 +350,7 @@ type generateOption struct {
         User logic.User
 }
 
-func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
         o := &amp;generateOption{}
         cmd := &amp;cobra.Command{
                 Use:     constant.GENERATE_USE,
@@ -369,7 +369,7 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="
                 }</span>,
         }
 
-        <span class="cov0" title="0">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
+        <span class="cov8" title="1">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
 
         cmd.SetOut(o.Out)
         cmd.SetErr(o.ErrOut)
@@ -415,7 +415,7 @@ type rootOption struct {
         User logic.User
 }
 
-func Execute() int <span class="cov0" title="0">{
+func Execute() int <span class="cov8" title="1">{
         o := os.Stdout
         e := os.Stderr
 
@@ -425,15 +425,15 @@ func Execute() int <span class="cov0" title="0">{
                 return 1
         }</span>
 
-        <span class="cov0" title="0">if err = rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if err = rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
                 util.PrintlnWithWriter(e, color.RedString(err.Error()))
                 return 1
         }</span>
 
-        <span class="cov0" title="0">return 0</span>
+        <span class="cov8" title="1">return 0</span>
 }
 
-func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <span class="cov0" title="0">{
+func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <span class="cov8" title="1">{
         glbo := &amp;GlobalOption{
                 Out:    outWriter,
                 ErrOut: errWriter,
@@ -448,7 +448,7 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
                 SilenceErrors: true,
                 SilenceUsage:  true,
                 Args:          cobra.MaximumNArgs(1),
-                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov8" title="1">{
                         ro.Args = args
                         ro.Out = glbo.Out
                         ro.ErrOut = glbo.ErrOut
@@ -459,7 +459,7 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
                 }</span>,
         }
 
-        <span class="cov0" title="0">cmd.PersistentFlags().IntVarP(&amp;ro.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
+        <span class="cov8" title="1">cmd.PersistentFlags().IntVarP(&amp;ro.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
 
         cmd.SetOut(outWriter)
         cmd.SetErr(errWriter)
@@ -475,7 +475,7 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
         return cmd, nil</span>
 }
 
-func (o *rootOption) rootGenerate() error <span class="cov0" title="0">{
+func (o *rootOption) rootGenerate() error <span class="cov8" title="1">{
         return logic.Generate(o.Env, o.User, logic.DefineNumber(o.Number, o.Args))
 }</span>
 </pre>
@@ -491,7 +491,7 @@ import (
         "github.com/yanosea/jrp/util"
 )
 
-func newVersionCommand(globalOption *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+func newVersionCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
         cmd := &amp;cobra.Command{
                 Use:   constant.VERSION_USE,
                 Short: constant.VERSION_SHORT,
@@ -501,7 +501,7 @@ func newVersionCommand(globalOption *GlobalOption) *cobra.Command <span class="c
                 }</span>,
         }
 
-        <span class="cov0" title="0">cmd.SetOut(globalOption.Out)
+        <span class="cov8" title="1">cmd.SetOut(globalOption.Out)
         cmd.SetErr(globalOption.ErrOut)
         cmd.SetHelpTemplate(constant.VERSION_HELP_TEMPLATE)
 
@@ -923,8 +923,10 @@ import (
         "github.com/yanosea/jrp/cmd"
 )
 
-func main() <span class="cov0" title="0">{
-        os.Exit(cmd.Execute())
+var osExit = os.Exit
+
+func main() <span class="cov8" title="1">{
+        osExit(cmd.Execute())
 }</span>
 </pre>
 		
