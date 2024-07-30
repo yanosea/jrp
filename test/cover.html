@@ -79,7 +79,7 @@
 				
 				<option value="file11">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
-				<option value="file12">github.com/yanosea/jrp/logic/download.go (91.2%)</option>
+				<option value="file12">github.com/yanosea/jrp/logic/download.go (100.0%)</option>
 				
 				<option value="file13">github.com/yanosea/jrp/logic/env.go (100.0%)</option>
 				
@@ -97,7 +97,7 @@
 				
 				<option value="file20">github.com/yanosea/jrp/main.go (0.0%)</option>
 				
-				<option value="file21">github.com/yanosea/jrp/mock/logic/mock_file_system.go (64.7%)</option>
+				<option value="file21">github.com/yanosea/jrp/mock/logic/mock_file_system.go (100.0%)</option>
 				
 				<option value="file22">github.com/yanosea/jrp/mock/logic/mock_gzip.go (100.0%)</option>
 				
@@ -671,17 +671,18 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error
                         return err
                 }</span>
                 <span class="cov8" title="1">defer f.Close()
-                if _, err := io.Copy(f, gz); err != nil </span><span class="cov0" title="0">{
+                if _, err := io.Copy(f, gz); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
 
                 // remove temporary file
-                <span class="cov8" title="1">if err := fs.Remove(tempFilePath); err != nil </span><span class="cov0" title="0">{
+                <span class="cov8" title="1">if err := fs.Remove(tempFilePath); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
-                // if db file is downloaded, print message
+
+                // if db file is downloaded successfully, print message
                 <span class="cov8" title="1">fmt.Println(constant.DOWNLOAD_MESSAGE_SUCCEEDED)</span>
-        } else<span class="cov0" title="0"> {
+        } else<span class="cov8" title="1"> {
                 // if db file already exists, print message
                 fmt.Println(constant.DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED)
         }</span>
@@ -984,7 +985,7 @@ func (mr *MockFileSystemMockRecorder) Create(name any) *gomock.Call <span class=
 }</span>
 
 // Remove mocks base method.
-func (m *MockFileSystem) Remove(name string) error <span class="cov0" title="0">{
+func (m *MockFileSystem) Remove(name string) error <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Remove", name)
         ret0, _ := ret[0].(error)
@@ -992,7 +993,7 @@ func (m *MockFileSystem) Remove(name string) error <span class="cov0" title="0">
 }</span>
 
 // Remove indicates an expected call of Remove.
-func (mr *MockFileSystemMockRecorder) Remove(name any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockFileSystemMockRecorder) Remove(name any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFileSystem)(nil).Remove), name)
 }</span>

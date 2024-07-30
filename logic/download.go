@@ -62,7 +62,8 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error
 		if err := fs.Remove(tempFilePath); err != nil {
 			return err
 		}
-		// if db file is downloaded, print message
+
+		// if db file is downloaded successfully, print message
 		fmt.Println(constant.DOWNLOAD_MESSAGE_SUCCEEDED)
 	} else {
 		// if db file already exists, print message

@@ -1,4 +1,5 @@
 mode: set
+github.com/yanosea/jrp/main.go:9.13,11.2 1 0
 github.com/yanosea/jrp/cmd/completion.go:10.70,14.55 1 0
 github.com/yanosea/jrp/cmd/completion.go:14.55,19.4 2 0
 github.com/yanosea/jrp/cmd/completion.go:22.2,33.12 5 0
@@ -37,7 +38,6 @@ github.com/yanosea/jrp/cmd/version.go:12.67,17.55 1 0
 github.com/yanosea/jrp/cmd/version.go:17.55,19.4 1 0
 github.com/yanosea/jrp/cmd/version.go:22.2,26.12 4 0
 github.com/yanosea/jrp/cmd/version.go:29.40,33.2 2 0
-github.com/yanosea/jrp/main.go:9.13,11.2 1 0
 github.com/yanosea/jrp/constant/download.go:32.36,34.2 1 1
 github.com/yanosea/jrp/constant/generate.go:34.36,36.2 1 1
 github.com/yanosea/jrp/util/printer.go:8.47,10.2 1 1
@@ -84,12 +84,12 @@ github.com/yanosea/jrp/logic/download.go:47.17,49.4 1 1
 github.com/yanosea/jrp/logic/download.go:50.3,53.17 3 1
 github.com/yanosea/jrp/logic/download.go:53.17,55.4 1 1
 github.com/yanosea/jrp/logic/download.go:56.3,57.43 2 1
-github.com/yanosea/jrp/logic/download.go:57.43,59.4 1 0
+github.com/yanosea/jrp/logic/download.go:57.43,59.4 1 1
 github.com/yanosea/jrp/logic/download.go:62.3,62.49 1 1
-github.com/yanosea/jrp/logic/download.go:62.49,64.4 1 0
-github.com/yanosea/jrp/logic/download.go:66.3,66.51 1 1
-github.com/yanosea/jrp/logic/download.go:67.8,70.3 1 0
-github.com/yanosea/jrp/logic/download.go:72.2,72.12 1 1
+github.com/yanosea/jrp/logic/download.go:62.49,64.4 1 1
+github.com/yanosea/jrp/logic/download.go:67.3,67.51 1 1
+github.com/yanosea/jrp/logic/download.go:68.8,71.3 1 1
+github.com/yanosea/jrp/logic/download.go:73.2,73.12 1 1
 github.com/yanosea/jrp/logic/env.go:13.39,15.2 1 1
 github.com/yanosea/jrp/logic/file_system.go:14.59,16.2 1 1
 github.com/yanosea/jrp/logic/file_system.go:18.47,20.2 1 1
@@ -127,8 +127,8 @@ github.com/yanosea/jrp/mock/logic/mock_file_system.go:31.65,35.2 3 1
 github.com/yanosea/jrp/mock/logic/mock_file_system.go:38.63,40.2 1 1
 github.com/yanosea/jrp/mock/logic/mock_file_system.go:43.64,49.2 5 1
 github.com/yanosea/jrp/mock/logic/mock_file_system.go:52.69,55.2 2 1
-github.com/yanosea/jrp/mock/logic/mock_file_system.go:58.52,63.2 4 0
-github.com/yanosea/jrp/mock/logic/mock_file_system.go:66.69,69.2 2 0
+github.com/yanosea/jrp/mock/logic/mock_file_system.go:58.52,63.2 4 1
+github.com/yanosea/jrp/mock/logic/mock_file_system.go:66.69,69.2 2 1
 github.com/yanosea/jrp/mock/logic/mock_gzip.go:31.53,35.2 3 1
 github.com/yanosea/jrp/mock/logic/mock_gzip.go:38.51,40.2 1 1
 github.com/yanosea/jrp/mock/logic/mock_gzip.go:43.66,49.2 5 1
