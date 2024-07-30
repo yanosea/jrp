@@ -65,11 +65,11 @@
 				
 				<option value="file4">github.com/yanosea/jrp/cmd/completion_zsh.go (83.3%)</option>
 				
-				<option value="file5">github.com/yanosea/jrp/cmd/download.go (26.1%)</option>
+				<option value="file5">github.com/yanosea/jrp/cmd/download.go (31.6%)</option>
 				
-				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (50.0%)</option>
+				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (38.9%)</option>
 				
-				<option value="file7">github.com/yanosea/jrp/cmd/root.go (84.6%)</option>
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (83.3%)</option>
 				
 				<option value="file8">github.com/yanosea/jrp/cmd/version.go (62.5%)</option>
 				
@@ -275,13 +275,6 @@ import (
 type downloadOption struct {
         Out    io.Writer
         ErrOut io.Writer
-
-        Env        logic.Env
-        User       logic.User
-        FileSystem logic.FileSystem
-        HttpClient logic.HttpClient
-        IO         logic.IO
-        Gzip       logic.Gzip
 }
 
 func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="cov8" title="1">{
@@ -294,10 +287,6 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="
                 RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
                         o.Out = globalOption.Out
                         o.ErrOut = globalOption.ErrOut
-                        o.Env = logic.OsEnv{}
-                        o.User = logic.OsUser{}
-                        o.FileSystem = logic.OSFileSystem{}
-                        o.HttpClient = logic.DefaultHttpClient{}
                         return o.download()
                 }</span>,
         }
@@ -371,8 +360,6 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="
                         o.Args = args
                         o.Out = globalOption.Out
                         o.ErrOut = globalOption.ErrOut
-                        o.Env = logic.OsEnv{}
-                        o.User = logic.OsUser{}
 
                         return o.generate()
                 }</span>,
@@ -388,8 +375,17 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command <span class="
 }
 
 func (o *generateOption) generate() error <span class="cov0" title="0">{
-        return logic.Generate(o.Env, o.User, logic.DefineNumber(o.Number, o.Args))
-}</span>
+        env := logic.OsEnv{}
+        user := logic.OsUser{}
+
+        japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(o.Number, o.Args, env, user)
+        num := japaneseRandomPhraseGenaretaer.DefineNumber()
+
+        if err := japaneseRandomPhraseGenaretaer.Generate(num); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov0" title="0">return nil</span>
+}
 </pre>
 		
 		<pre class="file" id="file7" style="display: none">package cmd
@@ -419,9 +415,6 @@ type rootOption struct {
 
         Out    io.Writer
         ErrOut io.Writer
-
-        Env  logic.Env
-        User logic.User
 }
 
 func Execute() int <span class="cov8" title="1">{
@@ -461,8 +454,6 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
                         ro.Args = args
                         ro.Out = glbo.Out
                         ro.ErrOut = glbo.ErrOut
-                        ro.Env = logic.OsEnv{}
-                        ro.User = logic.OsUser{}
 
                         return ro.rootGenerate()
                 }</span>,
@@ -485,8 +476,17 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) <spa
 }
 
 func (o *rootOption) rootGenerate() error <span class="cov8" title="1">{
-        return logic.Generate(o.Env, o.User, logic.DefineNumber(o.Number, o.Args))
-}</span>
+        env := logic.OsEnv{}
+        user := logic.OsUser{}
+
+        japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(o.Number, o.Args, env, user)
+        num := japaneseRandomPhraseGenaretaer.DefineNumber()
+
+        if err := japaneseRandomPhraseGenaretaer.Generate(num); err != nil </span><span class="cov0" title="0">{
+                return err
+        }</span>
+        <span class="cov8" title="1">return nil</span>
+}
 </pre>
 		
 		<pre class="file" id="file8" style="display: none">package cmd
@@ -606,16 +606,32 @@ import (
         "github.com/yanosea/jrp/constant"
 )
 
-func GetDBFileDirPath(e Env, u User) (string, error) <span class="cov8" title="1">{
+type FileDirPathGetter interface {
+        GetFileDirPath() error
+}
+
+type DBFileDirPathGetter struct {
+        Env  Env
+        User User
+}
+
+func NewDBFileDirPathGetter(env Env, user User) *DBFileDirPathGetter <span class="cov8" title="1">{
+        return &amp;DBFileDirPathGetter{
+                Env:  env,
+                User: user,
+        }
+}</span>
+
+func (g *DBFileDirPathGetter) GetFileDirPath() (string, error) <span class="cov8" title="1">{
         // get current user
-        currentUser, err := u.Current()
+        currentUser, err := g.User.Current()
         if err != nil </span><span class="cov8" title="1">{
                 return "", err
         }</span>
         // set default path ($XDG_DATA_HOME/jrp)
         <span class="cov8" title="1">dbFileDirPath := filepath.Join(currentUser.HomeDir, ".local", "share", "jrp")
         // get JRP_ENV_WORDNETJP_DIR
-        wordNetJpDirPath := e.Get(constant.JRP_ENV_WORDNETJP_DIR)
+        wordNetJpDirPath := g.Env.Get(constant.JRP_ENV_WORDNETJP_DIR)
         if wordNetJpDirPath != "" </span><span class="cov8" title="1">{
                 dbFileDirPath = wordNetJpDirPath
         }</span>
@@ -659,8 +675,11 @@ func NewDBFileDownloader(env Env, user User, fs FileSystem, hc HttpClient, io IO
 }</span>
 
 func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
+        // create DBFileDirPathGetter instance
+        dbFileDirPathGetter := NewDBFileDirPathGetter(d.Env, d.User)
+
         // get db file directory path
-        dbFileDirPath, err := GetDBFileDirPath(d.Env, d.User)
+        dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
         if err != nil </span><span class="cov8" title="1">{
                 return err
         }</span>
@@ -768,7 +787,6 @@ func (OSFileSystem) Remove(name string) error <span class="cov8" title="1">{
 import (
         "database/sql"
         "fmt"
-        "io"
         "math/rand"
         "os"
         "path/filepath"
@@ -779,41 +797,50 @@ import (
         _ "modernc.org/sqlite"
 
         "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/model"
 )
 
+type Genarater interface {
+        DetermineNumber(num int, args []string) int
+        Generate() error
+}
+
+type JapaneseRandomPhraseGenaretaer struct {
+        Num  int
+        Args []string
+        Env  Env
+        User User
+}
+
+func NewJapaneseRandomPhraseGenerator(num int, args []string, env Env, user User) *JapaneseRandomPhraseGenaretaer <span class="cov0" title="0">{
+        return &amp;JapaneseRandomPhraseGenaretaer{
+                Num:  num,
+                Args: args,
+                Env:  env,
+                User: user,
+        }
+}</span>
+
 // WordNet Japanese word table structure
-type Word struct {
-        WordID int
-        Lang   sql.NullString
-        Lemma  sql.NullString
-        Pron   sql.NullString
-        Pos    sql.NullString
-}
-
-type generateOption struct {
-        Number int
-
-        Out    io.Writer
-        ErrOut io.Writer
-}
-
-func DefineNumber(num int, args []string) int <span class="cov0" title="0">{
-        if len(args) == 0 </span><span class="cov0" title="0">{
-                return num
+func (j JapaneseRandomPhraseGenaretaer) DefineNumber() int <span class="cov0" title="0">{
+        if len(j.Args) == 0 </span><span class="cov0" title="0">{
+                return j.Num
         }</span>
 
-        <span class="cov0" title="0">argNum, _ := strconv.Atoi(args[0])
+        <span class="cov0" title="0">argNum, _ := strconv.Atoi(j.Args[0])
 
-        if argNum &gt; num </span><span class="cov0" title="0">{
+        if argNum &gt; j.Num </span><span class="cov0" title="0">{
                 return argNum
         }</span> else<span class="cov0" title="0"> {
-                return num
+                return j.Num
         }</span>
 }
 
-func Generate(e Env, u User, num int) error <span class="cov0" title="0">{
+func (j JapaneseRandomPhraseGenaretaer) Generate(num int) error <span class="cov0" title="0">{
+        // create DBFileDirPathGetter instance
+        dbFileDirPathGetter := NewDBFileDirPathGetter(j.Env, j.User)
         // get the directory of wnjpn.db from environment
-        dbFileDirPath, err := GetDBFileDirPath(e, u)
+        dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
         if err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
@@ -839,9 +866,9 @@ func Generate(e Env, u User, num int) error <span class="cov0" title="0">{
         }</span>
         <span class="cov0" title="0">defer rows.Close()
 
-        allAVNWords := make([]Word, 0)
+        allAVNWords := make([]model.Word, 0)
         for rows.Next() </span><span class="cov0" title="0">{
-                var word Word
+                var word model.Word
                 err = rows.Scan(&amp;word.Lemma, &amp;word.Pos)
                 if err != nil </span><span class="cov0" title="0">{
                         return err
@@ -850,8 +877,8 @@ func Generate(e Env, u User, num int) error <span class="cov0" title="0">{
         }
 
         // separate the words into adjectives and verbs, and nouns
-        <span class="cov0" title="0">var allAVWords []Word
-        var allNWords []Word
+        <span class="cov0" title="0">var allAVWords []model.Word
+        var allNWords []model.Word
 
         for _, word := range allAVNWords </span><span class="cov0" title="0">{
                 if word.Pos.Valid &amp;&amp; word.Pos.String == "n" </span><span class="cov0" title="0">{

@@ -3,7 +3,6 @@ package logic
 import (
 	"database/sql"
 	"fmt"
-	"io"
 	"math/rand"
 	"os"
 	"path/filepath"
@@ -14,41 +13,50 @@ import (
 	_ "modernc.org/sqlite"
 
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/model"
 )
 
+type Genarater interface {
+	DetermineNumber(num int, args []string) int
+	Generate() error
+}
+
+type JapaneseRandomPhraseGenaretaer struct {
+	Num  int
+	Args []string
+	Env  Env
+	User User
+}
+
+func NewJapaneseRandomPhraseGenerator(num int, args []string, env Env, user User) *JapaneseRandomPhraseGenaretaer {
+	return &JapaneseRandomPhraseGenaretaer{
+		Num:  num,
+		Args: args,
+		Env:  env,
+		User: user,
+	}
+}
+
 // WordNet Japanese word table structure
-type Word struct {
-	WordID int
-	Lang   sql.NullString
-	Lemma  sql.NullString
-	Pron   sql.NullString
-	Pos    sql.NullString
-}
-
-type generateOption struct {
-	Number int
-
-	Out    io.Writer
-	ErrOut io.Writer
-}
-
-func DefineNumber(num int, args []string) int {
-	if len(args) == 0 {
-		return num
+func (j JapaneseRandomPhraseGenaretaer) DefineNumber() int {
+	if len(j.Args) == 0 {
+		return j.Num
 	}
 
-	argNum, _ := strconv.Atoi(args[0])
+	argNum, _ := strconv.Atoi(j.Args[0])
 
-	if argNum > num {
+	if argNum > j.Num {
 		return argNum
 	} else {
-		return num
+		return j.Num
 	}
 }
 
-func Generate(e Env, u User, num int) error {
+func (j JapaneseRandomPhraseGenaretaer) Generate(num int) error {
+	// create DBFileDirPathGetter instance
+	dbFileDirPathGetter := NewDBFileDirPathGetter(j.Env, j.User)
 	// get the directory of wnjpn.db from environment
-	dbFileDirPath, err := GetDBFileDirPath(e, u)
+	dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
 	if err != nil {
 		return err
 	}
@@ -74,9 +82,9 @@ func Generate(e Env, u User, num int) error {
 	}
 	defer rows.Close()
 
-	allAVNWords := make([]Word, 0)
+	allAVNWords := make([]model.Word, 0)
 	for rows.Next() {
-		var word Word
+		var word model.Word
 		err = rows.Scan(&word.Lemma, &word.Pos)
 		if err != nil {
 			return err
@@ -85,8 +93,8 @@ func Generate(e Env, u User, num int) error {
 	}
 
 	// separate the words into adjectives and verbs, and nouns
-	var allAVWords []Word
-	var allNWords []Word
+	var allAVWords []model.Word
+	var allNWords []model.Word
 
 	for _, word := range allAVNWords {
 		if word.Pos.Valid && word.Pos.String == "n" {

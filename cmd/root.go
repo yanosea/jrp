@@ -25,9 +25,6 @@ type rootOption struct {
 
 	Out    io.Writer
 	ErrOut io.Writer
-
-	Env  logic.Env
-	User logic.User
 }
 
 func Execute() int {
@@ -67,8 +64,6 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) {
 			ro.Args = args
 			ro.Out = glbo.Out
 			ro.ErrOut = glbo.ErrOut
-			ro.Env = logic.OsEnv{}
-			ro.User = logic.OsUser{}
 
 			return ro.rootGenerate()
 		},
@@ -91,5 +86,14 @@ func newRootCommand(outWriter, errWriter io.Writer) (*cobra.Command, error) {
 }
 
 func (o *rootOption) rootGenerate() error {
-	return logic.Generate(o.Env, o.User, logic.DefineNumber(o.Number, o.Args))
+	env := logic.OsEnv{}
+	user := logic.OsUser{}
+
+	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(o.Number, o.Args, env, user)
+	num := japaneseRandomPhraseGenaretaer.DefineNumber()
+
+	if err := japaneseRandomPhraseGenaretaer.Generate(num); err != nil {
+		return err
+	}
+	return nil
 }

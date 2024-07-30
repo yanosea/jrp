@@ -17,9 +17,8 @@ func TestGetDBFileDirPath(t *testing.T) {
 	tcu, _ := tu.Current()
 
 	type args struct {
-		e   Env
-		u   User
-		env string
+		dbFileDirPathGetter *DBFileDirPathGetter
+		env                 string
 	}
 	tests := []struct {
 		name    string
@@ -30,25 +29,32 @@ func TestGetDBFileDirPath(t *testing.T) {
 	}{
 		{
 			name:    "positive testing (no env)",
-			args:    args{e: OsEnv{}, u: OsUser{}, env: ""},
+			args:    args{dbFileDirPathGetter: nil, env: ""},
 			want:    filepath.Join(tcu.HomeDir, ".local", "share", "jrp"),
 			wantErr: false,
-			setup:   nil,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				dbFileDirPathGetter := NewDBFileDirPathGetter(OsEnv{}, OsUser{})
+				tt.dbFileDirPathGetter = dbFileDirPathGetter
+			},
 		}, {
 			name:    "positive testing (with env)",
-			args:    args{e: OsEnv{}, u: OsUser{}, env: filepath.Join(tcu.HomeDir, "jrp")},
+			args:    args{dbFileDirPathGetter: nil, env: filepath.Join(tcu.HomeDir, "jrp")},
 			want:    filepath.Join(tcu.HomeDir, "jrp"),
 			wantErr: false,
-			setup:   nil,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				dbFileDirPathGetter := NewDBFileDirPathGetter(OsEnv{}, OsUser{})
+				tt.dbFileDirPathGetter = dbFileDirPathGetter
+			},
 		}, {
 			name:    "negative testing (user.Current() fails)",
-			args:    args{e: OsEnv{}, u: nil, env: ""},
+			args:    args{dbFileDirPathGetter: nil, env: ""},
 			want:    "",
 			wantErr: true,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mu := mock_logic.NewMockUser(mockCtrl)
 				mu.EXPECT().Current().Return(nil, errors.New("failed to get current user"))
-				tt.u = mu
+				dbFileDirPathGetter := NewDBFileDirPathGetter(OsEnv{}, mu)
+				tt.dbFileDirPathGetter = dbFileDirPathGetter
 			},
 		},
 	}
@@ -65,7 +71,7 @@ func TestGetDBFileDirPath(t *testing.T) {
 				os.Setenv(constant.JRP_ENV_WORDNETJP_DIR, tt.args.env)
 				defer os.Unsetenv(constant.JRP_ENV_WORDNETJP_DIR)
 			}
-			got, err := GetDBFileDirPath(tt.args.e, tt.args.u)
+			got, err := tt.args.dbFileDirPathGetter.GetFileDirPath()
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetDBFileDirPath() error = %v, wantErr %v", err, tt.wantErr)
 				return

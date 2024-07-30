@@ -12,13 +12,6 @@ import (
 type downloadOption struct {
 	Out    io.Writer
 	ErrOut io.Writer
-
-	Env        logic.Env
-	User       logic.User
-	FileSystem logic.FileSystem
-	HttpClient logic.HttpClient
-	IO         logic.IO
-	Gzip       logic.Gzip
 }
 
 func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
@@ -31,10 +24,6 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			o.Out = globalOption.Out
 			o.ErrOut = globalOption.ErrOut
-			o.Env = logic.OsEnv{}
-			o.User = logic.OsUser{}
-			o.FileSystem = logic.OSFileSystem{}
-			o.HttpClient = logic.DefaultHttpClient{}
 			return o.download()
 		},
 	}

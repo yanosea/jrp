@@ -43,8 +43,6 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 			o.Args = args
 			o.Out = globalOption.Out
 			o.ErrOut = globalOption.ErrOut
-			o.Env = logic.OsEnv{}
-			o.User = logic.OsUser{}
 
 			return o.generate()
 		},
@@ -60,5 +58,14 @@ func newGenerateCommand(globalOption *GlobalOption) *cobra.Command {
 }
 
 func (o *generateOption) generate() error {
-	return logic.Generate(o.Env, o.User, logic.DefineNumber(o.Number, o.Args))
+	env := logic.OsEnv{}
+	user := logic.OsUser{}
+
+	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(o.Number, o.Args, env, user)
+	num := japaneseRandomPhraseGenaretaer.DefineNumber()
+
+	if err := japaneseRandomPhraseGenaretaer.Generate(num); err != nil {
+		return err
+	}
+	return nil
 }

@@ -33,8 +33,11 @@ func NewDBFileDownloader(env Env, user User, fs FileSystem, hc HttpClient, io IO
 }
 
 func (d *DBFileDownloader) Download() error {
+	// create DBFileDirPathGetter instance
+	dbFileDirPathGetter := NewDBFileDirPathGetter(d.Env, d.User)
+
 	// get db file directory path
-	dbFileDirPath, err := GetDBFileDirPath(d.Env, d.User)
+	dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
 	if err != nil {
 		return err
 	}
