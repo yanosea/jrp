@@ -6,6 +6,12 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/internal/env"
+	"github.com/yanosea/jrp/internal/fs"
+	"github.com/yanosea/jrp/internal/gzip"
+	"github.com/yanosea/jrp/internal/http"
+	"github.com/yanosea/jrp/internal/iomanager"
+	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/logic"
 )
 
@@ -38,14 +44,14 @@ func newDownloadCommand(g *GlobalOption) *cobra.Command {
 }
 
 func (o *downloadOption) download() error {
-	env := logic.OsEnv{}
-	user := logic.OsUser{}
-	fileSystem := logic.OSFileSystem{}
-	httpClient := logic.DefaultHttpClient{}
-	io := logic.DefaultIO{}
-	gzip := logic.DefaultGzip{}
+	e := env.OsEnvironment{}
+	u := usermanager.OSUserProvider{}
+	f := fs.OsFileManager{}
+	h := http.DefaultHTTPClient{}
+	i := iomanager.DefaultIOHelper{}
+	g := gzip.DefaultGzipHandler{}
 
-	downloader := logic.NewDBFileDownloader(env, user, fileSystem, httpClient, io, gzip)
+	downloader := logic.NewDBFileDownloader(e, u, f, h, i, g)
 
 	if err := downloader.Download(); err != nil {
 		return err

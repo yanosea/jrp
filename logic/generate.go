@@ -6,13 +6,14 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
-	"strconv"
 	"time"
 
 	"github.com/fatih/color"
 	_ "modernc.org/sqlite"
 
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/internal/env"
+	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/model"
 )
 
@@ -22,33 +23,14 @@ type Genarater interface {
 }
 
 type JapaneseRandomPhraseGenaretaer struct {
-	Num  int
-	Args []string
-	Env  Env
-	User User
+	Env  env.EnvironmentProvider
+	User usermanager.UserProvider
 }
 
-func NewJapaneseRandomPhraseGenerator(num int, args []string, env Env, user User) *JapaneseRandomPhraseGenaretaer {
+func NewJapaneseRandomPhraseGenerator(e env.EnvironmentProvider, u usermanager.UserProvider) *JapaneseRandomPhraseGenaretaer {
 	return &JapaneseRandomPhraseGenaretaer{
-		Num:  num,
-		Args: args,
-		Env:  env,
-		User: user,
-	}
-}
-
-// WordNet Japanese word table structure
-func (j JapaneseRandomPhraseGenaretaer) DefineNumber() int {
-	if len(j.Args) == 0 {
-		return j.Num
-	}
-
-	argNum, _ := strconv.Atoi(j.Args[0])
-
-	if argNum > j.Num {
-		return argNum
-	} else {
-		return j.Num
+		Env:  e,
+		User: u,
 	}
 }
 

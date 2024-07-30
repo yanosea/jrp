@@ -6,6 +6,12 @@ import (
 	"path/filepath"
 
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/internal/env"
+	"github.com/yanosea/jrp/internal/fs"
+	"github.com/yanosea/jrp/internal/gzip"
+	"github.com/yanosea/jrp/internal/http"
+	"github.com/yanosea/jrp/internal/iomanager"
+	"github.com/yanosea/jrp/internal/usermanager"
 )
 
 type Downloader interface {
@@ -13,22 +19,23 @@ type Downloader interface {
 }
 
 type DBFileDownloader struct {
-	Env        Env
-	User       User
-	FileSystem FileSystem
-	HttpClient HttpClient
-	IO         IO
-	Gzip       Gzip
+	Env        env.EnvironmentProvider
+	User       usermanager.UserProvider
+	FileSystem fs.FileManager
+	HttpClient http.HTTPClient
+	IO         iomanager.IOHelper
+	Gzip       gzip.GzipHandler
 }
 
-func NewDBFileDownloader(env Env, user User, fs FileSystem, hc HttpClient, io IO, gz Gzip) *DBFileDownloader {
+func NewDBFileDownloader(e env.EnvironmentProvider, u usermanager.UserProvider, f fs.FileManager,
+	h http.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler) *DBFileDownloader {
 	return &DBFileDownloader{
-		Env:        env,
-		User:       user,
-		FileSystem: fs,
-		HttpClient: hc,
-		IO:         io,
-		Gzip:       gz,
+		Env:        e,
+		User:       u,
+		FileSystem: f,
+		HttpClient: h,
+		IO:         i,
+		Gzip:       g,
 	}
 }
 

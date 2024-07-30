@@ -9,11 +9,12 @@ import (
 	gomock "go.uber.org/mock/gomock"
 
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/internal/usermanager"
 	mock_logic "github.com/yanosea/jrp/mock/logic"
 )
 
 func TestGetDBFileDirPath(t *testing.T) {
-	tu := OsUser{}
+	tu := usermanager.OSUserProvider{}
 	tcu, _ := tu.Current()
 
 	type args struct {

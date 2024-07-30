@@ -8,6 +8,8 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/internal/env"
+	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/logic"
 	"github.com/yanosea/jrp/util"
 )
@@ -85,13 +87,11 @@ func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) {
 }
 
 func (o *rootOption) rootGenerate() error {
-	env := logic.OsEnv{}
-	user := logic.OsUser{}
+	e := env.OsEnvironment{}
+	u := usermanager.OSUserProvider{}
 
-	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(o.Number, o.Args, env, user)
-	num := japaneseRandomPhraseGenaretaer.DefineNumber()
-
-	if err := japaneseRandomPhraseGenaretaer.Generate(num); err != nil {
+	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(e, u)
+	if err := japaneseRandomPhraseGenaretaer.Generate(defineNumber(o.Number, o.Args)); err != nil {
 		return err
 	}
 	return nil

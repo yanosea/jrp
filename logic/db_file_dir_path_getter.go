@@ -4,6 +4,8 @@ import (
 	"path/filepath"
 
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/internal/env"
+	"github.com/yanosea/jrp/internal/usermanager"
 )
 
 type FileDirPathGetter interface {
@@ -11,14 +13,14 @@ type FileDirPathGetter interface {
 }
 
 type DBFileDirPathGetter struct {
-	Env  Env
-	User User
+	Env  env.EnvironmentProvider
+	User usermanager.UserProvider
 }
 
-func NewDBFileDirPathGetter(env Env, user User) *DBFileDirPathGetter {
+func NewDBFileDirPathGetter(e env.EnvironmentProvider, u usermanager.UserProvider) *DBFileDirPathGetter {
 	return &DBFileDirPathGetter{
-		Env:  env,
-		User: user,
+		Env:  e,
+		User: u,
 	}
 }
 

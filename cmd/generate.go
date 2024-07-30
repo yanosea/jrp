@@ -2,11 +2,14 @@ package cmd
 
 import (
 	"io"
+	"strconv"
 
 	"github.com/spf13/cobra"
 	_ "modernc.org/sqlite"
 
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/internal/env"
+	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/logic"
 )
 
@@ -45,14 +48,26 @@ func newGenerateCommand(g *GlobalOption) *cobra.Command {
 }
 
 func (o *generateOption) generate() error {
-	env := logic.OsEnv{}
-	user := logic.OsUser{}
+	e := env.OsEnvironment{}
+	u := usermanager.OSUserProvider{}
 
-	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(o.Number, o.Args, env, user)
-	num := japaneseRandomPhraseGenaretaer.DefineNumber()
-
-	if err := japaneseRandomPhraseGenaretaer.Generate(num); err != nil {
+	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(e, u)
+	if err := japaneseRandomPhraseGenaretaer.Generate(defineNumber(o.Number, o.Args)); err != nil {
 		return err
 	}
 	return nil
+}
+
+func defineNumber(num int, args []string) int {
+	if len(args) == 0 {
+		return num
+	}
+
+	argNum, _ := strconv.Atoi(args[0])
+
+	if argNum > num {
+		return argNum
+	} else {
+		return num
+	}
 }
