@@ -47,7 +47,16 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command {
 }
 
 func (o *downloadOption) download() error {
-	if err := logic.Download(o.Env, o.User, o.FileSystem, o.HttpClient, o.IO, o.Gzip); err != nil {
+	env := logic.OsEnv{}
+	user := logic.OsUser{}
+	fileSystem := logic.OSFileSystem{}
+	httpClient := logic.DefaultHttpClient{}
+	io := logic.DefaultIO{}
+	gzip := logic.DefaultGzip{}
+
+	downloader := logic.NewDBFileDownloader(env, user, fileSystem, httpClient, io, gzip)
+
+	if err := downloader.Download(); err != nil {
 		return err
 	}
 	return nil

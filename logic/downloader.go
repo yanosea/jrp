@@ -8,9 +8,33 @@ import (
 	"github.com/yanosea/jrp/constant"
 )
 
-func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error {
+type Downloader interface {
+	Download() error
+}
+
+type DBFileDownloader struct {
+	Env        Env
+	User       User
+	FileSystem FileSystem
+	HttpClient HttpClient
+	IO         IO
+	Gzip       Gzip
+}
+
+func NewDBFileDownloader(env Env, user User, fs FileSystem, hc HttpClient, io IO, gz Gzip) *DBFileDownloader {
+	return &DBFileDownloader{
+		Env:        env,
+		User:       user,
+		FileSystem: fs,
+		HttpClient: hc,
+		IO:         io,
+		Gzip:       gz,
+	}
+}
+
+func (d *DBFileDownloader) Download() error {
 	// get db file directory path
-	dbFileDirPath, err := GetDBFileDirPath(e, u)
+	dbFileDirPath, err := GetDBFileDirPath(d.Env, d.User)
 	if err != nil {
 		return err
 	}
@@ -24,7 +48,7 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error
 	dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
 	if _, err := os.Stat(dbFilePath); os.IsNotExist(err) {
 		// download db archive file
-		resp, err := hc.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
+		resp, err := d.HttpClient.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
 		if err != nil {
 			return err
 		}
@@ -32,34 +56,34 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error
 
 		// save db archive file to temporary file
 		tempFilePath := filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
-		out, err := fs.Create(tempFilePath)
+		out, err := d.FileSystem.Create(tempFilePath)
 		if err != nil {
 			return err
 		}
 		defer out.Close()
-		if _, err := io.Copy(out, resp.Body); err != nil {
+		if _, err := d.IO.Copy(out, resp.Body); err != nil {
 			return err
 		}
 		out.Seek(0, 0)
 
 		// decompress db archive file to db file
-		gz, err := gz.NewReader(out)
+		gz, err := d.Gzip.NewReader(out)
 		if err != nil {
 			return err
 		}
 		defer gz.Close()
 
-		f, err := fs.Create(dbFilePath)
+		f, err := d.FileSystem.Create(dbFilePath)
 		if err != nil {
 			return err
 		}
 		defer f.Close()
-		if _, err := io.Copy(f, gz); err != nil {
+		if _, err := d.IO.Copy(f, gz); err != nil {
 			return err
 		}
 
 		// remove temporary file
-		if err := fs.Remove(tempFilePath); err != nil {
+		if err := d.FileSystem.Remove(tempFilePath); err != nil {
 			return err
 		}
 

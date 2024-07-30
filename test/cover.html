@@ -65,7 +65,7 @@
 				
 				<option value="file4">github.com/yanosea/jrp/cmd/completion_zsh.go (83.3%)</option>
 				
-				<option value="file5">github.com/yanosea/jrp/cmd/download.go (37.5%)</option>
+				<option value="file5">github.com/yanosea/jrp/cmd/download.go (26.1%)</option>
 				
 				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (50.0%)</option>
 				
@@ -79,7 +79,7 @@
 				
 				<option value="file11">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
-				<option value="file12">github.com/yanosea/jrp/logic/download.go (100.0%)</option>
+				<option value="file12">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
 				
 				<option value="file13">github.com/yanosea/jrp/logic/env.go (100.0%)</option>
 				
@@ -310,7 +310,16 @@ func newDownloadCommand(globalOption *GlobalOption) *cobra.Command <span class="
 }
 
 func (o *downloadOption) download() error <span class="cov0" title="0">{
-        if err := logic.Download(o.Env, o.User, o.FileSystem, o.HttpClient, o.IO, o.Gzip); err != nil </span><span class="cov0" title="0">{
+        env := logic.OsEnv{}
+        user := logic.OsUser{}
+        fileSystem := logic.OSFileSystem{}
+        httpClient := logic.DefaultHttpClient{}
+        io := logic.DefaultIO{}
+        gzip := logic.DefaultGzip{}
+
+        downloader := logic.NewDBFileDownloader(env, user, fileSystem, httpClient, io, gzip)
+
+        if err := downloader.Download(); err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
         <span class="cov0" title="0">return nil</span>
@@ -625,9 +634,33 @@ import (
         "github.com/yanosea/jrp/constant"
 )
 
-func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error <span class="cov8" title="1">{
+type Downloader interface {
+        Download() error
+}
+
+type DBFileDownloader struct {
+        Env        Env
+        User       User
+        FileSystem FileSystem
+        HttpClient HttpClient
+        IO         IO
+        Gzip       Gzip
+}
+
+func NewDBFileDownloader(env Env, user User, fs FileSystem, hc HttpClient, io IO, gz Gzip) *DBFileDownloader <span class="cov8" title="1">{
+        return &amp;DBFileDownloader{
+                Env:        env,
+                User:       user,
+                FileSystem: fs,
+                HttpClient: hc,
+                IO:         io,
+                Gzip:       gz,
+        }
+}</span>
+
+func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
         // get db file directory path
-        dbFileDirPath, err := GetDBFileDirPath(e, u)
+        dbFileDirPath, err := GetDBFileDirPath(d.Env, d.User)
         if err != nil </span><span class="cov8" title="1">{
                 return err
         }</span>
@@ -641,7 +674,7 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error
         <span class="cov8" title="1">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
         if _, err := os.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov8" title="1">{
                 // download db archive file
-                resp, err := hc.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
+                resp, err := d.HttpClient.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
                 if err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
@@ -649,34 +682,34 @@ func Download(e Env, u User, fs FileSystem, hc HttpClient, io IO, gz Gzip) error
 
                 // save db archive file to temporary file
                 tempFilePath := filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
-                out, err := fs.Create(tempFilePath)
+                out, err := d.FileSystem.Create(tempFilePath)
                 if err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
                 <span class="cov8" title="1">defer out.Close()
-                if _, err := io.Copy(out, resp.Body); err != nil </span><span class="cov8" title="1">{
+                if _, err := d.IO.Copy(out, resp.Body); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
                 <span class="cov8" title="1">out.Seek(0, 0)
 
                 // decompress db archive file to db file
-                gz, err := gz.NewReader(out)
+                gz, err := d.Gzip.NewReader(out)
                 if err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
                 <span class="cov8" title="1">defer gz.Close()
 
-                f, err := fs.Create(dbFilePath)
+                f, err := d.FileSystem.Create(dbFilePath)
                 if err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
                 <span class="cov8" title="1">defer f.Close()
-                if _, err := io.Copy(f, gz); err != nil </span><span class="cov8" title="1">{
+                if _, err := d.IO.Copy(f, gz); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
 
                 // remove temporary file
-                <span class="cov8" title="1">if err := fs.Remove(tempFilePath); err != nil </span><span class="cov8" title="1">{
+                <span class="cov8" title="1">if err := d.FileSystem.Remove(tempFilePath); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
 
@@ -769,12 +802,9 @@ func DefineNumber(num int, args []string) int <span class="cov0" title="0">{
                 return num
         }</span>
 
-        <span class="cov0" title="0">argNum, err := strconv.Atoi(args[0])
-        if err != nil || argNum &lt;= 0 </span><span class="cov0" title="0">{
-                return num
-        }</span>
+        <span class="cov0" title="0">argNum, _ := strconv.Atoi(args[0])
 
-        <span class="cov0" title="0">if argNum &gt; num </span><span class="cov0" title="0">{
+        if argNum &gt; num </span><span class="cov0" title="0">{
                 return argNum
         }</span> else<span class="cov0" title="0"> {
                 return num

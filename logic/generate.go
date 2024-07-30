@@ -37,10 +37,7 @@ func DefineNumber(num int, args []string) int {
 		return num
 	}
 
-	argNum, err := strconv.Atoi(args[0])
-	if err != nil || argNum <= 0 {
-		return num
-	}
+	argNum, _ := strconv.Atoi(args[0])
 
 	if argNum > num {
 		return argNum
