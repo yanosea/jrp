@@ -6,10 +6,9 @@ import (
 	"path/filepath"
 
 	"github.com/yanosea/jrp/constant"
-	"github.com/yanosea/jrp/internal/env"
 	"github.com/yanosea/jrp/internal/fs"
 	"github.com/yanosea/jrp/internal/gzip"
-	"github.com/yanosea/jrp/internal/http"
+	"github.com/yanosea/jrp/internal/httpclient"
 	"github.com/yanosea/jrp/internal/iomanager"
 	"github.com/yanosea/jrp/internal/usermanager"
 )
@@ -19,18 +18,16 @@ type Downloader interface {
 }
 
 type DBFileDownloader struct {
-	Env        env.EnvironmentProvider
 	User       usermanager.UserProvider
 	FileSystem fs.FileManager
-	HttpClient http.HTTPClient
+	HttpClient httpclient.HTTPClient
 	IO         iomanager.IOHelper
 	Gzip       gzip.GzipHandler
 }
 
-func NewDBFileDownloader(e env.EnvironmentProvider, u usermanager.UserProvider, f fs.FileManager,
-	h http.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler) *DBFileDownloader {
+func NewDBFileDownloader(u usermanager.UserProvider, f fs.FileManager,
+	h httpclient.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler) *DBFileDownloader {
 	return &DBFileDownloader{
-		Env:        e,
 		User:       u,
 		FileSystem: f,
 		HttpClient: h,
@@ -41,7 +38,7 @@ func NewDBFileDownloader(e env.EnvironmentProvider, u usermanager.UserProvider, 
 
 func (d *DBFileDownloader) Download() error {
 	// create DBFileDirPathGetter instance
-	dbFileDirPathGetter := NewDBFileDirPathGetter(d.Env, d.User)
+	dbFileDirPathGetter := NewDBFileDirPathGetter(d.User)
 
 	// get db file directory path
 	dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
@@ -82,7 +79,6 @@ func (d *DBFileDownloader) Download() error {
 			return err
 		}
 		defer gz.Close()
-
 		f, err := d.FileSystem.Create(dbFilePath)
 		if err != nil {
 			return err

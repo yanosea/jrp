@@ -10,7 +10,7 @@ import (
 
 	"github.com/yanosea/jrp/constant"
 	"github.com/yanosea/jrp/internal/usermanager"
-	mock_logic "github.com/yanosea/jrp/mock/logic"
+	mock_usermanager "github.com/yanosea/jrp/mock/usermanager"
 )
 
 func TestGetDBFileDirPath(t *testing.T) {
@@ -34,7 +34,7 @@ func TestGetDBFileDirPath(t *testing.T) {
 			want:    filepath.Join(tcu.HomeDir, ".local", "share", "jrp"),
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
-				dbFileDirPathGetter := NewDBFileDirPathGetter(OsEnv{}, OsUser{})
+				dbFileDirPathGetter := NewDBFileDirPathGetter(usermanager.OSUserProvider{})
 				tt.dbFileDirPathGetter = dbFileDirPathGetter
 			},
 		}, {
@@ -43,7 +43,7 @@ func TestGetDBFileDirPath(t *testing.T) {
 			want:    filepath.Join(tcu.HomeDir, "jrp"),
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
-				dbFileDirPathGetter := NewDBFileDirPathGetter(OsEnv{}, OsUser{})
+				dbFileDirPathGetter := NewDBFileDirPathGetter(usermanager.OSUserProvider{})
 				tt.dbFileDirPathGetter = dbFileDirPathGetter
 			},
 		}, {
@@ -52,9 +52,9 @@ func TestGetDBFileDirPath(t *testing.T) {
 			want:    "",
 			wantErr: true,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
-				mu := mock_logic.NewMockUser(mockCtrl)
+				mu := mock_usermanager.NewMockUserProvider(mockCtrl)
 				mu.EXPECT().Current().Return(nil, errors.New("failed to get current user"))
-				dbFileDirPathGetter := NewDBFileDirPathGetter(OsEnv{}, mu)
+				dbFileDirPathGetter := NewDBFileDirPathGetter(mu)
 				tt.dbFileDirPathGetter = dbFileDirPathGetter
 			},
 		},

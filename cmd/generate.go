@@ -8,7 +8,9 @@ import (
 	_ "modernc.org/sqlite"
 
 	"github.com/yanosea/jrp/constant"
-	"github.com/yanosea/jrp/internal/env"
+	"github.com/yanosea/jrp/internal/db"
+	"github.com/yanosea/jrp/internal/fs"
+	"github.com/yanosea/jrp/internal/rand"
 	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/logic"
 )
@@ -48,10 +50,12 @@ func newGenerateCommand(g *GlobalOption) *cobra.Command {
 }
 
 func (o *generateOption) generate() error {
-	e := env.OsEnvironment{}
 	u := usermanager.OSUserProvider{}
+	d := db.SQLiteProvider{}
+	f := fs.OsFileManager{}
+	r := rand.NewDefaultRandomGenerator()
 
-	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(e, u)
+	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(u, d, f, r)
 	if err := japaneseRandomPhraseGenaretaer.Generate(defineNumber(o.Number, o.Args)); err != nil {
 		return err
 	}

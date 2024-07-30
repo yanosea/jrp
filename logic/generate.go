@@ -1,64 +1,60 @@
 package logic
 
 import (
-	"database/sql"
 	"fmt"
-	"math/rand"
-	"os"
 	"path/filepath"
-	"time"
 
 	"github.com/fatih/color"
-	_ "modernc.org/sqlite"
 
 	"github.com/yanosea/jrp/constant"
-	"github.com/yanosea/jrp/internal/env"
+	"github.com/yanosea/jrp/internal/db"
+	"github.com/yanosea/jrp/internal/fs"
+	"github.com/yanosea/jrp/internal/rand"
 	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/model"
 )
 
 type Genarater interface {
-	DetermineNumber(num int, args []string) int
-	Generate() error
+	Generate(num int) error
 }
 
 type JapaneseRandomPhraseGenaretaer struct {
-	Env  env.EnvironmentProvider
-	User usermanager.UserProvider
+	User            usermanager.UserProvider
+	DbProvider      db.DatabaseProvider
+	FileSystem      fs.FileManager
+	RandomGenerator rand.RandomGenerator
 }
 
-func NewJapaneseRandomPhraseGenerator(e env.EnvironmentProvider, u usermanager.UserProvider) *JapaneseRandomPhraseGenaretaer {
+func NewJapaneseRandomPhraseGenerator(u usermanager.UserProvider, d db.DatabaseProvider, f fs.FileManager, r rand.RandomGenerator) *JapaneseRandomPhraseGenaretaer {
 	return &JapaneseRandomPhraseGenaretaer{
-		Env:  e,
-		User: u,
+		User:            u,
+		DbProvider:      d,
+		FileSystem:      f,
+		RandomGenerator: r,
 	}
 }
 
 func (j JapaneseRandomPhraseGenaretaer) Generate(num int) error {
-	// create DBFileDirPathGetter instance
-	dbFileDirPathGetter := NewDBFileDirPathGetter(j.Env, j.User)
-	// get the directory of wnjpn.db from environment
+	dbFileDirPathGetter := NewDBFileDirPathGetter(j.User)
+
 	dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
 	if err != nil {
 		return err
 	}
 
-	// end the program if the database file doesn't exist
 	dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
-	if _, err := os.Stat(dbFilePath); os.IsNotExist(err) {
+	if !j.FileSystem.Exists(dbFilePath) {
 		fmt.Println(color.YellowString(constant.GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED))
 		return nil
 	}
 
-	// connect to the database
-	db, err := sql.Open("sqlite", "file:"+dbFilePath)
+	db, err := j.DbProvider.Connect(dbFilePath)
 	if err != nil {
 		return err
 	}
 	defer db.Close()
 
-	// get all rows from the word table where the lang is Japanese and the pos is adjective, verb, or noun
-	rows, err := db.Query(constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS)
+	rows, err := j.DbProvider.Query(db, constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS)
 	if err != nil {
 		return err
 	}
@@ -74,7 +70,6 @@ func (j JapaneseRandomPhraseGenaretaer) Generate(num int) error {
 		allAVNWords = append(allAVNWords, word)
 	}
 
-	// separate the words into adjectives and verbs, and nouns
 	var allAVWords []model.Word
 	var allNWords []model.Word
 
@@ -86,13 +81,9 @@ func (j JapaneseRandomPhraseGenaretaer) Generate(num int) error {
 		}
 	}
 
-	// generate random number
-	rand.New(rand.NewSource(time.Now().UnixNano()))
-
-	// generate the words
 	for i := 0; i < num; i++ {
-		randomIndexA := rand.Intn(len(allAVWords))
-		randomIndexB := rand.Intn(len(allNWords))
+		randomIndexA := j.RandomGenerator.Intn(len(allAVWords))
+		randomIndexB := j.RandomGenerator.Intn(len(allNWords))
 		randomWord := allAVWords[randomIndexA]
 		randomWord2 := allNWords[randomIndexB]
 		fmt.Println(randomWord.Lemma.String + randomWord2.Lemma.String)

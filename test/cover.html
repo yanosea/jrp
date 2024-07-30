@@ -65,11 +65,11 @@
 				
 				<option value="file4">github.com/yanosea/jrp/cmd/completion_zsh.go (83.3%)</option>
 				
-				<option value="file5">github.com/yanosea/jrp/cmd/download.go (35.3%)</option>
+				<option value="file5">github.com/yanosea/jrp/cmd/download.go (37.5%)</option>
 				
-				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (43.8%)</option>
+				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (39.1%)</option>
 				
-				<option value="file7">github.com/yanosea/jrp/cmd/root.go (82.1%)</option>
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (82.8%)</option>
 				
 				<option value="file8">github.com/yanosea/jrp/cmd/version.go (62.5%)</option>
 				
@@ -77,37 +77,43 @@
 				
 				<option value="file10">github.com/yanosea/jrp/constant/generate.go (100.0%)</option>
 				
-				<option value="file11">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
+				<option value="file11">github.com/yanosea/jrp/internal/db/database.go (0.0%)</option>
 				
-				<option value="file12">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
+				<option value="file12">github.com/yanosea/jrp/internal/fs/file_system.go (100.0%)</option>
 				
-				<option value="file13">github.com/yanosea/jrp/logic/env.go (100.0%)</option>
+				<option value="file13">github.com/yanosea/jrp/internal/gzip/gzip_handler.go (100.0%)</option>
 				
-				<option value="file14">github.com/yanosea/jrp/logic/file_system.go (100.0%)</option>
+				<option value="file14">github.com/yanosea/jrp/internal/httpclient/http_client.go (100.0%)</option>
 				
-				<option value="file15">github.com/yanosea/jrp/logic/generate.go (0.0%)</option>
+				<option value="file15">github.com/yanosea/jrp/internal/iomanager/io_helper.go (100.0%)</option>
 				
-				<option value="file16">github.com/yanosea/jrp/logic/gzip.go (100.0%)</option>
+				<option value="file16">github.com/yanosea/jrp/internal/rand/random.go (50.0%)</option>
 				
-				<option value="file17">github.com/yanosea/jrp/logic/http_client.go (100.0%)</option>
+				<option value="file17">github.com/yanosea/jrp/internal/usermanager/user_provider.go (100.0%)</option>
 				
-				<option value="file18">github.com/yanosea/jrp/logic/io.go (100.0%)</option>
+				<option value="file18">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
-				<option value="file19">github.com/yanosea/jrp/logic/user.go (100.0%)</option>
+				<option value="file19">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
 				
-				<option value="file20">github.com/yanosea/jrp/main.go (100.0%)</option>
+				<option value="file20">github.com/yanosea/jrp/logic/generate.go (0.0%)</option>
 				
-				<option value="file21">github.com/yanosea/jrp/mock/logic/mock_file_system.go (100.0%)</option>
+				<option value="file21">github.com/yanosea/jrp/main.go (100.0%)</option>
 				
-				<option value="file22">github.com/yanosea/jrp/mock/logic/mock_gzip.go (100.0%)</option>
+				<option value="file22">github.com/yanosea/jrp/mock/db/database.go (0.0%)</option>
 				
-				<option value="file23">github.com/yanosea/jrp/mock/logic/mock_http_client.go (100.0%)</option>
+				<option value="file23">github.com/yanosea/jrp/mock/fs/file_system.go (73.9%)</option>
 				
-				<option value="file24">github.com/yanosea/jrp/mock/logic/mock_io.go (100.0%)</option>
+				<option value="file24">github.com/yanosea/jrp/mock/gzip/gzip_handler.go (100.0%)</option>
 				
-				<option value="file25">github.com/yanosea/jrp/mock/logic/mock_user.go (100.0%)</option>
+				<option value="file25">github.com/yanosea/jrp/mock/httpclient/http_client.go (100.0%)</option>
 				
-				<option value="file26">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
+				<option value="file26">github.com/yanosea/jrp/mock/internal/random.go (0.0%)</option>
+				
+				<option value="file27">github.com/yanosea/jrp/mock/iomanager/io_helper.go (100.0%)</option>
+				
+				<option value="file28">github.com/yanosea/jrp/mock/usermanager/user_provider.go (100.0%)</option>
+				
+				<option value="file29">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -269,6 +275,11 @@ import (
         "github.com/spf13/cobra"
 
         "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/fs"
+        "github.com/yanosea/jrp/internal/gzip"
+        "github.com/yanosea/jrp/internal/httpclient"
+        "github.com/yanosea/jrp/internal/iomanager"
+        "github.com/yanosea/jrp/internal/usermanager"
         "github.com/yanosea/jrp/logic"
 )
 
@@ -301,14 +312,13 @@ func newDownloadCommand(g *GlobalOption) *cobra.Command <span class="cov8" title
 }
 
 func (o *downloadOption) download() error <span class="cov0" title="0">{
-        env := logic.OsEnv{}
-        user := logic.OsUser{}
-        fileSystem := logic.OSFileSystem{}
-        httpClient := logic.DefaultHttpClient{}
-        io := logic.DefaultIO{}
-        gzip := logic.DefaultGzip{}
+        u := usermanager.OSUserProvider{}
+        f := fs.OsFileManager{}
+        h := httpclient.DefaultHTTPClient{}
+        i := iomanager.DefaultIOHelper{}
+        g := gzip.DefaultGzipHandler{}
 
-        downloader := logic.NewDBFileDownloader(env, user, fileSystem, httpClient, io, gzip)
+        downloader := logic.NewDBFileDownloader(u, f, h, i, g)
 
         if err := downloader.Download(); err != nil </span><span class="cov0" title="0">{
                 return err
@@ -321,11 +331,16 @@ func (o *downloadOption) download() error <span class="cov0" title="0">{
 
 import (
         "io"
+        "strconv"
 
         "github.com/spf13/cobra"
         _ "modernc.org/sqlite"
 
         "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/db"
+        "github.com/yanosea/jrp/internal/fs"
+        "github.com/yanosea/jrp/internal/rand"
+        "github.com/yanosea/jrp/internal/usermanager"
         "github.com/yanosea/jrp/logic"
 )
 
@@ -364,16 +379,30 @@ func newGenerateCommand(g *GlobalOption) *cobra.Command <span class="cov8" title
 }
 
 func (o *generateOption) generate() error <span class="cov0" title="0">{
-        env := logic.OsEnv{}
-        user := logic.OsUser{}
+        u := usermanager.OSUserProvider{}
+        d := db.SQLiteProvider{}
+        f := fs.OsFileManager{}
+        r := rand.NewDefaultRandomGenerator()
 
-        japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(o.Number, o.Args, env, user)
-        num := japaneseRandomPhraseGenaretaer.DefineNumber()
-
-        if err := japaneseRandomPhraseGenaretaer.Generate(num); err != nil </span><span class="cov0" title="0">{
+        japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(u, d, f, r)
+        if err := japaneseRandomPhraseGenaretaer.Generate(defineNumber(o.Number, o.Args)); err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
         <span class="cov0" title="0">return nil</span>
+}
+
+func defineNumber(num int, args []string) int <span class="cov8" title="1">{
+        if len(args) == 0 </span><span class="cov8" title="1">{
+                return num
+        }</span>
+
+        <span class="cov0" title="0">argNum, _ := strconv.Atoi(args[0])
+
+        if argNum &gt; num </span><span class="cov0" title="0">{
+                return argNum
+        }</span> else<span class="cov0" title="0"> {
+                return num
+        }</span>
 }
 </pre>
 		
@@ -387,6 +416,10 @@ import (
         "github.com/spf13/cobra"
 
         "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/db"
+        "github.com/yanosea/jrp/internal/fs"
+        "github.com/yanosea/jrp/internal/rand"
+        "github.com/yanosea/jrp/internal/usermanager"
         "github.com/yanosea/jrp/logic"
         "github.com/yanosea/jrp/util"
 )
@@ -464,13 +497,13 @@ func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) <span class="cov8"
 }
 
 func (o *rootOption) rootGenerate() error <span class="cov8" title="1">{
-        env := logic.OsEnv{}
-        user := logic.OsUser{}
+        u := usermanager.OSUserProvider{}
+        d := db.SQLiteProvider{}
+        f := fs.OsFileManager{}
+        r := rand.NewDefaultRandomGenerator()
 
-        japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(o.Number, o.Args, env, user)
-        num := japaneseRandomPhraseGenaretaer.DefineNumber()
-
-        if err := japaneseRandomPhraseGenaretaer.Generate(num); err != nil </span><span class="cov0" title="0">{
+        japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(u, d, f, r)
+        if err := japaneseRandomPhraseGenaretaer.Generate(defineNumber(o.Number, o.Args)); err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
         <span class="cov8" title="1">return nil</span>
@@ -586,12 +619,157 @@ func GetGenerateAliases() []string <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file11" style="display: none">package logic
+		<pre class="file" id="file11" style="display: none">package db
 
 import (
+        "database/sql"
+)
+
+type DatabaseProvider interface {
+        Connect(dbFilePath string) (*sql.DB, error)
+        Query(db *sql.DB, query string) (*sql.Rows, error)
+}
+
+type SQLiteProvider struct{}
+
+func (s SQLiteProvider) Connect(dbFilePath string) (*sql.DB, error) <span class="cov0" title="0">{
+        return sql.Open("sqlite", dbFilePath)
+}</span>
+
+func (s SQLiteProvider) Query(db *sql.DB, query string) (*sql.Rows, error) <span class="cov0" title="0">{
+        return db.Query(query)
+}</span>
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package fs
+
+import (
+        "os"
+)
+
+type FileManager interface {
+        Create(name string) (*os.File, error)
+        Remove(name string) error
+        Exists(path string) bool
+}
+
+type OsFileManager struct{}
+
+func (OsFileManager) Create(name string) (*os.File, error) <span class="cov8" title="1">{
+        return os.Create(name)
+}</span>
+
+func (OsFileManager) Remove(name string) error <span class="cov8" title="1">{
+        return os.Remove(name)
+}</span>
+
+func (o OsFileManager) Exists(filePath string) bool <span class="cov8" title="1">{
+        _, err := os.Stat(filePath)
+        return !os.IsNotExist(err)
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package gzip
+
+import (
+        "compress/gzip"
+        "io"
+)
+
+type GzipHandler interface {
+        NewReader(r io.Reader) (io.ReadCloser, error)
+}
+
+type DefaultGzipHandler struct{}
+
+func (DefaultGzipHandler) NewReader(r io.Reader) (io.ReadCloser, error) <span class="cov8" title="1">{
+        return gzip.NewReader(r)
+}</span>
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">package httpclient
+
+import (
+        "net/http"
+)
+
+type HTTPClient interface {
+        Get(url string) (*http.Response, error)
+}
+
+type DefaultHTTPClient struct{}
+
+func (DefaultHTTPClient) Get(url string) (*http.Response, error) <span class="cov8" title="1">{
+        return http.Get(url)
+}</span>
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">package iomanager
+
+import (
+        "io"
+)
+
+type IOHelper interface {
+        Copy(dst io.Writer, src io.Reader) (int64, error)
+}
+
+type DefaultIOHelper struct{}
+
+func (DefaultIOHelper) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="cov8" title="1">{
+        return io.Copy(dst, src)
+}</span>
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">package rand
+
+import (
+        "math/rand"
+        "time"
+)
+
+type RandomGenerator interface {
+        Intn(n int) int
+}
+
+type DefaultRandomGenerator struct {
+        rng *rand.Rand
+}
+
+func NewDefaultRandomGenerator() *DefaultRandomGenerator <span class="cov8" title="1">{
+        return &amp;DefaultRandomGenerator{rng: rand.New(rand.NewSource(time.Now().UnixNano()))}
+}</span>
+
+func (d *DefaultRandomGenerator) Intn(n int) int <span class="cov0" title="0">{
+        return d.rng.Intn(n)
+}</span>
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">package usermanager
+
+import (
+        "os/user"
+)
+
+type UserProvider interface {
+        Current() (*user.User, error)
+}
+
+type OSUserProvider struct{}
+
+func (OSUserProvider) Current() (*user.User, error) <span class="cov8" title="1">{
+        return user.Current()
+}</span>
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package logic
+
+import (
+        "os"
         "path/filepath"
 
         "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/usermanager"
 )
 
 type FileDirPathGetter interface {
@@ -599,14 +777,12 @@ type FileDirPathGetter interface {
 }
 
 type DBFileDirPathGetter struct {
-        Env  Env
-        User User
+        User usermanager.UserProvider
 }
 
-func NewDBFileDirPathGetter(env Env, user User) *DBFileDirPathGetter <span class="cov8" title="1">{
+func NewDBFileDirPathGetter(u usermanager.UserProvider) *DBFileDirPathGetter <span class="cov8" title="1">{
         return &amp;DBFileDirPathGetter{
-                Env:  env,
-                User: user,
+                User: u,
         }
 }</span>
 
@@ -619,7 +795,7 @@ func (g *DBFileDirPathGetter) GetFileDirPath() (string, error) <span class="cov8
         // set default path ($XDG_DATA_HOME/jrp)
         <span class="cov8" title="1">dbFileDirPath := filepath.Join(currentUser.HomeDir, ".local", "share", "jrp")
         // get JRP_ENV_WORDNETJP_DIR
-        wordNetJpDirPath := g.Env.Get(constant.JRP_ENV_WORDNETJP_DIR)
+        wordNetJpDirPath := os.Getenv(constant.JRP_ENV_WORDNETJP_DIR)
         if wordNetJpDirPath != "" </span><span class="cov8" title="1">{
                 dbFileDirPath = wordNetJpDirPath
         }</span>
@@ -628,7 +804,7 @@ func (g *DBFileDirPathGetter) GetFileDirPath() (string, error) <span class="cov8
 }
 </pre>
 		
-		<pre class="file" id="file12" style="display: none">package logic
+		<pre class="file" id="file19" style="display: none">package logic
 
 import (
         "fmt"
@@ -636,6 +812,11 @@ import (
         "path/filepath"
 
         "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/fs"
+        "github.com/yanosea/jrp/internal/gzip"
+        "github.com/yanosea/jrp/internal/httpclient"
+        "github.com/yanosea/jrp/internal/iomanager"
+        "github.com/yanosea/jrp/internal/usermanager"
 )
 
 type Downloader interface {
@@ -643,28 +824,27 @@ type Downloader interface {
 }
 
 type DBFileDownloader struct {
-        Env        Env
-        User       User
-        FileSystem FileSystem
-        HttpClient HttpClient
-        IO         IO
-        Gzip       Gzip
+        User       usermanager.UserProvider
+        FileSystem fs.FileManager
+        HttpClient httpclient.HTTPClient
+        IO         iomanager.IOHelper
+        Gzip       gzip.GzipHandler
 }
 
-func NewDBFileDownloader(env Env, user User, fs FileSystem, hc HttpClient, io IO, gz Gzip) *DBFileDownloader <span class="cov8" title="1">{
+func NewDBFileDownloader(u usermanager.UserProvider, f fs.FileManager,
+        h httpclient.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler) *DBFileDownloader <span class="cov8" title="1">{
         return &amp;DBFileDownloader{
-                Env:        env,
-                User:       user,
-                FileSystem: fs,
-                HttpClient: hc,
-                IO:         io,
-                Gzip:       gz,
+                User:       u,
+                FileSystem: f,
+                HttpClient: h,
+                IO:         i,
+                Gzip:       g,
         }
 }</span>
 
 func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
         // create DBFileDirPathGetter instance
-        dbFileDirPathGetter := NewDBFileDirPathGetter(d.Env, d.User)
+        dbFileDirPathGetter := NewDBFileDirPathGetter(d.User)
 
         // get db file directory path
         dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
@@ -705,7 +885,6 @@ func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
                         return err
                 }</span>
                 <span class="cov8" title="1">defer gz.Close()
-
                 f, err := d.FileSystem.Create(dbFilePath)
                 if err != nil </span><span class="cov8" title="1">{
                         return err
@@ -731,124 +910,63 @@ func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
 }
 </pre>
 		
-		<pre class="file" id="file13" style="display: none">package logic
+		<pre class="file" id="file20" style="display: none">package logic
 
 import (
-        "os"
-)
-
-type Env interface {
-        Get(key string) string
-}
-
-type OsEnv struct{}
-
-func (e OsEnv) Get(key string) string <span class="cov8" title="1">{
-        return os.Getenv(key)
-}</span>
-</pre>
-		
-		<pre class="file" id="file14" style="display: none">package logic
-
-import (
-        "os"
-)
-
-type FileSystem interface {
-        Create(name string) (*os.File, error)
-        Remove(name string) error
-}
-
-type OSFileSystem struct{}
-
-func (OSFileSystem) Create(name string) (*os.File, error) <span class="cov8" title="1">{
-        return os.Create(name)
-}</span>
-
-func (OSFileSystem) Remove(name string) error <span class="cov8" title="1">{
-        return os.Remove(name)
-}</span>
-</pre>
-		
-		<pre class="file" id="file15" style="display: none">package logic
-
-import (
-        "database/sql"
         "fmt"
-        "math/rand"
-        "os"
         "path/filepath"
-        "strconv"
-        "time"
 
         "github.com/fatih/color"
-        _ "modernc.org/sqlite"
 
         "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/db"
+        "github.com/yanosea/jrp/internal/fs"
+        "github.com/yanosea/jrp/internal/rand"
+        "github.com/yanosea/jrp/internal/usermanager"
         "github.com/yanosea/jrp/model"
 )
 
 type Genarater interface {
-        DetermineNumber(num int, args []string) int
-        Generate() error
+        Generate(num int) error
 }
 
 type JapaneseRandomPhraseGenaretaer struct {
-        Num  int
-        Args []string
-        Env  Env
-        User User
+        User            usermanager.UserProvider
+        DbProvider      db.DatabaseProvider
+        FileSystem      fs.FileManager
+        RandomGenerator rand.RandomGenerator
 }
 
-func NewJapaneseRandomPhraseGenerator(num int, args []string, env Env, user User) *JapaneseRandomPhraseGenaretaer <span class="cov0" title="0">{
+func NewJapaneseRandomPhraseGenerator(u usermanager.UserProvider, d db.DatabaseProvider, f fs.FileManager, r rand.RandomGenerator) *JapaneseRandomPhraseGenaretaer <span class="cov0" title="0">{
         return &amp;JapaneseRandomPhraseGenaretaer{
-                Num:  num,
-                Args: args,
-                Env:  env,
-                User: user,
+                User:            u,
+                DbProvider:      d,
+                FileSystem:      f,
+                RandomGenerator: r,
         }
 }</span>
 
-// WordNet Japanese word table structure
-func (j JapaneseRandomPhraseGenaretaer) DefineNumber() int <span class="cov0" title="0">{
-        if len(j.Args) == 0 </span><span class="cov0" title="0">{
-                return j.Num
-        }</span>
-
-        <span class="cov0" title="0">argNum, _ := strconv.Atoi(j.Args[0])
-
-        if argNum &gt; j.Num </span><span class="cov0" title="0">{
-                return argNum
-        }</span> else<span class="cov0" title="0"> {
-                return j.Num
-        }</span>
-}
-
 func (j JapaneseRandomPhraseGenaretaer) Generate(num int) error <span class="cov0" title="0">{
-        // create DBFileDirPathGetter instance
-        dbFileDirPathGetter := NewDBFileDirPathGetter(j.Env, j.User)
-        // get the directory of wnjpn.db from environment
+        dbFileDirPathGetter := NewDBFileDirPathGetter(j.User)
+
         dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
         if err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
 
-        // end the program if the database file doesn't exist
         <span class="cov0" title="0">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
-        if _, err := os.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov0" title="0">{
+        if !j.FileSystem.Exists(dbFilePath) </span><span class="cov0" title="0">{
                 fmt.Println(color.YellowString(constant.GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED))
                 return nil
         }</span>
 
-        // connect to the database
-        <span class="cov0" title="0">db, err := sql.Open("sqlite", "file:"+dbFilePath)
+        <span class="cov0" title="0">db, err := j.DbProvider.Connect(dbFilePath)
         if err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
         <span class="cov0" title="0">defer db.Close()
 
-        // get all rows from the word table where the lang is Japanese and the pos is adjective, verb, or noun
-        rows, err := db.Query(constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS)
+        rows, err := j.DbProvider.Query(db, constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS)
         if err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
@@ -864,7 +982,6 @@ func (j JapaneseRandomPhraseGenaretaer) Generate(num int) error <span class="cov
                 <span class="cov0" title="0">allAVNWords = append(allAVNWords, word)</span>
         }
 
-        // separate the words into adjectives and verbs, and nouns
         <span class="cov0" title="0">var allAVWords []model.Word
         var allNWords []model.Word
 
@@ -876,13 +993,9 @@ func (j JapaneseRandomPhraseGenaretaer) Generate(num int) error <span class="cov
                 }</span>
         }
 
-        // generate random number
-        <span class="cov0" title="0">rand.New(rand.NewSource(time.Now().UnixNano()))
-
-        // generate the words
-        for i := 0; i &lt; num; i++ </span><span class="cov0" title="0">{
-                randomIndexA := rand.Intn(len(allAVWords))
-                randomIndexB := rand.Intn(len(allNWords))
+        <span class="cov0" title="0">for i := 0; i &lt; num; i++ </span><span class="cov0" title="0">{
+                randomIndexA := j.RandomGenerator.Intn(len(allAVWords))
+                randomIndexB := j.RandomGenerator.Intn(len(allNWords))
                 randomWord := allAVWords[randomIndexA]
                 randomWord2 := allNWords[randomIndexB]
                 fmt.Println(randomWord.Lemma.String + randomWord2.Lemma.String)
@@ -892,75 +1005,7 @@ func (j JapaneseRandomPhraseGenaretaer) Generate(num int) error <span class="cov
 }
 </pre>
 		
-		<pre class="file" id="file16" style="display: none">package logic
-
-import (
-        "compress/gzip"
-        "io"
-)
-
-type Gzip interface {
-        NewReader(r io.Reader) (io.ReadCloser, error)
-}
-
-type DefaultGzip struct{}
-
-func (DefaultGzip) NewReader(r io.Reader) (io.ReadCloser, error) <span class="cov8" title="1">{
-        return gzip.NewReader(r)
-}</span>
-</pre>
-		
-		<pre class="file" id="file17" style="display: none">package logic
-
-import (
-        "net/http"
-)
-
-type HttpClient interface {
-        Get(url string) (*http.Response, error)
-}
-type DefaultHttpClient struct{}
-
-func (DefaultHttpClient) Get(url string) (*http.Response, error) <span class="cov8" title="1">{
-        return http.Get(url)
-}</span>
-</pre>
-		
-		<pre class="file" id="file18" style="display: none">package logic
-
-import (
-        "io"
-)
-
-type IO interface {
-        Copy(dst io.Writer, src io.Reader) (int64, error)
-}
-
-type DefaultIO struct{}
-
-func (DefaultIO) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="cov8" title="1">{
-        return io.Copy(dst, src)
-}</span>
-</pre>
-		
-		<pre class="file" id="file19" style="display: none">package logic
-
-import (
-        "os/user"
-)
-
-type User interface {
-        Current() (*user.User, error)
-}
-
-type OsUser struct{}
-
-func (u OsUser) Current() (*user.User, error) <span class="cov8" title="1">{
-        return user.Current()
-}</span>
-</pre>
-		
-		<pre class="file" id="file20" style="display: none">package main
+		<pre class="file" id="file21" style="display: none">package main
 
 import (
         "os"
@@ -975,16 +1020,88 @@ func main() <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file21" style="display: none">// Code generated by MockGen. DO NOT EDIT.
-// Source: logic/file_system.go
+		<pre class="file" id="file22" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/db/database.go
 //
 // Generated by this command:
 //
-//        mockgen -source=logic/file_system.go -destination=mock/logic/mock_file_system.go
+//        mockgen -source=internal/db/database.go -destination=mock/db/database.go -package=mock_db
 //
 
-// Package mock_logic is a generated GoMock package.
-package mock_logic
+// Package mock_db is a generated GoMock package.
+package mock_db
+
+import (
+        sql "database/sql"
+        reflect "reflect"
+
+        gomock "go.uber.org/mock/gomock"
+)
+
+// MockDatabaseProvider is a mock of DatabaseProvider interface.
+type MockDatabaseProvider struct {
+        ctrl     *gomock.Controller
+        recorder *MockDatabaseProviderMockRecorder
+}
+
+// MockDatabaseProviderMockRecorder is the mock recorder for MockDatabaseProvider.
+type MockDatabaseProviderMockRecorder struct {
+        mock *MockDatabaseProvider
+}
+
+// NewMockDatabaseProvider creates a new mock instance.
+func NewMockDatabaseProvider(ctrl *gomock.Controller) *MockDatabaseProvider <span class="cov0" title="0">{
+        mock := &amp;MockDatabaseProvider{ctrl: ctrl}
+        mock.recorder = &amp;MockDatabaseProviderMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockDatabaseProvider) EXPECT() *MockDatabaseProviderMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+// Connect mocks base method.
+func (m *MockDatabaseProvider) Connect(dbFilePath string) (*sql.DB, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Connect", dbFilePath)
+        ret0, _ := ret[0].(*sql.DB)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// Connect indicates an expected call of Connect.
+func (mr *MockDatabaseProviderMockRecorder) Connect(dbFilePath any) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Connect", reflect.TypeOf((*MockDatabaseProvider)(nil).Connect), dbFilePath)
+}</span>
+
+// Query mocks base method.
+func (m *MockDatabaseProvider) Query(db *sql.DB, query string) (*sql.Rows, error) <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Query", db, query)
+        ret0, _ := ret[0].(*sql.Rows)
+        ret1, _ := ret[1].(error)
+        return ret0, ret1
+}</span>
+
+// Query indicates an expected call of Query.
+func (mr *MockDatabaseProviderMockRecorder) Query(db, query any) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Query", reflect.TypeOf((*MockDatabaseProvider)(nil).Query), db, query)
+}</span>
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/fs/file_system.go
+//
+// Generated by this command:
+//
+//        mockgen -source=internal/fs/file_system.go -destination=mock/fs/file_system.go -package=mock_fs
+//
+
+// Package mock_fs is a generated GoMock package.
+package mock_fs
 
 import (
         os "os"
@@ -993,31 +1110,31 @@ import (
         gomock "go.uber.org/mock/gomock"
 )
 
-// MockFileSystem is a mock of FileSystem interface.
-type MockFileSystem struct {
+// MockFileManager is a mock of FileManager interface.
+type MockFileManager struct {
         ctrl     *gomock.Controller
-        recorder *MockFileSystemMockRecorder
+        recorder *MockFileManagerMockRecorder
 }
 
-// MockFileSystemMockRecorder is the mock recorder for MockFileSystem.
-type MockFileSystemMockRecorder struct {
-        mock *MockFileSystem
+// MockFileManagerMockRecorder is the mock recorder for MockFileManager.
+type MockFileManagerMockRecorder struct {
+        mock *MockFileManager
 }
 
-// NewMockFileSystem creates a new mock instance.
-func NewMockFileSystem(ctrl *gomock.Controller) *MockFileSystem <span class="cov8" title="1">{
-        mock := &amp;MockFileSystem{ctrl: ctrl}
-        mock.recorder = &amp;MockFileSystemMockRecorder{mock}
+// NewMockFileManager creates a new mock instance.
+func NewMockFileManager(ctrl *gomock.Controller) *MockFileManager <span class="cov8" title="1">{
+        mock := &amp;MockFileManager{ctrl: ctrl}
+        mock.recorder = &amp;MockFileManagerMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockFileSystem) EXPECT() *MockFileSystemMockRecorder <span class="cov8" title="1">{
+func (m *MockFileManager) EXPECT() *MockFileManagerMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // Create mocks base method.
-func (m *MockFileSystem) Create(name string) (*os.File, error) <span class="cov8" title="1">{
+func (m *MockFileManager) Create(name string) (*os.File, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Create", name)
         ret0, _ := ret[0].(*os.File)
@@ -1026,13 +1143,27 @@ func (m *MockFileSystem) Create(name string) (*os.File, error) <span class="cov8
 }</span>
 
 // Create indicates an expected call of Create.
-func (mr *MockFileSystemMockRecorder) Create(name any) *gomock.Call <span class="cov8" title="1">{
+func (mr *MockFileManagerMockRecorder) Create(name any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
-        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFileSystem)(nil).Create), name)
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFileManager)(nil).Create), name)
+}</span>
+
+// Exists mocks base method.
+func (m *MockFileManager) Exists(path string) bool <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Exists", path)
+        ret0, _ := ret[0].(bool)
+        return ret0
+}</span>
+
+// Exists indicates an expected call of Exists.
+func (mr *MockFileManagerMockRecorder) Exists(path any) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exists", reflect.TypeOf((*MockFileManager)(nil).Exists), path)
 }</span>
 
 // Remove mocks base method.
-func (m *MockFileSystem) Remove(name string) error <span class="cov8" title="1">{
+func (m *MockFileManager) Remove(name string) error <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Remove", name)
         ret0, _ := ret[0].(error)
@@ -1040,22 +1171,22 @@ func (m *MockFileSystem) Remove(name string) error <span class="cov8" title="1">
 }</span>
 
 // Remove indicates an expected call of Remove.
-func (mr *MockFileSystemMockRecorder) Remove(name any) *gomock.Call <span class="cov8" title="1">{
+func (mr *MockFileManagerMockRecorder) Remove(name any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
-        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFileSystem)(nil).Remove), name)
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFileManager)(nil).Remove), name)
 }</span>
 </pre>
 		
-		<pre class="file" id="file22" style="display: none">// Code generated by MockGen. DO NOT EDIT.
-// Source: logic/gzip.go
+		<pre class="file" id="file24" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/gzip/gzip_handler.go
 //
 // Generated by this command:
 //
-//        mockgen -source=logic/gzip.go -destination=mock/logic/mock_gzip.go
+//        mockgen -source=internal/gzip/gzip_handler.go -destination=mock/gzip/gzip_handler.go -package=mock_gzip
 //
 
-// Package mock_logic is a generated GoMock package.
-package mock_logic
+// Package mock_gzip is a generated GoMock package.
+package mock_gzip
 
 import (
         io "io"
@@ -1064,31 +1195,31 @@ import (
         gomock "go.uber.org/mock/gomock"
 )
 
-// MockGzip is a mock of Gzip interface.
-type MockGzip struct {
+// MockGzipHandler is a mock of GzipHandler interface.
+type MockGzipHandler struct {
         ctrl     *gomock.Controller
-        recorder *MockGzipMockRecorder
+        recorder *MockGzipHandlerMockRecorder
 }
 
-// MockGzipMockRecorder is the mock recorder for MockGzip.
-type MockGzipMockRecorder struct {
-        mock *MockGzip
+// MockGzipHandlerMockRecorder is the mock recorder for MockGzipHandler.
+type MockGzipHandlerMockRecorder struct {
+        mock *MockGzipHandler
 }
 
-// NewMockGzip creates a new mock instance.
-func NewMockGzip(ctrl *gomock.Controller) *MockGzip <span class="cov8" title="1">{
-        mock := &amp;MockGzip{ctrl: ctrl}
-        mock.recorder = &amp;MockGzipMockRecorder{mock}
+// NewMockGzipHandler creates a new mock instance.
+func NewMockGzipHandler(ctrl *gomock.Controller) *MockGzipHandler <span class="cov8" title="1">{
+        mock := &amp;MockGzipHandler{ctrl: ctrl}
+        mock.recorder = &amp;MockGzipHandlerMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockGzip) EXPECT() *MockGzipMockRecorder <span class="cov8" title="1">{
+func (m *MockGzipHandler) EXPECT() *MockGzipHandlerMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // NewReader mocks base method.
-func (m *MockGzip) NewReader(r io.Reader) (io.ReadCloser, error) <span class="cov8" title="1">{
+func (m *MockGzipHandler) NewReader(r io.Reader) (io.ReadCloser, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "NewReader", r)
         ret0, _ := ret[0].(io.ReadCloser)
@@ -1097,22 +1228,22 @@ func (m *MockGzip) NewReader(r io.Reader) (io.ReadCloser, error) <span class="co
 }</span>
 
 // NewReader indicates an expected call of NewReader.
-func (mr *MockGzipMockRecorder) NewReader(r any) *gomock.Call <span class="cov8" title="1">{
+func (mr *MockGzipHandlerMockRecorder) NewReader(r any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
-        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewReader", reflect.TypeOf((*MockGzip)(nil).NewReader), r)
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewReader", reflect.TypeOf((*MockGzipHandler)(nil).NewReader), r)
 }</span>
 </pre>
 		
-		<pre class="file" id="file23" style="display: none">// Code generated by MockGen. DO NOT EDIT.
-// Source: logic/http_client.go
+		<pre class="file" id="file25" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/httpclient/http_client.go
 //
 // Generated by this command:
 //
-//        mockgen -source=logic/http_client.go -destination=mock/logic/mock_http_client.go
+//        mockgen -source=internal/httpclient/http_client.go -destination=mock/httpclient/http_client.go -package=mock_httpclient
 //
 
-// Package mock_logic is a generated GoMock package.
-package mock_logic
+// Package mock_httpclient is a generated GoMock package.
+package mock_httpclient
 
 import (
         http "net/http"
@@ -1160,16 +1291,71 @@ func (mr *MockHTTPClientMockRecorder) Get(url any) *gomock.Call <span class="cov
 }</span>
 </pre>
 		
-		<pre class="file" id="file24" style="display: none">// Code generated by MockGen. DO NOT EDIT.
-// Source: logic/io.go
+		<pre class="file" id="file26" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/rand/random.go
 //
 // Generated by this command:
 //
-//        mockgen -source=logic/io.go -destination=mock/logic/mock_io.go
+//        mockgen -source=internal/rand/random.go -destination=mock/internal/random.go -package=mock_rand
 //
 
-// Package mock_logic is a generated GoMock package.
-package mock_logic
+// Package mock_rand is a generated GoMock package.
+package mock_rand
+
+import (
+        reflect "reflect"
+
+        gomock "go.uber.org/mock/gomock"
+)
+
+// MockRandomGenerator is a mock of RandomGenerator interface.
+type MockRandomGenerator struct {
+        ctrl     *gomock.Controller
+        recorder *MockRandomGeneratorMockRecorder
+}
+
+// MockRandomGeneratorMockRecorder is the mock recorder for MockRandomGenerator.
+type MockRandomGeneratorMockRecorder struct {
+        mock *MockRandomGenerator
+}
+
+// NewMockRandomGenerator creates a new mock instance.
+func NewMockRandomGenerator(ctrl *gomock.Controller) *MockRandomGenerator <span class="cov0" title="0">{
+        mock := &amp;MockRandomGenerator{ctrl: ctrl}
+        mock.recorder = &amp;MockRandomGeneratorMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockRandomGenerator) EXPECT() *MockRandomGeneratorMockRecorder <span class="cov0" title="0">{
+        return m.recorder
+}</span>
+
+// Intn mocks base method.
+func (m *MockRandomGenerator) Intn(n int) int <span class="cov0" title="0">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Intn", n)
+        ret0, _ := ret[0].(int)
+        return ret0
+}</span>
+
+// Intn indicates an expected call of Intn.
+func (mr *MockRandomGeneratorMockRecorder) Intn(n any) *gomock.Call <span class="cov0" title="0">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Intn", reflect.TypeOf((*MockRandomGenerator)(nil).Intn), n)
+}</span>
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/iomanager/io_helper.go
+//
+// Generated by this command:
+//
+//        mockgen -source=internal/iomanager/io_helper.go -destination=mock/iomanager/io_helper.go -package=mock_iomanager
+//
+
+// Package mock_iomanager is a generated GoMock package.
+package mock_iomanager
 
 import (
         io "io"
@@ -1178,31 +1364,31 @@ import (
         gomock "go.uber.org/mock/gomock"
 )
 
-// MockIO is a mock of IO interface.
-type MockIO struct {
+// MockIOHelper is a mock of IOHelper interface.
+type MockIOHelper struct {
         ctrl     *gomock.Controller
-        recorder *MockIOMockRecorder
+        recorder *MockIOHelperMockRecorder
 }
 
-// MockIOMockRecorder is the mock recorder for MockIO.
-type MockIOMockRecorder struct {
-        mock *MockIO
+// MockIOHelperMockRecorder is the mock recorder for MockIOHelper.
+type MockIOHelperMockRecorder struct {
+        mock *MockIOHelper
 }
 
-// NewMockIO creates a new mock instance.
-func NewMockIO(ctrl *gomock.Controller) *MockIO <span class="cov8" title="1">{
-        mock := &amp;MockIO{ctrl: ctrl}
-        mock.recorder = &amp;MockIOMockRecorder{mock}
+// NewMockIOHelper creates a new mock instance.
+func NewMockIOHelper(ctrl *gomock.Controller) *MockIOHelper <span class="cov8" title="1">{
+        mock := &amp;MockIOHelper{ctrl: ctrl}
+        mock.recorder = &amp;MockIOHelperMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockIO) EXPECT() *MockIOMockRecorder <span class="cov8" title="1">{
+func (m *MockIOHelper) EXPECT() *MockIOHelperMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // Copy mocks base method.
-func (m *MockIO) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="cov8" title="1">{
+func (m *MockIOHelper) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Copy", dst, src)
         ret0, _ := ret[0].(int64)
@@ -1211,22 +1397,22 @@ func (m *MockIO) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="
 }</span>
 
 // Copy indicates an expected call of Copy.
-func (mr *MockIOMockRecorder) Copy(dst, src any) *gomock.Call <span class="cov8" title="1">{
+func (mr *MockIOHelperMockRecorder) Copy(dst, src any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
-        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Copy", reflect.TypeOf((*MockIO)(nil).Copy), dst, src)
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Copy", reflect.TypeOf((*MockIOHelper)(nil).Copy), dst, src)
 }</span>
 </pre>
 		
-		<pre class="file" id="file25" style="display: none">// Code generated by MockGen. DO NOT EDIT.
-// Source: logic/user.go
+		<pre class="file" id="file28" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/usermanager/user_provider.go
 //
 // Generated by this command:
 //
-//        mockgen -source=logic/user.go -destination=mock/logic/mock_user.go
+//        mockgen -source=internal/usermanager/user_provider.go -destination=mock/usermanager/user_provider.go -package=mock_usermanager
 //
 
-// Package mock_logic is a generated GoMock package.
-package mock_logic
+// Package mock_usermanager is a generated GoMock package.
+package mock_usermanager
 
 import (
         user "os/user"
@@ -1235,31 +1421,31 @@ import (
         gomock "go.uber.org/mock/gomock"
 )
 
-// MockUser is a mock of User interface.
-type MockUser struct {
+// MockUserProvider is a mock of UserProvider interface.
+type MockUserProvider struct {
         ctrl     *gomock.Controller
-        recorder *MockUserMockRecorder
+        recorder *MockUserProviderMockRecorder
 }
 
-// MockUserMockRecorder is the mock recorder for MockUser.
-type MockUserMockRecorder struct {
-        mock *MockUser
+// MockUserProviderMockRecorder is the mock recorder for MockUserProvider.
+type MockUserProviderMockRecorder struct {
+        mock *MockUserProvider
 }
 
-// NewMockUser creates a new mock instance.
-func NewMockUser(ctrl *gomock.Controller) *MockUser <span class="cov8" title="1">{
-        mock := &amp;MockUser{ctrl: ctrl}
-        mock.recorder = &amp;MockUserMockRecorder{mock}
+// NewMockUserProvider creates a new mock instance.
+func NewMockUserProvider(ctrl *gomock.Controller) *MockUserProvider <span class="cov8" title="1">{
+        mock := &amp;MockUserProvider{ctrl: ctrl}
+        mock.recorder = &amp;MockUserProviderMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockUser) EXPECT() *MockUserMockRecorder <span class="cov8" title="1">{
+func (m *MockUserProvider) EXPECT() *MockUserProviderMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // Current mocks base method.
-func (m *MockUser) Current() (*user.User, error) <span class="cov8" title="1">{
+func (m *MockUserProvider) Current() (*user.User, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Current")
         ret0, _ := ret[0].(*user.User)
@@ -1268,13 +1454,13 @@ func (m *MockUser) Current() (*user.User, error) <span class="cov8" title="1">{
 }</span>
 
 // Current indicates an expected call of Current.
-func (mr *MockUserMockRecorder) Current() *gomock.Call <span class="cov8" title="1">{
+func (mr *MockUserProviderMockRecorder) Current() *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
-        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Current", reflect.TypeOf((*MockUser)(nil).Current))
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Current", reflect.TypeOf((*MockUserProvider)(nil).Current))
 }</span>
 </pre>
 		
-		<pre class="file" id="file26" style="display: none">package util
+		<pre class="file" id="file29" style="display: none">package util
 
 import (
         "fmt"
