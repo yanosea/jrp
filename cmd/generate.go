@@ -1,11 +1,10 @@
 package cmd
 
 import (
+	"fmt"
 	"io"
-	"strconv"
 
 	"github.com/spf13/cobra"
-	_ "modernc.org/sqlite"
 
 	"github.com/yanosea/jrp/constant"
 	"github.com/yanosea/jrp/internal/db"
@@ -35,12 +34,20 @@ func newGenerateCommand(g *GlobalOption) *cobra.Command {
 		Long:    constant.GENERATE_LONG,
 		Args:    cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			o.Args = args
+			if len(args) == 0 {
+				o.Args = []string{"1"}
+			} else {
+				o.Args = args
+			}
 			return o.generate()
 		},
 	}
 
 	cmd.PersistentFlags().IntVarP(&o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
+	if o.Args == nil {
+		o.Args = make([]string, 1)
+		o.Args[0] = "1"
+	}
 
 	cmd.SetOut(o.Out)
 	cmd.SetErr(o.ErrOut)
@@ -56,22 +63,14 @@ func (o *generateOption) generate() error {
 	r := rand.NewDefaultRandomGenerator()
 
 	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(u, d, f, r)
-	if err := japaneseRandomPhraseGenaretaer.Generate(defineNumber(o.Number, o.Args)); err != nil {
+	jrp, err := japaneseRandomPhraseGenaretaer.Generate(logic.DefineNumber(o.Number, o.Args[0]))
+	if err != nil {
 		return err
 	}
+
+	if len(jrp) != 0 {
+		fmt.Println(jrp)
+	}
+
 	return nil
-}
-
-func defineNumber(num int, args []string) int {
-	if len(args) == 0 {
-		return num
-	}
-
-	argNum, _ := strconv.Atoi(args[0])
-
-	if argNum > num {
-		return argNum
-	} else {
-		return num
-	}
 }

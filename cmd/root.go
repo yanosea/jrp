@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"io"
 	"os"
 
@@ -67,7 +68,11 @@ func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) {
 		SilenceUsage:  true,
 		Args:          cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			o.Args = args
+			if len(args) == 0 {
+				o.Args = []string{"1"}
+			} else {
+				o.Args = args
+			}
 			return o.rootGenerate()
 		},
 	}
@@ -95,8 +100,14 @@ func (o *rootOption) rootGenerate() error {
 	r := rand.NewDefaultRandomGenerator()
 
 	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(u, d, f, r)
-	if err := japaneseRandomPhraseGenaretaer.Generate(defineNumber(o.Number, o.Args)); err != nil {
+	jrp, err := japaneseRandomPhraseGenaretaer.Generate(logic.DefineNumber(o.Number, o.Args[0]))
+	if err != nil {
 		return err
 	}
+
+	if len(jrp) != 0 {
+		fmt.Println(jrp)
+	}
+
 	return nil
 }

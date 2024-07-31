@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	_ "modernc.org/sqlite"
 )
 
 type DatabaseProvider interface {
