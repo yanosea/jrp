@@ -67,7 +67,7 @@
 				
 				<option value="file5">github.com/yanosea/jrp/cmd/download.go (37.5%)</option>
 				
-				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (39.1%)</option>
+				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (47.8%)</option>
 				
 				<option value="file7">github.com/yanosea/jrp/cmd/root.go (82.8%)</option>
 				
@@ -392,15 +392,15 @@ func (o *generateOption) generate() error <span class="cov0" title="0">{
 }
 
 func defineNumber(num int, args []string) int <span class="cov8" title="1">{
-        if len(args) == 0 </span><span class="cov8" title="1">{
+        if len(args) == 0 </span><span class="cov0" title="0">{
                 return num
         }</span>
 
-        <span class="cov0" title="0">argNum, _ := strconv.Atoi(args[0])
+        <span class="cov8" title="1">argNum, _ := strconv.Atoi(args[0])
 
         if argNum &gt; num </span><span class="cov0" title="0">{
                 return argNum
-        }</span> else<span class="cov0" title="0"> {
+        }</span> else<span class="cov8" title="1"> {
                 return num
         }</span>
 }
