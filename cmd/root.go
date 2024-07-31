@@ -11,7 +11,6 @@ import (
 	"github.com/yanosea/jrp/constant"
 	"github.com/yanosea/jrp/internal/db"
 	"github.com/yanosea/jrp/internal/fs"
-	"github.com/yanosea/jrp/internal/rand"
 	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/logic"
 	"github.com/yanosea/jrp/util"
@@ -97,9 +96,8 @@ func (o *rootOption) rootGenerate() error {
 	u := usermanager.OSUserProvider{}
 	d := db.SQLiteProvider{}
 	f := fs.OsFileManager{}
-	r := rand.NewDefaultRandomGenerator()
 
-	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(u, d, f, r)
+	japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(u, d, f)
 	jrp, err := japaneseRandomPhraseGenaretaer.Generate(logic.DefineNumber(o.Number, o.Args[0]))
 	if err != nil {
 		return err

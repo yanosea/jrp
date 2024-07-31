@@ -16,10 +16,10 @@ import (
 	"github.com/yanosea/jrp/internal/gzip"
 	"github.com/yanosea/jrp/internal/httpclient"
 	"github.com/yanosea/jrp/internal/iomanager"
-	"github.com/yanosea/jrp/internal/rand"
 	"github.com/yanosea/jrp/internal/usermanager"
 
 	mock_db "github.com/yanosea/jrp/mock/db"
+	mock_fs "github.com/yanosea/jrp/mock/fs"
 	mock_usermanager "github.com/yanosea/jrp/mock/usermanager"
 )
 
@@ -102,12 +102,11 @@ func TestGenerate(t *testing.T) {
 		num       int
 	}
 	tests := []struct {
-		name     string
-		args     args
-		want     int
-		wantErr  bool
-		setup    func(mockCtrl *gomock.Controller, tt *args)
-		tearDown func()
+		name    string
+		args    args
+		want    int
+		wantErr bool
+		setup   func(mockCtrl *gomock.Controller, tt *args)
 	}{
 		{
 			name:    "positive testing (num is 1)",
@@ -115,32 +114,28 @@ func TestGenerate(t *testing.T) {
 			want:    1,
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
-				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, db.SQLiteProvider{}, fs.OsFileManager{}, rand.NewDefaultRandomGenerator())
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, db.SQLiteProvider{}, fs.OsFileManager{})
 				tt.generator = generator
 			},
-			tearDown: nil,
 		}, {
 			name:    "positive testing (num is 2)",
 			args:    args{generator: nil, num: 2},
 			want:    2,
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
-				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, db.SQLiteProvider{}, fs.OsFileManager{}, rand.NewDefaultRandomGenerator())
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, db.SQLiteProvider{}, fs.OsFileManager{})
 				tt.generator = generator
 			},
-			tearDown: nil,
 		}, {
 			name:    "positive testing (DBFile does not exist)",
 			args:    args{generator: nil, num: 1},
 			want:    0,
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
-				os.RemoveAll(defaultDBFileDirPath)
-				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, db.SQLiteProvider{}, fs.OsFileManager{}, rand.NewDefaultRandomGenerator())
+				mfs := mock_fs.NewMockFileManager(mockCtrl)
+				mfs.EXPECT().Exists(filepath.Join(defaultDBFileDirPath, constant.WNJPN_DB_FILE_NAME)).Return(false)
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, db.SQLiteProvider{}, mfs)
 				tt.generator = generator
-			},
-			tearDown: func() {
-				tdl.Download()
 			},
 		}, {
 			name:    "negative testing (GetFileDirPath() fails)",
@@ -150,10 +145,9 @@ func TestGenerate(t *testing.T) {
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mu := mock_usermanager.NewMockUserProvider(mockCtrl)
 				mu.EXPECT().Current().Return(nil, errors.New("failed to get current user"))
-				generator := NewJapaneseRandomPhraseGenerator(mu, db.SQLiteProvider{}, fs.OsFileManager{}, rand.NewDefaultRandomGenerator())
+				generator := NewJapaneseRandomPhraseGenerator(mu, db.SQLiteProvider{}, fs.OsFileManager{})
 				tt.generator = generator
 			},
-			tearDown: nil,
 		}, {
 			name:    "negative testing (Connect() fails)",
 			args:    args{generator: nil, num: 1},
@@ -162,10 +156,9 @@ func TestGenerate(t *testing.T) {
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mdb := mock_db.NewMockDatabaseProvider(mockCtrl)
 				mdb.EXPECT().Connect(gomock.Any()).Return(nil, errors.New("failed to connect db"))
-				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, mdb, fs.OsFileManager{}, rand.NewDefaultRandomGenerator())
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, mdb, fs.OsFileManager{})
 				tt.generator = generator
 			},
-			tearDown: nil,
 		}, {
 			name:    "negative testing (Query() fails)",
 			args:    args{generator: nil, num: 1},
@@ -173,14 +166,13 @@ func TestGenerate(t *testing.T) {
 			wantErr: true,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mdb := mock_db.NewMockDatabaseProvider(mockCtrl)
-				jrpg := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, db.SQLiteProvider{}, fs.OsFileManager{}, rand.NewDefaultRandomGenerator())
+				jrpg := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, db.SQLiteProvider{}, fs.OsFileManager{})
 				db, _ := jrpg.DbProvider.Connect(filepath.Join(defaultDBFileDirPath, constant.WNJPN_DB_FILE_NAME))
 				mdb.EXPECT().Connect(filepath.Join(defaultDBFileDirPath, constant.WNJPN_DB_FILE_NAME)).Return(db, nil)
 				mdb.EXPECT().Query(db, constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS).Return(nil, errors.New("failed to execute query"))
-				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, mdb, fs.OsFileManager{}, rand.NewDefaultRandomGenerator())
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, mdb, fs.OsFileManager{})
 				tt.generator = generator
 			},
-			tearDown: nil,
 		},
 	}
 	for _, tt := range tests {
@@ -201,10 +193,6 @@ func TestGenerate(t *testing.T) {
 			}
 			for _, jrp := range jrps {
 				fmt.Println(jrp)
-			}
-
-			if tt.tearDown != nil {
-				tt.tearDown()
 			}
 		})
 	}

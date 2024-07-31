@@ -2,6 +2,7 @@ package logic
 
 import (
 	"fmt"
+	"math/rand"
 	"path/filepath"
 	"strconv"
 
@@ -10,7 +11,6 @@ import (
 	"github.com/yanosea/jrp/constant"
 	"github.com/yanosea/jrp/internal/db"
 	"github.com/yanosea/jrp/internal/fs"
-	"github.com/yanosea/jrp/internal/rand"
 	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/model"
 )
@@ -20,18 +20,16 @@ type Generator interface {
 }
 
 type JapaneseRandomPhraseGenerator struct {
-	User            usermanager.UserProvider
-	DbProvider      db.DatabaseProvider
-	FileSystem      fs.FileManager
-	RandomGenerator rand.RandomGenerator
+	User       usermanager.UserProvider
+	DbProvider db.DatabaseProvider
+	FileSystem fs.FileManager
 }
 
-func NewJapaneseRandomPhraseGenerator(u usermanager.UserProvider, d db.DatabaseProvider, f fs.FileManager, r rand.RandomGenerator) *JapaneseRandomPhraseGenerator {
+func NewJapaneseRandomPhraseGenerator(u usermanager.UserProvider, d db.DatabaseProvider, f fs.FileManager) *JapaneseRandomPhraseGenerator {
 	return &JapaneseRandomPhraseGenerator{
-		User:            u,
-		DbProvider:      d,
-		FileSystem:      f,
-		RandomGenerator: r,
+		User:       u,
+		DbProvider: d,
+		FileSystem: f,
 	}
 }
 
@@ -101,8 +99,8 @@ func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) {
 
 	jrp := make([]string, 0)
 	for i := 0; i < num; i++ {
-		randomIndexA := j.RandomGenerator.Intn(len(allAVWords))
-		randomIndexB := j.RandomGenerator.Intn(len(allNWords))
+		randomIndexA := rand.Intn(len(allAVWords))
+		randomIndexB := rand.Intn(len(allNWords))
 		randomWordA := allAVWords[randomIndexA]
 		randomWordB := allNWords[randomIndexB]
 		jrp = append(jrp, randomWordA.Lemma.String+randomWordB.Lemma.String)
