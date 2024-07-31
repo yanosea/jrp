@@ -190,7 +190,7 @@ func TestDownload(t *testing.T) {
 			}
 
 			if err := tt.args.downloader.Download(); (err != nil) != tt.wantErr {
-				t.Errorf("Download() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("Download() : error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

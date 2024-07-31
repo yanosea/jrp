@@ -74,11 +74,11 @@ func TestGetDBFileDirPath(t *testing.T) {
 			}
 			got, err := tt.args.dbFileDirPathGetter.GetFileDirPath()
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetDBFileDirPath() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GetDBFileDirPath() : error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if got != tt.want {
-				t.Errorf("GetDBFileDirPath() = %v, want %v", got, tt.want)
+				t.Errorf("GetDBFileDirPath() : got = %v, want = %v", got, tt.want)
 			}
 		})
 	}

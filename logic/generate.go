@@ -66,7 +66,7 @@ func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) {
 	dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
 	if !j.FileSystem.Exists(dbFilePath) {
 		fmt.Println(color.YellowString(constant.GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED))
-		return nil, nil
+		return make([]string, 0), nil
 	}
 
 	db, err := j.DbProvider.Connect(dbFilePath)
@@ -84,10 +84,7 @@ func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) {
 	allAVNWords := make([]model.Word, 0)
 	for rows.Next() {
 		var word model.Word
-		err = rows.Scan(&word.Lemma, &word.Pos)
-		if err != nil {
-			return nil, err
-		}
+		rows.Scan(&word.Lemma, &word.Pos)
 		allAVNWords = append(allAVNWords, word)
 	}
 

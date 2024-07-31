@@ -18,14 +18,14 @@ func TestPrintlnWithWriter(t *testing.T) {
 		want string
 	}{
 		{
-			name: "positive testing",
+			name: "positive testing (stdout)",
 			args: args{
 				message: "test message stdout",
 				writer:  os.Stdout,
 			},
 			want: "test message stdout\n",
 		}, {
-			name: "positive testing",
+			name: "positive testing (stderr)",
 			args: args{
 				message: "test message stderr",
 				writer:  os.Stderr,
@@ -39,7 +39,7 @@ func TestPrintlnWithWriter(t *testing.T) {
 			tt.args.writer = &buf
 			PrintlnWithWriter(tt.args.writer, tt.args.message)
 			if got := buf.String(); got != tt.want {
-				t.Errorf("PrintlnWithWriter() = %v, want %v", got, tt.want)
+				t.Errorf("PrintlnWithWriter() : got =  %v, want = %v", got, tt.want)
 			}
 		})
 	}

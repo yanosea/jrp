@@ -95,11 +95,11 @@
 				
 				<option value="file19">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
 				
-				<option value="file20">github.com/yanosea/jrp/logic/generate.go (87.5%)</option>
+				<option value="file20">github.com/yanosea/jrp/logic/generate.go (100.0%)</option>
 				
 				<option value="file21">github.com/yanosea/jrp/main.go (100.0%)</option>
 				
-				<option value="file22">github.com/yanosea/jrp/mock/db/database.go (0.0%)</option>
+				<option value="file22">github.com/yanosea/jrp/mock/db/database.go (100.0%)</option>
 				
 				<option value="file23">github.com/yanosea/jrp/mock/fs/file_system.go (73.9%)</option>
 				
@@ -982,24 +982,24 @@ func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) <span
         dbFileDirPathGetter := NewDBFileDirPathGetter(j.User)
 
         dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
 
         <span class="cov8" title="1">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
-        if !j.FileSystem.Exists(dbFilePath) </span><span class="cov0" title="0">{
+        if !j.FileSystem.Exists(dbFilePath) </span><span class="cov8" title="1">{
                 fmt.Println(color.YellowString(constant.GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED))
-                return nil, nil
+                return make([]string, 0), nil
         }</span>
 
         <span class="cov8" title="1">db, err := j.DbProvider.Connect(dbFilePath)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
         <span class="cov8" title="1">defer db.Close()
 
         rows, err := j.DbProvider.Query(db, constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS)
-        if err != nil </span><span class="cov0" title="0">{
+        if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
         <span class="cov8" title="1">defer rows.Close()
@@ -1007,12 +1007,9 @@ func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) <span
         allAVNWords := make([]model.Word, 0)
         for rows.Next() </span><span class="cov8" title="1">{
                 var word model.Word
-                err = rows.Scan(&amp;word.Lemma, &amp;word.Pos)
-                if err != nil </span><span class="cov0" title="0">{
-                        return nil, err
-                }</span>
-                <span class="cov8" title="1">allAVNWords = append(allAVNWords, word)</span>
-        }
+                rows.Scan(&amp;word.Lemma, &amp;word.Pos)
+                allAVNWords = append(allAVNWords, word)
+        }</span>
 
         <span class="cov8" title="1">var allAVWords []model.Word
         var allNWords []model.Word
@@ -1083,19 +1080,19 @@ type MockDatabaseProviderMockRecorder struct {
 }
 
 // NewMockDatabaseProvider creates a new mock instance.
-func NewMockDatabaseProvider(ctrl *gomock.Controller) *MockDatabaseProvider <span class="cov0" title="0">{
+func NewMockDatabaseProvider(ctrl *gomock.Controller) *MockDatabaseProvider <span class="cov8" title="1">{
         mock := &amp;MockDatabaseProvider{ctrl: ctrl}
         mock.recorder = &amp;MockDatabaseProviderMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockDatabaseProvider) EXPECT() *MockDatabaseProviderMockRecorder <span class="cov0" title="0">{
+func (m *MockDatabaseProvider) EXPECT() *MockDatabaseProviderMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // Connect mocks base method.
-func (m *MockDatabaseProvider) Connect(dbFilePath string) (*sql.DB, error) <span class="cov0" title="0">{
+func (m *MockDatabaseProvider) Connect(dbFilePath string) (*sql.DB, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Connect", dbFilePath)
         ret0, _ := ret[0].(*sql.DB)
@@ -1104,13 +1101,13 @@ func (m *MockDatabaseProvider) Connect(dbFilePath string) (*sql.DB, error) <span
 }</span>
 
 // Connect indicates an expected call of Connect.
-func (mr *MockDatabaseProviderMockRecorder) Connect(dbFilePath any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockDatabaseProviderMockRecorder) Connect(dbFilePath any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Connect", reflect.TypeOf((*MockDatabaseProvider)(nil).Connect), dbFilePath)
 }</span>
 
 // Query mocks base method.
-func (m *MockDatabaseProvider) Query(db *sql.DB, query string) (*sql.Rows, error) <span class="cov0" title="0">{
+func (m *MockDatabaseProvider) Query(db *sql.DB, query string) (*sql.Rows, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Query", db, query)
         ret0, _ := ret[0].(*sql.Rows)
@@ -1119,7 +1116,7 @@ func (m *MockDatabaseProvider) Query(db *sql.DB, query string) (*sql.Rows, error
 }</span>
 
 // Query indicates an expected call of Query.
-func (mr *MockDatabaseProviderMockRecorder) Query(db, query any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockDatabaseProviderMockRecorder) Query(db, query any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Query", reflect.TypeOf((*MockDatabaseProvider)(nil).Query), db, query)
 }</span>
