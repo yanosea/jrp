@@ -5,17 +5,19 @@ import (
 	"testing"
 
 	"github.com/spf13/cobra"
+
 	"github.com/yanosea/jrp/constant"
 )
 
-func Test_newCompletionFishCommand(t *testing.T) {
+func TestNewCompletionFishCommand(t *testing.T) {
 	type args struct {
 		globalOption *GlobalOption
 	}
 	tests := []struct {
-		name string
-		args args
-		want *cobra.Command
+		name    string
+		args    args
+		want    *cobra.Command
+		wantErr bool
 	}{
 		{
 			name: "positive testing",
@@ -32,6 +34,9 @@ func Test_newCompletionFishCommand(t *testing.T) {
 			got := newCompletionFishCommand(tt.args.globalOption)
 			if got.Use != tt.want.Use || got.Short != tt.want.Short || got.Long != tt.want.Long {
 				t.Errorf("newCompletionFishCommand() : got = %v, want = %v", got, tt.want)
+			}
+			if err := got.Execute(); (err != nil) != tt.wantErr {
+				t.Errorf("newCompletionFishCommand().Execute() : error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}

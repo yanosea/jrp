@@ -1,13 +1,13 @@
 package main
 
 import (
-	"bytes"
 	"os"
 	"path/filepath"
 	"testing"
 
 	"github.com/yanosea/jrp/constant"
 	"github.com/yanosea/jrp/internal/usermanager"
+	"github.com/yanosea/jrp/test"
 )
 
 func TestMain(t *testing.T) {
@@ -35,7 +35,6 @@ func TestMain(t *testing.T) {
 			origOsExit := osExit
 			osExit = func(code int) {
 				if code != tt.want.exitCode {
-					t.Fatalf("osExit was called with code %v", code)
 					t.Errorf("main() : exit code = %v, want = %v", code, tt.want.exitCode)
 				}
 			}
@@ -43,7 +42,7 @@ func TestMain(t *testing.T) {
 				osExit = origOsExit
 			}()
 
-			stdOut, errOut := CaptureOutput(t, func() {
+			stdOut, errOut := test.CaptureOutput(t, func() {
 				main()
 			})
 
@@ -55,41 +54,4 @@ func TestMain(t *testing.T) {
 			}
 		})
 	}
-}
-
-func CaptureOutput(t *testing.T, fnc func()) (string, string) {
-	t.Helper()
-
-	origStdout := os.Stdout
-	origStderr := os.Stderr
-
-	defer func() {
-		os.Stdout = origStdout
-		os.Stderr = origStderr
-	}()
-
-	rOut, wOut, _ := os.Pipe()
-	rErr, wErr, _ := os.Pipe()
-
-	os.Stdout = wOut
-	os.Stderr = wErr
-
-	fnc()
-
-	wOut.Close()
-	wErr.Close()
-
-	var outBuf, errBuf bytes.Buffer
-
-	if _, err := outBuf.ReadFrom(rOut); err != nil {
-		t.Fatalf("fail read stdout: %v", err)
-	}
-	if _, err := errBuf.ReadFrom(rErr); err != nil {
-		t.Fatalf("fail read stderr: %v", err)
-	}
-
-	stdout := outBuf.String()
-	stderr := errBuf.String()
-
-	return stdout, stderr
 }

@@ -6,17 +6,19 @@ import (
 	"testing"
 
 	"github.com/spf13/cobra"
+
 	"github.com/yanosea/jrp/constant"
 )
 
-func Test_newVersionCommand(t *testing.T) {
+func TestNewVersionCommand(t *testing.T) {
 	type args struct {
 		globalOption *GlobalOption
 	}
 	tests := []struct {
-		name string
-		args args
-		want *cobra.Command
+		name    string
+		args    args
+		want    *cobra.Command
+		wantErr bool
 	}{
 		{
 			name: "positive testing",
@@ -26,6 +28,7 @@ func Test_newVersionCommand(t *testing.T) {
 				Short: constant.VERSION_SHORT,
 				Long:  constant.VERSION_LONG,
 			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
@@ -33,6 +36,9 @@ func Test_newVersionCommand(t *testing.T) {
 			got := newVersionCommand(tt.args.globalOption)
 			if got.Use != tt.want.Use || got.Short != tt.want.Short || got.Long != tt.want.Long {
 				t.Errorf("newVersionCommand() : got = %v, want = %v", got, tt.want)
+			}
+			if err := got.Execute(); (err != nil) != tt.wantErr {
+				t.Errorf("newVersionCommand().Execute() : error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -54,6 +60,7 @@ func TestGlobalOption_version(t *testing.T) {
 				Out:    os.Stdout,
 				ErrOut: os.Stderr,
 			},
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
