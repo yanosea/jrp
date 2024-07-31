@@ -110,6 +110,15 @@ func TestGenerate(t *testing.T) {
 				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, db.SQLiteProvider{}, fs.OsFileManager{}, rand.NewDefaultRandomGenerator())
 				tt.generator = generator
 			},
+		}, {
+			name:    "positive testing (num is 2)",
+			args:    args{generator: nil, num: 2},
+			want:    2,
+			wantErr: false,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, db.SQLiteProvider{}, fs.OsFileManager{}, rand.NewDefaultRandomGenerator())
+				tt.generator = generator
+			},
 		},
 	}
 	for _, tt := range tests {
