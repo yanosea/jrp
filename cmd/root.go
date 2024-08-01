@@ -30,13 +30,9 @@ type rootOption struct {
 }
 
 func (g *GlobalOption) Execute() int {
-	rootCmd, err := newRootCommand(g.Out, g.ErrOut)
-	if err != nil {
-		util.PrintlnWithWriter(g.ErrOut, color.RedString(err.Error()))
-		return 1
-	}
+	rootCmd := newRootCommand(g.Out, g.ErrOut)
 
-	if err = rootCmd.Execute(); err != nil {
+	if err := rootCmd.Execute(); err != nil {
 		util.PrintlnWithWriter(g.ErrOut, color.RedString(err.Error()))
 		return 1
 	}
@@ -44,7 +40,7 @@ func (g *GlobalOption) Execute() int {
 	return 0
 }
 
-func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) {
+func newRootCommand(ow, ew io.Writer) *cobra.Command {
 	g := &GlobalOption{
 		Out:    ow,
 		ErrOut: ew,
@@ -85,7 +81,7 @@ func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) {
 		newVersionCommand(g),
 	)
 
-	return cmd, nil
+	return cmd
 }
 
 func (o *rootOption) rootGenerate() error {
