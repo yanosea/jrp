@@ -9,5 +9,6 @@ import (
 var osExit = os.Exit
 
 func main() {
-	osExit(cmd.Execute())
+	g := &cmd.GlobalOption{Out: os.Stdout, ErrOut: os.Stderr}
+	osExit(g.Execute())
 }

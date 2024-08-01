@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"io"
-	"os"
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
@@ -30,18 +29,15 @@ type rootOption struct {
 	Number int
 }
 
-func Execute() int {
-	o := os.Stdout
-	e := os.Stderr
-
-	rootCmd, err := newRootCommand(o, e)
+func (g *GlobalOption) Execute() int {
+	rootCmd, err := newRootCommand(g.Out, g.ErrOut)
 	if err != nil {
-		util.PrintlnWithWriter(e, color.RedString(err.Error()))
+		util.PrintlnWithWriter(g.ErrOut, color.RedString(err.Error()))
 		return 1
 	}
 
 	if err = rootCmd.Execute(); err != nil {
-		util.PrintlnWithWriter(e, color.RedString(err.Error()))
+		util.PrintlnWithWriter(g.ErrOut, color.RedString(err.Error()))
 		return 1
 	}
 
