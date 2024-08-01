@@ -77,35 +77,41 @@
 				
 				<option value="file10">github.com/yanosea/jrp/constant/generate.go (100.0%)</option>
 				
-				<option value="file11">github.com/yanosea/jrp/internal/db/database.go (0.0%)</option>
+				<option value="file11">github.com/yanosea/jrp/internal/db/database.go (100.0%)</option>
 				
-				<option value="file12">github.com/yanosea/jrp/internal/fs/file_system.go (50.0%)</option>
+				<option value="file12">github.com/yanosea/jrp/internal/fs/file_system.go (100.0%)</option>
 				
-				<option value="file13">github.com/yanosea/jrp/internal/gzip/gzip_handler.go (0.0%)</option>
+				<option value="file13">github.com/yanosea/jrp/internal/gzip/gzip_handler.go (100.0%)</option>
 				
-				<option value="file14">github.com/yanosea/jrp/internal/httpclient/http_client.go (0.0%)</option>
+				<option value="file14">github.com/yanosea/jrp/internal/httpclient/http_client.go (100.0%)</option>
 				
-				<option value="file15">github.com/yanosea/jrp/internal/iomanager/io_helper.go (0.0%)</option>
+				<option value="file15">github.com/yanosea/jrp/internal/iomanager/io_helper.go (100.0%)</option>
 				
 				<option value="file16">github.com/yanosea/jrp/internal/usermanager/user_provider.go (100.0%)</option>
 				
-				<option value="file17">github.com/yanosea/jrp/main.go (100.0%)</option>
+				<option value="file17">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
-				<option value="file18">github.com/yanosea/jrp/mock/db/database.go (0.0%)</option>
+				<option value="file18">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
 				
-				<option value="file19">github.com/yanosea/jrp/mock/fs/file_system.go (0.0%)</option>
+				<option value="file19">github.com/yanosea/jrp/logic/generate.go (100.0%)</option>
 				
-				<option value="file20">github.com/yanosea/jrp/mock/gzip/gzip_handler.go (0.0%)</option>
+				<option value="file20">github.com/yanosea/jrp/main.go (100.0%)</option>
 				
-				<option value="file21">github.com/yanosea/jrp/mock/httpclient/http_client.go (0.0%)</option>
+				<option value="file21">github.com/yanosea/jrp/mock/db/database.go (100.0%)</option>
 				
-				<option value="file22">github.com/yanosea/jrp/mock/iomanager/io_helper.go (0.0%)</option>
+				<option value="file22">github.com/yanosea/jrp/mock/fs/file_system.go (100.0%)</option>
 				
-				<option value="file23">github.com/yanosea/jrp/mock/usermanager/user_provider.go (0.0%)</option>
+				<option value="file23">github.com/yanosea/jrp/mock/gzip/gzip_handler.go (100.0%)</option>
 				
-				<option value="file24">github.com/yanosea/jrp/test/capture.go (100.0%)</option>
+				<option value="file24">github.com/yanosea/jrp/mock/httpclient/http_client.go (100.0%)</option>
 				
-				<option value="file25">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
+				<option value="file25">github.com/yanosea/jrp/mock/iomanager/io_helper.go (100.0%)</option>
+				
+				<option value="file26">github.com/yanosea/jrp/mock/usermanager/user_provider.go (100.0%)</option>
+				
+				<option value="file27">github.com/yanosea/jrp/test/capture.go (100.0%)</option>
+				
+				<option value="file28">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -628,11 +634,11 @@ type DatabaseProvider interface {
 
 type SQLiteProvider struct{}
 
-func (s SQLiteProvider) Connect(dbFilePath string) (*sql.DB, error) <span class="cov0" title="0">{
+func (s SQLiteProvider) Connect(dbFilePath string) (*sql.DB, error) <span class="cov8" title="1">{
         return sql.Open("sqlite", dbFilePath)
 }</span>
 
-func (s SQLiteProvider) Query(db *sql.DB, query string) (*sql.Rows, error) <span class="cov0" title="0">{
+func (s SQLiteProvider) Query(db *sql.DB, query string) (*sql.Rows, error) <span class="cov8" title="1">{
         return db.Query(query)
 }</span>
 </pre>
@@ -651,11 +657,11 @@ type FileManager interface {
 
 type OsFileManager struct{}
 
-func (OsFileManager) Create(name string) (*os.File, error) <span class="cov0" title="0">{
+func (OsFileManager) Create(name string) (*os.File, error) <span class="cov8" title="1">{
         return os.Create(name)
 }</span>
 
-func (OsFileManager) Remove(name string) error <span class="cov0" title="0">{
+func (OsFileManager) Remove(name string) error <span class="cov8" title="1">{
         return os.Remove(name)
 }</span>
 
@@ -678,7 +684,7 @@ type GzipHandler interface {
 
 type DefaultGzipHandler struct{}
 
-func (DefaultGzipHandler) NewReader(r io.Reader) (io.ReadCloser, error) <span class="cov0" title="0">{
+func (DefaultGzipHandler) NewReader(r io.Reader) (io.ReadCloser, error) <span class="cov8" title="1">{
         return gzip.NewReader(r)
 }</span>
 </pre>
@@ -695,7 +701,7 @@ type HTTPClient interface {
 
 type DefaultHTTPClient struct{}
 
-func (DefaultHTTPClient) Get(url string) (*http.Response, error) <span class="cov0" title="0">{
+func (DefaultHTTPClient) Get(url string) (*http.Response, error) <span class="cov8" title="1">{
         return http.Get(url)
 }</span>
 </pre>
@@ -712,7 +718,7 @@ type IOHelper interface {
 
 type DefaultIOHelper struct{}
 
-func (DefaultIOHelper) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="cov0" title="0">{
+func (DefaultIOHelper) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="cov8" title="1">{
         return io.Copy(dst, src)
 }</span>
 </pre>
@@ -734,7 +740,267 @@ func (OSUserProvider) Current() (*user.User, error) <span class="cov8" title="1"
 }</span>
 </pre>
 		
-		<pre class="file" id="file17" style="display: none">package main
+		<pre class="file" id="file17" style="display: none">package logic
+
+import (
+        "os"
+        "path/filepath"
+
+        "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/usermanager"
+)
+
+type FileDirPathGetter interface {
+        GetFileDirPath() error
+}
+
+type DBFileDirPathGetter struct {
+        User usermanager.UserProvider
+}
+
+func NewDBFileDirPathGetter(u usermanager.UserProvider) *DBFileDirPathGetter <span class="cov8" title="1">{
+        return &amp;DBFileDirPathGetter{
+                User: u,
+        }
+}</span>
+
+func (g *DBFileDirPathGetter) GetFileDirPath() (string, error) <span class="cov8" title="1">{
+        // get current user
+        currentUser, err := g.User.Current()
+        if err != nil </span><span class="cov8" title="1">{
+                return "", err
+        }</span>
+        // set default path ($XDG_DATA_HOME/jrp)
+        <span class="cov8" title="1">dbFileDirPath := filepath.Join(currentUser.HomeDir, ".local", "share", "jrp")
+        // get JRP_ENV_WORDNETJP_DIR
+        wordNetJpDirPath := os.Getenv(constant.JRP_ENV_WORDNETJP_DIR)
+        if wordNetJpDirPath != "" </span><span class="cov8" title="1">{
+                dbFileDirPath = wordNetJpDirPath
+        }</span>
+
+        <span class="cov8" title="1">return dbFileDirPath, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package logic
+
+import (
+        "fmt"
+        "os"
+        "path/filepath"
+
+        "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/fs"
+        "github.com/yanosea/jrp/internal/gzip"
+        "github.com/yanosea/jrp/internal/httpclient"
+        "github.com/yanosea/jrp/internal/iomanager"
+        "github.com/yanosea/jrp/internal/usermanager"
+)
+
+type Downloader interface {
+        Download() error
+}
+
+type DBFileDownloader struct {
+        User       usermanager.UserProvider
+        FileSystem fs.FileManager
+        HttpClient httpclient.HTTPClient
+        IO         iomanager.IOHelper
+        Gzip       gzip.GzipHandler
+}
+
+func NewDBFileDownloader(u usermanager.UserProvider, f fs.FileManager,
+        h httpclient.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler) *DBFileDownloader <span class="cov8" title="1">{
+        return &amp;DBFileDownloader{
+                User:       u,
+                FileSystem: f,
+                HttpClient: h,
+                IO:         i,
+                Gzip:       g,
+        }
+}</span>
+
+func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
+        // create DBFileDirPathGetter instance
+        dbFileDirPathGetter := NewDBFileDirPathGetter(d.User)
+
+        // get db file directory path
+        dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        // if db file directory does not exist, create it
+        <span class="cov8" title="1">if _, err := os.Stat(dbFileDirPath); os.IsNotExist(err) </span><span class="cov8" title="1">{
+                os.MkdirAll(dbFileDirPath, 0755)
+        }</span>
+
+        // if db file does not exist, download it
+        <span class="cov8" title="1">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
+        if _, err := os.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov8" title="1">{
+                // download db archive file
+                resp, err := d.HttpClient.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
+                if err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">defer resp.Body.Close()
+
+                // save db archive file to temporary file
+                tempFilePath := filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
+                out, err := d.FileSystem.Create(tempFilePath)
+                if err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">defer out.Close()
+                if _, err := d.IO.Copy(out, resp.Body); err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">out.Seek(0, 0)
+
+                // decompress db archive file to db file
+                gz, err := d.Gzip.NewReader(out)
+                if err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">defer gz.Close()
+                f, err := d.FileSystem.Create(dbFilePath)
+                if err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">defer f.Close()
+                if _, err := d.IO.Copy(f, gz); err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+
+                // remove temporary file
+                <span class="cov8" title="1">if err := d.FileSystem.Remove(tempFilePath); err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+
+                // if db file is downloaded successfully, print message
+                <span class="cov8" title="1">fmt.Println(constant.DOWNLOAD_MESSAGE_SUCCEEDED)</span>
+        } else<span class="cov8" title="1"> {
+                // if db file already exists, print message
+                fmt.Println(constant.DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED)
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package logic
+
+import (
+        "fmt"
+        "math/rand"
+        "path/filepath"
+        "strconv"
+
+        "github.com/fatih/color"
+
+        "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/db"
+        "github.com/yanosea/jrp/internal/fs"
+        "github.com/yanosea/jrp/internal/usermanager"
+        "github.com/yanosea/jrp/model"
+)
+
+type Generator interface {
+        Generate(num int) error
+}
+
+type JapaneseRandomPhraseGenerator struct {
+        User       usermanager.UserProvider
+        DbProvider db.DatabaseProvider
+        FileSystem fs.FileManager
+}
+
+func NewJapaneseRandomPhraseGenerator(u usermanager.UserProvider, d db.DatabaseProvider, f fs.FileManager) *JapaneseRandomPhraseGenerator <span class="cov8" title="1">{
+        return &amp;JapaneseRandomPhraseGenerator{
+                User:       u,
+                DbProvider: d,
+                FileSystem: f,
+        }
+}</span>
+
+func DefineNumber(num int, argNum string) int <span class="cov8" title="1">{
+        if num &lt;= 0 </span><span class="cov8" title="1">{
+                num = 1
+        }</span>
+
+        <span class="cov8" title="1">argNumConv, err := strconv.Atoi(argNum)
+        if err != nil </span><span class="cov8" title="1">{
+                argNumConv = 1
+        }</span>
+        <span class="cov8" title="1">if argNumConv &lt;= 0 </span><span class="cov8" title="1">{
+                argNumConv = 1
+        }</span>
+
+        <span class="cov8" title="1">if argNumConv &gt; num </span><span class="cov8" title="1">{
+                return argNumConv
+        }</span> else<span class="cov8" title="1"> {
+                return num
+        }</span>
+}
+
+func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) <span class="cov8" title="1">{
+        dbFileDirPathGetter := NewDBFileDirPathGetter(j.User)
+
+        dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
+        if !j.FileSystem.Exists(dbFilePath) </span><span class="cov8" title="1">{
+                fmt.Println(color.YellowString(constant.GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED))
+                return make([]string, 0), nil
+        }</span>
+
+        <span class="cov8" title="1">db, err := j.DbProvider.Connect(dbFilePath)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer db.Close()
+
+        rows, err := j.DbProvider.Query(db, constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">defer rows.Close()
+
+        allAVNWords := make([]model.Word, 0)
+        for rows.Next() </span><span class="cov8" title="1">{
+                var word model.Word
+                rows.Scan(&amp;word.Lemma, &amp;word.Pos)
+                allAVNWords = append(allAVNWords, word)
+        }</span>
+
+        <span class="cov8" title="1">var allAVWords []model.Word
+        var allNWords []model.Word
+
+        for _, word := range allAVNWords </span><span class="cov8" title="1">{
+                if word.Pos.Valid &amp;&amp; word.Pos.String == "n" </span><span class="cov8" title="1">{
+                        allNWords = append(allNWords, word)
+                }</span> else<span class="cov8" title="1"> {
+                        allAVWords = append(allAVWords, word)
+                }</span>
+        }
+
+        <span class="cov8" title="1">jrp := make([]string, 0)
+        for i := 0; i &lt; num; i++ </span><span class="cov8" title="1">{
+                randomIndexA := rand.Intn(len(allAVWords))
+                randomIndexB := rand.Intn(len(allNWords))
+                randomWordA := allAVWords[randomIndexA]
+                randomWordB := allNWords[randomIndexB]
+                jrp = append(jrp, randomWordA.Lemma.String+randomWordB.Lemma.String)
+        }</span>
+
+        <span class="cov8" title="1">return jrp, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package main
 
 import (
         "os"
@@ -750,7 +1016,7 @@ func main() <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file18" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file21" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/db/database.go
 //
 // Generated by this command:
@@ -780,19 +1046,19 @@ type MockDatabaseProviderMockRecorder struct {
 }
 
 // NewMockDatabaseProvider creates a new mock instance.
-func NewMockDatabaseProvider(ctrl *gomock.Controller) *MockDatabaseProvider <span class="cov0" title="0">{
+func NewMockDatabaseProvider(ctrl *gomock.Controller) *MockDatabaseProvider <span class="cov8" title="1">{
         mock := &amp;MockDatabaseProvider{ctrl: ctrl}
         mock.recorder = &amp;MockDatabaseProviderMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockDatabaseProvider) EXPECT() *MockDatabaseProviderMockRecorder <span class="cov0" title="0">{
+func (m *MockDatabaseProvider) EXPECT() *MockDatabaseProviderMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // Connect mocks base method.
-func (m *MockDatabaseProvider) Connect(dbFilePath string) (*sql.DB, error) <span class="cov0" title="0">{
+func (m *MockDatabaseProvider) Connect(dbFilePath string) (*sql.DB, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Connect", dbFilePath)
         ret0, _ := ret[0].(*sql.DB)
@@ -801,13 +1067,13 @@ func (m *MockDatabaseProvider) Connect(dbFilePath string) (*sql.DB, error) <span
 }</span>
 
 // Connect indicates an expected call of Connect.
-func (mr *MockDatabaseProviderMockRecorder) Connect(dbFilePath any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockDatabaseProviderMockRecorder) Connect(dbFilePath any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Connect", reflect.TypeOf((*MockDatabaseProvider)(nil).Connect), dbFilePath)
 }</span>
 
 // Query mocks base method.
-func (m *MockDatabaseProvider) Query(db *sql.DB, query string) (*sql.Rows, error) <span class="cov0" title="0">{
+func (m *MockDatabaseProvider) Query(db *sql.DB, query string) (*sql.Rows, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Query", db, query)
         ret0, _ := ret[0].(*sql.Rows)
@@ -816,13 +1082,13 @@ func (m *MockDatabaseProvider) Query(db *sql.DB, query string) (*sql.Rows, error
 }</span>
 
 // Query indicates an expected call of Query.
-func (mr *MockDatabaseProviderMockRecorder) Query(db, query any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockDatabaseProviderMockRecorder) Query(db, query any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Query", reflect.TypeOf((*MockDatabaseProvider)(nil).Query), db, query)
 }</span>
 </pre>
 		
-		<pre class="file" id="file19" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file22" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/fs/file_system.go
 //
 // Generated by this command:
@@ -852,19 +1118,19 @@ type MockFileManagerMockRecorder struct {
 }
 
 // NewMockFileManager creates a new mock instance.
-func NewMockFileManager(ctrl *gomock.Controller) *MockFileManager <span class="cov0" title="0">{
+func NewMockFileManager(ctrl *gomock.Controller) *MockFileManager <span class="cov8" title="1">{
         mock := &amp;MockFileManager{ctrl: ctrl}
         mock.recorder = &amp;MockFileManagerMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockFileManager) EXPECT() *MockFileManagerMockRecorder <span class="cov0" title="0">{
+func (m *MockFileManager) EXPECT() *MockFileManagerMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // Create mocks base method.
-func (m *MockFileManager) Create(name string) (*os.File, error) <span class="cov0" title="0">{
+func (m *MockFileManager) Create(name string) (*os.File, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Create", name)
         ret0, _ := ret[0].(*os.File)
@@ -873,13 +1139,13 @@ func (m *MockFileManager) Create(name string) (*os.File, error) <span class="cov
 }</span>
 
 // Create indicates an expected call of Create.
-func (mr *MockFileManagerMockRecorder) Create(name any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockFileManagerMockRecorder) Create(name any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Create", reflect.TypeOf((*MockFileManager)(nil).Create), name)
 }</span>
 
 // Exists mocks base method.
-func (m *MockFileManager) Exists(path string) bool <span class="cov0" title="0">{
+func (m *MockFileManager) Exists(path string) bool <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Exists", path)
         ret0, _ := ret[0].(bool)
@@ -887,13 +1153,13 @@ func (m *MockFileManager) Exists(path string) bool <span class="cov0" title="0">
 }</span>
 
 // Exists indicates an expected call of Exists.
-func (mr *MockFileManagerMockRecorder) Exists(path any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockFileManagerMockRecorder) Exists(path any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Exists", reflect.TypeOf((*MockFileManager)(nil).Exists), path)
 }</span>
 
 // Remove mocks base method.
-func (m *MockFileManager) Remove(name string) error <span class="cov0" title="0">{
+func (m *MockFileManager) Remove(name string) error <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Remove", name)
         ret0, _ := ret[0].(error)
@@ -901,13 +1167,13 @@ func (m *MockFileManager) Remove(name string) error <span class="cov0" title="0"
 }</span>
 
 // Remove indicates an expected call of Remove.
-func (mr *MockFileManagerMockRecorder) Remove(name any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockFileManagerMockRecorder) Remove(name any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Remove", reflect.TypeOf((*MockFileManager)(nil).Remove), name)
 }</span>
 </pre>
 		
-		<pre class="file" id="file20" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file23" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/gzip/gzip_handler.go
 //
 // Generated by this command:
@@ -937,19 +1203,19 @@ type MockGzipHandlerMockRecorder struct {
 }
 
 // NewMockGzipHandler creates a new mock instance.
-func NewMockGzipHandler(ctrl *gomock.Controller) *MockGzipHandler <span class="cov0" title="0">{
+func NewMockGzipHandler(ctrl *gomock.Controller) *MockGzipHandler <span class="cov8" title="1">{
         mock := &amp;MockGzipHandler{ctrl: ctrl}
         mock.recorder = &amp;MockGzipHandlerMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockGzipHandler) EXPECT() *MockGzipHandlerMockRecorder <span class="cov0" title="0">{
+func (m *MockGzipHandler) EXPECT() *MockGzipHandlerMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // NewReader mocks base method.
-func (m *MockGzipHandler) NewReader(r io.Reader) (io.ReadCloser, error) <span class="cov0" title="0">{
+func (m *MockGzipHandler) NewReader(r io.Reader) (io.ReadCloser, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "NewReader", r)
         ret0, _ := ret[0].(io.ReadCloser)
@@ -958,13 +1224,13 @@ func (m *MockGzipHandler) NewReader(r io.Reader) (io.ReadCloser, error) <span cl
 }</span>
 
 // NewReader indicates an expected call of NewReader.
-func (mr *MockGzipHandlerMockRecorder) NewReader(r any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockGzipHandlerMockRecorder) NewReader(r any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewReader", reflect.TypeOf((*MockGzipHandler)(nil).NewReader), r)
 }</span>
 </pre>
 		
-		<pre class="file" id="file21" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file24" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/httpclient/http_client.go
 //
 // Generated by this command:
@@ -994,19 +1260,19 @@ type MockHTTPClientMockRecorder struct {
 }
 
 // NewMockHTTPClient creates a new mock instance.
-func NewMockHTTPClient(ctrl *gomock.Controller) *MockHTTPClient <span class="cov0" title="0">{
+func NewMockHTTPClient(ctrl *gomock.Controller) *MockHTTPClient <span class="cov8" title="1">{
         mock := &amp;MockHTTPClient{ctrl: ctrl}
         mock.recorder = &amp;MockHTTPClientMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockHTTPClient) EXPECT() *MockHTTPClientMockRecorder <span class="cov0" title="0">{
+func (m *MockHTTPClient) EXPECT() *MockHTTPClientMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // Get mocks base method.
-func (m *MockHTTPClient) Get(url string) (*http.Response, error) <span class="cov0" title="0">{
+func (m *MockHTTPClient) Get(url string) (*http.Response, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Get", url)
         ret0, _ := ret[0].(*http.Response)
@@ -1015,13 +1281,13 @@ func (m *MockHTTPClient) Get(url string) (*http.Response, error) <span class="co
 }</span>
 
 // Get indicates an expected call of Get.
-func (mr *MockHTTPClientMockRecorder) Get(url any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockHTTPClientMockRecorder) Get(url any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockHTTPClient)(nil).Get), url)
 }</span>
 </pre>
 		
-		<pre class="file" id="file22" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file25" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/iomanager/io_helper.go
 //
 // Generated by this command:
@@ -1051,19 +1317,19 @@ type MockIOHelperMockRecorder struct {
 }
 
 // NewMockIOHelper creates a new mock instance.
-func NewMockIOHelper(ctrl *gomock.Controller) *MockIOHelper <span class="cov0" title="0">{
+func NewMockIOHelper(ctrl *gomock.Controller) *MockIOHelper <span class="cov8" title="1">{
         mock := &amp;MockIOHelper{ctrl: ctrl}
         mock.recorder = &amp;MockIOHelperMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockIOHelper) EXPECT() *MockIOHelperMockRecorder <span class="cov0" title="0">{
+func (m *MockIOHelper) EXPECT() *MockIOHelperMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // Copy mocks base method.
-func (m *MockIOHelper) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="cov0" title="0">{
+func (m *MockIOHelper) Copy(dst io.Writer, src io.Reader) (int64, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Copy", dst, src)
         ret0, _ := ret[0].(int64)
@@ -1072,13 +1338,13 @@ func (m *MockIOHelper) Copy(dst io.Writer, src io.Reader) (int64, error) <span c
 }</span>
 
 // Copy indicates an expected call of Copy.
-func (mr *MockIOHelperMockRecorder) Copy(dst, src any) *gomock.Call <span class="cov0" title="0">{
+func (mr *MockIOHelperMockRecorder) Copy(dst, src any) *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Copy", reflect.TypeOf((*MockIOHelper)(nil).Copy), dst, src)
 }</span>
 </pre>
 		
-		<pre class="file" id="file23" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file26" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/usermanager/user_provider.go
 //
 // Generated by this command:
@@ -1108,19 +1374,19 @@ type MockUserProviderMockRecorder struct {
 }
 
 // NewMockUserProvider creates a new mock instance.
-func NewMockUserProvider(ctrl *gomock.Controller) *MockUserProvider <span class="cov0" title="0">{
+func NewMockUserProvider(ctrl *gomock.Controller) *MockUserProvider <span class="cov8" title="1">{
         mock := &amp;MockUserProvider{ctrl: ctrl}
         mock.recorder = &amp;MockUserProviderMockRecorder{mock}
         return mock
 }</span>
 
 // EXPECT returns an object that allows the caller to indicate expected use.
-func (m *MockUserProvider) EXPECT() *MockUserProviderMockRecorder <span class="cov0" title="0">{
+func (m *MockUserProvider) EXPECT() *MockUserProviderMockRecorder <span class="cov8" title="1">{
         return m.recorder
 }</span>
 
 // Current mocks base method.
-func (m *MockUserProvider) Current() (*user.User, error) <span class="cov0" title="0">{
+func (m *MockUserProvider) Current() (*user.User, error) <span class="cov8" title="1">{
         m.ctrl.T.Helper()
         ret := m.ctrl.Call(m, "Current")
         ret0, _ := ret[0].(*user.User)
@@ -1129,13 +1395,13 @@ func (m *MockUserProvider) Current() (*user.User, error) <span class="cov0" titl
 }</span>
 
 // Current indicates an expected call of Current.
-func (mr *MockUserProviderMockRecorder) Current() *gomock.Call <span class="cov0" title="0">{
+func (mr *MockUserProviderMockRecorder) Current() *gomock.Call <span class="cov8" title="1">{
         mr.mock.ctrl.T.Helper()
         return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Current", reflect.TypeOf((*MockUserProvider)(nil).Current))
 }</span>
 </pre>
 		
-		<pre class="file" id="file24" style="display: none">package test
+		<pre class="file" id="file27" style="display: none">package test
 
 import (
         "bytes"
@@ -1177,7 +1443,7 @@ func CaptureOutput(t *testing.T, fnc func()) (string, string) <span class="cov8"
 }
 </pre>
 		
-		<pre class="file" id="file25" style="display: none">package util
+		<pre class="file" id="file28" style="display: none">package util
 
 import (
         "fmt"
