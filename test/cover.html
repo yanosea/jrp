@@ -65,11 +65,11 @@
 				
 				<option value="file4">github.com/yanosea/jrp/cmd/completion_zsh.go (100.0%)</option>
 				
-				<option value="file5">github.com/yanosea/jrp/cmd/download.go (0.0%)</option>
+				<option value="file5">github.com/yanosea/jrp/cmd/download.go (37.5%)</option>
 				
-				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (0.0%)</option>
+				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (41.7%)</option>
 				
-				<option value="file7">github.com/yanosea/jrp/cmd/root.go (0.0%)</option>
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (78.8%)</option>
 				
 				<option value="file8">github.com/yanosea/jrp/cmd/version.go (100.0%)</option>
 				
@@ -287,7 +287,7 @@ type downloadOption struct {
         ErrOut io.Writer
 }
 
-func newDownloadCommand(g *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+func newDownloadCommand(g *GlobalOption) *cobra.Command <span class="cov8" title="1">{
         o := &amp;downloadOption{
                 Out:    g.Out,
                 ErrOut: g.ErrOut,
@@ -303,7 +303,7 @@ func newDownloadCommand(g *GlobalOption) *cobra.Command <span class="cov0" title
                 }</span>,
         }
 
-        <span class="cov0" title="0">cmd.SetOut(o.Out)
+        <span class="cov8" title="1">cmd.SetOut(o.Out)
         cmd.SetErr(o.ErrOut)
         cmd.SetHelpTemplate(constant.DOWNLOAD_HELP_TEMPLATE)
 
@@ -348,7 +348,7 @@ type generateOption struct {
         Number int
 }
 
-func newGenerateCommand(g *GlobalOption) *cobra.Command <span class="cov0" title="0">{
+func newGenerateCommand(g *GlobalOption) *cobra.Command <span class="cov8" title="1">{
         o := &amp;generateOption{
                 Out:    g.Out,
                 ErrOut: g.ErrOut,
@@ -370,13 +370,13 @@ func newGenerateCommand(g *GlobalOption) *cobra.Command <span class="cov0" title
                 },
         }
 
-        <span class="cov0" title="0">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
-        if o.Args == nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
+        if o.Args == nil </span><span class="cov8" title="1">{
                 o.Args = make([]string, 1)
                 o.Args[0] = "1"
         }</span>
 
-        <span class="cov0" title="0">cmd.SetOut(o.Out)
+        <span class="cov8" title="1">cmd.SetOut(o.Out)
         cmd.SetErr(o.ErrOut)
         cmd.SetHelpTemplate(constant.GENARETE_HELP_TEMPLATE)
 
@@ -434,7 +434,7 @@ type rootOption struct {
         Number int
 }
 
-func Execute() int <span class="cov0" title="0">{
+func Execute() int <span class="cov8" title="1">{
         o := os.Stdout
         e := os.Stderr
 
@@ -444,15 +444,15 @@ func Execute() int <span class="cov0" title="0">{
                 return 1
         }</span>
 
-        <span class="cov0" title="0">if err = rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if err = rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
                 util.PrintlnWithWriter(e, color.RedString(err.Error()))
                 return 1
         }</span>
 
-        <span class="cov0" title="0">return 0</span>
+        <span class="cov8" title="1">return 0</span>
 }
 
-func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) <span class="cov0" title="0">{
+func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) <span class="cov8" title="1">{
         g := &amp;GlobalOption{
                 Out:    ow,
                 ErrOut: ew,
@@ -470,17 +470,17 @@ func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) <span class="cov0"
                 SilenceErrors: true,
                 SilenceUsage:  true,
                 Args:          cobra.MaximumNArgs(1),
-                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
-                        if len(args) == 0 </span><span class="cov0" title="0">{
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov8" title="1">{
+                        if len(args) == 0 </span><span class="cov8" title="1">{
                                 o.Args = []string{"1"}
                         }</span> else<span class="cov0" title="0"> {
                                 o.Args = args
                         }</span>
-                        <span class="cov0" title="0">return o.rootGenerate()</span>
+                        <span class="cov8" title="1">return o.rootGenerate()</span>
                 },
         }
 
-        <span class="cov0" title="0">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
+        <span class="cov8" title="1">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
 
         cmd.SetOut(ow)
         cmd.SetErr(ew)
@@ -496,7 +496,7 @@ func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) <span class="cov0"
         return cmd, nil</span>
 }
 
-func (o *rootOption) rootGenerate() error <span class="cov0" title="0">{
+func (o *rootOption) rootGenerate() error <span class="cov8" title="1">{
         u := usermanager.OSUserProvider{}
         d := db.SQLiteProvider{}
         f := fs.OsFileManager{}
@@ -507,11 +507,11 @@ func (o *rootOption) rootGenerate() error <span class="cov0" title="0">{
                 return err
         }</span>
 
-        <span class="cov0" title="0">if len(jrp) != 0 </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if len(jrp) != 0 </span><span class="cov0" title="0">{
                 fmt.Println(jrp)
         }</span>
 
-        <span class="cov0" title="0">return nil</span>
+        <span class="cov8" title="1">return nil</span>
 }
 </pre>
 		

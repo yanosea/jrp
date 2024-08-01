@@ -38,7 +38,7 @@ func TestNewVersionCommand(t *testing.T) {
 				t.Errorf("newVersionCommand() : got = %v, want = %v", got, tt.want)
 			}
 			if err := got.Execute(); (err != nil) != tt.wantErr {
-				t.Errorf("newVersionCommand().Execute() : error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("newVersionCommand().Execute() : error = %v, wantErr = %v", err, tt.wantErr)
 			}
 		})
 	}
@@ -70,7 +70,7 @@ func TestGlobalOption_version(t *testing.T) {
 				ErrOut: tt.fields.ErrOut,
 			}
 			if err := g.version(); (err != nil) != tt.wantErr {
-				t.Errorf("GlobalOption.version() : error = %v, wantErr : %v", err, tt.wantErr)
+				t.Errorf("GlobalOption.version() : error = %v, wantErr = %v", err, tt.wantErr)
 			}
 		})
 	}
