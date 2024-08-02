@@ -69,7 +69,7 @@
 				
 				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (41.7%)</option>
 				
-				<option value="file7">github.com/yanosea/jrp/cmd/root.go (77.4%)</option>
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (82.1%)</option>
 				
 				<option value="file8">github.com/yanosea/jrp/cmd/version.go (100.0%)</option>
 				
@@ -109,7 +109,7 @@
 				
 				<option value="file26">github.com/yanosea/jrp/mock/usermanager/user_provider.go (100.0%)</option>
 				
-				<option value="file27">github.com/yanosea/jrp/test/capture.go (100.0%)</option>
+				<option value="file27">github.com/yanosea/jrp/test/capture.go (0.0%)</option>
 				
 				<option value="file28">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
 				
@@ -434,13 +434,9 @@ type rootOption struct {
 }
 
 func (g *GlobalOption) Execute() int <span class="cov8" title="1">{
-        rootCmd, err := newRootCommand(g.Out, g.ErrOut)
-        if err != nil </span><span class="cov0" title="0">{
-                util.PrintlnWithWriter(g.ErrOut, color.RedString(err.Error()))
-                return 1
-        }</span>
+        rootCmd := newRootCommand(g.Out, g.ErrOut)
 
-        <span class="cov8" title="1">if err = rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
+        if err := rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
                 util.PrintlnWithWriter(g.ErrOut, color.RedString(err.Error()))
                 return 1
         }</span>
@@ -448,7 +444,7 @@ func (g *GlobalOption) Execute() int <span class="cov8" title="1">{
         <span class="cov8" title="1">return 0</span>
 }
 
-func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) <span class="cov8" title="1">{
+func newRootCommand(ow, ew io.Writer) *cobra.Command <span class="cov8" title="1">{
         g := &amp;GlobalOption{
                 Out:    ow,
                 ErrOut: ew,
@@ -489,7 +485,7 @@ func newRootCommand(ow, ew io.Writer) (*cobra.Command, error) <span class="cov8"
                 newVersionCommand(g),
         )
 
-        return cmd, nil</span>
+        return cmd</span>
 }
 
 func (o *rootOption) rootGenerate() error <span class="cov8" title="1">{
@@ -1409,18 +1405,18 @@ import (
         "testing"
 )
 
-func CaptureOutput(t *testing.T, fnc func()) (string, string) <span class="cov8" title="1">{
+func CaptureOutput(t *testing.T, fnc func()) (string, string) <span class="cov0" title="0">{
         t.Helper()
 
         origStdout := os.Stdout
         origStderr := os.Stderr
 
-        defer func() </span><span class="cov8" title="1">{
+        defer func() </span><span class="cov0" title="0">{
                 os.Stdout = origStdout
                 os.Stderr = origStderr
         }</span>()
 
-        <span class="cov8" title="1">rOut, wOut, _ := os.Pipe()
+        <span class="cov0" title="0">rOut, wOut, _ := os.Pipe()
         rErr, wErr, _ := os.Pipe()
 
         os.Stdout = wOut
