@@ -6,8 +6,8 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
-
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/internal/cmdwrapper"
 	"github.com/yanosea/jrp/internal/db"
 	"github.com/yanosea/jrp/internal/fs"
 	"github.com/yanosea/jrp/internal/usermanager"
@@ -18,8 +18,9 @@ import (
 var version = "develop"
 
 type GlobalOption struct {
-	Out    io.Writer
-	ErrOut io.Writer
+	Out            io.Writer
+	ErrOut         io.Writer
+	NewRootCommand func(ow, ew io.Writer) cmdwrapper.ICommand
 }
 
 type rootOption struct {
@@ -29,18 +30,24 @@ type rootOption struct {
 	Number int
 }
 
-func (g *GlobalOption) Execute() int {
-	rootCmd := newRootCommand(g.Out, g.ErrOut)
+func NewGlobalOption(out io.Writer, errOut io.Writer) *GlobalOption {
+	return &GlobalOption{
+		Out:            out,
+		ErrOut:         errOut,
+		NewRootCommand: newRootCommand, // デフォルト実装を設定
+	}
+}
 
+func (g *GlobalOption) Execute() int {
+	rootCmd := g.NewRootCommand(g.Out, g.ErrOut)
 	if err := rootCmd.Execute(); err != nil {
 		util.PrintlnWithWriter(g.ErrOut, color.RedString(err.Error()))
 		return 1
 	}
-
 	return 0
 }
 
-func newRootCommand(ow, ew io.Writer) *cobra.Command {
+func newRootCommand(ow, ew io.Writer) cmdwrapper.ICommand {
 	g := &GlobalOption{
 		Out:    ow,
 		ErrOut: ew,
@@ -81,7 +88,7 @@ func newRootCommand(ow, ew io.Writer) *cobra.Command {
 		newVersionCommand(g),
 	)
 
-	return cmd
+	return cmdwrapper.NewCommandWrapper(cmd)
 }
 
 func (o *rootOption) rootGenerate() error {
