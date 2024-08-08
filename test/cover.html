@@ -69,7 +69,7 @@
 				
 				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (41.7%)</option>
 				
-				<option value="file7">github.com/yanosea/jrp/cmd/root.go (20.7%)</option>
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (90.3%)</option>
 				
 				<option value="file8">github.com/yanosea/jrp/cmd/version.go (100.0%)</option>
 				
@@ -429,7 +429,8 @@ var version = "develop"
 type GlobalOption struct {
         Out            io.Writer
         ErrOut         io.Writer
-        NewRootCommand func(ow, ew io.Writer) cmdwrapper.ICommand
+        Args           []string
+        NewRootCommand func(ow, ew io.Writer, args []string) cmdwrapper.ICommand
 }
 
 type rootOption struct {
@@ -439,16 +440,18 @@ type rootOption struct {
         Number int
 }
 
-func NewGlobalOption(out io.Writer, errOut io.Writer) *GlobalOption <span class="cov8" title="1">{
+func NewGlobalOption(out io.Writer, errOut io.Writer, args []string) *GlobalOption <span class="cov8" title="1">{
         return &amp;GlobalOption{
-                Out:            out,
-                ErrOut:         errOut,
-                NewRootCommand: newRootCommand,
+                Out:    out,
+                ErrOut: errOut,
+                NewRootCommand: func(ow, ew io.Writer, cmdArgs []string) cmdwrapper.ICommand </span><span class="cov8" title="1">{
+                        return newRootCommand(ow, ew, cmdArgs)
+                }</span>,
         }
-}</span>
+}
 
 func (g *GlobalOption) Execute() int <span class="cov8" title="1">{
-        rootCmd := g.NewRootCommand(g.Out, g.ErrOut)
+        rootCmd := g.NewRootCommand(g.Out, g.ErrOut, g.Args)
         if err := rootCmd.Execute(); err != nil </span><span class="cov8" title="1">{
                 util.PrintlnWithWriter(g.ErrOut, color.RedString(err.Error()))
                 return 1
@@ -456,7 +459,7 @@ func (g *GlobalOption) Execute() int <span class="cov8" title="1">{
         <span class="cov8" title="1">return 0</span>
 }
 
-func newRootCommand(ow, ew io.Writer) cmdwrapper.ICommand <span class="cov0" title="0">{
+func newRootCommand(ow, ew io.Writer, cmdArgs []string) cmdwrapper.ICommand <span class="cov8" title="1">{
         g := &amp;GlobalOption{
                 Out:    ow,
                 ErrOut: ew,
@@ -474,17 +477,17 @@ func newRootCommand(ow, ew io.Writer) cmdwrapper.ICommand <span class="cov0" tit
                 SilenceErrors: true,
                 SilenceUsage:  true,
                 Args:          cobra.MaximumNArgs(1),
-                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
-                        if len(args) == 0 </span><span class="cov0" title="0">{
+                RunE: func(cmd *cobra.Command, _ []string) error </span><span class="cov8" title="1">{
+                        if len(cmdArgs) == 0 </span><span class="cov8" title="1">{
                                 o.Args = []string{"1"}
                         }</span> else<span class="cov0" title="0"> {
-                                o.Args = args
+                                o.Args = cmdArgs
                         }</span>
-                        <span class="cov0" title="0">return o.rootGenerate()</span>
+                        <span class="cov8" title="1">return o.rootGenerate()</span>
                 },
         }
 
-        <span class="cov0" title="0">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
+        <span class="cov8" title="1">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
 
         cmd.SetOut(ow)
         cmd.SetErr(ew)
@@ -497,10 +500,11 @@ func newRootCommand(ow, ew io.Writer) cmdwrapper.ICommand <span class="cov0" tit
                 newVersionCommand(g),
         )
 
+        cmd.SetArgs(cmdArgs)
         return cmdwrapper.NewCommandWrapper(cmd)</span>
 }
 
-func (o *rootOption) rootGenerate() error <span class="cov0" title="0">{
+func (o *rootOption) rootGenerate() error <span class="cov8" title="1">{
         u := usermanager.OSUserProvider{}
         d := db.SQLiteProvider{}
         f := fs.OsFileManager{}
@@ -511,11 +515,11 @@ func (o *rootOption) rootGenerate() error <span class="cov0" title="0">{
                 return err
         }</span>
 
-        <span class="cov0" title="0">if len(jrp) != 0 </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if len(jrp) != 0 </span><span class="cov0" title="0">{
                 fmt.Println(jrp)
         }</span>
 
-        <span class="cov0" title="0">return nil</span>
+        <span class="cov8" title="1">return nil</span>
 }
 </pre>
 		
@@ -1046,7 +1050,7 @@ import (
 var osExit = os.Exit
 
 func main() <span class="cov8" title="1">{
-        g := cmd.NewGlobalOption(os.Stdout, os.Stderr)
+        g := cmd.NewGlobalOption(os.Stdout, os.Stderr, os.Args)
         osExit(g.Execute())
 }</span>
 </pre>

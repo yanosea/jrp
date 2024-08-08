@@ -21,7 +21,8 @@ var version = "develop"
 type GlobalOption struct {
 	Out            io.Writer
 	ErrOut         io.Writer
-	NewRootCommand func(ow, ew io.Writer) cmdwrapper.ICommand
+	Args           []string
+	NewRootCommand func(ow, ew io.Writer, args []string) cmdwrapper.ICommand
 }
 
 type rootOption struct {
@@ -31,16 +32,18 @@ type rootOption struct {
 	Number int
 }
 
-func NewGlobalOption(out io.Writer, errOut io.Writer) *GlobalOption {
+func NewGlobalOption(out io.Writer, errOut io.Writer, args []string) *GlobalOption {
 	return &GlobalOption{
-		Out:            out,
-		ErrOut:         errOut,
-		NewRootCommand: newRootCommand,
+		Out:    out,
+		ErrOut: errOut,
+		NewRootCommand: func(ow, ew io.Writer, cmdArgs []string) cmdwrapper.ICommand {
+			return newRootCommand(ow, ew, cmdArgs)
+		},
 	}
 }
 
 func (g *GlobalOption) Execute() int {
-	rootCmd := g.NewRootCommand(g.Out, g.ErrOut)
+	rootCmd := g.NewRootCommand(g.Out, g.ErrOut, g.Args)
 	if err := rootCmd.Execute(); err != nil {
 		util.PrintlnWithWriter(g.ErrOut, color.RedString(err.Error()))
 		return 1
@@ -48,7 +51,7 @@ func (g *GlobalOption) Execute() int {
 	return 0
 }
 
-func newRootCommand(ow, ew io.Writer) cmdwrapper.ICommand {
+func newRootCommand(ow, ew io.Writer, cmdArgs []string) cmdwrapper.ICommand {
 	g := &GlobalOption{
 		Out:    ow,
 		ErrOut: ew,
@@ -66,11 +69,11 @@ func newRootCommand(ow, ew io.Writer) cmdwrapper.ICommand {
 		SilenceErrors: true,
 		SilenceUsage:  true,
 		Args:          cobra.MaximumNArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) == 0 {
+		RunE: func(cmd *cobra.Command, _ []string) error {
+			if len(cmdArgs) == 0 {
 				o.Args = []string{"1"}
 			} else {
-				o.Args = args
+				o.Args = cmdArgs
 			}
 			return o.rootGenerate()
 		},
@@ -89,6 +92,7 @@ func newRootCommand(ow, ew io.Writer) cmdwrapper.ICommand {
 		newVersionCommand(g),
 	)
 
+	cmd.SetArgs(cmdArgs)
 	return cmdwrapper.NewCommandWrapper(cmd)
 }
 

@@ -2,6 +2,7 @@ package cmd_test
 
 import (
 	"errors"
+	"fmt"
 	"io"
 	"os"
 	"testing"
@@ -20,22 +21,31 @@ func TestExecute(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
+		cmdArgs []string
 		want    int
 		wantErr bool
 		setup   func(mockCmd *mock_cmdwrapper.MockICommand)
 	}{
 		{
 			name:    "positive testing",
-			args:    args{globalOption: cmd.NewGlobalOption(os.Stdout, os.Stderr)},
+			args:    args{globalOption: cmd.NewGlobalOption(os.Stdout, os.Stderr, []string{})},
+			cmdArgs: []string{},
 			want:    0,
 			wantErr: false,
-			setup: func(mockCmd *mock_cmdwrapper.MockICommand) {
-				mockCmd.EXPECT().Execute().Return(nil)
-			},
+			setup:   nil,
+		},
+		{
+			name:    "positive testing with args",
+			args:    args{globalOption: cmd.NewGlobalOption(os.Stdout, os.Stderr, []string{"testArg"})},
+			cmdArgs: []string{"testArg"},
+			want:    0,
+			wantErr: false,
+			setup:   nil,
 		},
 		{
 			name:    "negative testing (rootCmd.Execute() fails)",
-			args:    args{globalOption: cmd.NewGlobalOption(os.Stdout, os.Stderr)},
+			args:    args{globalOption: cmd.NewGlobalOption(os.Stdout, os.Stderr, []string{})},
+			cmdArgs: []string{},
 			want:    1,
 			wantErr: true,
 			setup: func(mockCmd *mock_cmdwrapper.MockICommand) {
@@ -49,14 +59,16 @@ func TestExecute(t *testing.T) {
 			ctrl := gomock.NewController(t)
 			defer ctrl.Finish()
 
-			mockCmd := mock_cmdwrapper.NewMockICommand(ctrl)
 			if tt.setup != nil {
+				mockCmd := mock_cmdwrapper.NewMockICommand(ctrl)
 				tt.setup(mockCmd)
+				tt.args.globalOption.NewRootCommand = func(ow, ew io.Writer, cmdArgs []string) cmdwrapper.ICommand {
+					return mockCmd
+				}
 			}
 
-			tt.args.globalOption.NewRootCommand = func(ow, ew io.Writer) cmdwrapper.ICommand {
-				return mockCmd
-			}
+			fmt.Println("globalOption: args")
+			fmt.Println(tt.args.globalOption.Args)
 
 			if got := tt.args.globalOption.Execute(); (got != 0) != tt.wantErr {
 				t.Errorf("Execute() = %v, want = %v", got, tt.want)
