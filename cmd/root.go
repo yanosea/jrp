@@ -6,6 +6,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/spf13/cobra"
+
 	"github.com/yanosea/jrp/constant"
 	"github.com/yanosea/jrp/internal/cmdwrapper"
 	"github.com/yanosea/jrp/internal/db"
