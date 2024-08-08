@@ -2,7 +2,6 @@ package cmd_test
 
 import (
 	"errors"
-	"fmt"
 	"io"
 	"os"
 	"testing"
@@ -21,7 +20,6 @@ func TestExecute(t *testing.T) {
 	tests := []struct {
 		name    string
 		args    args
-		cmdArgs []string
 		want    int
 		wantErr bool
 		setup   func(mockCmd *mock_cmdwrapper.MockICommand)
@@ -29,7 +27,6 @@ func TestExecute(t *testing.T) {
 		{
 			name:    "positive testing",
 			args:    args{globalOption: cmd.NewGlobalOption(os.Stdout, os.Stderr, []string{})},
-			cmdArgs: []string{},
 			want:    0,
 			wantErr: false,
 			setup:   nil,
@@ -37,7 +34,6 @@ func TestExecute(t *testing.T) {
 		{
 			name:    "positive testing with args",
 			args:    args{globalOption: cmd.NewGlobalOption(os.Stdout, os.Stderr, []string{"testArg"})},
-			cmdArgs: []string{"testArg"},
 			want:    0,
 			wantErr: false,
 			setup:   nil,
@@ -45,7 +41,6 @@ func TestExecute(t *testing.T) {
 		{
 			name:    "negative testing (rootCmd.Execute() fails)",
 			args:    args{globalOption: cmd.NewGlobalOption(os.Stdout, os.Stderr, []string{})},
-			cmdArgs: []string{},
 			want:    1,
 			wantErr: true,
 			setup: func(mockCmd *mock_cmdwrapper.MockICommand) {
@@ -66,9 +61,6 @@ func TestExecute(t *testing.T) {
 					return mockCmd
 				}
 			}
-
-			fmt.Println("globalOption: args")
-			fmt.Println(tt.args.globalOption.Args)
 
 			if got := tt.args.globalOption.Execute(); (got != 0) != tt.wantErr {
 				t.Errorf("Execute() = %v, want = %v", got, tt.want)

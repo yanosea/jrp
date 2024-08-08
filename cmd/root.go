@@ -36,8 +36,9 @@ func NewGlobalOption(out io.Writer, errOut io.Writer, args []string) *GlobalOpti
 	return &GlobalOption{
 		Out:    out,
 		ErrOut: errOut,
-		NewRootCommand: func(ow, ew io.Writer, cmdArgs []string) cmdwrapper.ICommand {
-			return newRootCommand(ow, ew, cmdArgs)
+		Args:   args,
+		NewRootCommand: func(ow, ew io.Writer, _ []string) cmdwrapper.ICommand {
+			return newRootCommand(ow, ew, args)
 		},
 	}
 }
