@@ -69,7 +69,7 @@
 				
 				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (41.7%)</option>
 				
-				<option value="file7">github.com/yanosea/jrp/cmd/root.go (82.1%)</option>
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (20.7%)</option>
 				
 				<option value="file8">github.com/yanosea/jrp/cmd/version.go (100.0%)</option>
 				
@@ -77,41 +77,45 @@
 				
 				<option value="file10">github.com/yanosea/jrp/constant/generate.go (100.0%)</option>
 				
-				<option value="file11">github.com/yanosea/jrp/internal/db/database.go (100.0%)</option>
+				<option value="file11">github.com/yanosea/jrp/internal/cmdwrapper/command_wrapper.go (100.0%)</option>
 				
-				<option value="file12">github.com/yanosea/jrp/internal/fs/file_system.go (100.0%)</option>
+				<option value="file12">github.com/yanosea/jrp/internal/db/database.go (100.0%)</option>
 				
-				<option value="file13">github.com/yanosea/jrp/internal/gzip/gzip_handler.go (100.0%)</option>
+				<option value="file13">github.com/yanosea/jrp/internal/fs/file_system.go (100.0%)</option>
 				
-				<option value="file14">github.com/yanosea/jrp/internal/httpclient/http_client.go (100.0%)</option>
+				<option value="file14">github.com/yanosea/jrp/internal/gzip/gzip_handler.go (100.0%)</option>
 				
-				<option value="file15">github.com/yanosea/jrp/internal/iomanager/io_helper.go (100.0%)</option>
+				<option value="file15">github.com/yanosea/jrp/internal/httpclient/http_client.go (100.0%)</option>
 				
-				<option value="file16">github.com/yanosea/jrp/internal/usermanager/user_provider.go (100.0%)</option>
+				<option value="file16">github.com/yanosea/jrp/internal/iomanager/io_helper.go (100.0%)</option>
 				
-				<option value="file17">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
+				<option value="file17">github.com/yanosea/jrp/internal/usermanager/user_provider.go (100.0%)</option>
 				
-				<option value="file18">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
+				<option value="file18">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
-				<option value="file19">github.com/yanosea/jrp/logic/generate.go (100.0%)</option>
+				<option value="file19">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
 				
-				<option value="file20">github.com/yanosea/jrp/main.go (100.0%)</option>
+				<option value="file20">github.com/yanosea/jrp/logic/generate.go (100.0%)</option>
 				
-				<option value="file21">github.com/yanosea/jrp/mock/db/database.go (100.0%)</option>
+				<option value="file21">github.com/yanosea/jrp/main.go (100.0%)</option>
 				
-				<option value="file22">github.com/yanosea/jrp/mock/fs/file_system.go (100.0%)</option>
+				<option value="file22">github.com/yanosea/jrp/mock/cmdwrapper/command_wrapper.go (100.0%)</option>
 				
-				<option value="file23">github.com/yanosea/jrp/mock/gzip/gzip_handler.go (100.0%)</option>
+				<option value="file23">github.com/yanosea/jrp/mock/db/database.go (100.0%)</option>
 				
-				<option value="file24">github.com/yanosea/jrp/mock/httpclient/http_client.go (100.0%)</option>
+				<option value="file24">github.com/yanosea/jrp/mock/fs/file_system.go (100.0%)</option>
 				
-				<option value="file25">github.com/yanosea/jrp/mock/iomanager/io_helper.go (100.0%)</option>
+				<option value="file25">github.com/yanosea/jrp/mock/gzip/gzip_handler.go (100.0%)</option>
 				
-				<option value="file26">github.com/yanosea/jrp/mock/usermanager/user_provider.go (100.0%)</option>
+				<option value="file26">github.com/yanosea/jrp/mock/httpclient/http_client.go (100.0%)</option>
 				
-				<option value="file27">github.com/yanosea/jrp/test/capture.go (0.0%)</option>
+				<option value="file27">github.com/yanosea/jrp/mock/iomanager/io_helper.go (100.0%)</option>
 				
-				<option value="file28">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
+				<option value="file28">github.com/yanosea/jrp/mock/usermanager/user_provider.go (100.0%)</option>
+				
+				<option value="file29">github.com/yanosea/jrp/test/capture.go (0.0%)</option>
+				
+				<option value="file30">github.com/yanosea/jrp/util/printer.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -412,6 +416,7 @@ import (
         "github.com/spf13/cobra"
 
         "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/cmdwrapper"
         "github.com/yanosea/jrp/internal/db"
         "github.com/yanosea/jrp/internal/fs"
         "github.com/yanosea/jrp/internal/usermanager"
@@ -422,8 +427,9 @@ import (
 var version = "develop"
 
 type GlobalOption struct {
-        Out    io.Writer
-        ErrOut io.Writer
+        Out            io.Writer
+        ErrOut         io.Writer
+        NewRootCommand func(ow, ew io.Writer) cmdwrapper.ICommand
 }
 
 type rootOption struct {
@@ -433,18 +439,24 @@ type rootOption struct {
         Number int
 }
 
-func (g *GlobalOption) Execute() int <span class="cov8" title="1">{
-        rootCmd := newRootCommand(g.Out, g.ErrOut)
+func NewGlobalOption(out io.Writer, errOut io.Writer) *GlobalOption <span class="cov8" title="1">{
+        return &amp;GlobalOption{
+                Out:            out,
+                ErrOut:         errOut,
+                NewRootCommand: newRootCommand,
+        }
+}</span>
 
-        if err := rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
+func (g *GlobalOption) Execute() int <span class="cov8" title="1">{
+        rootCmd := g.NewRootCommand(g.Out, g.ErrOut)
+        if err := rootCmd.Execute(); err != nil </span><span class="cov8" title="1">{
                 util.PrintlnWithWriter(g.ErrOut, color.RedString(err.Error()))
                 return 1
         }</span>
-
         <span class="cov8" title="1">return 0</span>
 }
 
-func newRootCommand(ow, ew io.Writer) *cobra.Command <span class="cov8" title="1">{
+func newRootCommand(ow, ew io.Writer) cmdwrapper.ICommand <span class="cov0" title="0">{
         g := &amp;GlobalOption{
                 Out:    ow,
                 ErrOut: ew,
@@ -462,17 +474,17 @@ func newRootCommand(ow, ew io.Writer) *cobra.Command <span class="cov8" title="1
                 SilenceErrors: true,
                 SilenceUsage:  true,
                 Args:          cobra.MaximumNArgs(1),
-                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov8" title="1">{
-                        if len(args) == 0 </span><span class="cov8" title="1">{
+                RunE: func(cmd *cobra.Command, args []string) error </span><span class="cov0" title="0">{
+                        if len(args) == 0 </span><span class="cov0" title="0">{
                                 o.Args = []string{"1"}
                         }</span> else<span class="cov0" title="0"> {
                                 o.Args = args
                         }</span>
-                        <span class="cov8" title="1">return o.rootGenerate()</span>
+                        <span class="cov0" title="0">return o.rootGenerate()</span>
                 },
         }
 
-        <span class="cov8" title="1">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
+        <span class="cov0" title="0">cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
 
         cmd.SetOut(ow)
         cmd.SetErr(ew)
@@ -485,10 +497,10 @@ func newRootCommand(ow, ew io.Writer) *cobra.Command <span class="cov8" title="1
                 newVersionCommand(g),
         )
 
-        return cmd</span>
+        return cmdwrapper.NewCommandWrapper(cmd)</span>
 }
 
-func (o *rootOption) rootGenerate() error <span class="cov8" title="1">{
+func (o *rootOption) rootGenerate() error <span class="cov0" title="0">{
         u := usermanager.OSUserProvider{}
         d := db.SQLiteProvider{}
         f := fs.OsFileManager{}
@@ -499,11 +511,11 @@ func (o *rootOption) rootGenerate() error <span class="cov8" title="1">{
                 return err
         }</span>
 
-        <span class="cov8" title="1">if len(jrp) != 0 </span><span class="cov0" title="0">{
+        <span class="cov0" title="0">if len(jrp) != 0 </span><span class="cov0" title="0">{
                 fmt.Println(jrp)
         }</span>
 
-        <span class="cov8" title="1">return nil</span>
+        <span class="cov0" title="0">return nil</span>
 }
 </pre>
 		
@@ -555,6 +567,8 @@ The default directory is "~/.local/share/jrp" ("$XDG_DATA_HOME/jrp").
 
 Usage:
   jrp download [flags]
+  jrp dl [flags]
+  jrp d [flags]
 
 Flags:
   -h, --help   🤝 help for download
@@ -588,9 +602,11 @@ If both are provided, the larger number takes precedence.
 
 Usage:
   jrp generate [flags]
+  jrp gen [flags]
+  jrp g [flags]
 
 Flags:
-  -n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command.
+  -n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command such ah (jrp -n 10, jrp 10).
   -h, --help      🤝 help for generate
 
 Arguments:
@@ -616,7 +632,30 @@ func GetGenerateAliases() []string <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file11" style="display: none">package db
+		<pre class="file" id="file11" style="display: none">package cmdwrapper
+
+import (
+        "github.com/spf13/cobra"
+)
+
+type ICommand interface {
+        Execute() error
+}
+
+type CommandWrapper struct {
+        Cmd *cobra.Command
+}
+
+func (cw *CommandWrapper) Execute() error <span class="cov8" title="1">{
+        return cw.Cmd.Execute()
+}</span>
+
+func NewCommandWrapper(cmd *cobra.Command) ICommand <span class="cov8" title="1">{
+        return &amp;CommandWrapper{Cmd: cmd}
+}</span>
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">package db
 
 import (
         "database/sql"
@@ -639,7 +678,7 @@ func (s SQLiteProvider) Query(db *sql.DB, query string) (*sql.Rows, error) <span
 }</span>
 </pre>
 		
-		<pre class="file" id="file12" style="display: none">package fs
+		<pre class="file" id="file13" style="display: none">package fs
 
 import (
         "os"
@@ -667,7 +706,7 @@ func (o OsFileManager) Exists(filePath string) bool <span class="cov8" title="1"
 }</span>
 </pre>
 		
-		<pre class="file" id="file13" style="display: none">package gzip
+		<pre class="file" id="file14" style="display: none">package gzip
 
 import (
         "compress/gzip"
@@ -685,7 +724,7 @@ func (DefaultGzipHandler) NewReader(r io.Reader) (io.ReadCloser, error) <span cl
 }</span>
 </pre>
 		
-		<pre class="file" id="file14" style="display: none">package httpclient
+		<pre class="file" id="file15" style="display: none">package httpclient
 
 import (
         "net/http"
@@ -702,7 +741,7 @@ func (DefaultHTTPClient) Get(url string) (*http.Response, error) <span class="co
 }</span>
 </pre>
 		
-		<pre class="file" id="file15" style="display: none">package iomanager
+		<pre class="file" id="file16" style="display: none">package iomanager
 
 import (
         "io"
@@ -719,7 +758,7 @@ func (DefaultIOHelper) Copy(dst io.Writer, src io.Reader) (int64, error) <span c
 }</span>
 </pre>
 		
-		<pre class="file" id="file16" style="display: none">package usermanager
+		<pre class="file" id="file17" style="display: none">package usermanager
 
 import (
         "os/user"
@@ -736,7 +775,7 @@ func (OSUserProvider) Current() (*user.User, error) <span class="cov8" title="1"
 }</span>
 </pre>
 		
-		<pre class="file" id="file17" style="display: none">package logic
+		<pre class="file" id="file18" style="display: none">package logic
 
 import (
         "os"
@@ -778,7 +817,7 @@ func (g *DBFileDirPathGetter) GetFileDirPath() (string, error) <span class="cov8
 }
 </pre>
 		
-		<pre class="file" id="file18" style="display: none">package logic
+		<pre class="file" id="file19" style="display: none">package logic
 
 import (
         "fmt"
@@ -884,7 +923,7 @@ func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
 }
 </pre>
 		
-		<pre class="file" id="file19" style="display: none">package logic
+		<pre class="file" id="file20" style="display: none">package logic
 
 import (
         "fmt"
@@ -996,7 +1035,7 @@ func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) <span
 }
 </pre>
 		
-		<pre class="file" id="file20" style="display: none">package main
+		<pre class="file" id="file21" style="display: none">package main
 
 import (
         "os"
@@ -1007,12 +1046,67 @@ import (
 var osExit = os.Exit
 
 func main() <span class="cov8" title="1">{
-        g := &amp;cmd.GlobalOption{Out: os.Stdout, ErrOut: os.Stderr}
+        g := cmd.NewGlobalOption(os.Stdout, os.Stderr)
         osExit(g.Execute())
 }</span>
 </pre>
 		
-		<pre class="file" id="file21" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file22" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+// Source: internal/cmdwrapper/command_wrapper.go
+//
+// Generated by this command:
+//
+//        mockgen -source=internal/cmdwrapper/command_wrapper.go -destination=mock/cmdwrapper/command_wrapper.go -package=mock_cmdwrapper
+//
+
+// Package mock_cmdwrapper is a generated GoMock package.
+package mock_cmdwrapper
+
+import (
+        reflect "reflect"
+
+        gomock "go.uber.org/mock/gomock"
+)
+
+// MockICommand is a mock of ICommand interface.
+type MockICommand struct {
+        ctrl     *gomock.Controller
+        recorder *MockICommandMockRecorder
+}
+
+// MockICommandMockRecorder is the mock recorder for MockICommand.
+type MockICommandMockRecorder struct {
+        mock *MockICommand
+}
+
+// NewMockICommand creates a new mock instance.
+func NewMockICommand(ctrl *gomock.Controller) *MockICommand <span class="cov8" title="1">{
+        mock := &amp;MockICommand{ctrl: ctrl}
+        mock.recorder = &amp;MockICommandMockRecorder{mock}
+        return mock
+}</span>
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockICommand) EXPECT() *MockICommandMockRecorder <span class="cov8" title="1">{
+        return m.recorder
+}</span>
+
+// Execute mocks base method.
+func (m *MockICommand) Execute() error <span class="cov8" title="1">{
+        m.ctrl.T.Helper()
+        ret := m.ctrl.Call(m, "Execute")
+        ret0, _ := ret[0].(error)
+        return ret0
+}</span>
+
+// Execute indicates an expected call of Execute.
+func (mr *MockICommandMockRecorder) Execute() *gomock.Call <span class="cov8" title="1">{
+        mr.mock.ctrl.T.Helper()
+        return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Execute", reflect.TypeOf((*MockICommand)(nil).Execute))
+}</span>
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/db/database.go
 //
 // Generated by this command:
@@ -1084,7 +1178,7 @@ func (mr *MockDatabaseProviderMockRecorder) Query(db, query any) *gomock.Call <s
 }</span>
 </pre>
 		
-		<pre class="file" id="file22" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file24" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/fs/file_system.go
 //
 // Generated by this command:
@@ -1169,7 +1263,7 @@ func (mr *MockFileManagerMockRecorder) Remove(name any) *gomock.Call <span class
 }</span>
 </pre>
 		
-		<pre class="file" id="file23" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file25" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/gzip/gzip_handler.go
 //
 // Generated by this command:
@@ -1226,7 +1320,7 @@ func (mr *MockGzipHandlerMockRecorder) NewReader(r any) *gomock.Call <span class
 }</span>
 </pre>
 		
-		<pre class="file" id="file24" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file26" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/httpclient/http_client.go
 //
 // Generated by this command:
@@ -1283,7 +1377,7 @@ func (mr *MockHTTPClientMockRecorder) Get(url any) *gomock.Call <span class="cov
 }</span>
 </pre>
 		
-		<pre class="file" id="file25" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file27" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/iomanager/io_helper.go
 //
 // Generated by this command:
@@ -1340,7 +1434,7 @@ func (mr *MockIOHelperMockRecorder) Copy(dst, src any) *gomock.Call <span class=
 }</span>
 </pre>
 		
-		<pre class="file" id="file26" style="display: none">// Code generated by MockGen. DO NOT EDIT.
+		<pre class="file" id="file28" style="display: none">// Code generated by MockGen. DO NOT EDIT.
 // Source: internal/usermanager/user_provider.go
 //
 // Generated by this command:
@@ -1397,7 +1491,7 @@ func (mr *MockUserProviderMockRecorder) Current() *gomock.Call <span class="cov8
 }</span>
 </pre>
 		
-		<pre class="file" id="file27" style="display: none">package test
+		<pre class="file" id="file29" style="display: none">package test
 
 import (
         "bytes"
@@ -1439,7 +1533,7 @@ func CaptureOutput(t *testing.T, fnc func()) (string, string) <span class="cov0"
 }
 </pre>
 		
-		<pre class="file" id="file28" style="display: none">package util
+		<pre class="file" id="file30" style="display: none">package util
 
 import (
         "fmt"

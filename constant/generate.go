@@ -8,9 +8,11 @@ If both are provided, the larger number takes precedence.
 
 Usage:
   jrp generate [flags]
+  jrp gen [flags]
+  jrp g [flags]
 
 Flags:
-  -n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command.
+  -n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command such ah (jrp -n 10, jrp 10).
   -h, --help      🤝 help for generate
 
 Arguments:

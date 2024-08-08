@@ -11,6 +11,8 @@ The default directory is "~/.local/share/jrp" ("$XDG_DATA_HOME/jrp").
 
 Usage:
   jrp download [flags]
+  jrp dl [flags]
+  jrp d [flags]
 
 Flags:
   -h, --help   🤝 help for download
