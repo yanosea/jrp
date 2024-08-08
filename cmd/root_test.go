@@ -39,7 +39,7 @@ func TestExecute(t *testing.T) {
 			want:    1,
 			wantErr: true,
 			setup: func(mockCmd *mock_cmdwrapper.MockICommand) {
-				mockCmd.EXPECT().Execute().Return(errors.New("some error"))
+				mockCmd.EXPECT().Execute().Return(errors.New("failed to execute command"))
 			},
 		},
 	}

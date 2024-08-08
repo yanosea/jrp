@@ -34,7 +34,7 @@ func NewGlobalOption(out io.Writer, errOut io.Writer) *GlobalOption {
 	return &GlobalOption{
 		Out:            out,
 		ErrOut:         errOut,
-		NewRootCommand: newRootCommand, // デフォルト実装を設定
+		NewRootCommand: newRootCommand,
 	}
 }
 
