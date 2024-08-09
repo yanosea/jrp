@@ -100,7 +100,7 @@ func TestExecute(t *testing.T) {
 			}
 
 			if got := tt.args.globalOption.Execute(); (got != 0) != tt.wantErr {
-				t.Errorf("Execute() = %v, want = %v", got, tt.want)
+				t.Errorf("Execute() : exit code = %v, want = %v", got, tt.want)
 			}
 		})
 	}
