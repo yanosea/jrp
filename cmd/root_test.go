@@ -51,6 +51,7 @@ func TestExecute(t *testing.T) {
 			want:    0,
 			wantErr: false,
 			setup: func(_ *mock_cmdwrapper.MockICommand) {
+				os.RemoveAll(dbFileDirPath)
 				tdl.Download()
 			},
 		}, {
@@ -67,6 +68,7 @@ func TestExecute(t *testing.T) {
 			want:    0,
 			wantErr: false,
 			setup: func(_ *mock_cmdwrapper.MockICommand) {
+				os.RemoveAll(dbFileDirPath)
 				tdl.Download()
 			},
 		}, {

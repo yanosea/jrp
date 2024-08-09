@@ -69,7 +69,7 @@
 				
 				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (41.7%)</option>
 				
-				<option value="file7">github.com/yanosea/jrp/cmd/root.go (100.0%)</option>
+				<option value="file7">github.com/yanosea/jrp/cmd/root.go (96.8%)</option>
 				
 				<option value="file8">github.com/yanosea/jrp/cmd/version.go (100.0%)</option>
 				
@@ -93,7 +93,7 @@
 				
 				<option value="file18">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
-				<option value="file19">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
+				<option value="file19">github.com/yanosea/jrp/logic/downloader.go (97.2%)</option>
 				
 				<option value="file20">github.com/yanosea/jrp/logic/generate.go (100.0%)</option>
 				
@@ -512,7 +512,7 @@ func (o *rootOption) rootGenerate() error <span class="cov8" title="1">{
 
         japaneseRandomPhraseGenaretaer := logic.NewJapaneseRandomPhraseGenerator(u, d, f)
         jrp, err := japaneseRandomPhraseGenaretaer.Generate(logic.DefineNumber(o.Number, o.Args[0]))
-        if err != nil </span><span class="cov8" title="1">{
+        if err != nil </span><span class="cov0" title="0">{
                 return err
         }</span>
 
@@ -919,7 +919,7 @@ func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
 
                 // if db file is downloaded successfully, print message
                 <span class="cov8" title="1">fmt.Println(constant.DOWNLOAD_MESSAGE_SUCCEEDED)</span>
-        } else<span class="cov8" title="1"> {
+        } else<span class="cov0" title="0"> {
                 // if db file already exists, print message
                 fmt.Println(constant.DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED)
         }</span>
