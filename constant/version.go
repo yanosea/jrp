@@ -16,5 +16,5 @@ Flags:
 	VERSION_LONG  = `🔖 Show the version of jrp.
 
 Simply show the version of jrp.`
-	VERSION_MESSAGE_TEMPLATE = "🔖 jrp version %s"
+	VERSION_MESSAGE_TEMPLATE = "jrp version %s"
 )
