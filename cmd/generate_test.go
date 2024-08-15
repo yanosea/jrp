@@ -26,7 +26,7 @@ func TestNewGenerateCommand(t *testing.T) {
 	}{
 		{
 			name: "positive testing",
-			args: args{globalOption: &cmd.GlobalOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{"generate", "0"}}},
+			args: args{globalOption: &cmd.GlobalOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{"generate"}}},
 		},
 	}
 	for _, tt := range tests {
@@ -49,7 +49,7 @@ func TestGenerateRunE(t *testing.T) {
 	}{
 		{
 			name: "positive testing",
-			args: args{o: cmd.GenerateOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{"generate", "0"}, Number: 0, Generator: logic.NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})}},
+			args: args{o: cmd.GenerateOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{"generate"}, Number: 1, Generator: logic.NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})}},
 		},
 	}
 	for _, tt := range tests {
@@ -77,12 +77,12 @@ func TestGenerate(t *testing.T) {
 	}{
 		{
 			name:    "positive testing",
-			args:    args{o: cmd.GenerateOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{"generate", "0"}, Number: 1, Generator: logic.NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})}},
+			args:    args{o: cmd.GenerateOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{"generate", "1"}, Number: 1, Generator: logic.NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})}},
 			wantErr: false,
 			setup:   nil,
 		}, {
 			name:    "negative testing (Generate() fails)",
-			args:    args{o: cmd.GenerateOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{"generate", "0"}, Number: 1, Generator: nil}},
+			args:    args{o: cmd.GenerateOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{"generate", "1"}, Number: 1, Generator: nil}},
 			wantErr: true,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mg := mock_generator.NewMockGenerator(mockCtrl)

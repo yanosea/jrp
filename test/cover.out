@@ -41,7 +41,7 @@ github.com/yanosea/jrp/cmd/download.go:50.48,52.3 1 1
 github.com/yanosea/jrp/cmd/download.go:53.2,53.12 1 1
 github.com/yanosea/jrp/cmd/generate.go:24.57,48.2 8 1
 github.com/yanosea/jrp/cmd/generate.go:50.75,51.22 1 1
-github.com/yanosea/jrp/cmd/generate.go:51.22,53.3 1 0
+github.com/yanosea/jrp/cmd/generate.go:51.22,53.3 1 1
 github.com/yanosea/jrp/cmd/generate.go:55.2,57.21 2 1
 github.com/yanosea/jrp/cmd/generate.go:60.43,62.16 2 1
 github.com/yanosea/jrp/cmd/generate.go:62.16,64.3 1 1

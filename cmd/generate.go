@@ -48,8 +48,8 @@ func NewGenerateCommand(g *GlobalOption) *cobra.Command {
 }
 
 func (o *GenerateOption) GenerateRunE(_ *cobra.Command, _ []string) error {
-	if len(o.Args) == 0 {
-		o.Args = []string{"1"}
+	if len(o.Args) <= 1 {
+		o.Args = []string{"generate", "1"}
 	}
 
 	o.Generator = logic.NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})
