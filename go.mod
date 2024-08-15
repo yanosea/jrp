@@ -6,7 +6,7 @@ require (
 	github.com/fatih/color v1.17.0
 	github.com/spf13/cobra v1.8.1
 	go.uber.org/mock v0.4.0
-	modernc.org/sqlite v1.31.1
+	modernc.org/sqlite v1.32.0
 )
 
 require (
