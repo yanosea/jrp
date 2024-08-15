@@ -67,7 +67,7 @@
 				
 				<option value="file5">github.com/yanosea/jrp/cmd/download.go (100.0%)</option>
 				
-				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (94.4%)</option>
+				<option value="file6">github.com/yanosea/jrp/cmd/generate.go (100.0%)</option>
 				
 				<option value="file7">github.com/yanosea/jrp/cmd/root.go (100.0%)</option>
 				
@@ -368,8 +368,8 @@ func NewGenerateCommand(g *GlobalOption) *cobra.Command <span class="cov8" title
 }</span>
 
 func (o *GenerateOption) GenerateRunE(_ *cobra.Command, _ []string) error <span class="cov8" title="1">{
-        if len(o.Args) == 0 </span><span class="cov0" title="0">{
-                o.Args = []string{"1"}
+        if len(o.Args) &lt;= 1 </span><span class="cov8" title="1">{
+                o.Args = []string{"generate", "1"}
         }</span>
 
         <span class="cov8" title="1">o.Generator = logic.NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})
