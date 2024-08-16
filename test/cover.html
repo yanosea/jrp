@@ -95,19 +95,21 @@
 				
 				<option value="file19">github.com/yanosea/jrp/internal/iomanager/io_helper.go (100.0%)</option>
 				
-				<option value="file20">github.com/yanosea/jrp/internal/usermanager/user_provider.go (100.0%)</option>
+				<option value="file20">github.com/yanosea/jrp/internal/spinnerservice/spinner_service.go (100.0%)</option>
 				
-				<option value="file21">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
+				<option value="file21">github.com/yanosea/jrp/internal/usermanager/user_provider.go (100.0%)</option>
 				
-				<option value="file22">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
+				<option value="file22">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
-				<option value="file23">github.com/yanosea/jrp/logic/generator.go (100.0%)</option>
+				<option value="file23">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
 				
-				<option value="file24">github.com/yanosea/jrp/main.go (100.0%)</option>
+				<option value="file24">github.com/yanosea/jrp/logic/generator.go (100.0%)</option>
 				
-				<option value="file25">github.com/yanosea/jrp/util/capture.go (100.0%)</option>
+				<option value="file25">github.com/yanosea/jrp/main.go (100.0%)</option>
 				
-				<option value="file26">github.com/yanosea/jrp/util/utility.go (100.0%)</option>
+				<option value="file26">github.com/yanosea/jrp/util/capture.go (100.0%)</option>
+				
+				<option value="file27">github.com/yanosea/jrp/util/utility.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -274,6 +276,7 @@ import (
         "github.com/yanosea/jrp/internal/gzip"
         "github.com/yanosea/jrp/internal/httpclient"
         "github.com/yanosea/jrp/internal/iomanager"
+        "github.com/yanosea/jrp/internal/spinnerservice"
         "github.com/yanosea/jrp/internal/usermanager"
         "github.com/yanosea/jrp/logic"
 )
@@ -306,7 +309,14 @@ func NewDownloadCommand(g *GlobalOption) *cobra.Command <span class="cov8" title
 }</span>
 
 func (o *DownloadOption) DownloadRunE(_ *cobra.Command, _ []string) error <span class="cov8" title="1">{
-        o.Downloader = logic.NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+        o.Downloader = logic.NewDBFileDownloader(
+                usermanager.OSUserProvider{},
+                fs.OsFileManager{},
+                httpclient.DefaultHTTPClient{},
+                iomanager.DefaultIOHelper{},
+                gzip.DefaultGzipHandler{},
+                spinnerservice.NewRealSpinnerService(),
+        )
         return o.Download()
 }</span>
 
@@ -573,6 +583,7 @@ jrp will download archive file from the official site and decompress it to the d
 You can set the directory of the database file to the environment variable "JRP_WORDNETJP_DIR".
 The default directory is "$XDG_DATA_HOME/jrp".
 `
+        DOWNLOAD_MESSAGE_DOWNLOADING        = "  Download Japanese Wordnet sqlite3 database file from the official site..."
         DOWNLOAD_MESSAGE_SUCCEEDED          = "✅ Downloaded successfully! Now, you are ready to use jrp!"
         DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED = "✅ You are already ready to use jrp!"
 )
@@ -835,7 +846,49 @@ func (DefaultIOHelper) Copy(dst io.Writer, src io.Reader) (int64, error) <span c
 }</span>
 </pre>
 		
-		<pre class="file" id="file20" style="display: none">package usermanager
+		<pre class="file" id="file20" style="display: none">package spinnerservice
+
+import (
+        "time"
+
+        "github.com/briandowns/spinner"
+)
+
+type SpinnerService interface {
+        Start()
+        Stop()
+        SetColor(colors ...string) error
+        SetSuffix(suffix string)
+}
+
+type RealSpinnerService struct {
+        sp *spinner.Spinner
+}
+
+func NewRealSpinnerService() *RealSpinnerService <span class="cov8" title="1">{
+        s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
+        s.Reverse()
+        return &amp;RealSpinnerService{sp: s}
+}</span>
+
+func (rss *RealSpinnerService) Start() <span class="cov8" title="1">{
+        rss.sp.Start()
+}</span>
+
+func (rss *RealSpinnerService) Stop() <span class="cov8" title="1">{
+        rss.sp.Stop()
+}</span>
+
+func (rss *RealSpinnerService) SetColor(colors ...string) error <span class="cov8" title="1">{
+        return rss.sp.Color(colors...)
+}</span>
+
+func (rss *RealSpinnerService) SetSuffix(suffix string) <span class="cov8" title="1">{
+        rss.sp.Suffix = suffix
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package usermanager
 
 import (
         "os/user"
@@ -852,7 +905,7 @@ func (OSUserProvider) Current() (*user.User, error) <span class="cov8" title="1"
 }</span>
 </pre>
 		
-		<pre class="file" id="file21" style="display: none">package logic
+		<pre class="file" id="file22" style="display: none">package logic
 
 import (
         "os"
@@ -894,7 +947,7 @@ func (g *DBFileDirPathGetter) GetFileDirPath() (string, error) <span class="cov8
 }
 </pre>
 		
-		<pre class="file" id="file22" style="display: none">package logic
+		<pre class="file" id="file23" style="display: none">package logic
 
 import (
         "fmt"
@@ -909,6 +962,7 @@ import (
         "github.com/yanosea/jrp/internal/gzip"
         "github.com/yanosea/jrp/internal/httpclient"
         "github.com/yanosea/jrp/internal/iomanager"
+        "github.com/yanosea/jrp/internal/spinnerservice"
         "github.com/yanosea/jrp/internal/usermanager"
 )
 
@@ -922,16 +976,18 @@ type DBFileDownloader struct {
         HttpClient httpclient.HTTPClient
         IO         iomanager.IOHelper
         Gzip       gzip.GzipHandler
+        Spinner    spinnerservice.SpinnerService
 }
 
 func NewDBFileDownloader(u usermanager.UserProvider, f fs.FileManager,
-        h httpclient.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler) *DBFileDownloader <span class="cov8" title="1">{
+        h httpclient.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler, s spinnerservice.SpinnerService) *DBFileDownloader <span class="cov8" title="1">{
         return &amp;DBFileDownloader{
                 User:       u,
                 FileSystem: f,
                 HttpClient: h,
                 IO:         i,
                 Gzip:       g,
+                Spinner:    s,
         }
 }</span>
 
@@ -955,6 +1011,14 @@ func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
         // if db file does not exist, download it
         <span class="cov8" title="1">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
         if _, err := os.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov8" title="1">{
+                // spinner settings
+                if err := d.Spinner.SetColor("yellow"); err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">d.Spinner.SetSuffix(color.YellowString(constant.DOWNLOAD_MESSAGE_DOWNLOADING))
+                // start spinner
+                d.Spinner.Start()
+
                 // download db archive file
                 resp, err := d.HttpClient.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
                 if err != nil </span><span class="cov8" title="1">{
@@ -996,8 +1060,11 @@ func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
                         return err
                 }</span>
 
+                // stop spinner
+                <span class="cov8" title="1">d.Spinner.Stop()
+
                 // if db file is downloaded successfully, print message
-                <span class="cov8" title="1">fmt.Println(color.GreenString(constant.DOWNLOAD_MESSAGE_SUCCEEDED))</span>
+                fmt.Println(color.GreenString(constant.DOWNLOAD_MESSAGE_SUCCEEDED))</span>
         } else<span class="cov8" title="1"> {
                 // if db file already exists, print message
                 fmt.Println(color.GreenString(constant.DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED))
@@ -1007,7 +1074,7 @@ func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
 }
 </pre>
 		
-		<pre class="file" id="file23" style="display: none">package logic
+		<pre class="file" id="file24" style="display: none">package logic
 
 import (
         "fmt"
@@ -1121,7 +1188,7 @@ func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) <span
 }
 </pre>
 		
-		<pre class="file" id="file24" style="display: none">package main
+		<pre class="file" id="file25" style="display: none">package main
 
 import (
         "os"
@@ -1137,7 +1204,7 @@ func main() <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file25" style="display: none">package util
+		<pre class="file" id="file26" style="display: none">package util
 
 import (
         "os"
@@ -1199,7 +1266,7 @@ func (d *DefaultCapturer) CaptureOutput(t *testing.T, fnc func()) (string, strin
 }
 </pre>
 		
-		<pre class="file" id="file26" style="display: none">package util
+		<pre class="file" id="file27" style="display: none">package util
 
 import (
         "fmt"

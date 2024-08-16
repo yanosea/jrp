@@ -12,6 +12,7 @@ import (
 	"github.com/yanosea/jrp/internal/gzip"
 	"github.com/yanosea/jrp/internal/httpclient"
 	"github.com/yanosea/jrp/internal/iomanager"
+	"github.com/yanosea/jrp/internal/spinnerservice"
 	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/logic"
 
@@ -51,7 +52,7 @@ func TestDownloadRunE(t *testing.T) {
 	}{
 		{
 			name: "positive testing",
-			args: args{o: cmd.DownloadOption{Out: os.Stdout, ErrOut: os.Stderr, Downloader: logic.NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})}},
+			args: args{o: cmd.DownloadOption{Out: os.Stdout, ErrOut: os.Stderr, Downloader: logic.NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, spinnerservice.NewRealSpinnerService())}},
 		},
 	}
 	for _, tt := range tests {
@@ -79,7 +80,7 @@ func TestDownload(t *testing.T) {
 	}{
 		{
 			name:    "positive testing",
-			args:    args{o: cmd.DownloadOption{Out: os.Stdout, ErrOut: os.Stderr, Downloader: logic.NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})}},
+			args:    args{o: cmd.DownloadOption{Out: os.Stdout, ErrOut: os.Stderr, Downloader: logic.NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, spinnerservice.NewRealSpinnerService())}},
 			wantErr: false,
 			setup:   nil,
 		},

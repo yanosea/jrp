@@ -13,6 +13,7 @@ import (
 	"github.com/yanosea/jrp/internal/gzip"
 	"github.com/yanosea/jrp/internal/httpclient"
 	"github.com/yanosea/jrp/internal/iomanager"
+	"github.com/yanosea/jrp/internal/spinnerservice"
 	"github.com/yanosea/jrp/internal/usermanager"
 )
 
@@ -26,16 +27,18 @@ type DBFileDownloader struct {
 	HttpClient httpclient.HTTPClient
 	IO         iomanager.IOHelper
 	Gzip       gzip.GzipHandler
+	Spinner    spinnerservice.SpinnerService
 }
 
 func NewDBFileDownloader(u usermanager.UserProvider, f fs.FileManager,
-	h httpclient.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler) *DBFileDownloader {
+	h httpclient.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler, s spinnerservice.SpinnerService) *DBFileDownloader {
 	return &DBFileDownloader{
 		User:       u,
 		FileSystem: f,
 		HttpClient: h,
 		IO:         i,
 		Gzip:       g,
+		Spinner:    s,
 	}
 }
 
@@ -59,6 +62,14 @@ func (d *DBFileDownloader) Download() error {
 	// if db file does not exist, download it
 	dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
 	if _, err := os.Stat(dbFilePath); os.IsNotExist(err) {
+		// spinner settings
+		if err := d.Spinner.SetColor("yellow"); err != nil {
+			return err
+		}
+		d.Spinner.SetSuffix(color.YellowString(constant.DOWNLOAD_MESSAGE_DOWNLOADING))
+		// start spinner
+		d.Spinner.Start()
+
 		// download db archive file
 		resp, err := d.HttpClient.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
 		if err != nil {
@@ -99,6 +110,9 @@ func (d *DBFileDownloader) Download() error {
 		if err := d.FileSystem.RemoveAll(tempFilePath); err != nil {
 			return err
 		}
+
+		// stop spinner
+		d.Spinner.Stop()
 
 		// if db file is downloaded successfully, print message
 		fmt.Println(color.GreenString(constant.DOWNLOAD_MESSAGE_SUCCEEDED))

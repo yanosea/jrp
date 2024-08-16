@@ -16,12 +16,14 @@ import (
 	"github.com/yanosea/jrp/internal/gzip"
 	"github.com/yanosea/jrp/internal/httpclient"
 	"github.com/yanosea/jrp/internal/iomanager"
+	"github.com/yanosea/jrp/internal/spinnerservice"
 	"github.com/yanosea/jrp/internal/usermanager"
 
 	mock_fs "github.com/yanosea/jrp/mock/fs"
 	mock_gzip "github.com/yanosea/jrp/mock/gzip"
 	mock_httpclient "github.com/yanosea/jrp/mock/httpclient"
 	mock_iomanager "github.com/yanosea/jrp/mock/iomanager"
+	mock_spinnerservice "github.com/yanosea/jrp/mock/spinnerservice"
 	mock_usermanager "github.com/yanosea/jrp/mock/usermanager"
 )
 
@@ -32,6 +34,7 @@ func TestNewDBFileDownloader(t *testing.T) {
 		h httpclient.HTTPClient
 		i iomanager.IOHelper
 		g gzip.GzipHandler
+		s spinnerservice.SpinnerService
 	}
 	tests := []struct {
 		name string
@@ -39,12 +42,12 @@ func TestNewDBFileDownloader(t *testing.T) {
 	}{
 		{
 			name: "positive testing",
-			args: args{u: usermanager.OSUserProvider{}, f: fs.OsFileManager{}, h: httpclient.DefaultHTTPClient{}, i: iomanager.DefaultIOHelper{}, g: gzip.DefaultGzipHandler{}},
+			args: args{u: usermanager.OSUserProvider{}, f: fs.OsFileManager{}, h: httpclient.DefaultHTTPClient{}, i: iomanager.DefaultIOHelper{}, g: gzip.DefaultGzipHandler{}, s: spinnerservice.NewRealSpinnerService()},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			u := NewDBFileDownloader(tt.args.u, tt.args.f, tt.args.h, tt.args.i, tt.args.g)
+			u := NewDBFileDownloader(tt.args.u, tt.args.f, tt.args.h, tt.args.i, tt.args.g, tt.args.s)
 			if u == nil {
 				t.Errorf("NewDBFileDownloader() : returned nil")
 			}
@@ -55,6 +58,7 @@ func TestNewDBFileDownloader(t *testing.T) {
 func TestDownload(t *testing.T) {
 	tu := usermanager.OSUserProvider{}
 	tcu, _ := tu.Current()
+	sp := spinnerservice.NewRealSpinnerService()
 	defaultDBFileDirPath := filepath.Join(tcu.HomeDir, ".local", "share", "jrp")
 	envDBFileDirPath := filepath.Join(tcu.HomeDir, "jrp")
 	defaultTempFilePath := filepath.Join(os.TempDir(), constant.WNJPN_DB_ARCHIVE_FILE_NAME)
@@ -74,7 +78,7 @@ func TestDownload(t *testing.T) {
 			args:    args{downloader: nil, env: ""},
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
-				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, sp)
 				tt.downloader = downloader
 			},
 		}, {
@@ -82,7 +86,7 @@ func TestDownload(t *testing.T) {
 			args:    args{downloader: nil, env: filepath.Join(tcu.HomeDir, "jrp")},
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
-				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, sp)
 				tt.downloader = downloader
 			},
 		}, {
@@ -90,7 +94,7 @@ func TestDownload(t *testing.T) {
 			args:    args{downloader: nil, env: ""},
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
-				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, sp)
 				tt.downloader = downloader
 				if err := downloader.Download(); err != nil {
 					t.Error(err)
@@ -103,17 +107,27 @@ func TestDownload(t *testing.T) {
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mu := mock_usermanager.NewMockUserProvider(mockCtrl)
 				mu.EXPECT().Current().Return(nil, errors.New("failed to get current user"))
-				downloader := NewDBFileDownloader(mu, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+				downloader := NewDBFileDownloader(mu, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, sp)
 				tt.downloader = downloader
 			},
 		}, {
-			name:    "negative testing (os.MkdirAll(dbFileDirPath, os.Filemode(0755)) fails)",
+			name:    "negative testing (os.MkdirAll(dbFileDirPath, os.Filemode(0755) fails)",
 			args:    args{downloader: nil, env: ""},
 			wantErr: true,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mfs := mock_fs.NewMockFileManager(mockCtrl)
 				mfs.EXPECT().MkdirAll(gomock.Any(), os.FileMode(0755)).Return(errors.New("failed to create db file dir"))
-				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, sp)
+				tt.downloader = downloader
+			},
+		}, {
+			name:    "negative testing (d.Spinner.SetColor(\"yellow\") fails)",
+			args:    args{downloader: nil, env: ""},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				ms := mock_spinnerservice.NewMockSpinnerService(mockCtrl)
+				ms.EXPECT().SetColor(gomock.Any()).Return(errors.New("failed to set spinner color"))
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, ms)
 				tt.downloader = downloader
 			},
 		}, {
@@ -123,7 +137,7 @@ func TestDownload(t *testing.T) {
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mhc := mock_httpclient.NewMockHTTPClient(mockCtrl)
 				mhc.EXPECT().Get(gomock.Any()).Return(nil, errors.New("failed to get http response"))
-				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, mhc, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, mhc, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, sp)
 				tt.downloader = downloader
 			},
 		}, {
@@ -136,7 +150,7 @@ func TestDownload(t *testing.T) {
 					mfs.EXPECT().MkdirAll(defaultDBFileDirPath, os.FileMode(0755)).Return(nil),
 					mfs.EXPECT().Create(gomock.Any()).Return(nil, errors.New("failed to create temp file")),
 				)
-				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, sp)
 				tt.downloader = downloader
 			},
 		}, {
@@ -146,7 +160,7 @@ func TestDownload(t *testing.T) {
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mio := mock_iomanager.NewMockIOHelper(mockCtrl)
 				mio.EXPECT().Copy(gomock.Any(), gomock.Any()).Return(int64(0), errors.New("failed to copy response body to temp file"))
-				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, mio, gzip.DefaultGzipHandler{})
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, mio, gzip.DefaultGzipHandler{}, sp)
 				tt.downloader = downloader
 			},
 		}, {
@@ -167,7 +181,7 @@ func TestDownload(t *testing.T) {
 				)
 				mio := mock_iomanager.NewMockIOHelper(mockCtrl)
 				mio.EXPECT().Copy(mf, gomock.Any()).Return(int64(0), nil)
-				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, httpclient.DefaultHTTPClient{}, mio, gzip.DefaultGzipHandler{})
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, httpclient.DefaultHTTPClient{}, mio, gzip.DefaultGzipHandler{}, sp)
 				tt.downloader = downloader
 			},
 		}, {
@@ -177,7 +191,7 @@ func TestDownload(t *testing.T) {
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mgz := mock_gzip.NewMockGzipHandler(mockCtrl)
 				mgz.EXPECT().NewReader(gomock.Any()).Return(nil, errors.New("failed to new reader"))
-				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, mgz)
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, mgz, sp)
 				tt.downloader = downloader
 			},
 		}, {
@@ -193,7 +207,7 @@ func TestDownload(t *testing.T) {
 					mfs.EXPECT().Create(defaultTempFilePath).Return(tempFile, nil),
 					mfs.EXPECT().Create(dbFilePath).Return(nil, errors.New("failed to create db file")),
 				)
-				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+				downloader := NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, sp)
 				tt.downloader = downloader
 			},
 		}, {
@@ -219,7 +233,7 @@ func TestDownload(t *testing.T) {
 				mhc.EXPECT().Get(gomock.Any()).Return(&http.Response{Body: io.NopCloser(bytes.NewReader([]byte{}))}, nil)
 				mgz := mock_gzip.NewMockGzipHandler(mockCtrl)
 				mgz.EXPECT().NewReader(gomock.Any()).Return(io.NopCloser(bytes.NewReader([]byte{})), nil)
-				tt.downloader = NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, mhc, mio, mgz)
+				tt.downloader = NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, mhc, mio, mgz, sp)
 			},
 		}, {
 			name:    "negative testing (os.Remove(tempFilePath) fails)",
@@ -246,7 +260,7 @@ func TestDownload(t *testing.T) {
 				mgz := mock_gzip.NewMockGzipHandler(mockCtrl)
 				mgz.EXPECT().NewReader(gomock.Any()).Return(io.NopCloser(bytes.NewReader([]byte{})), nil)
 				os.RemoveAll(filepath.Join(tcu.HomeDir, ".local", "share", "jrp"))
-				tt.downloader = NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, mhc, mio, mgz)
+				tt.downloader = NewDBFileDownloader(usermanager.OSUserProvider{}, mfs, mhc, mio, mgz, sp)
 			},
 		},
 	}
