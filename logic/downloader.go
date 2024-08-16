@@ -5,7 +5,9 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"time"
 
+	"github.com/briandowns/spinner"
 	"github.com/fatih/color"
 
 	"github.com/yanosea/jrp/constant"
@@ -59,6 +61,14 @@ func (d *DBFileDownloader) Download() error {
 	// if db file does not exist, download it
 	dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
 	if _, err := os.Stat(dbFilePath); os.IsNotExist(err) {
+		// spinner settings
+		s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
+		s.Reverse()
+		s.Color("yellow")
+		s.Suffix = color.YellowString(constant.DOWNLOAD_MESSAGE_DOWNLOADING)
+		// start spinner
+		s.Start()
+
 		// download db archive file
 		resp, err := d.HttpClient.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
 		if err != nil {
@@ -99,6 +109,9 @@ func (d *DBFileDownloader) Download() error {
 		if err := d.FileSystem.RemoveAll(tempFilePath); err != nil {
 			return err
 		}
+
+		// stop spinner
+		s.Stop()
 
 		// if db file is downloaded successfully, print message
 		fmt.Println(color.GreenString(constant.DOWNLOAD_MESSAGE_SUCCEEDED))

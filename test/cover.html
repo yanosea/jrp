@@ -573,6 +573,7 @@ jrp will download archive file from the official site and decompress it to the d
 You can set the directory of the database file to the environment variable "JRP_WORDNETJP_DIR".
 The default directory is "$XDG_DATA_HOME/jrp".
 `
+        DOWNLOAD_MESSAGE_DOWNLOADING        = "  Download Japanese Wordnet sqlite3 database file from the official site..."
         DOWNLOAD_MESSAGE_SUCCEEDED          = "✅ Downloaded successfully! Now, you are ready to use jrp!"
         DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED = "✅ You are already ready to use jrp!"
 )
@@ -901,7 +902,9 @@ import (
         "io"
         "os"
         "path/filepath"
+        "time"
 
+        "github.com/briandowns/spinner"
         "github.com/fatih/color"
 
         "github.com/yanosea/jrp/constant"
@@ -955,6 +958,14 @@ func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
         // if db file does not exist, download it
         <span class="cov8" title="1">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
         if _, err := os.Stat(dbFilePath); os.IsNotExist(err) </span><span class="cov8" title="1">{
+                // spinner settings
+                s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
+                s.Reverse()
+                s.Color("yellow")
+                s.Suffix = color.YellowString(constant.DOWNLOAD_MESSAGE_DOWNLOADING)
+                // start spinner
+                s.Start()
+
                 // download db archive file
                 resp, err := d.HttpClient.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
                 if err != nil </span><span class="cov8" title="1">{
@@ -996,8 +1007,11 @@ func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
                         return err
                 }</span>
 
+                // stop spinner
+                <span class="cov8" title="1">s.Stop()
+
                 // if db file is downloaded successfully, print message
-                <span class="cov8" title="1">fmt.Println(color.GreenString(constant.DOWNLOAD_MESSAGE_SUCCEEDED))</span>
+                fmt.Println(color.GreenString(constant.DOWNLOAD_MESSAGE_SUCCEEDED))</span>
         } else<span class="cov8" title="1"> {
                 // if db file already exists, print message
                 fmt.Println(color.GreenString(constant.DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED))
