@@ -16,6 +16,7 @@ import (
 	"github.com/yanosea/jrp/internal/gzip"
 	"github.com/yanosea/jrp/internal/httpclient"
 	"github.com/yanosea/jrp/internal/iomanager"
+	"github.com/yanosea/jrp/internal/spinnerservice"
 	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/logic"
 
@@ -52,7 +53,7 @@ func TestExecute(t *testing.T) {
 	tu := usermanager.OSUserProvider{}
 	tcu, _ := tu.Current()
 	dbFileDirPath := filepath.Join(tcu.HomeDir, ".local", "share", "jrp")
-	tdl := logic.NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+	tdl := logic.NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, spinnerservice.NewRealSpinnerService())
 
 	type args struct {
 		globalOption *cmd.GlobalOption

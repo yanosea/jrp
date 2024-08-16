@@ -10,6 +10,7 @@ import (
 	"github.com/yanosea/jrp/internal/gzip"
 	"github.com/yanosea/jrp/internal/httpclient"
 	"github.com/yanosea/jrp/internal/iomanager"
+	"github.com/yanosea/jrp/internal/spinnerservice"
 	"github.com/yanosea/jrp/internal/usermanager"
 	"github.com/yanosea/jrp/logic"
 )
@@ -42,7 +43,14 @@ func NewDownloadCommand(g *GlobalOption) *cobra.Command {
 }
 
 func (o *DownloadOption) DownloadRunE(_ *cobra.Command, _ []string) error {
-	o.Downloader = logic.NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+	o.Downloader = logic.NewDBFileDownloader(
+		usermanager.OSUserProvider{},
+		fs.OsFileManager{},
+		httpclient.DefaultHTTPClient{},
+		iomanager.DefaultIOHelper{},
+		gzip.DefaultGzipHandler{},
+		spinnerservice.NewRealSpinnerService(),
+	)
 	return o.Download()
 }
 

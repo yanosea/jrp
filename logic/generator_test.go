@@ -15,6 +15,7 @@ import (
 	"github.com/yanosea/jrp/internal/gzip"
 	"github.com/yanosea/jrp/internal/httpclient"
 	"github.com/yanosea/jrp/internal/iomanager"
+	"github.com/yanosea/jrp/internal/spinnerservice"
 	"github.com/yanosea/jrp/internal/usermanager"
 
 	mock_database "github.com/yanosea/jrp/mock/database"
@@ -117,7 +118,7 @@ func TestGenerate(t *testing.T) {
 	tu := usermanager.OSUserProvider{}
 	tcu, _ := tu.Current()
 	defaultDBFileDirPath := filepath.Join(tcu.HomeDir, ".local", "share", "jrp")
-	tdl := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{})
+	tdl := NewDBFileDownloader(usermanager.OSUserProvider{}, fs.OsFileManager{}, httpclient.DefaultHTTPClient{}, iomanager.DefaultIOHelper{}, gzip.DefaultGzipHandler{}, spinnerservice.NewRealSpinnerService())
 	if err := tdl.Download(); err != nil {
 		t.Error(err)
 	}

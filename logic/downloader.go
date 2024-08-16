@@ -5,9 +5,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
-	"time"
 
-	"github.com/briandowns/spinner"
 	"github.com/fatih/color"
 
 	"github.com/yanosea/jrp/constant"
@@ -15,6 +13,7 @@ import (
 	"github.com/yanosea/jrp/internal/gzip"
 	"github.com/yanosea/jrp/internal/httpclient"
 	"github.com/yanosea/jrp/internal/iomanager"
+	"github.com/yanosea/jrp/internal/spinnerservice"
 	"github.com/yanosea/jrp/internal/usermanager"
 )
 
@@ -28,16 +27,18 @@ type DBFileDownloader struct {
 	HttpClient httpclient.HTTPClient
 	IO         iomanager.IOHelper
 	Gzip       gzip.GzipHandler
+	Spinner    spinnerservice.SpinnerService
 }
 
 func NewDBFileDownloader(u usermanager.UserProvider, f fs.FileManager,
-	h httpclient.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler) *DBFileDownloader {
+	h httpclient.HTTPClient, i iomanager.IOHelper, g gzip.GzipHandler, s spinnerservice.SpinnerService) *DBFileDownloader {
 	return &DBFileDownloader{
 		User:       u,
 		FileSystem: f,
 		HttpClient: h,
 		IO:         i,
 		Gzip:       g,
+		Spinner:    s,
 	}
 }
 
@@ -62,12 +63,12 @@ func (d *DBFileDownloader) Download() error {
 	dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
 	if _, err := os.Stat(dbFilePath); os.IsNotExist(err) {
 		// spinner settings
-		s := spinner.New(spinner.CharSets[11], 100*time.Millisecond)
-		s.Reverse()
-		s.Color("yellow")
-		s.Suffix = color.YellowString(constant.DOWNLOAD_MESSAGE_DOWNLOADING)
+		if err := d.Spinner.SetColor("yellow"); err != nil {
+			return err
+		}
+		d.Spinner.SetSuffix(color.YellowString(constant.DOWNLOAD_MESSAGE_DOWNLOADING))
 		// start spinner
-		s.Start()
+		d.Spinner.Start()
 
 		// download db archive file
 		resp, err := d.HttpClient.Get(constant.WNJPN_DB_ARCHIVE_FILE_URL)
@@ -111,7 +112,7 @@ func (d *DBFileDownloader) Download() error {
 		}
 
 		// stop spinner
-		s.Stop()
+		d.Spinner.Stop()
 
 		// if db file is downloaded successfully, print message
 		fmt.Println(color.GreenString(constant.DOWNLOAD_MESSAGE_SUCCEEDED))

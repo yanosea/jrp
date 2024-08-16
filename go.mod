@@ -3,6 +3,7 @@ module github.com/yanosea/jrp
 go 1.20
 
 require (
+	github.com/briandowns/spinner v1.23.1
 	github.com/fatih/color v1.17.0
 	github.com/spf13/cobra v1.8.1
 	go.uber.org/mock v0.4.0
@@ -10,7 +11,6 @@ require (
 )
 
 require (
-	github.com/briandowns/spinner v1.23.1 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
