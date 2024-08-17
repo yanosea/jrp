@@ -79,37 +79,41 @@
 				
 				<option value="file11">github.com/yanosea/jrp/internal/buffer/buffer.go (100.0%)</option>
 				
-				<option value="file12">github.com/yanosea/jrp/internal/cmdwrapper/command_wrapper.go (100.0%)</option>
+				<option value="file12">github.com/yanosea/jrp/internal/buildinfo/build_info.go (100.0%)</option>
 				
-				<option value="file13">github.com/yanosea/jrp/internal/database/database.go (100.0%)</option>
+				<option value="file13">github.com/yanosea/jrp/internal/cmdwrapper/command_wrapper.go (100.0%)</option>
 				
-				<option value="file14">github.com/yanosea/jrp/internal/database/rows.go (100.0%)</option>
+				<option value="file14">github.com/yanosea/jrp/internal/database/database.go (100.0%)</option>
 				
-				<option value="file15">github.com/yanosea/jrp/internal/fs/file.go (100.0%)</option>
+				<option value="file15">github.com/yanosea/jrp/internal/database/rows.go (100.0%)</option>
 				
-				<option value="file16">github.com/yanosea/jrp/internal/fs/file_manager.go (100.0%)</option>
+				<option value="file16">github.com/yanosea/jrp/internal/fs/file.go (100.0%)</option>
 				
-				<option value="file17">github.com/yanosea/jrp/internal/gzip/gzip_handler.go (100.0%)</option>
+				<option value="file17">github.com/yanosea/jrp/internal/fs/file_manager.go (100.0%)</option>
 				
-				<option value="file18">github.com/yanosea/jrp/internal/httpclient/http_client.go (100.0%)</option>
+				<option value="file18">github.com/yanosea/jrp/internal/gzip/gzip_handler.go (100.0%)</option>
 				
-				<option value="file19">github.com/yanosea/jrp/internal/iomanager/io_helper.go (100.0%)</option>
+				<option value="file19">github.com/yanosea/jrp/internal/httpclient/http_client.go (100.0%)</option>
 				
-				<option value="file20">github.com/yanosea/jrp/internal/spinnerservice/spinner_service.go (100.0%)</option>
+				<option value="file20">github.com/yanosea/jrp/internal/iomanager/io_helper.go (100.0%)</option>
 				
-				<option value="file21">github.com/yanosea/jrp/internal/usermanager/user_provider.go (100.0%)</option>
+				<option value="file21">github.com/yanosea/jrp/internal/spinnerservice/spinner_service.go (100.0%)</option>
 				
-				<option value="file22">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
+				<option value="file22">github.com/yanosea/jrp/internal/usermanager/user_provider.go (100.0%)</option>
 				
-				<option value="file23">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
+				<option value="file23">github.com/yanosea/jrp/logic/db_file_dir_path_getter.go (100.0%)</option>
 				
-				<option value="file24">github.com/yanosea/jrp/logic/generator.go (100.0%)</option>
+				<option value="file24">github.com/yanosea/jrp/logic/downloader.go (100.0%)</option>
 				
-				<option value="file25">github.com/yanosea/jrp/main.go (100.0%)</option>
+				<option value="file25">github.com/yanosea/jrp/logic/generator.go (100.0%)</option>
 				
-				<option value="file26">github.com/yanosea/jrp/util/capture.go (100.0%)</option>
+				<option value="file26">github.com/yanosea/jrp/logic/version.go (100.0%)</option>
 				
-				<option value="file27">github.com/yanosea/jrp/util/utility.go (100.0%)</option>
+				<option value="file27">github.com/yanosea/jrp/main.go (100.0%)</option>
+				
+				<option value="file28">github.com/yanosea/jrp/util/capture.go (100.0%)</option>
+				
+				<option value="file29">github.com/yanosea/jrp/util/utility.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -410,6 +414,7 @@ import (
         "github.com/spf13/cobra"
 
         "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/buildinfo"
         "github.com/yanosea/jrp/internal/cmdwrapper"
         "github.com/yanosea/jrp/internal/database"
         "github.com/yanosea/jrp/internal/fs"
@@ -418,7 +423,7 @@ import (
         "github.com/yanosea/jrp/util"
 )
 
-var version = "develop"
+var version = ""
 
 type GlobalOption struct {
         Out            io.Writer
@@ -466,12 +471,13 @@ func NewRootCommand(ow, ew io.Writer, cmdArgs []string) cmdwrapper.ICommand <spa
                 ErrOut: g.ErrOut,
                 Args:   cmdArgs,
         }
+        v := logic.NewJrpVersionGetter(buildinfo.RealBuildInfoProvider{})
 
         cmd := &amp;cobra.Command{
                 Use:           constant.ROOT_USE,
                 Short:         constant.ROOT_SHORT,
                 Long:          constant.ROOT_LONG,
-                Version:       version,
+                Version:       v.GetVersion(version),
                 SilenceErrors: true,
                 SilenceUsage:  true,
                 Args:          cobra.MaximumNArgs(1),
@@ -658,7 +664,24 @@ func (b *DefaultBuffer) String() string <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file12" style="display: none">package cmdwrapper
+		<pre class="file" id="file12" style="display: none">package buildinfo
+
+import (
+        "runtime/debug"
+)
+
+type BuildInfoProvider interface {
+        ReadBuildInfo() (*debug.BuildInfo, bool)
+}
+
+type RealBuildInfoProvider struct{}
+
+func (RealBuildInfoProvider) ReadBuildInfo() (*debug.BuildInfo, bool) <span class="cov8" title="1">{
+        return debug.ReadBuildInfo()
+}</span>
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">package cmdwrapper
 
 import (
         "github.com/spf13/cobra"
@@ -681,7 +704,7 @@ func NewCommandWrapper(cmd *cobra.Command) ICommand <span class="cov8" title="1"
 }</span>
 </pre>
 		
-		<pre class="file" id="file13" style="display: none">package database
+		<pre class="file" id="file14" style="display: none">package database
 
 import (
         "database/sql"
@@ -705,7 +728,7 @@ func (s SQLiteProvider) Query(db *sql.DB, query string) (Rows, error) <span clas
 }</span>
 </pre>
 		
-		<pre class="file" id="file14" style="display: none">package database
+		<pre class="file" id="file15" style="display: none">package database
 
 import (
         "database/sql"
@@ -734,7 +757,7 @@ func (s SQLiteRows) Close() error <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file15" style="display: none">package fs
+		<pre class="file" id="file16" style="display: none">package fs
 
 import (
         "os"
@@ -760,7 +783,7 @@ func (f *OsFile) Close() error <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file16" style="display: none">package fs
+		<pre class="file" id="file17" style="display: none">package fs
 
 import (
         "os"
@@ -794,7 +817,7 @@ func (OsFileManager) MkdirAll(path string, perm os.FileMode) error <span class="
 }</span>
 </pre>
 		
-		<pre class="file" id="file17" style="display: none">package gzip
+		<pre class="file" id="file18" style="display: none">package gzip
 
 import (
         "compress/gzip"
@@ -812,7 +835,7 @@ func (DefaultGzipHandler) NewReader(r io.Reader) (io.ReadCloser, error) <span cl
 }</span>
 </pre>
 		
-		<pre class="file" id="file18" style="display: none">package httpclient
+		<pre class="file" id="file19" style="display: none">package httpclient
 
 import (
         "net/http"
@@ -829,7 +852,7 @@ func (DefaultHTTPClient) Get(url string) (*http.Response, error) <span class="co
 }</span>
 </pre>
 		
-		<pre class="file" id="file19" style="display: none">package iomanager
+		<pre class="file" id="file20" style="display: none">package iomanager
 
 import (
         "io"
@@ -846,7 +869,7 @@ func (DefaultIOHelper) Copy(dst io.Writer, src io.Reader) (int64, error) <span c
 }</span>
 </pre>
 		
-		<pre class="file" id="file20" style="display: none">package spinnerservice
+		<pre class="file" id="file21" style="display: none">package spinnerservice
 
 import (
         "time"
@@ -888,7 +911,7 @@ func (rss *RealSpinnerService) SetSuffix(suffix string) <span class="cov8" title
 }</span>
 </pre>
 		
-		<pre class="file" id="file21" style="display: none">package usermanager
+		<pre class="file" id="file22" style="display: none">package usermanager
 
 import (
         "os/user"
@@ -905,7 +928,7 @@ func (OSUserProvider) Current() (*user.User, error) <span class="cov8" title="1"
 }</span>
 </pre>
 		
-		<pre class="file" id="file22" style="display: none">package logic
+		<pre class="file" id="file23" style="display: none">package logic
 
 import (
         "os"
@@ -947,7 +970,7 @@ func (g *DBFileDirPathGetter) GetFileDirPath() (string, error) <span class="cov8
 }
 </pre>
 		
-		<pre class="file" id="file23" style="display: none">package logic
+		<pre class="file" id="file24" style="display: none">package logic
 
 import (
         "fmt"
@@ -1074,7 +1097,7 @@ func (d *DBFileDownloader) Download() error <span class="cov8" title="1">{
 }
 </pre>
 		
-		<pre class="file" id="file24" style="display: none">package logic
+		<pre class="file" id="file25" style="display: none">package logic
 
 import (
         "fmt"
@@ -1188,7 +1211,43 @@ func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) <span
 }
 </pre>
 		
-		<pre class="file" id="file25" style="display: none">package main
+		<pre class="file" id="file26" style="display: none">package logic
+
+import (
+        "github.com/yanosea/jrp/internal/buildinfo"
+)
+
+type VersionGetter interface {
+        GetVersion(string) string
+}
+
+type JrpVersionGetter struct {
+        BuildInfoProvider buildinfo.BuildInfoProvider
+}
+
+func NewJrpVersionGetter(b buildinfo.BuildInfoProvider) *JrpVersionGetter <span class="cov8" title="1">{
+        return &amp;JrpVersionGetter{
+                BuildInfoProvider: b,
+        }
+}</span>
+
+func (b *JrpVersionGetter) GetVersion(v string) string <span class="cov8" title="1">{
+        // if version is embedded, return it
+        if v != "" </span><span class="cov8" title="1">{
+                return v
+        }</span>
+
+        <span class="cov8" title="1">if i, ok := b.BuildInfoProvider.ReadBuildInfo(); !ok </span><span class="cov8" title="1">{
+                // return unknown
+                return "unknown"
+        }</span> else<span class="cov8" title="1"> {
+                // return version from build info
+                return i.Main.Version
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package main
 
 import (
         "os"
@@ -1204,7 +1263,7 @@ func main() <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file26" style="display: none">package util
+		<pre class="file" id="file28" style="display: none">package util
 
 import (
         "os"
@@ -1266,7 +1325,7 @@ func (d *DefaultCapturer) CaptureOutput(t *testing.T, fnc func()) (string, strin
 }
 </pre>
 		
-		<pre class="file" id="file27" style="display: none">package util
+		<pre class="file" id="file29" style="display: none">package util
 
 import (
         "fmt"
