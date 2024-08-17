@@ -19,7 +19,7 @@
 
 ## ℹ️ About
 
-`jrp` is the CLI tool to generate random Japanese phrase(s). (It's jokeey tool!)  
+`jrp` is the CLI tool to generate Japanese random phrase(s). (It's jokeey tool!)  
 This tool uses [WordNet Japan](https://bond-lab.github.io/wnja/jpn/downloads.html) sqlite database file.
 
 ## 💻 Usage
