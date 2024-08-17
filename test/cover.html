@@ -533,6 +533,8 @@ import (
         "github.com/spf13/cobra"
 
         "github.com/yanosea/jrp/constant"
+        "github.com/yanosea/jrp/internal/buildinfo"
+        "github.com/yanosea/jrp/logic"
         "github.com/yanosea/jrp/util"
 )
 
@@ -554,8 +556,9 @@ func newVersionCommand(globalOption *GlobalOption) *cobra.Command <span class="c
 }
 
 func (g *GlobalOption) version() error <span class="cov8" title="1">{
+        v := logic.NewJrpVersionGetter(buildinfo.RealBuildInfoProvider{})
         // show version
-        util.PrintlnWithWriter(g.Out, fmt.Sprintf(constant.VERSION_MESSAGE_TEMPLATE, version))
+        util.PrintlnWithWriter(g.Out, fmt.Sprintf(constant.VERSION_MESSAGE_TEMPLATE, v.GetVersion(version)))
         return nil
 }</span>
 </pre>
