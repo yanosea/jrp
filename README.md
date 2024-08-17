@@ -15,6 +15,8 @@
 
 </div>
 
+![demo](docs/demo.gif "demo")
+
 ## ℹ️ About
 
 `jrp` is the CLI tool to generate random Japanese phrase(s). (It's jokeey tool!)  
@@ -58,6 +60,10 @@ brew tap yanosea/tap
 brew install yanosea/tap/jrp
 ```
 
+### 📦 Download from release
+
+Go to the [Releases](https://github.com/yanosea/jrp/releases) and download the latest binary for your platform.
+
 ## ✨ Update
 
 ### 🐭 Using go
@@ -74,6 +80,10 @@ go install github.com/yanosea/jrp@latest
 brew update
 brew upgrade jrp
 ```
+
+### 📦 Download from release
+
+Download the latest binary from the [Releases](https://github.com/yanosea/jrp/releases) page and replace the old binary in your `$PATH`.
 
 ## 📃 License
 
