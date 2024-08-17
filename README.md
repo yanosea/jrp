@@ -45,6 +45,12 @@ Arguments:
 
 ## 🔧 Installation
 
+### 🐭 Using go
+
+```
+go install github.com/yanosea/jrp@latest
+```
+
 ### 🍺 Using homebrew
 
 ```
@@ -53,6 +59,16 @@ brew install yanosea/tap/jrp
 ```
 
 ## ✨ Update
+
+### 🐭 Using go
+
+reinstall `jrp`!
+
+```
+go install github.com/yanosea/jrp@latest
+```
+
+### 🍺 Using homebrew
 
 ```
 brew update

@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/internal/buildinfo"
 	"github.com/yanosea/jrp/internal/cmdwrapper"
 	"github.com/yanosea/jrp/internal/database"
 	"github.com/yanosea/jrp/internal/fs"
@@ -15,7 +16,7 @@ import (
 	"github.com/yanosea/jrp/util"
 )
 
-var version = "develop"
+var version = ""
 
 type GlobalOption struct {
 	Out            io.Writer
@@ -63,12 +64,13 @@ func NewRootCommand(ow, ew io.Writer, cmdArgs []string) cmdwrapper.ICommand {
 		ErrOut: g.ErrOut,
 		Args:   cmdArgs,
 	}
+	v := logic.NewJrpVersionGetter(buildinfo.RealBuildInfoProvider{})
 
 	cmd := &cobra.Command{
 		Use:           constant.ROOT_USE,
 		Short:         constant.ROOT_SHORT,
 		Long:          constant.ROOT_LONG,
-		Version:       version,
+		Version:       v.GetVersion(version),
 		SilenceErrors: true,
 		SilenceUsage:  true,
 		Args:          cobra.MaximumNArgs(1),
