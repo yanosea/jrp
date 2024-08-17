@@ -6,6 +6,8 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/yanosea/jrp/constant"
+	"github.com/yanosea/jrp/internal/buildinfo"
+	"github.com/yanosea/jrp/logic"
 	"github.com/yanosea/jrp/util"
 )
 
@@ -27,7 +29,8 @@ func newVersionCommand(globalOption *GlobalOption) *cobra.Command {
 }
 
 func (g *GlobalOption) version() error {
+	v := logic.NewJrpVersionGetter(buildinfo.RealBuildInfoProvider{})
 	// show version
-	util.PrintlnWithWriter(g.Out, fmt.Sprintf(constant.VERSION_MESSAGE_TEMPLATE, version))
+	util.PrintlnWithWriter(g.Out, fmt.Sprintf(constant.VERSION_MESSAGE_TEMPLATE, v.GetVersion(version)))
 	return nil
 }
