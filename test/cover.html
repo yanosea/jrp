@@ -352,6 +352,8 @@ type GenerateOption struct {
         ErrOut    io.Writer
         Args      []string
         Number    int
+        Prefix    string
+        Suffix    string
         Generator logic.Generator
 }
 
@@ -372,6 +374,8 @@ func NewGenerateCommand(g *GlobalOption) *cobra.Command <span class="cov8" title
         }
 
         cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
+        cmd.PersistentFlags().StringVarP(&amp;o.Prefix, constant.GENERATE_FLAG_PREFIX, constant.GENERATE_FLAG_PREFIX_SHORTHAND, "", constant.GENERATE_FLAG_PREFIX_DESCRIPTION)
+        cmd.PersistentFlags().StringVarP(&amp;o.Suffix, constant.GENERATE_FLAG_SUFFIX, constant.GENERATE_FLAG_SUFFIX_SHORTHAND, "", constant.GENERATE_FLAG_SUFFIX_DESCRIPTION)
 
         cmd.SetOut(o.Out)
         cmd.SetErr(o.ErrOut)
@@ -392,7 +396,14 @@ func (o *GenerateOption) GenerateRunE(_ *cobra.Command, _ []string) error <span 
 }
 
 func (o *GenerateOption) Generate() error <span class="cov8" title="1">{
-        jrps, err := o.Generator.Generate(logic.DefineNumber(o.Number, o.Args[1]))
+        jrps, err := o.Generator.Generate(
+                logic.DefineNumber(
+                        o.Number,
+                        logic.GetFirstConvertibleToString(o.Args),
+                ),
+                o.Prefix,
+                o.Suffix,
+        )
         if err != nil </span><span class="cov8" title="1">{
                 return err
         }</span>
@@ -437,6 +448,8 @@ type RootOption struct {
         ErrOut    io.Writer
         Args      []string
         Number    int
+        Prefix    string
+        Suffix    string
         Generator logic.Generator
 }
 
@@ -485,6 +498,8 @@ func NewRootCommand(ow, ew io.Writer, cmdArgs []string) cmdwrapper.ICommand <spa
         }
 
         cmd.PersistentFlags().IntVarP(&amp;o.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
+        cmd.PersistentFlags().StringVarP(&amp;o.Prefix, constant.ROOT_FLAG_PREFIX, constant.ROOT_FLAG_PREFIX_SHORTHAND, "", constant.ROOT_FLAG_PREFIX_DESCRIPTION)
+        cmd.PersistentFlags().StringVarP(&amp;o.Suffix, constant.ROOT_FLAG_SUFFIX, constant.ROOT_FLAG_SUFFIX_SHORTHAND, "", constant.ROOT_FLAG_SUFFIX_DESCRIPTION)
 
         cmd.SetOut(ow)
         cmd.SetErr(ew)
@@ -512,7 +527,14 @@ func (o *RootOption) RootRunE(_ *cobra.Command, _ []string) error <span class="c
 }
 
 func (o *RootOption) RootGenerate() error <span class="cov8" title="1">{
-        jrps, err := o.Generator.Generate(logic.DefineNumber(o.Number, o.Args[0]))
+        jrps, err := o.Generator.Generate(
+                logic.DefineNumber(
+                        o.Number,
+                        logic.GetFirstConvertibleToString(o.Args),
+                ),
+                o.Prefix,
+                o.Suffix,
+        )
         if err != nil </span><span class="cov8" title="1">{
                 return err
         }</span>
@@ -610,13 +632,18 @@ const (
 You can specify how many phrases to generate by flag "-n" or "--number" or a number argument.
 If both are provided, the larger number takes precedence.
 
+And you can specify the prefix and suffix of the phrase to generate
+by the flag "-p" or "--prefix" and "-s" or "--suffix".
+
 Usage:
   jrp generate [flags]
   jrp gen [flags]
   jrp g [flags]
 
 Flags:
-  -n, --number    🔢 number of phrases to generate (default 1). You can abbreviate "generate" sub command such ah (jrp -n 10, jrp 10).
+  -n, --number    🔢 number of phrases to generate (default 1).
+  -p  --prefix    💬 prefix of phrases to generate.
+  -s  --suffix    💬 suffix of phrases to generate.
   -h, --help      🤝 help for generate
 
 Arguments:
@@ -627,14 +654,23 @@ Arguments:
         GENERATE_LONG  = `✨ Generate Japanese random phrase(s).
 
 You can generate Japanese random phrase.
-You can specify the number of phrases to generate by the flag "-n" or "--number".
 `
         GENERATE_FLAG_NUMBER             = "number"
         GENERATE_FLAG_NUMBER_SHORTHAND   = "n"
         GENERATE_FLAG_NUMBER_DESCRIPTION = "number of phrases to generate"
+        GENERATE_FLAG_PREFIX             = "prifix"
+        GENERATE_FLAG_PREFIX_SHORTHAND   = "p"
+        GENERATE_FLAG_PREFIX_DESCRIPTION = "prefix of phrases to generate"
+        GENERATE_FLAG_SUFFIX             = "suffix"
+        GENERATE_FLAG_SUFFIX_SHORTHAND   = "s"
+        GENERATE_FLAG_SUFFIX_DESCRIPTION = "suffix of phrases to generate"
 
         GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED = "⚡ You have to execute 'download' to use jrp..."
-        GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS   = "SELECT word.Lemma, word.Pos FROM word WHERE word.Lang = 'jpn' AND word.Pos in ('a', 'v', 'n')"
+        GENERATE_MESSAGE_NOTIFY_USE_ONLY_ONE      = "⚡ You can use only one of prefix or suffix..."
+
+        GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS = "SELECT word.Lemma, word.Pos FROM word WHERE word.Lang = 'jpn' AND word.Pos in ('a', 'v', 'n');"
+        GENERATE_SQL_GET_ALL_JAPANESE_AV_WORDS  = "SELECT word.Lemma, word.Pos FROM word WHERE word.Lang = 'jpn' AND word.Pos in ('a', 'v');"
+        GENERATE_SQL_GET_ALL_JAPANESE_N_WORDS   = "SELECT word.Lemma, word.Pos FROM word WHERE word.Lang = 'jpn' AND word.Pos = 'n';"
 )
 
 func GetGenerateAliases() []string <span class="cov8" title="1">{
@@ -1118,7 +1154,7 @@ import (
 )
 
 type Generator interface {
-        Generate(num int) ([]string, error)
+        Generate(num int, prefix string, suffix string) ([]string, error)
 }
 
 type JapaneseRandomPhraseGenerator struct {
@@ -1134,6 +1170,15 @@ func NewJapaneseRandomPhraseGenerator(u usermanager.UserProvider, d database.Dat
                 FileSystem: f,
         }
 }</span>
+
+func GetFirstConvertibleToString(args []string) string <span class="cov8" title="1">{
+        for _, arg := range args </span><span class="cov8" title="1">{
+                if _, err := strconv.Atoi(arg); err == nil </span><span class="cov8" title="1">{
+                        return arg
+                }</span>
+        }
+        <span class="cov8" title="1">return "1"</span>
+}
 
 func DefineNumber(num int, argNum string) int <span class="cov8" title="1">{
         if num &lt;= 0 </span><span class="cov8" title="1">{
@@ -1155,45 +1200,61 @@ func DefineNumber(num int, argNum string) int <span class="cov8" title="1">{
         }</span>
 }
 
-func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) <span class="cov8" title="1">{
+func (j JapaneseRandomPhraseGenerator) Generate(num int, prefix string, suffix string) ([]string, error) <span class="cov8" title="1">{
+        // get db file path
         dbFileDirPathGetter := NewDBFileDirPathGetter(j.User)
-
         dbFileDirPath, err := dbFileDirPathGetter.GetFileDirPath()
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-
         <span class="cov8" title="1">dbFilePath := filepath.Join(dbFileDirPath, constant.WNJPN_DB_FILE_NAME)
         if !j.FileSystem.Exists(dbFilePath) </span><span class="cov8" title="1">{
+                // if db file does not exist, notify to download
                 fmt.Println(color.YellowString(constant.GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED))
                 return make([]string, 0), nil
         }</span>
 
+        // define query
+        <span class="cov8" title="1">var query string
+        if prefix == "" &amp;&amp; suffix == "" </span><span class="cov8" title="1">{
+                query = constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS
+        }</span> else<span class="cov8" title="1"> if prefix != "" &amp;&amp; suffix == "" </span><span class="cov8" title="1">{
+                query = constant.GENERATE_SQL_GET_ALL_JAPANESE_N_WORDS
+        }</span> else<span class="cov8" title="1"> if prefix == "" &amp;&amp; suffix != "" </span><span class="cov8" title="1">{
+                query = constant.GENERATE_SQL_GET_ALL_JAPANESE_AV_WORDS
+        }</span> else<span class="cov8" title="1"> {
+                // if both prefix and suffix are provided, notify to use only one
+                fmt.Println(color.YellowString(constant.GENERATE_MESSAGE_NOTIFY_USE_ONLY_ONE))
+                return make([]string, 0), nil
+        }</span>
+
+        // connect to db
         <span class="cov8" title="1">db, err := j.DbProvider.Connect(dbFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
         <span class="cov8" title="1">defer db.Close()
 
-        rows, err := j.DbProvider.Query(db, constant.GENERATE_SQL_GET_ALL_JAPANESE_AVN_WORDS)
+        // get all words from db
+        rows, err := j.DbProvider.Query(db, query)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
         <span class="cov8" title="1">defer rows.Close()
 
-        allAVNWords := make([]model.Word, 0)
+        allWords := make([]model.Word, 0)
         for rows.Next() </span><span class="cov8" title="1">{
                 var word model.Word
                 if err := rows.Scan(&amp;word.Lemma, &amp;word.Pos); err != nil </span><span class="cov8" title="1">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">allAVNWords = append(allAVNWords, word)</span>
+                <span class="cov8" title="1">allWords = append(allWords, word)</span>
         }
 
         <span class="cov8" title="1">var allAVWords []model.Word
         var allNWords []model.Word
 
-        for _, word := range allAVNWords </span><span class="cov8" title="1">{
+        for _, word := range allWords </span><span class="cov8" title="1">{
                 if word.Pos.Valid &amp;&amp; word.Pos.String == "n" </span><span class="cov8" title="1">{
                         allNWords = append(allNWords, word)
                 }</span> else<span class="cov8" title="1"> {
@@ -1203,12 +1264,26 @@ func (j JapaneseRandomPhraseGenerator) Generate(num int) ([]string, error) <span
 
         <span class="cov8" title="1">jrp := make([]string, 0)
         for i := 0; i &lt; num; i++ </span><span class="cov8" title="1">{
-                randomIndexA := rand.Intn(len(allAVWords))
-                randomIndexB := rand.Intn(len(allNWords))
-                randomWordA := allAVWords[randomIndexA]
-                randomWordB := allNWords[randomIndexB]
-                jrp = append(jrp, randomWordA.Lemma.String+randomWordB.Lemma.String)
-        }</span>
+                var prefixWord string
+                if prefix != "" </span><span class="cov8" title="1">{
+                        prefixWord = prefix
+                }</span> else<span class="cov8" title="1"> {
+                        randomIndexPrefix := rand.Intn(len(allAVWords))
+                        randomWordPrefix := allAVWords[randomIndexPrefix]
+                        prefixWord = randomWordPrefix.Lemma.String
+                }</span>
+
+                <span class="cov8" title="1">var suffixWord string
+                if suffix != "" </span><span class="cov8" title="1">{
+                        suffixWord = suffix
+                }</span> else<span class="cov8" title="1"> {
+                        randomIndexSuffix := rand.Intn(len(allNWords))
+                        randomWordSuffix := allNWords[randomIndexSuffix]
+                        suffixWord = randomWordSuffix.Lemma.String
+                }</span>
+
+                <span class="cov8" title="1">jrp = append(jrp, prefixWord+suffixWord)</span>
+        }
 
         <span class="cov8" title="1">return jrp, nil</span>
 }

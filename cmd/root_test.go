@@ -202,16 +202,16 @@ func TestRootGenerate(t *testing.T) {
 	}{
 		{
 			name:    "positive testing",
-			args:    args{o: cmd.RootOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{""}, Number: 1, Generator: logic.NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})}},
+			args:    args{o: cmd.RootOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{""}, Number: 1, Prefix: "", Suffix: "", Generator: logic.NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})}},
 			wantErr: false,
 			setup:   nil,
 		}, {
 			name:    "negative testing (Generate() fails)",
-			args:    args{o: cmd.RootOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{""}, Number: 1, Generator: nil}},
+			args:    args{o: cmd.RootOption{Out: os.Stdout, ErrOut: os.Stderr, Args: []string{""}, Number: 1, Prefix: "", Suffix: "", Generator: nil}},
 			wantErr: true,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				mg := mock_generator.NewMockGenerator(mockCtrl)
-				mg.EXPECT().Generate(tt.o.Number).Return(nil, errors.New("failed to generate japanese random phrase"))
+				mg.EXPECT().Generate(tt.o.Number, tt.o.Prefix, tt.o.Suffix).Return(nil, errors.New("failed to generate japanese random phrase"))
 				tt.o.Generator = mg
 			},
 		},

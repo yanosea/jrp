@@ -18,6 +18,8 @@ type GenerateOption struct {
 	ErrOut    io.Writer
 	Args      []string
 	Number    int
+	Prefix    string
+	Suffix    string
 	Generator logic.Generator
 }
 
@@ -38,6 +40,8 @@ func NewGenerateCommand(g *GlobalOption) *cobra.Command {
 	}
 
 	cmd.PersistentFlags().IntVarP(&o.Number, constant.GENERATE_FLAG_NUMBER, constant.GENERATE_FLAG_NUMBER_SHORTHAND, 1, constant.GENERATE_FLAG_NUMBER_DESCRIPTION)
+	cmd.PersistentFlags().StringVarP(&o.Prefix, constant.GENERATE_FLAG_PREFIX, constant.GENERATE_FLAG_PREFIX_SHORTHAND, "", constant.GENERATE_FLAG_PREFIX_DESCRIPTION)
+	cmd.PersistentFlags().StringVarP(&o.Suffix, constant.GENERATE_FLAG_SUFFIX, constant.GENERATE_FLAG_SUFFIX_SHORTHAND, "", constant.GENERATE_FLAG_SUFFIX_DESCRIPTION)
 
 	cmd.SetOut(o.Out)
 	cmd.SetErr(o.ErrOut)
@@ -58,7 +62,14 @@ func (o *GenerateOption) GenerateRunE(_ *cobra.Command, _ []string) error {
 }
 
 func (o *GenerateOption) Generate() error {
-	jrps, err := o.Generator.Generate(logic.DefineNumber(o.Number, o.Args[1]))
+	jrps, err := o.Generator.Generate(
+		logic.DefineNumber(
+			o.Number,
+			logic.GetFirstConvertibleToString(o.Args),
+		),
+		o.Prefix,
+		o.Suffix,
+	)
 	if err != nil {
 		return err
 	}
