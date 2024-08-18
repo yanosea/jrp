@@ -48,6 +48,42 @@ func TestNewJapaneseRandomPhraseGenerator(t *testing.T) {
 	}
 }
 
+func TestFirstConvertibleToString(t *testing.T) {
+	type args struct {
+		args []string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			name: "positive testing (args have convertible string, it is first)",
+			args: args{args: []string{"2", "test", "3"}},
+			want: "2",
+		}, {
+			name: "positive testing (args have convertible string, it is second)",
+			args: args{args: []string{"test", "4", "5"}},
+			want: "4",
+		}, {
+			name: "positive testing (args have convertible string, it is last)",
+			args: args{args: []string{"test", "test", "6"}},
+			want: "6",
+		}, {
+			name: "positive testing (args have no convertible string)",
+			args: args{args: []string{"test", "test", "test"}},
+			want: "1",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := GetFirstConvertibleToString(tt.args.args); got != tt.want {
+				t.Errorf("GetFirstConvertibleToString() got = %v, want = %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestDefineNumber(t *testing.T) {
 	type args struct {
 		num    int
@@ -62,8 +98,7 @@ func TestDefineNumber(t *testing.T) {
 			name: "positive testing (num is -1, argNum is empty)",
 			args: args{num: -1, argNum: ""},
 			want: 1,
-		},
-		{
+		}, {
 			name: "positive testing (num is 0, argNum is empty)",
 			args: args{num: 0, argNum: ""},
 			want: 1,
@@ -126,6 +161,8 @@ func TestGenerate(t *testing.T) {
 	type args struct {
 		generator *JapaneseRandomPhraseGenerator
 		num       int
+		prefix    string
+		suffix    string
 	}
 	tests := []struct {
 		name    string
@@ -135,8 +172,8 @@ func TestGenerate(t *testing.T) {
 		setup   func(mockCtrl *gomock.Controller, tt *args)
 	}{
 		{
-			name:    "positive testing (num is 1)",
-			args:    args{generator: nil, num: 1},
+			name:    "positive testing (num is 1, prefix is empty, suffix is empty)",
+			args:    args{generator: nil, num: 1, prefix: "", suffix: ""},
 			want:    1,
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
@@ -144,9 +181,63 @@ func TestGenerate(t *testing.T) {
 				tt.generator = generator
 			},
 		}, {
-			name:    "positive testing (num is 2)",
-			args:    args{generator: nil, num: 2},
+			name:    "positive testing (num is 1, prefix is not empty, suffix is empty)",
+			args:    args{generator: nil, num: 1, prefix: "凛として", suffix: ""},
+			want:    1,
+			wantErr: false,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})
+				tt.generator = generator
+			},
+		}, {
+			name:    "positive testing (num is 1, prefix is empty, suffix is not empty)",
+			args:    args{generator: nil, num: 1, prefix: "", suffix: "時雨"},
+			want:    1,
+			wantErr: false,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})
+				tt.generator = generator
+			},
+		}, {
+			name:    "positive testing (num is 1, prefix is not empty, suffix is not empty)",
+			args:    args{generator: nil, num: 1, prefix: "凛として", suffix: "時雨"},
+			want:    0,
+			wantErr: false,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})
+				tt.generator = generator
+			},
+		}, {
+			name:    "positive testing (num is 2, prefix is empty, suffix is empty)",
+			args:    args{generator: nil, num: 2, prefix: "", suffix: ""},
 			want:    2,
+			wantErr: false,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})
+				tt.generator = generator
+			},
+		}, {
+			name:    "positive testing (num is 2, prefix is not empty, suffix is empty)",
+			args:    args{generator: nil, num: 2, prefix: "凛として", suffix: ""},
+			want:    2,
+			wantErr: false,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})
+				tt.generator = generator
+			},
+		}, {
+			name:    "positive testing (num is 2, prefix is empty, suffix is not empty)",
+			args:    args{generator: nil, num: 2, prefix: "", suffix: "時雨"},
+			want:    2,
+			wantErr: false,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})
+				tt.generator = generator
+			},
+		}, {
+			name:    "positive testing (num is 2, prefix is not empty, suffix is not empty)",
+			args:    args{generator: nil, num: 2, prefix: "凛として", suffix: "時雨"},
+			want:    0,
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *args) {
 				generator := NewJapaneseRandomPhraseGenerator(usermanager.OSUserProvider{}, database.SQLiteProvider{}, fs.OsFileManager{})
@@ -235,7 +326,7 @@ func TestGenerate(t *testing.T) {
 				tt.setup(ctrl, &tt.args)
 			}
 
-			jrps, err := tt.args.generator.Generate(tt.args.num)
+			jrps, err := tt.args.generator.Generate(tt.args.num, tt.args.prefix, tt.args.suffix)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Generate() error = %v, wantErr %v", err, tt.wantErr)
 			}

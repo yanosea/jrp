@@ -30,6 +30,8 @@ type RootOption struct {
 	ErrOut    io.Writer
 	Args      []string
 	Number    int
+	Prefix    string
+	Suffix    string
 	Generator logic.Generator
 }
 
@@ -78,6 +80,8 @@ func NewRootCommand(ow, ew io.Writer, cmdArgs []string) cmdwrapper.ICommand {
 	}
 
 	cmd.PersistentFlags().IntVarP(&o.Number, constant.ROOT_FLAG_NUMBER, constant.ROOT_FLAG_NUMBER_SHORTHAND, 1, constant.ROOT_FLAG_NUMBER_DESCRIPTION)
+	cmd.PersistentFlags().StringVarP(&o.Prefix, constant.ROOT_FLAG_PREFIX, constant.ROOT_FLAG_PREFIX_SHORTHAND, "", constant.ROOT_FLAG_PREFIX_DESCRIPTION)
+	cmd.PersistentFlags().StringVarP(&o.Suffix, constant.ROOT_FLAG_SUFFIX, constant.ROOT_FLAG_SUFFIX_SHORTHAND, "", constant.ROOT_FLAG_SUFFIX_DESCRIPTION)
 
 	cmd.SetOut(ow)
 	cmd.SetErr(ew)
@@ -105,7 +109,14 @@ func (o *RootOption) RootRunE(_ *cobra.Command, _ []string) error {
 }
 
 func (o *RootOption) RootGenerate() error {
-	jrps, err := o.Generator.Generate(logic.DefineNumber(o.Number, o.Args[0]))
+	jrps, err := o.Generator.Generate(
+		logic.DefineNumber(
+			o.Number,
+			logic.GetFirstConvertibleToString(o.Args),
+		),
+		o.Prefix,
+		o.Suffix,
+	)
 	if err != nil {
 		return err
 	}
