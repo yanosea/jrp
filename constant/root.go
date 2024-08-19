@@ -14,7 +14,7 @@ Usage:
   jrp [command]
 
 Available Subcommands:
-  download    📥 Download Japanese Wordnet sqlite3 database file from the official site.
+  download    📦 Download Japanese Wordnet sqlite3 database file from the official site.
   generate    ✨ Generate Japanese random phrase(s). You can abbreviate "generate" sub command. ('jrp' and 'jrp generate' are the same.)
   help        🤝 Help of jrp.
   completion  🔧 Generate the autocompletion script for the specified shell.
