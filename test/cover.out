@@ -97,8 +97,8 @@ github.com/yanosea/jrp/internal/spinnerservice/spinner_service.go:30.39,32.2 1 1
 github.com/yanosea/jrp/internal/spinnerservice/spinner_service.go:34.65,36.2 1 1
 github.com/yanosea/jrp/internal/spinnerservice/spinner_service.go:38.57,40.2 1 1
 github.com/yanosea/jrp/internal/usermanager/user_provider.go:13.53,15.2 1 1
-github.com/yanosea/jrp/constant/download.go:36.36,38.2 1 1
-github.com/yanosea/jrp/constant/generate.go:50.36,52.2 1 1
+github.com/yanosea/jrp/constant/download.go:35.36,37.2 1 1
+github.com/yanosea/jrp/constant/generate.go:54.36,56.2 1 1
 github.com/yanosea/jrp/internal/buffer/buffer.go:17.61,19.2 1 0
 github.com/yanosea/jrp/internal/buffer/buffer.go:21.41,23.2 1 0
 github.com/yanosea/jrp/internal/buildinfo/build_info.go:13.71,15.2 1 0

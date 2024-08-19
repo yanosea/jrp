@@ -9,7 +9,7 @@ Usage:
   jrp version [flags]
 
 Flags:
-  -h, --help   help for version
+  -h, --help  🤝 help for version
 `
 	VERSION_USE   = "version"
 	VERSION_SHORT = "🔖 Show the version of jrp."

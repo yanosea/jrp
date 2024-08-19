@@ -3,7 +3,7 @@ package constant
 const (
 	COMPLETION_BASH_HELP_TEMPLATE = `🔧🐚 Generate the autocompletion script for the bash shell.
 
-This script depends on the 'bash-completion' package.
+This script depends on the "bash-completion" package.
 If it is not installed already, you can install it via your OS's package manager.
 
 To load completions in your current shell session:
@@ -12,11 +12,11 @@ To load completions in your current shell session:
 
 To load completions for every new session, execute once:
 
-  * 🐧 Linux:
+  - 🐧 Linux:
 
     jrp completion bash > /etc/bash_completion.d/jrp
 
-  * 🍎 macOS:
+  - 🍎 macOS:
 
     jrp completion bash > $(brew --prefix)/etc/bash_completion.d/jrp
 
@@ -32,7 +32,7 @@ Flags:
 	COMPLETION_BASH_SHORT = "🔧🐚 Generate the autocompletion script for the bash shell."
 	COMPLETION_BASH_LONG  = `🔧🐚 Generate the autocompletion script for the bash shell.
 
-This script depends on the 'bash-completion' package.
+This script depends on the "bash-completion" package.
 If it is not installed already, you can install it via your OS's package manager.
 
 To load completions in your current shell session:
@@ -41,11 +41,11 @@ To load completions in your current shell session:
 
 To load completions for every new session, execute once:
 
-  * 🐧 Linux:
+  - 🐧 Linux:
 
     jrp completion bash > /etc/bash_completion.d/jrp
 
-  * 🍎 macOS:
+  - 🍎 macOS:
 
     jrp completion bash > $(brew --prefix)/etc/bash_completion.d/jrp
 

@@ -25,14 +25,14 @@ Use "jrp completion [command] --help" for more information about a command.
 See each sub-command's help for details on how to use the generated script.
 You must use sub command below...
 
-  * 🐚 bash
-  * 🐟 fish
-  * 🪟 powershell
-  * 🧙 zsh`
+  - 🐚 bash
+  - 🐟 fish
+  - 🪟 powershell
+  - 🧙 zsh`
 	COMPLETION_MESSAGE_NO_SUB_COMMAND = `Use sub command below...
 
-  * 🐚 bash
-  * 🐟 fish
-  * 🪟 powershell
-  * 🧙 zsh`
+  - 🐚 bash
+  - 🐟 fish
+  - 🪟 powershell
+  - 🧙 zsh`
 )

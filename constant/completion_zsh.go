@@ -15,11 +15,11 @@ To load completions in your current shell session:
 
 To load completions for every new session, execute once:
 
-  * 🐧 Linux:
+  - 🐧 Linux:
 
     jrp completion zsh > "${fpath[1]}/_jrp"
 
-  * 🍎 macOS:
+  - 🍎 macOS:
 
     jrp completion zsh > $(brew --prefix)/share/zsh/site-functions/_jrp
 
@@ -47,11 +47,11 @@ To load completions in your current shell session:
 
 To load completions for every new session, execute once:
 
-  * 🐧 Linux:
+  - 🐧 Linux:
 
     jrp completion zsh > "${fpath[1]}/_jrp"
 
-  * 🍎 macOS:
+  - 🍎 macOS:
 
     jrp completion zsh > $(brew --prefix)/share/zsh/site-functions/_jrp
 

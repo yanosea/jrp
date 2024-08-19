@@ -13,7 +13,6 @@ Usage:
   jrp download [flags]
   jrp dl [flags]
   jrp d [flags]
- (All the above are equivalent.)
 
 Flags:
   -h, --help   🤝 help for download
