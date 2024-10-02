@@ -22,7 +22,10 @@
 ## ℹ️ About
 
 `jrp` is the CLI tool to generate Japanese random phrase(s). (It's jokeey tool!)  
-This tool uses [WordNet Japan](https://bond-lab.github.io/wnja/jpn/downloads.html) sqlite database file.
+You can save the generated phrase(s) to the history and manage them.  
+Also, you can save the generated phrase(s) to the favorite and manage them.
+
+This tool uses [WordNet Japan sqlite3 database file](https://bond-lab.github.io/wnja/jpn/downloads.html).
 
 ## 💻 Usage
 
@@ -32,16 +35,20 @@ Usage:
   jrp [command]
 
 Available Subcommands:
-  download, dl, d   📦 Download Japanese Wordnet sqlite3 database file from the official site.
-  generate, gen, g  ✨ Generate Japanese random phrase(s). You can abbreviate "generate" sub command. ("jrp" and "jrp generate" are the same.)
-  help              🤝 Help of jrp.
-  completion        🔧 Generate the autocompletion script for the specified shell.
-  version           🔖 Show the version of jrp.
+  download, dl,   d  📦 Download WordNet Japan sqlite3 database file from the official site.
+  generate, gen,  g  ✨ Generate Japanese random phrase(s). You can abbreviate "generate" sub command. ("jrp" and "jrp generate" are the same.)
+  history,  hist, h  📜 Manage the history of the "generate" command.
+  favorite, fav,  f  ⭐ Manage the favorited phrase(s) of the history of "generate" command.
+  help               🤝 Help of jrp.
+  completion         🔧 Generate the autocompletion script for the specified shell.
+  version            🔖 Show the version of jrp.
 
 Flags:
   -n, --number   🔢 number of phrases to generate (default 1, e.g: 10).
   -p  --prefix   💬 prefix of phrase(s) to generate.
   -s  --suffix   💬 suffix of phrase(s) to generate.
+  -d  --dry-run  🧪 generate phrase(s) without saving to the history.
+  -P, --plain    📝 plain text output instead of table output.
   -h, --help     🤝 help for jrp
   -v, --version  🔖 version for jrp
 
@@ -49,17 +56,35 @@ Arguments:
   number  🔢 number of phrases to generate (e.g: 10).
 ```
 
+## 🌍 Environments
+
+### 📁 Directory to store WordNet Japan sqlite3 database file
+
+Default : `$XDG_DATA_HOME/jrp` or `$HOME/.local/share/jrp`
+
+```sh
+export JRP_WNJPN_DB_FILE_DIR=/path/to/your/directory
+```
+
+### 📁 Directory to store jrp sqlite3 database file
+
+Default : `$XDG_DATA_HOME/jrp` or `$HOME/.local/share/jrp`
+
+```sh
+export JRP_DB_FILE_DIR=/path/to/your/directory
+```
+
 ## 🔧 Installation
 
 ### 🐭 Using go
 
-```
+```sh
 go install github.com/yanosea/jrp@latest
 ```
 
 ### 🍺 Using homebrew
 
-```
+```sh
 brew tap yanosea/tap
 brew install yanosea/tap/jrp
 ```
@@ -74,13 +99,13 @@ Go to the [Releases](https://github.com/yanosea/jrp/releases) and download the l
 
 reinstall `jrp`!
 
-```
+```sh
 go install github.com/yanosea/jrp@latest
 ```
 
 ### 🍺 Using homebrew
 
-```
+```sh
 brew update
 brew upgrade jrp
 ```
@@ -88,6 +113,45 @@ brew upgrade jrp
 ### 📦 Download from release
 
 Download the latest binary from the [Releases](https://github.com/yanosea/jrp/releases) page and replace the old binary in your `$PATH`.
+
+## 🧹 Uninstallation
+
+### 🔧 Uninstall jrp
+
+#### 🐭 Using go
+
+```sh
+rm $GOPATH/bin/jrp
+sudo rm -fr $GOPATH/pkg/mod/github.com/yanosea/jrp@*
+```
+
+#### 🍺 Using homebrew
+
+```sh
+brew uninstall jrp
+brew untap yanosea/tap/jrp
+```
+
+#### 📦 Download from release
+
+Remove the binary you downloaded and placed in your `$PATH`.
+
+### 🗑️ Remove data files
+
+If you've set jrp envs, please replace `$HOME/.local/share/jrp` with envs you've set.  
+These below commands are in the case of default. Ofcourse you can remove whole the directory.
+
+#### 💾 Remove WordNet Japan sqlite3 database file
+
+```sh
+rm $HOME/.local/share/jrp/wnjpn.db
+```
+
+#### 💾 Remove jrp sqlite3 database file
+
+```sh
+rm $HOME/.local/share/jrp/jrp.db
+```
 
 ## 📃 License
 

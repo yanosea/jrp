@@ -4,3 +4,6 @@ jrp
 jrp.exe
 .DS_Store
 *.log
+
+# NOT IGNORE FOLDER
+!jrp/

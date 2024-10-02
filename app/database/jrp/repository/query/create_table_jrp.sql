@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS
+  jrp (
+    ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT
+    , Phrase TEXT NOT NULL
+    , Prefix TEXT
+    , Suffix TEXT
+    , IsFavorite INTEGER DEFAULT 0
+    , CreatedAt TIMESTAMP
+    , UpdatedAt TIMESTAMP
+  );
