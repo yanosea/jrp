@@ -338,7 +338,7 @@ func (o *rootOption) writeRootSaveResult(result jrprepository.SaveStatus) {
 
 // writeRootResult writes the result of the root command.
 func (o *rootOption) writeRootResult(jrps []model.Jrp) {
-	if jrps != nil && len(jrps) != 0 {
+	if len(jrps) != 0 {
 		if o.Plain {
 			for _, jrp := range jrps {
 				// if plain flag is set, write only the phrase

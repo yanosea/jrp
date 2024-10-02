@@ -46,17 +46,22 @@ func NewJrpChecker(
 
 // GetJrpSeq returns the sequence of jrp.
 func (j *JrpChecker) GetJrpSeq(jrpDBFilePath string) (int, error) {
+	var deferErr error
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
 	if err != nil {
 		return 0, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	rows, err := db.Query("SELECT seq FROM sqlite_sequence WHERE sqlite_sequence.name = 'jrp';")
 	if err != nil {
 		return 0, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	var seq int
 	for rows.Next() {
@@ -65,22 +70,27 @@ func (j *JrpChecker) GetJrpSeq(jrpDBFilePath string) (int, error) {
 		}
 	}
 
-	return seq, nil
+	return seq, deferErr
 }
 
 // IsExist checks if jrp exists.
 func (j *JrpChecker) IsExist(jrpDBFilePath string, id int) (bool, error) {
+	var deferErr error
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
 	if err != nil {
 		return false, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	rows, err := db.Query("SELECT COUNT(*) FROM jrp WHERE jrp.ID = (?);", j.StrconvProxy.Itoa(id))
 	if err != nil {
 		return false, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	var count int
 	for rows.Next() {
@@ -89,22 +99,27 @@ func (j *JrpChecker) IsExist(jrpDBFilePath string, id int) (bool, error) {
 		}
 	}
 
-	return count == 1, nil
+	return count == 1, deferErr
 }
 
 // IsFavorited checks if jrp is favorited.
 func (j *JrpChecker) IsFavorited(jrpDBFilePath string, id int) (bool, error) {
+	var deferErr error
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
 	if err != nil {
 		return false, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	rows, err := db.Query("SELECT COUNT(*) FROM jrp WHERE jrp.IsFavorite = 1 AND jrp.ID = (?);", j.StrconvProxy.Itoa(id))
 	if err != nil {
 		return false, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	var count int
 	for rows.Next() {
@@ -113,7 +128,7 @@ func (j *JrpChecker) IsFavorited(jrpDBFilePath string, id int) (bool, error) {
 		}
 	}
 
-	return count == 1, nil
+	return count == 1, deferErr
 }
 
 // IsSameJrps checks if jrps are the same.

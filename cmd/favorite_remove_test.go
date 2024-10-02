@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/yanosea/jrp/app/database/jrp/model"
@@ -134,7 +135,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -167,7 +170,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -200,7 +205,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -212,7 +219,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -223,7 +230,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -245,7 +254,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -257,7 +268,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -268,7 +279,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -290,7 +303,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -302,7 +317,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -313,7 +328,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -335,7 +352,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -347,7 +366,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -358,7 +377,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -380,7 +401,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -392,7 +415,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -403,7 +426,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -425,7 +450,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -437,7 +464,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -455,7 +482,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -477,7 +506,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -489,7 +520,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -507,7 +538,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -529,7 +562,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -541,7 +576,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -559,7 +594,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -581,7 +618,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -593,7 +632,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -611,7 +650,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -633,7 +674,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -645,7 +688,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -663,7 +706,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -685,7 +730,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -707,7 +754,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -718,8 +765,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -741,7 +792,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -763,7 +816,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -774,8 +827,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -797,7 +854,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -819,7 +878,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -830,8 +889,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -853,7 +916,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -865,7 +930,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -876,8 +941,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -899,7 +968,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -911,7 +982,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -922,8 +993,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -945,7 +1020,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -976,7 +1053,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -994,8 +1071,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1017,7 +1098,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1048,7 +1131,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1066,8 +1149,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1089,7 +1176,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1120,7 +1209,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1138,8 +1227,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1161,7 +1254,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1173,7 +1268,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1191,8 +1286,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1214,7 +1313,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1236,7 +1337,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1254,8 +1355,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1277,7 +1382,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1289,7 +1396,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1300,7 +1407,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1322,7 +1431,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1334,7 +1445,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1345,7 +1456,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1367,7 +1480,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1379,7 +1494,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1390,7 +1505,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1412,7 +1529,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1424,7 +1543,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1435,7 +1554,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1457,7 +1578,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1469,7 +1592,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1480,7 +1603,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1502,7 +1627,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1514,7 +1641,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1532,7 +1659,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1554,7 +1683,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1566,7 +1697,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1584,7 +1715,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1606,7 +1739,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1618,7 +1753,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1636,7 +1771,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1658,7 +1795,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1670,7 +1809,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1688,7 +1827,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1710,7 +1851,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1722,7 +1865,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1740,7 +1883,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1762,7 +1907,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1774,7 +1921,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1785,8 +1932,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1808,7 +1959,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1820,7 +1973,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1831,8 +1984,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1854,7 +2011,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1866,7 +2025,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1877,8 +2036,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1900,7 +2063,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1912,7 +2077,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1923,8 +2088,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1946,7 +2115,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1958,7 +2129,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1969,8 +2140,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1992,7 +2167,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2004,7 +2181,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2022,8 +2199,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2045,7 +2226,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2057,7 +2240,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2075,8 +2258,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2098,7 +2285,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2110,7 +2299,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2128,8 +2317,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2151,7 +2344,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2163,7 +2358,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2181,8 +2376,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2204,7 +2403,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2216,7 +2417,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2234,8 +2435,12 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2257,7 +2462,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						fmt.Printf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2290,7 +2497,9 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               mockUtility,
 					}
-					favoriteRemoveOption.favoriteRemoveRunE(nil, nil)
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						fmt.Printf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2412,7 +2621,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil)
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2445,7 +2656,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2478,7 +2691,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil)
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2490,7 +2705,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2501,7 +2716,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2523,7 +2740,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2535,7 +2754,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2546,7 +2765,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2568,7 +2789,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2580,7 +2803,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2591,7 +2814,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2613,7 +2838,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2625,7 +2852,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2636,7 +2863,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2658,7 +2887,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2670,7 +2901,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2681,7 +2912,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2703,7 +2936,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil)
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2715,7 +2950,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2733,7 +2968,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2755,7 +2992,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2767,7 +3006,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2785,7 +3024,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2807,7 +3048,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2819,7 +3062,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2837,7 +3080,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2859,7 +3104,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2871,7 +3118,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2889,7 +3136,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2911,7 +3160,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2923,7 +3174,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2941,7 +3192,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2963,7 +3216,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil)
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2985,7 +3240,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2996,8 +3251,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3019,7 +3278,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3041,7 +3302,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3052,8 +3313,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3075,7 +3340,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3097,7 +3364,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3108,8 +3375,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3131,7 +3402,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3143,7 +3416,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3154,8 +3427,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3177,7 +3454,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3189,7 +3468,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3200,8 +3479,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3223,7 +3506,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil)
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3254,7 +3539,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3272,8 +3557,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3295,7 +3584,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3326,7 +3617,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3344,8 +3635,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3367,7 +3662,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3398,7 +3695,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3416,8 +3713,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3439,7 +3740,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3451,7 +3754,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3469,8 +3772,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3492,7 +3799,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3514,7 +3823,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3532,8 +3841,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3555,7 +3868,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil)
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3567,7 +3882,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3578,7 +3893,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3600,7 +3917,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3612,7 +3931,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3623,7 +3942,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3645,7 +3966,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3657,7 +3980,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3668,7 +3991,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3690,7 +4015,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3702,7 +4029,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3713,7 +4040,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3735,7 +4064,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3747,7 +4078,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3758,7 +4089,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3780,7 +4113,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil)
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3792,7 +4127,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3810,7 +4145,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3832,7 +4169,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3844,7 +4183,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3862,7 +4201,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3884,7 +4225,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3896,7 +4239,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3914,7 +4257,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3936,7 +4281,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -3948,7 +4295,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -3966,7 +4313,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -3988,7 +4337,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4000,7 +4351,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4018,7 +4369,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -4040,7 +4393,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil)
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4052,7 +4407,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4063,8 +4418,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -4086,7 +4445,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4098,7 +4459,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4109,8 +4470,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -4132,7 +4497,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4144,7 +4511,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4155,8 +4522,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -4178,7 +4549,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4190,7 +4563,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4201,8 +4574,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -4224,7 +4601,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4236,7 +4615,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4247,8 +4626,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -4270,7 +4653,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil)
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4282,7 +4667,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4300,8 +4685,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -4323,7 +4712,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4335,7 +4726,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4353,8 +4744,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -4376,7 +4771,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4388,7 +4785,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4406,8 +4803,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -4429,7 +4830,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4441,7 +4844,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4459,8 +4862,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -4482,7 +4889,9 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						JrpRepository:         jrpRepository,
 						Utility:               util,
 					}
-					favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3})
+					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3}); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemove() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -4494,7 +4903,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -4512,8 +4921,12 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2})
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {

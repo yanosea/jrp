@@ -476,13 +476,12 @@ func TestGenerator_getJrps(t *testing.T) {
 		WNJpnRepository repository.WNJpnRepositoryInterface
 	}
 	type args struct {
-		wnJpnDBFilePath string
-		num             int
-		allAVWords      []model.Word
-		allNWords       []model.Word
-		prefix          string
-		suffix          string
-		mode            GenerateMode
+		num        int
+		allAVWords []model.Word
+		allNWords  []model.Word
+		prefix     string
+		suffix     string
+		mode       GenerateMode
 	}
 	tests := []struct {
 		name       string

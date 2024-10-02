@@ -125,7 +125,9 @@ func TestGlobalOption_version(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					globalOption.version()
+					if err := globalOption.version(); err != nil {
+						t.Errorf("GlobalOption.version() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},

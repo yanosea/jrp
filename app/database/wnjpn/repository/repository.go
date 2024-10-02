@@ -44,19 +44,24 @@ func (w *WNJpnRepository) GetAllAVWords(wnJpnDBFilePath string) ([]model.Word, e
 
 // getWords gets words.
 func (w *WNJpnRepository) getWords(wnJpnDBFilePath string, query string) ([]model.Word, error) {
+	var deferErr error
 	// connect to db
 	db, err := w.SqlProxy.Open(sqlproxy.Sqlite, wnJpnDBFilePath)
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// execute query
 	rows, err := db.Query(query)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	// scan rows
 	allWords := make([]model.Word, 0)
@@ -69,5 +74,5 @@ func (w *WNJpnRepository) getWords(wnJpnDBFilePath string, query string) ([]mode
 		allWords = append(allWords, word)
 	}
 
-	return allWords, nil
+	return allWords, deferErr
 }

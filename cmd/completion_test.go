@@ -129,7 +129,9 @@ func TestGlobalOption_completion(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					globalOption.completion()
+					if err := globalOption.completion(); err != nil {
+						t.Errorf("GlobalOption.completion() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/yanosea/jrp/app/database/jrp/model"
@@ -137,7 +138,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -173,7 +176,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -209,7 +214,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -220,7 +227,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -231,7 +238,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -257,7 +266,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -268,7 +279,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -279,7 +290,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -305,7 +318,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -316,7 +331,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -327,7 +342,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -353,7 +370,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -364,7 +383,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -375,7 +394,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -401,7 +422,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -412,7 +435,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -423,7 +446,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -449,7 +474,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -460,7 +487,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -471,7 +498,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -497,7 +526,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -508,7 +539,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -519,7 +550,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -545,7 +578,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -556,7 +591,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -637,7 +672,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -663,7 +700,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -674,7 +713,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -755,7 +794,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -781,7 +822,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -792,7 +835,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -873,7 +916,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -899,7 +944,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -910,7 +957,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -991,7 +1038,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1017,7 +1066,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						t.Errorf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1028,7 +1079,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1109,7 +1160,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1135,7 +1188,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						fmt.Printf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1146,7 +1201,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1157,7 +1212,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1183,7 +1240,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               mockUtility,
 					}
-					historySearchOption.historySearchRunE(nil, nil)
+					if err := historySearchOption.historySearchRunE(nil, nil); err != nil {
+						fmt.Printf("historySearchOption.historySearchRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1194,7 +1253,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1205,7 +1264,9 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1314,7 +1375,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, nil)
+					if err := historySearchOption.historySearch(jrpDBFilePath, nil); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1350,7 +1413,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1386,7 +1451,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, nil)
+					if err := historySearchOption.historySearch(jrpDBFilePath, nil); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1397,7 +1464,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1408,7 +1475,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1434,7 +1503,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1445,7 +1516,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1456,7 +1527,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1482,7 +1555,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{"test2", "test3"})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{"test2", "test3"}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1493,7 +1568,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1504,7 +1579,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1530,7 +1607,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{"test1", "test2"})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{"test1", "test2"}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1541,7 +1620,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1552,7 +1631,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1578,7 +1659,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{"test1", "test2"})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{"test1", "test2"}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1589,7 +1672,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1600,7 +1683,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1626,7 +1711,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1637,7 +1724,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1648,7 +1735,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1674,7 +1763,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1685,7 +1776,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1696,7 +1787,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1722,7 +1815,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1733,7 +1828,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1814,7 +1909,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1840,7 +1937,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1851,7 +1950,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -1932,7 +2031,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -1958,7 +2059,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -1969,7 +2072,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2050,7 +2153,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2076,7 +2181,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2087,7 +2194,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2168,7 +2275,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -2194,7 +2303,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"})
+					if err := historySearchOption.historySearch(jrpDBFilePath, []string{"te", "st"}); err != nil {
+						t.Errorf("historySearchOption.historySearch() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -2205,7 +2316,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -2286,7 +2397,9 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {

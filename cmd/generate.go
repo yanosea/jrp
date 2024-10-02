@@ -274,7 +274,7 @@ func (o *generateOption) writeGenerateSaveResult(result jrprepository.SaveStatus
 
 // writeGenerateResult writes the result of generate command.
 func (o *generateOption) writeGenerateResult(jrps []model.Jrp) {
-	if jrps != nil && len(jrps) != 0 {
+	if len(jrps) != 0 {
 		if o.Plain {
 			for _, jrp := range jrps {
 				// if plain flag is set, write only the phrase

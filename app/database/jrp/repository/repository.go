@@ -52,6 +52,7 @@ func New(
 
 // SaveHistory saves jrps as  history.
 func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (SaveStatus, error) {
+	var deferErr error
 	// if jrps is nil or empty, return nil
 	if jrps == nil || len(jrps) <= 0 {
 		return SavedNone, nil
@@ -62,7 +63,9 @@ func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (Save
 	if err != nil {
 		return SavedFailed, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -74,14 +77,18 @@ func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (Save
 	if err != nil {
 		return SavedFailed, err
 	}
-	defer tx.Rollback()
+	defer func() {
+		deferErr = tx.Rollback()
+	}()
 
 	// prepare insert statement
 	stmt, err := db.Prepare(query.InsertJrp)
 	if err != nil {
 		return SavedFailed, err
 	}
-	defer stmt.Close()
+	defer func() {
+		deferErr = stmt.Close()
+	}()
 
 	// insert jrp and count affected rows
 	count := int64(0)
@@ -114,17 +121,20 @@ func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (Save
 		return SavedNotAll, nil
 	}
 
-	return SavedSuccessfully, nil
+	return SavedSuccessfully, deferErr
 }
 
 // GetAllHistory gets all jrps as history.
 func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error) {
+	var deferErr error
 	// connect to db
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -136,7 +146,9 @@ func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error) 
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	// scan rows
 	var allHistory []model.Jrp
@@ -159,11 +171,12 @@ func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error) 
 		allHistory = append(allHistory, history)
 	}
 
-	return allHistory, nil
+	return allHistory, deferErr
 }
 
 // GetHistoryWithNumber gets history with number.
 func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([]model.Jrp, error) {
+	var deferErr error
 	if number <= 0 {
 		// if number is less than or equal to 0, return nil
 		return nil, nil
@@ -174,7 +187,9 @@ func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -186,14 +201,18 @@ func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([
 	if err != nil {
 		return nil, err
 	}
-	defer stmt.Close()
+	defer func() {
+		deferErr = stmt.Close()
+	}()
 
 	// get history from jrp by number
 	rows, err := stmt.Query(number)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	// scan rows
 	var allHistory []model.Jrp
@@ -221,11 +240,12 @@ func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([
 		return allHistory[i].ID < allHistory[j].ID
 	})
 
-	return allHistory, nil
+	return allHistory, deferErr
 }
 
 // SearchAllHistory searches all jrps as history with keywords.
 func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string, and bool) ([]model.Jrp, error) {
+	var deferErr error
 	if keywords == nil || len(keywords) <= 0 {
 		// if keywords is nil or empty, return nil
 		return nil, nil
@@ -236,7 +256,9 @@ func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string,
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -270,7 +292,9 @@ func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string,
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	// scan rows
 	var searchedAllHistory []model.Jrp
@@ -293,7 +317,7 @@ func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string,
 		searchedAllHistory = append(searchedAllHistory, history)
 	}
 
-	return searchedAllHistory, nil
+	return searchedAllHistory, deferErr
 }
 
 // SearchHistoryWithNumber searches jrps as history with number and keywords.
@@ -303,6 +327,7 @@ func (j JrpRepository) SearchHistoryWithNumber(
 	keywords []string,
 	and bool,
 ) ([]model.Jrp, error) {
+	var deferErr error
 	if number <= 0 || keywords == nil || len(keywords) <= 0 {
 		// if number is less than or equal to 0 or keywords is nil or empty
 		return nil, nil
@@ -313,7 +338,9 @@ func (j JrpRepository) SearchHistoryWithNumber(
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -348,7 +375,9 @@ func (j JrpRepository) SearchHistoryWithNumber(
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	// scan rows
 	var searchedHistory []model.Jrp
@@ -376,22 +405,25 @@ func (j JrpRepository) SearchHistoryWithNumber(
 		return searchedHistory[i].ID < searchedHistory[j].ID
 	})
 
-	return searchedHistory, nil
+	return searchedHistory, deferErr
 }
 
 // RemoveHistoryByIDs removes jrps by IDs.
 func (j JrpRepository) RemoveHistoryByIDs(jrpDBFilePath string, ids []int, force bool) (RemoveStatus, error) {
+	var deferErr error
 	if ids == nil || len(ids) <= 0 {
 		// if ids is nil or empty, return nil
 		return RemovedNone, nil
-
 	}
+
 	// connect to db
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
 	if err != nil {
 		return RemovedFailed, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -416,7 +448,9 @@ func (j JrpRepository) RemoveHistoryByIDs(jrpDBFilePath string, ids []int, force
 	if err != nil {
 		return RemovedFailed, err
 	}
-	defer stmt.Close()
+	defer func() {
+		deferErr = stmt.Close()
+	}()
 
 	// convert ids to interface slice for Exec
 	args := make([]interface{}, len(ids))
@@ -441,17 +475,20 @@ func (j JrpRepository) RemoveHistoryByIDs(jrpDBFilePath string, ids []int, force
 		return RemovedNotAll, nil
 	}
 
-	return RemovedSuccessfully, nil
+	return RemovedSuccessfully, deferErr
 }
 
 // RemoveHistoryAll removes all jrps.
 func (j JrpRepository) RemoveHistoryAll(jrpDBFilePath string, force bool) (RemoveStatus, error) {
+	var deferErr error
 	// connect to db
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
 	if err != nil {
 		return RemovedFailed, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -463,7 +500,9 @@ func (j JrpRepository) RemoveHistoryAll(jrpDBFilePath string, force bool) (Remov
 	if err != nil {
 		return RemovedFailed, err
 	}
-	defer tx.Rollback()
+	defer func() {
+		deferErr = tx.Rollback()
+	}()
 
 	// set q
 	var q string
@@ -505,17 +544,20 @@ func (j JrpRepository) RemoveHistoryAll(jrpDBFilePath string, force bool) (Remov
 		return RemovedFailed, err
 	}
 
-	return RemovedSuccessfully, nil
+	return RemovedSuccessfully, deferErr
 }
 
 // GetAllFavorite gets all jrps that are favorited.
 func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error) {
+	var deferErr error
 	// connect to db
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -527,7 +569,9 @@ func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	// scan rows
 	var allFavorite []model.Jrp
@@ -550,11 +594,12 @@ func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error)
 		allFavorite = append(allFavorite, favorite)
 	}
 
-	return allFavorite, nil
+	return allFavorite, deferErr
 }
 
 // GetFavoriteWithNumber gets jrps that are favorited with number.
 func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) ([]model.Jrp, error) {
+	var deferErr error
 	if number <= 0 {
 		// if number is less than or equal to 0, return nil
 		return nil, nil
@@ -565,7 +610,9 @@ func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) (
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -577,14 +624,18 @@ func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) (
 	if err != nil {
 		return nil, err
 	}
-	defer stmt.Close()
+	defer func() {
+		deferErr = stmt.Close()
+	}()
 
 	// get favorite from jrp by number
 	rows, err := stmt.Query(number)
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	// scan rows
 	var allFavorite []model.Jrp
@@ -612,11 +663,12 @@ func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) (
 		return allFavorite[i].ID < allFavorite[j].ID
 	})
 
-	return allFavorite, nil
+	return allFavorite, deferErr
 }
 
 // SearchAllFavorite searches all jrps that are favorited with keywords.
 func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string, and bool) ([]model.Jrp, error) {
+	var deferErr error
 	if keywords == nil || len(keywords) <= 0 {
 		// if keywords is nil or empty, return nil
 		return nil, nil
@@ -627,7 +679,9 @@ func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -661,7 +715,9 @@ func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	// scan rows
 	var searchedAllFavorite []model.Jrp
@@ -683,7 +739,7 @@ func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string
 		searchedAllFavorite = append(searchedAllFavorite, favorite)
 	}
 
-	return searchedAllFavorite, nil
+	return searchedAllFavorite, deferErr
 }
 
 // SearchFavoriteWithNumber searches jrps that are favorited with number and keywords.
@@ -693,6 +749,7 @@ func (j JrpRepository) SearchFavoriteWithNumber(
 	keywords []string,
 	and bool,
 ) ([]model.Jrp, error) {
+	var deferErr error
 	if number <= 0 || keywords == nil || len(keywords) <= 0 {
 		// if number is less than or equal to 0 or keywords is nil or empty
 		return nil, nil
@@ -703,7 +760,9 @@ func (j JrpRepository) SearchFavoriteWithNumber(
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -738,7 +797,9 @@ func (j JrpRepository) SearchFavoriteWithNumber(
 	if err != nil {
 		return nil, err
 	}
-	defer rows.Close()
+	defer func() {
+		deferErr = rows.Close()
+	}()
 
 	// scan rows
 	var searchedFavorite []model.Jrp
@@ -766,17 +827,20 @@ func (j JrpRepository) SearchFavoriteWithNumber(
 		return searchedFavorite[i].ID < searchedFavorite[j].ID
 	})
 
-	return searchedFavorite, nil
+	return searchedFavorite, deferErr
 }
 
 // AddFavoriteByIDs adds jrps to favorite by IDs.
 func (j JrpRepository) AddFavoriteByIDs(jrpDBFilePath string, ids []int) (AddStatus, error) {
+	var deferErr error
 	// connect to db
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
 	if err != nil {
 		return AddedFailed, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -796,7 +860,6 @@ func (j JrpRepository) AddFavoriteByIDs(jrpDBFilePath string, ids []int) (AddSta
 	if err != nil {
 		return AddedFailed, err
 	}
-	defer stmt.Close()
 
 	// convert ids to interface slice for Exec
 	args := make([]interface{}, len(ids))
@@ -821,17 +884,20 @@ func (j JrpRepository) AddFavoriteByIDs(jrpDBFilePath string, ids []int) (AddSta
 		return AddedNotAll, nil
 	}
 
-	return AddedSuccessfully, nil
+	return AddedSuccessfully, deferErr
 }
 
 // RemoveFavoriteByIDs removes jrps from favorite by IDs.
 func (j JrpRepository) RemoveFavoriteByIDs(jrpDBFilePath string, ids []int) (RemoveStatus, error) {
+	var deferErr error
 	// connect to db
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
 	if err != nil {
 		return RemovedFailed, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -851,7 +917,9 @@ func (j JrpRepository) RemoveFavoriteByIDs(jrpDBFilePath string, ids []int) (Rem
 	if err != nil {
 		return RemovedFailed, err
 	}
-	defer stmt.Close()
+	defer func() {
+		deferErr = stmt.Close()
+	}()
 
 	// convert ids to interface slice for Exec
 	args := make([]interface{}, len(ids))
@@ -877,17 +945,20 @@ func (j JrpRepository) RemoveFavoriteByIDs(jrpDBFilePath string, ids []int) (Rem
 		return RemovedNotAll, nil
 	}
 
-	return RemovedSuccessfully, nil
+	return RemovedSuccessfully, deferErr
 }
 
 // RemoveFavoriteAll removes all jrps from favorite.
 func (j JrpRepository) RemoveFavoriteAll(jrpDBFilePath string) (RemoveStatus, error) {
+	var deferErr error
 	// connect to db
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
 	if err != nil {
 		return RemovedFailed, err
 	}
-	defer db.Close()
+	defer func() {
+		deferErr = db.Close()
+	}()
 
 	// create table 'jrp'
 	if _, err := j.createTableJrp(db); err != nil {
@@ -899,7 +970,9 @@ func (j JrpRepository) RemoveFavoriteAll(jrpDBFilePath string) (RemoveStatus, er
 	if err != nil {
 		return RemovedFailed, err
 	}
-	defer tx.Rollback()
+	defer func() {
+		deferErr = tx.Rollback()
+	}()
 
 	// remove all favorite
 	var res sqlproxy.ResultInstanceInterface
@@ -921,7 +994,7 @@ func (j JrpRepository) RemoveFavoriteAll(jrpDBFilePath string) (RemoveStatus, er
 		return RemovedFailed, err
 	}
 
-	return RemovedSuccessfully, nil
+	return RemovedSuccessfully, deferErr
 }
 
 // createTableJrp creates table 'jrp'.

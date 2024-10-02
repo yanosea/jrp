@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/yanosea/jrp/app/database/jrp/model"
@@ -166,7 +167,9 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generateRunE(nil, nil)
+					if err := generateOption.generateRunE(nil, nil); err != nil {
+						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -205,7 +208,9 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generateRunE(nil, nil)
+					if err := generateOption.generateRunE(nil, nil); err != nil {
+						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -244,7 +249,9 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generateRunE(nil, nil)
+					if err := generateOption.generateRunE(nil, nil); err != nil {
+						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -283,7 +290,9 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generateRunE(nil, nil)
+					if err := generateOption.generateRunE(nil, nil); err != nil {
+						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -322,7 +331,9 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generateRunE(nil, nil)
+					if err := generateOption.generateRunE(nil, nil); err != nil {
+						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -361,7 +372,9 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generateRunE(nil, nil)
+					if err := generateOption.generateRunE(nil, nil); err != nil {
+						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -400,7 +413,9 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generateRunE(nil, nil)
+					if err := generateOption.generateRunE(nil, nil); err != nil {
+						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -439,7 +454,9 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generateRunE(nil, nil)
+					if err := generateOption.generateRunE(nil, nil); err != nil {
+						fmt.Printf("generateOption.generateRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -478,7 +495,9 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generateRunE(nil, nil)
+					if err := generateOption.generateRunE(nil, nil); err != nil {
+						fmt.Printf("generateOption.generateRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -624,7 +643,9 @@ func Test_generateOption_generate(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix)
+					if err := generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
+						t.Errorf("generateOption.generate() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -663,7 +684,9 @@ func Test_generateOption_generate(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix)
+					if err := generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
+						t.Errorf("generateOption.generate() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -702,7 +725,9 @@ func Test_generateOption_generate(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix)
+					if err := generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
+						fmt.Printf("generateOption.generate() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -741,7 +766,9 @@ func Test_generateOption_generate(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix)
+					if err := generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
+						fmt.Printf("generateOption.generate() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},

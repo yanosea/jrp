@@ -119,7 +119,7 @@ func (o *historySearchOption) historySearchRunE(_ *cobra.Command, _ []string) er
 			keywords = append(keywords, arg)
 		}
 	}
-	if keywords == nil || len(keywords) == 0 {
+	if len(keywords) == 0 {
 		// if no keywords are provided, write message and return
 		colorProxy := colorproxy.New()
 		o.Utility.PrintlnWithWriter(o.Out, colorProxy.YellowString(constant.HISTORY_SEARCH_MESSAGE_NO_KEYWORDS_PROVIDED))

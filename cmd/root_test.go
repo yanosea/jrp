@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 
 	"github.com/yanosea/jrp/app/database/jrp/model"
@@ -273,7 +274,9 @@ func Test_rootOption_rootRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.rootRunE(nil, nil)
+					if err := rootOption.rootRunE(nil, nil); err != nil {
+						t.Errorf("rootOption.rootRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -312,7 +315,9 @@ func Test_rootOption_rootRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.rootRunE(nil, nil)
+					if err := rootOption.rootRunE(nil, nil); err != nil {
+						t.Errorf("rootOption.rootRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -351,7 +356,9 @@ func Test_rootOption_rootRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.rootRunE(nil, nil)
+					if err := rootOption.rootRunE(nil, nil); err != nil {
+						t.Errorf("rootOption.rootRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -390,7 +397,9 @@ func Test_rootOption_rootRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.rootRunE(nil, nil)
+					if err := rootOption.rootRunE(nil, nil); err != nil {
+						t.Errorf("rootOption.rootRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -429,7 +438,9 @@ func Test_rootOption_rootRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.rootRunE(nil, nil)
+					if err := rootOption.rootRunE(nil, nil); err != nil {
+						t.Errorf("rootOption.rootRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -468,7 +479,9 @@ func Test_rootOption_rootRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.rootRunE(nil, nil)
+					if err := rootOption.rootRunE(nil, nil); err != nil {
+						t.Errorf("rootOption.rootRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -507,7 +520,9 @@ func Test_rootOption_rootRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.rootRunE(nil, nil)
+					if err := rootOption.rootRunE(nil, nil); err != nil {
+						t.Errorf("rootOption.rootRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -546,7 +561,9 @@ func Test_rootOption_rootRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.rootRunE(nil, nil)
+					if err := rootOption.rootRunE(nil, nil); err != nil {
+						fmt.Printf("rootOption.rootRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -585,7 +602,9 @@ func Test_rootOption_rootRunE(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.rootRunE(nil, nil)
+					if err := rootOption.rootRunE(nil, nil); err != nil {
+						fmt.Printf("rootOption.rootRunE() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -731,7 +750,9 @@ func Test_rootOption_root(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.root(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix)
+					if err := rootOption.root(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
+						t.Errorf("rootOption.root() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -770,7 +791,9 @@ func Test_rootOption_root(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.root(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix)
+					if err := rootOption.root(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
+						t.Errorf("rootOption.root() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -809,7 +832,9 @@ func Test_rootOption_root(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.root(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix)
+					if err := rootOption.root(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
+						fmt.Printf("rootOption.root() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},
@@ -848,7 +873,9 @@ func Test_rootOption_root(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.root(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix)
+					if err := rootOption.root(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
+						fmt.Printf("rootOption.root() : error =\n%v", err)
+					}
 				},
 				capturer: capturer,
 			},

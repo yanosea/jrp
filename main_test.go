@@ -77,9 +77,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -100,9 +98,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -123,9 +119,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -146,9 +140,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -169,9 +161,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -192,9 +182,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -215,9 +203,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -238,9 +224,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -261,9 +245,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -284,9 +266,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -307,9 +287,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -330,9 +308,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()
@@ -353,9 +329,7 @@ func Test_main(t *testing.T) {
 				t: t,
 				fnc: func() {
 					origOsExit := osExit
-					osExit = func(code int) {
-						return
-					}
+					osExit = func(code int) {}
 					defer func() {
 						osExit = origOsExit
 					}()

@@ -275,6 +275,7 @@ func New(
 
 // SaveHistory saves jrps as  history.
 func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (SaveStatus, error) <span class="cov8" title="1">{
+        var deferErr error
         // if jrps is nil or empty, return nil
         if jrps == nil || len(jrps) &lt;= 0 </span><span class="cov8" title="1">{
                 return SavedNone, nil
@@ -285,10 +286,12 @@ func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (Save
         if err != nil </span><span class="cov8" title="1">{
                 return SavedFailed, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return SavedFailed, err
         }</span>
 
@@ -297,17 +300,21 @@ func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (Save
         if err != nil </span><span class="cov8" title="1">{
                 return SavedFailed, err
         }</span>
-        <span class="cov8" title="1">defer tx.Rollback()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = tx.Rollback()
+        }</span>()
 
         // prepare insert statement
-        stmt, err := db.Prepare(query.InsertJrp)
+        <span class="cov8" title="1">stmt, err := db.Prepare(query.InsertJrp)
         if err != nil </span><span class="cov8" title="1">{
                 return SavedFailed, err
         }</span>
-        <span class="cov8" title="1">defer stmt.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = stmt.Close()
+        }</span>()
 
         // insert jrp and count affected rows
-        count := int64(0)
+        <span class="cov8" title="1">count := int64(0)
         for _, jrp := range jrps </span><span class="cov8" title="1">{
                 res, err := stmt.Exec(
                         jrp.Phrase,
@@ -337,20 +344,23 @@ func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (Save
                 return SavedNotAll, nil
         }</span>
 
-        <span class="cov8" title="1">return SavedSuccessfully, nil</span>
+        <span class="cov8" title="1">return SavedSuccessfully, deferErr</span>
 }
 
 // GetAllHistory gets all jrps as history.
 func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error) <span class="cov8" title="1">{
+        var deferErr error
         // connect to db
         db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
 
@@ -359,10 +369,12 @@ func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error) 
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
         // scan rows
-        var allHistory []model.Jrp
+        <span class="cov8" title="1">var allHistory []model.Jrp
         for rows.Next() </span><span class="cov8" title="1">{
                 var history model.Jrp
                 if err := rows.Scan(
@@ -382,11 +394,12 @@ func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error) 
                 allHistory = append(allHistory, history)</span>
         }
 
-        <span class="cov8" title="1">return allHistory, nil</span>
+        <span class="cov8" title="1">return allHistory, deferErr</span>
 }
 
 // GetHistoryWithNumber gets history with number.
 func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([]model.Jrp, error) <span class="cov8" title="1">{
+        var deferErr error
         if number &lt;= 0 </span><span class="cov8" title="1">{
                 // if number is less than or equal to 0, return nil
                 return nil, nil
@@ -397,10 +410,12 @@ func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
 
@@ -409,17 +424,21 @@ func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer stmt.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = stmt.Close()
+        }</span>()
 
         // get history from jrp by number
-        rows, err := stmt.Query(number)
+        <span class="cov8" title="1">rows, err := stmt.Query(number)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
         // scan rows
-        var allHistory []model.Jrp
+        <span class="cov8" title="1">var allHistory []model.Jrp
         for rows.Next() </span><span class="cov8" title="1">{
                 var history model.Jrp
                 if err := rows.Scan(
@@ -444,11 +463,12 @@ func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([
                 return allHistory[i].ID &lt; allHistory[j].ID
         }</span>)
 
-        <span class="cov8" title="1">return allHistory, nil</span>
+        <span class="cov8" title="1">return allHistory, deferErr</span>
 }
 
 // SearchAllHistory searches all jrps as history with keywords.
 func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string, and bool) ([]model.Jrp, error) <span class="cov8" title="1">{
+        var deferErr error
         if keywords == nil || len(keywords) &lt;= 0 </span><span class="cov8" title="1">{
                 // if keywords is nil or empty, return nil
                 return nil, nil
@@ -459,10 +479,12 @@ func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string,
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
 
@@ -493,10 +515,12 @@ func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string,
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
         // scan rows
-        var searchedAllHistory []model.Jrp
+        <span class="cov8" title="1">var searchedAllHistory []model.Jrp
         for rows.Next() </span><span class="cov8" title="1">{
                 var history model.Jrp
                 if err := rows.Scan(
@@ -516,7 +540,7 @@ func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string,
                 searchedAllHistory = append(searchedAllHistory, history)</span>
         }
 
-        <span class="cov8" title="1">return searchedAllHistory, nil</span>
+        <span class="cov8" title="1">return searchedAllHistory, deferErr</span>
 }
 
 // SearchHistoryWithNumber searches jrps as history with number and keywords.
@@ -526,6 +550,7 @@ func (j JrpRepository) SearchHistoryWithNumber(
         keywords []string,
         and bool,
 ) ([]model.Jrp, error) <span class="cov8" title="1">{
+        var deferErr error
         if number &lt;= 0 || keywords == nil || len(keywords) &lt;= 0 </span><span class="cov8" title="1">{
                 // if number is less than or equal to 0 or keywords is nil or empty
                 return nil, nil
@@ -536,10 +561,12 @@ func (j JrpRepository) SearchHistoryWithNumber(
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
 
@@ -571,10 +598,12 @@ func (j JrpRepository) SearchHistoryWithNumber(
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
         // scan rows
-        var searchedHistory []model.Jrp
+        <span class="cov8" title="1">var searchedHistory []model.Jrp
         for rows.Next() </span><span class="cov8" title="1">{
                 var history model.Jrp
                 if err := rows.Scan(
@@ -599,25 +628,28 @@ func (j JrpRepository) SearchHistoryWithNumber(
                 return searchedHistory[i].ID &lt; searchedHistory[j].ID
         }</span>)
 
-        <span class="cov8" title="1">return searchedHistory, nil</span>
+        <span class="cov8" title="1">return searchedHistory, deferErr</span>
 }
 
 // RemoveHistoryByIDs removes jrps by IDs.
 func (j JrpRepository) RemoveHistoryByIDs(jrpDBFilePath string, ids []int, force bool) (RemoveStatus, error) <span class="cov8" title="1">{
+        var deferErr error
         if ids == nil || len(ids) &lt;= 0 </span><span class="cov8" title="1">{
                 // if ids is nil or empty, return nil
                 return RemovedNone, nil
-
         }</span>
+
         // connect to db
         <span class="cov8" title="1">db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
 
@@ -639,10 +671,12 @@ func (j JrpRepository) RemoveHistoryByIDs(jrpDBFilePath string, ids []int, force
         if err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
-        <span class="cov8" title="1">defer stmt.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = stmt.Close()
+        }</span>()
 
         // convert ids to interface slice for Exec
-        args := make([]interface{}, len(ids))
+        <span class="cov8" title="1">args := make([]interface{}, len(ids))
         for i, id := range ids </span><span class="cov8" title="1">{
                 args[i] = id
         }</span>
@@ -664,20 +698,23 @@ func (j JrpRepository) RemoveHistoryByIDs(jrpDBFilePath string, ids []int, force
                 return RemovedNotAll, nil
         }</span>
 
-        <span class="cov8" title="1">return RemovedSuccessfully, nil</span>
+        <span class="cov8" title="1">return RemovedSuccessfully, deferErr</span>
 }
 
 // RemoveHistoryAll removes all jrps.
 func (j JrpRepository) RemoveHistoryAll(jrpDBFilePath string, force bool) (RemoveStatus, error) <span class="cov8" title="1">{
+        var deferErr error
         // connect to db
         db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
 
@@ -686,10 +723,12 @@ func (j JrpRepository) RemoveHistoryAll(jrpDBFilePath string, force bool) (Remov
         if err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
-        <span class="cov8" title="1">defer tx.Rollback()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = tx.Rollback()
+        }</span>()
 
         // set q
-        var q string
+        <span class="cov8" title="1">var q string
         if force </span><span class="cov8" title="1">{
                 q = query.RemoveAllJrp
         }</span> else<span class="cov8" title="1"> {
@@ -728,20 +767,23 @@ func (j JrpRepository) RemoveHistoryAll(jrpDBFilePath string, force bool) (Remov
                 return RemovedFailed, err
         }</span>
 
-        <span class="cov8" title="1">return RemovedSuccessfully, nil</span>
+        <span class="cov8" title="1">return RemovedSuccessfully, deferErr</span>
 }
 
 // GetAllFavorite gets all jrps that are favorited.
 func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error) <span class="cov8" title="1">{
+        var deferErr error
         // connect to db
         db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
 
@@ -750,10 +792,12 @@ func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
         // scan rows
-        var allFavorite []model.Jrp
+        <span class="cov8" title="1">var allFavorite []model.Jrp
         for rows.Next() </span><span class="cov8" title="1">{
                 var favorite model.Jrp
                 if err := rows.Scan(
@@ -773,11 +817,12 @@ func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error)
                 allFavorite = append(allFavorite, favorite)</span>
         }
 
-        <span class="cov8" title="1">return allFavorite, nil</span>
+        <span class="cov8" title="1">return allFavorite, deferErr</span>
 }
 
 // GetFavoriteWithNumber gets jrps that are favorited with number.
 func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) ([]model.Jrp, error) <span class="cov8" title="1">{
+        var deferErr error
         if number &lt;= 0 </span><span class="cov8" title="1">{
                 // if number is less than or equal to 0, return nil
                 return nil, nil
@@ -788,10 +833,12 @@ func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) (
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
 
@@ -800,17 +847,21 @@ func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) (
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer stmt.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = stmt.Close()
+        }</span>()
 
         // get favorite from jrp by number
-        rows, err := stmt.Query(number)
+        <span class="cov8" title="1">rows, err := stmt.Query(number)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
         // scan rows
-        var allFavorite []model.Jrp
+        <span class="cov8" title="1">var allFavorite []model.Jrp
         for rows.Next() </span><span class="cov8" title="1">{
                 var favorite model.Jrp
                 if err := rows.Scan(
@@ -835,11 +886,12 @@ func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) (
                 return allFavorite[i].ID &lt; allFavorite[j].ID
         }</span>)
 
-        <span class="cov8" title="1">return allFavorite, nil</span>
+        <span class="cov8" title="1">return allFavorite, deferErr</span>
 }
 
 // SearchAllFavorite searches all jrps that are favorited with keywords.
 func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string, and bool) ([]model.Jrp, error) <span class="cov8" title="1">{
+        var deferErr error
         if keywords == nil || len(keywords) &lt;= 0 </span><span class="cov8" title="1">{
                 // if keywords is nil or empty, return nil
                 return nil, nil
@@ -850,10 +902,12 @@ func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
 
@@ -884,10 +938,12 @@ func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
         // scan rows
-        var searchedAllFavorite []model.Jrp
+        <span class="cov8" title="1">var searchedAllFavorite []model.Jrp
         for rows.Next() </span><span class="cov8" title="1">{
                 var favorite model.Jrp
                 if err := rows.Scan(&amp;favorite.ID,
@@ -906,7 +962,7 @@ func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string
                 searchedAllFavorite = append(searchedAllFavorite, favorite)</span>
         }
 
-        <span class="cov8" title="1">return searchedAllFavorite, nil</span>
+        <span class="cov8" title="1">return searchedAllFavorite, deferErr</span>
 }
 
 // SearchFavoriteWithNumber searches jrps that are favorited with number and keywords.
@@ -916,6 +972,7 @@ func (j JrpRepository) SearchFavoriteWithNumber(
         keywords []string,
         and bool,
 ) ([]model.Jrp, error) <span class="cov8" title="1">{
+        var deferErr error
         if number &lt;= 0 || keywords == nil || len(keywords) &lt;= 0 </span><span class="cov8" title="1">{
                 // if number is less than or equal to 0 or keywords is nil or empty
                 return nil, nil
@@ -926,10 +983,12 @@ func (j JrpRepository) SearchFavoriteWithNumber(
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
 
@@ -961,10 +1020,12 @@ func (j JrpRepository) SearchFavoriteWithNumber(
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
         // scan rows
-        var searchedFavorite []model.Jrp
+        <span class="cov8" title="1">var searchedFavorite []model.Jrp
         for rows.Next() </span><span class="cov8" title="1">{
                 var favorite model.Jrp
                 if err := rows.Scan(
@@ -989,20 +1050,23 @@ func (j JrpRepository) SearchFavoriteWithNumber(
                 return searchedFavorite[i].ID &lt; searchedFavorite[j].ID
         }</span>)
 
-        <span class="cov8" title="1">return searchedFavorite, nil</span>
+        <span class="cov8" title="1">return searchedFavorite, deferErr</span>
 }
 
 // AddFavoriteByIDs adds jrps to favorite by IDs.
 func (j JrpRepository) AddFavoriteByIDs(jrpDBFilePath string, ids []int) (AddStatus, error) <span class="cov8" title="1">{
+        var deferErr error
         // connect to db
         db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return AddedFailed, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return AddedFailed, err
         }</span>
 
@@ -1019,10 +1083,9 @@ func (j JrpRepository) AddFavoriteByIDs(jrpDBFilePath string, ids []int) (AddSta
         if err != nil </span><span class="cov8" title="1">{
                 return AddedFailed, err
         }</span>
-        <span class="cov8" title="1">defer stmt.Close()
 
         // convert ids to interface slice for Exec
-        args := make([]interface{}, len(ids))
+        <span class="cov8" title="1">args := make([]interface{}, len(ids))
         for i, id := range ids </span><span class="cov8" title="1">{
                 args[i] = id
         }</span>
@@ -1044,20 +1107,23 @@ func (j JrpRepository) AddFavoriteByIDs(jrpDBFilePath string, ids []int) (AddSta
                 return AddedNotAll, nil
         }</span>
 
-        <span class="cov8" title="1">return AddedSuccessfully, nil</span>
+        <span class="cov8" title="1">return AddedSuccessfully, deferErr</span>
 }
 
 // RemoveFavoriteByIDs removes jrps from favorite by IDs.
 func (j JrpRepository) RemoveFavoriteByIDs(jrpDBFilePath string, ids []int) (RemoveStatus, error) <span class="cov8" title="1">{
+        var deferErr error
         // connect to db
         db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
 
@@ -1074,10 +1140,12 @@ func (j JrpRepository) RemoveFavoriteByIDs(jrpDBFilePath string, ids []int) (Rem
         if err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
-        <span class="cov8" title="1">defer stmt.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = stmt.Close()
+        }</span>()
 
         // convert ids to interface slice for Exec
-        args := make([]interface{}, len(ids))
+        <span class="cov8" title="1">args := make([]interface{}, len(ids))
         for i, id := range ids </span><span class="cov8" title="1">{
                 args[i] = id
         }</span>
@@ -1100,20 +1168,23 @@ func (j JrpRepository) RemoveFavoriteByIDs(jrpDBFilePath string, ids []int) (Rem
                 return RemovedNotAll, nil
         }</span>
 
-        <span class="cov8" title="1">return RemovedSuccessfully, nil</span>
+        <span class="cov8" title="1">return RemovedSuccessfully, deferErr</span>
 }
 
 // RemoveFavoriteAll removes all jrps from favorite.
 func (j JrpRepository) RemoveFavoriteAll(jrpDBFilePath string) (RemoveStatus, error) <span class="cov8" title="1">{
+        var deferErr error
         // connect to db
         db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // create table 'jrp'
-        if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := j.createTableJrp(db); err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
 
@@ -1122,10 +1193,12 @@ func (j JrpRepository) RemoveFavoriteAll(jrpDBFilePath string) (RemoveStatus, er
         if err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
-        <span class="cov8" title="1">defer tx.Rollback()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = tx.Rollback()
+        }</span>()
 
         // remove all favorite
-        var res sqlproxy.ResultInstanceInterface
+        <span class="cov8" title="1">var res sqlproxy.ResultInstanceInterface
         if res, err = tx.Exec(query.RemoveAllFavorite); err != nil </span><span class="cov8" title="1">{
                 return RemovedFailed, err
         }</span>
@@ -1144,7 +1217,7 @@ func (j JrpRepository) RemoveFavoriteAll(jrpDBFilePath string) (RemoveStatus, er
                 return RemovedFailed, err
         }</span>
 
-        <span class="cov8" title="1">return RemovedSuccessfully, nil</span>
+        <span class="cov8" title="1">return RemovedSuccessfully, deferErr</span>
 }
 
 // createTableJrp creates table 'jrp'.
@@ -1199,22 +1272,27 @@ func (w *WNJpnRepository) GetAllAVWords(wnJpnDBFilePath string) ([]model.Word, e
 
 // getWords gets words.
 func (w *WNJpnRepository) getWords(wnJpnDBFilePath string, query string) ([]model.Word, error) <span class="cov8" title="1">{
+        var deferErr error
         // connect to db
         db, err := w.SqlProxy.Open(sqlproxy.Sqlite, wnJpnDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
         // execute query
-        rows, err := db.Query(query)
+        <span class="cov8" title="1">rows, err := db.Query(query)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
         // scan rows
-        allWords := make([]model.Word, 0)
+        <span class="cov8" title="1">allWords := make([]model.Word, 0)
         for rows.Next() </span><span class="cov8" title="1">{
                 var word model.Word
                 if err := rows.Scan(&amp;word.Lemma, &amp;word.Pos); err != nil </span><span class="cov8" title="1">{
@@ -1224,7 +1302,7 @@ func (w *WNJpnRepository) getWords(wnJpnDBFilePath string, query string) ([]mode
                 <span class="cov8" title="1">allWords = append(allWords, word)</span>
         }
 
-        <span class="cov8" title="1">return allWords, nil</span>
+        <span class="cov8" title="1">return allWords, deferErr</span>
 }
 </pre>
 		
@@ -1368,26 +1446,31 @@ func (d *Downloader) DownloadWNJpnDBFile(wnJpnDBFileDirPath string) (DownloadSta
 
 // downloadAndExtractDBFile downloads and extracts wnjapn db file.
 func (d *Downloader) downloadAndExtractDBFile(dbFilePath string) (DownloadStatus, error) <span class="cov8" title="1">{
+        var deferErr error
         // download gzip file
         resp, err := d.downloadGzipFile()
         if err != nil </span><span class="cov8" title="1">{
                 return DownloadedFailed, err
         }</span>
-        <span class="cov8" title="1">defer resp.FieldResponse.Body.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = resp.FieldResponse.Body.Close()
+        }</span>()
 
         // save to temp file
-        tempFilePath, err := d.saveToTempFile(resp.FieldResponse.Body)
+        <span class="cov8" title="1">tempFilePath, err := d.saveToTempFile(resp.FieldResponse.Body)
         if err != nil </span><span class="cov8" title="1">{
                 return DownloadedFailed, err
         }</span>
-        <span class="cov8" title="1">defer d.OsProxy.Remove(tempFilePath)
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = d.OsProxy.Remove(tempFilePath)
+        }</span>()
 
         // extract gzip file
-        if err := d.extractGzipFile(tempFilePath, dbFilePath); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if err := d.extractGzipFile(tempFilePath, dbFilePath); err != nil </span><span class="cov8" title="1">{
                 return DownloadedFailed, err
         }</span>
 
-        <span class="cov8" title="1">return DownloadedSuccessfully, nil</span>
+        <span class="cov8" title="1">return DownloadedSuccessfully, deferErr</span>
 }
 
 // downloadGzipFile downloads gzip file.
@@ -1398,16 +1481,19 @@ func (d *Downloader) downloadGzipFile() (*httpproxy.ResponseInstance, error) <sp
 
 // saveToTempFile saves body to temp file.
 func (d *Downloader) saveToTempFile(body ioproxy.ReaderInstanceInterface) (string, error) <span class="cov8" title="1">{
+        var deferErr error
         // create temp file
         tempFilePath := d.FilepathProxy.Join(d.OsProxy.TempDir(), WNJPN_DB_ARCHIVE_FILE_NAME)
         out, err := d.OsProxy.Create(tempFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return "", err
         }</span>
-        <span class="cov8" title="1">defer out.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = out.Close()
+        }</span>()
 
         // copy downloaded file to temp file
-        if _, err := d.IoProxy.Copy(out, body); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := d.IoProxy.Copy(out, body); err != nil </span><span class="cov8" title="1">{
                 return "", err
         }</span>
 
@@ -1416,36 +1502,43 @@ func (d *Downloader) saveToTempFile(body ioproxy.ReaderInstanceInterface) (strin
                 return "", err
         }</span>
 
-        <span class="cov8" title="1">return tempFilePath, nil</span>
+        <span class="cov8" title="1">return tempFilePath, deferErr</span>
 }
 
 // extractGzipFile extracts gzip file.
 func (d *Downloader) extractGzipFile(srcPath, destPath string) error <span class="cov8" title="1">{
+        var deferErr error
         // open gzip file
         file, err := d.OsProxy.Open(srcPath)
         if err != nil </span><span class="cov8" title="1">{
                 return err
         }</span>
-        <span class="cov8" title="1">defer file.Close()
-        gz, err := d.GzipProxy.NewReader(file)
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = file.Close()
+        }</span>()
+        <span class="cov8" title="1">gz, err := d.GzipProxy.NewReader(file)
         if err != nil </span><span class="cov8" title="1">{
                 return err
         }</span>
-        <span class="cov8" title="1">defer gz.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = gz.Close()
+        }</span>()
 
         // create file to save
-        out, err := d.OsProxy.Create(destPath)
+        <span class="cov8" title="1">out, err := d.OsProxy.Create(destPath)
         if err != nil </span><span class="cov8" title="1">{
                 return err
         }</span>
-        <span class="cov8" title="1">defer out.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = out.Close()
+        }</span>()
 
         // copy gzip file to dest file
-        if _, err := d.IoProxy.Copy(out, gz); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := d.IoProxy.Copy(out, gz); err != nil </span><span class="cov8" title="1">{
                 return err
         }</span>
 
-        <span class="cov8" title="1">return nil</span>
+        <span class="cov8" title="1">return deferErr</span>
 }
 </pre>
 		
@@ -4899,7 +4992,7 @@ func (o *favoriteSearchOption) favoriteSearchRunE(_ *cobra.Command, _ []string) 
                         keywords = append(keywords, arg)
                 }</span>
         }
-        <span class="cov8" title="1">if keywords == nil || len(keywords) == 0 </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if len(keywords) == 0 </span><span class="cov8" title="1">{
                 // if no keywords are provided, write message and return
                 colorProxy := colorproxy.New()
                 o.Utility.PrintlnWithWriter(o.Out, colorProxy.YellowString(constant.FAVORITE_SEARCH_MESSAGE_NO_KEYWORDS_PROVIDED))
@@ -5414,7 +5507,7 @@ func (o *generateOption) writeGenerateSaveResult(result jrprepository.SaveStatus
 
 // writeGenerateResult writes the result of generate command.
 func (o *generateOption) writeGenerateResult(jrps []model.Jrp) <span class="cov8" title="1">{
-        if jrps != nil &amp;&amp; len(jrps) != 0 </span><span class="cov8" title="1">{
+        if len(jrps) != 0 </span><span class="cov8" title="1">{
                 if o.Plain </span><span class="cov8" title="1">{
                         for _, jrp := range jrps </span><span class="cov8" title="1">{
                                 // if plain flag is set, write only the phrase
@@ -5991,7 +6084,7 @@ func (o *historySearchOption) historySearchRunE(_ *cobra.Command, _ []string) er
                         keywords = append(keywords, arg)
                 }</span>
         }
-        <span class="cov8" title="1">if keywords == nil || len(keywords) == 0 </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if len(keywords) == 0 </span><span class="cov8" title="1">{
                 // if no keywords are provided, write message and return
                 colorProxy := colorproxy.New()
                 o.Utility.PrintlnWithWriter(o.Out, colorProxy.YellowString(constant.HISTORY_SEARCH_MESSAGE_NO_KEYWORDS_PROVIDED))
@@ -6569,7 +6662,7 @@ func (o *rootOption) writeRootSaveResult(result jrprepository.SaveStatus) <span 
 
 // writeRootResult writes the result of the root command.
 func (o *rootOption) writeRootResult(jrps []model.Jrp) <span class="cov8" title="1">{
-        if jrps != nil &amp;&amp; len(jrps) != 0 </span><span class="cov8" title="1">{
+        if len(jrps) != 0 </span><span class="cov8" title="1">{
                 if o.Plain </span><span class="cov8" title="1">{
                         for _, jrp := range jrps </span><span class="cov8" title="1">{
                                 // if plain flag is set, write only the phrase
@@ -6788,74 +6881,89 @@ func NewJrpChecker(
 
 // GetJrpSeq returns the sequence of jrp.
 func (j *JrpChecker) GetJrpSeq(jrpDBFilePath string) (int, error) <span class="cov8" title="1">{
+        var deferErr error
         db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return 0, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
-        rows, err := db.Query("SELECT seq FROM sqlite_sequence WHERE sqlite_sequence.name = 'jrp';")
+        <span class="cov8" title="1">rows, err := db.Query("SELECT seq FROM sqlite_sequence WHERE sqlite_sequence.name = 'jrp';")
         if err != nil </span><span class="cov8" title="1">{
                 return 0, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
-        var seq int
+        <span class="cov8" title="1">var seq int
         for rows.Next() </span><span class="cov8" title="1">{
                 if err := rows.Scan(&amp;seq); err != nil </span><span class="cov8" title="1">{
                         return 0, err
                 }</span>
         }
 
-        <span class="cov8" title="1">return seq, nil</span>
+        <span class="cov8" title="1">return seq, deferErr</span>
 }
 
 // IsExist checks if jrp exists.
 func (j *JrpChecker) IsExist(jrpDBFilePath string, id int) (bool, error) <span class="cov8" title="1">{
+        var deferErr error
         db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return false, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
-        rows, err := db.Query("SELECT COUNT(*) FROM jrp WHERE jrp.ID = (?);", j.StrconvProxy.Itoa(id))
+        <span class="cov8" title="1">rows, err := db.Query("SELECT COUNT(*) FROM jrp WHERE jrp.ID = (?);", j.StrconvProxy.Itoa(id))
         if err != nil </span><span class="cov8" title="1">{
                 return false, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
-        var count int
+        <span class="cov8" title="1">var count int
         for rows.Next() </span><span class="cov8" title="1">{
                 if err := rows.Scan(&amp;count); err != nil </span><span class="cov8" title="1">{
                         return false, err
                 }</span>
         }
 
-        <span class="cov8" title="1">return count == 1, nil</span>
+        <span class="cov8" title="1">return count == 1, deferErr</span>
 }
 
 // IsFavorited checks if jrp is favorited.
 func (j *JrpChecker) IsFavorited(jrpDBFilePath string, id int) (bool, error) <span class="cov8" title="1">{
+        var deferErr error
         db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
         if err != nil </span><span class="cov8" title="1">{
                 return false, err
         }</span>
-        <span class="cov8" title="1">defer db.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = db.Close()
+        }</span>()
 
-        rows, err := db.Query("SELECT COUNT(*) FROM jrp WHERE jrp.IsFavorite = 1 AND jrp.ID = (?);", j.StrconvProxy.Itoa(id))
+        <span class="cov8" title="1">rows, err := db.Query("SELECT COUNT(*) FROM jrp WHERE jrp.IsFavorite = 1 AND jrp.ID = (?);", j.StrconvProxy.Itoa(id))
         if err != nil </span><span class="cov8" title="1">{
                 return false, err
         }</span>
-        <span class="cov8" title="1">defer rows.Close()
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                deferErr = rows.Close()
+        }</span>()
 
-        var count int
+        <span class="cov8" title="1">var count int
         for rows.Next() </span><span class="cov8" title="1">{
                 if err := rows.Scan(&amp;count); err != nil </span><span class="cov8" title="1">{
                         return false, err
                 }</span>
         }
 
-        <span class="cov8" title="1">return count == 1, nil</span>
+        <span class="cov8" title="1">return count == 1, deferErr</span>
 }
 
 // IsSameJrps checks if jrps are the same.

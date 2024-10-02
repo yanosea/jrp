@@ -128,7 +128,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -139,8 +139,12 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
-				jrpRepository.RemoveHistoryAll(jrpDBFilePath, true)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.RemoveHistoryAll(jrpDBFilePath, true); err != nil {
+					t.Errorf("JrpRepository.RemoveHistoryAll() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -166,7 +170,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -177,7 +181,9 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -203,7 +209,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -214,7 +220,9 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 				mockSqlProxy := mocksqlproxy.NewMockSql(mockCtrl)
 				mockSqlProxy.EXPECT().Open(gomock.Any(), gomock.Any()).Return(nil, errors.New("SqlProxy.Open() failed"))
 				tt.SqlProxy = mockSqlProxy
@@ -243,7 +251,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -254,7 +262,9 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 				mockDBInstance := mocksqlproxy.NewMockDBInstanceInterface(mockCtrl)
 				mockDBInstance.EXPECT().Query(gomock.Any()).Return(nil, errors.New("DBInstance.Query() failed"))
 				mockDBInstance.EXPECT().Close().Return(nil)
@@ -286,7 +296,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -297,7 +307,9 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 				mockRowsInstance := mocksqlproxy.NewMockRowsInstanceInterface(mockCtrl)
 				mockRowsInstance.EXPECT().Next().Return(true)
 				mockRowsInstance.EXPECT().Scan(gomock.Any()).Return(errors.New("RowsInstance.Scan() failed"))
@@ -406,7 +418,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -417,7 +429,9 @@ func TestJrpChecker_IsExist(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -444,7 +458,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -455,7 +469,9 @@ func TestJrpChecker_IsExist(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -482,7 +498,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -493,7 +509,9 @@ func TestJrpChecker_IsExist(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 				mockSqlProxy := mocksqlproxy.NewMockSql(mockCtrl)
 				mockSqlProxy.EXPECT().Open(gomock.Any(), gomock.Any()).Return(nil, errors.New("SqlProxy.Open() failed"))
 				tt.SqlProxy = mockSqlProxy
@@ -523,7 +541,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -534,7 +552,9 @@ func TestJrpChecker_IsExist(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 				mockDBInstance := mocksqlproxy.NewMockDBInstanceInterface(mockCtrl)
 				mockDBInstance.EXPECT().Query(gomock.Any(), "1").Return(nil, errors.New("DBInstance.Query() failed"))
 				mockDBInstance.EXPECT().Close().Return(nil)
@@ -567,7 +587,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -578,7 +598,9 @@ func TestJrpChecker_IsExist(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 				mockRowsInstance := mocksqlproxy.NewMockRowsInstanceInterface(mockCtrl)
 				mockRowsInstance.EXPECT().Next().Return(true)
 				mockRowsInstance.EXPECT().Scan(gomock.Any()).Return(errors.New("RowsInstance.Scan() failed"))
@@ -687,7 +709,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -698,7 +720,9 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -725,7 +749,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -736,7 +760,9 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 			},
 			cleanup: func() {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
@@ -763,7 +789,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -774,7 +800,9 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 				mockSqlProxy := mocksqlproxy.NewMockSql(mockCtrl)
 				mockSqlProxy.EXPECT().Open(gomock.Any(), gomock.Any()).Return(nil, errors.New("SqlProxy.Open() failed"))
 				tt.SqlProxy = mockSqlProxy
@@ -804,7 +832,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -815,7 +843,9 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 				mockDBInstance := mocksqlproxy.NewMockDBInstanceInterface(mockCtrl)
 				mockDBInstance.EXPECT().Query(gomock.Any(), "1").Return(nil, errors.New("DBInstance.Query() failed"))
 				mockDBInstance.EXPECT().Close().Return(nil)
@@ -848,7 +878,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				jrpRepository.SaveHistory(
+				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
 					[]model.Jrp{
 						{
@@ -859,7 +889,9 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					},
-				)
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
 				mockRowsInstance := mocksqlproxy.NewMockRowsInstanceInterface(mockCtrl)
 				mockRowsInstance.EXPECT().Next().Return(true)
 				mockRowsInstance.EXPECT().Scan(gomock.Any()).Return(errors.New("RowsInstance.Scan() failed"))

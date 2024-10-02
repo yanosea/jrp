@@ -64,26 +64,31 @@ func (d *Downloader) DownloadWNJpnDBFile(wnJpnDBFileDirPath string) (DownloadSta
 
 // downloadAndExtractDBFile downloads and extracts wnjapn db file.
 func (d *Downloader) downloadAndExtractDBFile(dbFilePath string) (DownloadStatus, error) {
+	var deferErr error
 	// download gzip file
 	resp, err := d.downloadGzipFile()
 	if err != nil {
 		return DownloadedFailed, err
 	}
-	defer resp.FieldResponse.Body.Close()
+	defer func() {
+		deferErr = resp.FieldResponse.Body.Close()
+	}()
 
 	// save to temp file
 	tempFilePath, err := d.saveToTempFile(resp.FieldResponse.Body)
 	if err != nil {
 		return DownloadedFailed, err
 	}
-	defer d.OsProxy.Remove(tempFilePath)
+	defer func() {
+		deferErr = d.OsProxy.Remove(tempFilePath)
+	}()
 
 	// extract gzip file
 	if err := d.extractGzipFile(tempFilePath, dbFilePath); err != nil {
 		return DownloadedFailed, err
 	}
 
-	return DownloadedSuccessfully, nil
+	return DownloadedSuccessfully, deferErr
 }
 
 // downloadGzipFile downloads gzip file.
@@ -94,13 +99,16 @@ func (d *Downloader) downloadGzipFile() (*httpproxy.ResponseInstance, error) {
 
 // saveToTempFile saves body to temp file.
 func (d *Downloader) saveToTempFile(body ioproxy.ReaderInstanceInterface) (string, error) {
+	var deferErr error
 	// create temp file
 	tempFilePath := d.FilepathProxy.Join(d.OsProxy.TempDir(), WNJPN_DB_ARCHIVE_FILE_NAME)
 	out, err := d.OsProxy.Create(tempFilePath)
 	if err != nil {
 		return "", err
 	}
-	defer out.Close()
+	defer func() {
+		deferErr = out.Close()
+	}()
 
 	// copy downloaded file to temp file
 	if _, err := d.IoProxy.Copy(out, body); err != nil {
@@ -112,34 +120,41 @@ func (d *Downloader) saveToTempFile(body ioproxy.ReaderInstanceInterface) (strin
 		return "", err
 	}
 
-	return tempFilePath, nil
+	return tempFilePath, deferErr
 }
 
 // extractGzipFile extracts gzip file.
 func (d *Downloader) extractGzipFile(srcPath, destPath string) error {
+	var deferErr error
 	// open gzip file
 	file, err := d.OsProxy.Open(srcPath)
 	if err != nil {
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		deferErr = file.Close()
+	}()
 	gz, err := d.GzipProxy.NewReader(file)
 	if err != nil {
 		return err
 	}
-	defer gz.Close()
+	defer func() {
+		deferErr = gz.Close()
+	}()
 
 	// create file to save
 	out, err := d.OsProxy.Create(destPath)
 	if err != nil {
 		return err
 	}
-	defer out.Close()
+	defer func() {
+		deferErr = out.Close()
+	}()
 
 	// copy gzip file to dest file
 	if _, err := d.IoProxy.Copy(out, gz); err != nil {
 		return err
 	}
 
-	return nil
+	return deferErr
 }
