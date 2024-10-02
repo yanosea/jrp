@@ -2,6 +2,6 @@
 go test -v -p 1 ../... -cover -coverprofile=./cover.out
 awk '!/(mock)\//' ./cover.out > temp_cover.out && mv temp_cover.out cover.out
 # generate a html report for GitHub Pages
-go tool cover -html=./cover.out -o ../docs/index.html
+go tool cover -html=./cover.out -o ../docs/coverage.html
 # remove the cover.out file
 rm ./cover.out
