@@ -12,6 +12,8 @@
 ![Language:Go](https://img.shields.io/static/v1?label=Language&message=Go&color=blue&style=flat-square)
 ![License:MIT](https://img.shields.io/static/v1?label=License&message=MIT&color=blue&style=flat-square)
 [![Latest Release](https://img.shields.io/github/v/release/yanosea/jrp?style=flat-square)](https://github.com/yanosea/jrp/releases/latest)
+<br/>
+[Coverage Report](https://yanosea.github.io/jrp)
 
 </div>
 
