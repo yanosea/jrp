@@ -37,7 +37,7 @@ This is the same as the "favorite clear" command.
 	FAVORITE_REMOVE_FLAG_ALL             = "all"
 	FAVORITE_REMOVE_FLAG_ALL_SHORTHAND   = "a"
 	FAVORITE_REMOVE_FLAG_ALL_DEFAULT     = false
-	FAVORITE_REMOVE_FLAG_ALL_DESCRIPTION = "show all phrases in the favorite"
+	FAVORITE_REMOVE_FLAG_ALL_DESCRIPTION = "remove all phrase(s) in the favorite"
 
 	FAVORITE_REMOVE_MESSAGE_NO_ID_SPECIFIED      = "⚡ No ID argument(s) specified..."
 	FAVORITE_REMOVE_MESSAGE_REMOVED_SUCCESSFULLY = "✅ Removed favorited phrase(s) successfully!"
