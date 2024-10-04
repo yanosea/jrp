@@ -14,6 +14,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
 	"github.com/yanosea/jrp/app/proxy/os"
+	"github.com/yanosea/jrp/app/proxy/promptui"
 	"github.com/yanosea/jrp/app/proxy/sort"
 	"github.com/yanosea/jrp/app/proxy/sql"
 	"github.com/yanosea/jrp/app/proxy/strconv"
@@ -97,7 +98,7 @@ func NewHistoryCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		NewHistoryShowCommand(g),
 		NewHistoryRemoveCommand(g),
 		NewHistorySearchCommand(g),
-		NewHistoryClearCommand(g),
+		NewHistoryClearCommand(g, promptuiproxy.New()),
 	)
 
 	return cmd

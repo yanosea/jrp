@@ -12,6 +12,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
 	"github.com/yanosea/jrp/app/proxy/os"
+	"github.com/yanosea/jrp/app/proxy/promptui"
 	"github.com/yanosea/jrp/app/proxy/sort"
 	"github.com/yanosea/jrp/app/proxy/sql"
 	"github.com/yanosea/jrp/app/proxy/strings"
@@ -25,13 +26,15 @@ type historyClearOption struct {
 	ErrOut                ioproxy.WriterInstanceInterface
 	Args                  []string
 	Force                 bool
+	NoConfirm             bool
 	DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 	JrpRepository         repository.JrpRepositoryInterface
+	PromptuiProxy         promptuiproxy.Promptui
 	Utility               utility.UtilityInterface
 }
 
 // NewHistoryClearCommand creates a new history clear command.
-func NewHistoryClearCommand(g *GlobalOption) *cobraproxy.CommandInstance {
+func NewHistoryClearCommand(g *GlobalOption, promptuiProxy promptuiproxy.Promptui) *cobraproxy.CommandInstance {
 	o := &historyClearOption{
 		Out:     g.Out,
 		ErrOut:  g.ErrOut,
@@ -49,6 +52,7 @@ func NewHistoryClearCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
+	o.PromptuiProxy = promptuiProxy
 
 	cobraProxy := cobraproxy.New()
 	cmd := cobraProxy.NewCommand()
@@ -66,6 +70,14 @@ func NewHistoryClearCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		constant.HISTORY_CLEAR_FLAG_FORCE_DEFAULT,
 		constant.HISTORY_CLEAR_FLAG_FORCE_DESCRIPTION,
 	)
+	cmd.PersistentFlags().BoolVarP(
+		&o.NoConfirm,
+		constant.HISTORY_CLEAR_FLAG_NO_CONFIRM,
+		constant.HISTORY_CLEAR_FLAG_NO_CONFIRM_SHORTHAND,
+		constant.HISTORY_CLEAR_FLAG_NO_CONFIRM_DEFAULT,
+		constant.HISTORY_CLEAR_FLAG_NO_CONFIRM_DESCRIPTION,
+	)
+
 	cmd.SetOut(g.Out)
 	cmd.SetErr(g.ErrOut)
 	cmd.SetHelpTemplate(constant.HISTORY_CLEAR_HELP_TEMPLATE)
@@ -84,6 +96,22 @@ func (o *historyClearOption) historyClearRunE(_ *cobra.Command, _ []string) erro
 	// create the directory if it does not exist
 	if err := o.Utility.CreateDirIfNotExist(jrpDBFileDirPath); err != nil {
 		return err
+	}
+
+	// write prompt if no-confirm option is not set
+	if !o.NoConfirm {
+		colorProxy := colorproxy.New()
+		prompt := o.PromptuiProxy.NewPrompt()
+		prompt.SetLabel(colorProxy.YellowString(constant.HISTORY_CLEAR_PROMPT_LABEL))
+		result, err := prompt.Run()
+		if err != nil {
+			return err
+		}
+		if result != "y" && result != "Y" {
+			// write canceled message and do nothing
+			o.Utility.PrintlnWithWriter(o.Out, constant.HISTORY_CLEAR_MESSAGE_CLEAR_CANCELED)
+			return nil
+		}
 	}
 
 	filepathProxy := filepathproxy.New()

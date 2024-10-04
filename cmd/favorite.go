@@ -14,6 +14,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
 	"github.com/yanosea/jrp/app/proxy/os"
+	"github.com/yanosea/jrp/app/proxy/promptui"
 	"github.com/yanosea/jrp/app/proxy/sort"
 	"github.com/yanosea/jrp/app/proxy/sql"
 	"github.com/yanosea/jrp/app/proxy/strconv"
@@ -100,7 +101,7 @@ func NewFavoriteCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		NewFavoriteAddCommand(g),
 		NewFavoriteRemoveCommand(g),
 		NewFavoriteSearchCommand(g),
-		NewFavoriteClearCommand(g),
+		NewFavoriteClearCommand(g, promptuiproxy.New()),
 	)
 
 	return cmd
