@@ -31,6 +31,8 @@ mockgen -source=../app/proxy/os/osproxy.go -destination=../mock/app/proxy/os/osp
 mockgen -source=../app/proxy/os/fileinstance.go -destination=../mock/app/proxy/os/fileinstance.go -package=mockosproxy
 mockgen -source=../app/proxy/pflag/pflagproxy.go -destination=../mock/app/proxy/pflag/pflagproxy.go -package=mockpflagproxy
 mockgen -source=../app/proxy/pflag/flagsetinstance.go -destination=../mock/app/proxy/pflag/flagsetinstance.go -package=mockpflagproxy
+mockgen -source=../app/proxy/promptui/promptuiproxy.go -destination=../mock/app/proxy/promptui/promptuiproxy.go -package=mockpromptuiproxy
+mockgen -source=../app/proxy/promptui/promptinstance.go -destination=../mock/app/proxy/promptui/promptinstance.go -package=mockpromptuiproxy
 mockgen -source=../app/proxy/rand/randproxy.go -destination=../mock/app/proxy/rand/randproxy.go -package=mockrandproxy
 mockgen -source=../app/proxy/sort/sortproxy.go -destination=../mock/app/proxy/sort/sortproxy.go -package=mocksortproxy
 mockgen -source=../app/proxy/spinner/spinnerproxy.go -destination=../mock/app/proxy/spinner/spinnerproxy.go -package=mockspinnerproxy

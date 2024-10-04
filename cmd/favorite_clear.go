@@ -12,6 +12,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
 	"github.com/yanosea/jrp/app/proxy/os"
+	"github.com/yanosea/jrp/app/proxy/promptui"
 	"github.com/yanosea/jrp/app/proxy/sort"
 	"github.com/yanosea/jrp/app/proxy/sql"
 	"github.com/yanosea/jrp/app/proxy/strings"
@@ -24,13 +25,15 @@ type favoriteClearOption struct {
 	Out                   ioproxy.WriterInstanceInterface
 	ErrOut                ioproxy.WriterInstanceInterface
 	Args                  []string
+	NoConfirm             bool
 	DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 	JrpRepository         repository.JrpRepositoryInterface
+	PromptuiProxy         promptuiproxy.Promptui
 	Utility               utility.UtilityInterface
 }
 
 // NewFavoriteClearCommand creates a new favorite clear command.
-func NewFavoriteClearCommand(g *GlobalOption) *cobraproxy.CommandInstance {
+func NewFavoriteClearCommand(g *GlobalOption, promptuiProxy promptuiproxy.Promptui) *cobraproxy.CommandInstance {
 	o := &favoriteClearOption{
 		Out:     g.Out,
 		ErrOut:  g.ErrOut,
@@ -48,6 +51,7 @@ func NewFavoriteClearCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
+	o.PromptuiProxy = promptuiProxy
 
 	cobraProxy := cobraproxy.New()
 	cmd := cobraProxy.NewCommand()
@@ -57,6 +61,14 @@ func NewFavoriteClearCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 	cmd.FieldCommand.Short = constant.FAVORITE_CLEAR_SHORT
 	cmd.FieldCommand.Long = constant.FAVORITE_CLEAR_LONG
 	cmd.FieldCommand.RunE = o.favoriteClearRunE
+
+	cmd.PersistentFlags().BoolVarP(
+		&o.NoConfirm,
+		constant.FAVORITE_CLEAR_FLAG_NO_CONFIRM,
+		constant.FAVORITE_CLEAR_FLAG_NO_CONFIRM_SHORTHAND,
+		constant.FAVORITE_CLEAR_FLAG_NO_CONFIRM_DEFAULT,
+		constant.FAVORITE_CLEAR_FLAG_NO_CONFIRM_DESCRIPTION,
+	)
 
 	cmd.SetOut(g.Out)
 	cmd.SetErr(g.ErrOut)
@@ -76,6 +88,22 @@ func (o *favoriteClearOption) favoriteClearRunE(_ *cobra.Command, _ []string) er
 	// create the directory if it does not exist
 	if err := o.Utility.CreateDirIfNotExist(jrpDBFileDirPath); err != nil {
 		return err
+	}
+
+	// write prompt if no-confirm option is not set
+	if !o.NoConfirm {
+		colorProxy := colorproxy.New()
+		prompt := o.PromptuiProxy.NewPrompt()
+		prompt.SetLabel(colorProxy.YellowString(constant.FAVORITE_CLEAR_PROMPT_LABEL))
+		result, err := prompt.Run()
+		if err != nil {
+			return err
+		}
+		if result != "y" && result != "Y" {
+			// write canceled message and do nothing
+			o.Utility.PrintlnWithWriter(o.Out, constant.FAVORITE_CLEAR_MESSAGE_CLEAR_CANCELED)
+			return nil
+		}
 	}
 
 	filepathProxy := filepathproxy.New()

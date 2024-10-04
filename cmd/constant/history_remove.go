@@ -15,7 +15,7 @@ Usage:
   jrp history r      [flag]
 
 Flags:
-	-f, --force  🚫 force remove the history even if it is favorited
+  -f, --force  🧹 remove the history even if it is favorited
   -h, --help   🤝 help for remove
 
 Arguments:
