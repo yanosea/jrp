@@ -1592,7 +1592,7 @@ func New(
 // GenerateJrp generates jrps.
 func (g *Generator) GenerateJrp(wnJpnDBFilePath string, num int, word string, mode GenerateMode) (GenerateResult, []jrp.Jrp, error) <span class="cov8" title="1">{
         if _, err := g.OsProxy.Stat(wnJpnDBFilePath); g.OsProxy.IsNotExist(err) </span><span class="cov8" title="1">{
-                // if WordNet Japan sqlite3 database file does not exist, return warning
+                // if WordNet Japan sqlite database file does not exist, return warning
                 return DBFileNotFound, nil, nil
         }</span>
 
@@ -3288,8 +3288,6 @@ func NewCompletionCommand(g *GlobalOption) *cobraproxy.CommandInstance <span cla
         cmd := cobraProxy.NewCommand()
 
         cmd.FieldCommand.Use = constant.COMPLETION_USE
-        cmd.FieldCommand.Short = constant.COMPLETION_SHORT
-        cmd.FieldCommand.Long = constant.COMPLETION_LONG
         cmd.FieldCommand.RunE = g.completionRunE
 
         cmd.SetOut(g.Out)
@@ -3336,8 +3334,6 @@ func NewCompletionBashCommand(g *GlobalOption) *cobraproxy.CommandInstance <span
         cmd := cobraProxy.NewCommand()
 
         cmd.FieldCommand.Use = constant.COMPLETION_BASH_USE
-        cmd.FieldCommand.Short = constant.COMPLETION_BASH_SHORT
-        cmd.FieldCommand.Long = constant.COMPLETION_BASH_LONG
         cmd.FieldCommand.RunE = g.completionBashRunE
 
         cmd.SetOut(g.Out)
@@ -3373,8 +3369,6 @@ func NewCompletionFishCommand(g *GlobalOption) *cobraproxy.CommandInstance <span
         cmd := cobraProxy.NewCommand()
 
         cmd.FieldCommand.Use = constant.COMPLETION_FISH_USE
-        cmd.FieldCommand.Short = constant.COMPLETION_FISH_SHORT
-        cmd.FieldCommand.Long = constant.COMPLETION_FISH_LONG
         cmd.FieldCommand.RunE = g.completionFishRunE
 
         cmd.SetOut(g.Out)
@@ -3410,8 +3404,6 @@ func NewCompletionPowerShellCommand(g *GlobalOption) *cobraproxy.CommandInstance
         cmd := cobraProxy.NewCommand()
 
         cmd.FieldCommand.Use = constant.COMPLETION_POWERSHELL_USE
-        cmd.FieldCommand.Short = constant.COMPLETION_POWERSHELL_SHORT
-        cmd.FieldCommand.Long = constant.COMPLETION_POWERSHELL_LONG
         cmd.FieldCommand.RunE = g.completionPowerShellRunE
 
         cmd.SetOut(g.Out)
@@ -3447,8 +3439,6 @@ func NewCompletionZshCommand(g *GlobalOption) *cobraproxy.CommandInstance <span 
         cmd := cobraProxy.NewCommand()
 
         cmd.FieldCommand.Use = constant.COMPLETION_ZSH_USE
-        cmd.FieldCommand.Short = constant.COMPLETION_ZSH_SHORT
-        cmd.FieldCommand.Long = constant.COMPLETION_ZSH_LONG
         cmd.FieldCommand.RunE = g.completionZshRunE
 
         cmd.SetOut(g.Out)
@@ -3472,10 +3462,11 @@ func (g *GlobalOption) completionZsh(c *cobra.Command) error <span class="cov8" 
 		<pre class="file" id="file47" style="display: none">package constant
 
 const (
-        DOWNLOAD_HELP_TEMPLATE = `📦 Download WordNet Japan sqlite3 database file from the official site.
+        DOWNLOAD_USE           = "download"
+        DOWNLOAD_HELP_TEMPLATE = `📦 Download WordNet Japan sqlite database file from the official web site.
 
-You have to download WordNet Japan sqlite3 database file to use jrp at first.
-jrp will download archive file from the official site and decompress it to the database file.
+You have to download WordNet Japan sqlite database file to use jrp at first.
+jrp will download archive file from the official web site and decompress it to the database file.
 
 You can set the directory of the database file to the environment variable "JRP_WNJPN_DB_FILE_DIR".
 The default directory is "~/.local/share/jrp" ("$XDG_DATA_HOME/jrp").
@@ -3488,17 +3479,7 @@ Usage:
 Flags:
   -h, --help   🤝 help for download
 `
-        DOWNLOAD_USE   = "download"
-        DOWNLOAD_SHORT = "📦 Download WordNet Japan sqlite3 database file from the official site."
-        DOWNLOAD_LONG  = `📦 Download WordNet Japan sqlite3 database file from the official site.
-
-You have to download WordNet Japan sqlite3 database file to use jrp at first.
-jrp will download archive file from the official site and decompress it to the database file.
-
-You can set the directory of the database file to the environment variable "JRP_WNJPN_DB_FILE_DIR".
-The default directory is "$XDG_DATA_HOME/jrp".
-`
-        DOWNLOAD_MESSAGE_DOWNLOADING        = "  📦 Downloading WordNet Japan sqlite3 database file from the official site..."
+        DOWNLOAD_MESSAGE_DOWNLOADING        = "  📦 Downloading WordNet Japan sqlite database file from the official web site..."
         DOWNLOAD_MESSAGE_SUCCEEDED          = "✅ Downloaded successfully! Now, you are ready to use jrp!"
         DOWNLOAD_MESSAGE_FAILED             = "❌ Failed to download... Please try again later..."
         DOWNLOAD_MESSAGE_ALREADY_DOWNLOADED = "✅ You are already ready to use jrp!"
@@ -3512,6 +3493,7 @@ func GetDownloadAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file48" style="display: none">package constant
 
 const (
+        FAVORITE_USE           = "favorite"
         FAVORITE_HELP_TEMPLATE = `⭐ Manage the favorited phrase(s) of the history of "generate" command.
 
 You can favorite (add) generated phrase(s) with its ID(s).
@@ -3541,38 +3523,15 @@ Available Subommands:
   clear   ⭐✨ Clear the favorited phrase(s).
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50).
-  -a, --all     📁 show all phrases in the favorite.
-  -P, --plain   📝 plain text output instead of table output.
+  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -a, --all     📁 show all favorited phrase(s)
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for favorite
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50).
+  number  📏 number how many phrases to show (default 10, e.g: 50)
 
 Use "jrp favorite [command] --help" for more information about a command.
-`
-        FAVORITE_USE   = "favorite"
-        FAVORITE_SHORT = "⭐ Manage the favorited phrase(s) of the history of \"generate\" command."
-        FAVORITE_LONG  = `⭐ Manage the favorited phrase(s) of the history of "generate" command.
-
-You can favorite (add) generated phrase(s) with its ID(s).
-Also, You can show, remove, search and clear the phrase(s) you favorited.
-
-You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
-jrp will get the most recent favorited phrase(s).
-If you don't specify the number of phrases, jrp will show the most recent 10 phrases by default.
-If both are provided, the larger number takes precedence.
-
-Also, you can show all phrases in the favorite by flag "-a" or "--all".
-If you use the flag, the number flag or argument will be ignored.
-
-You can use sub command below...
-
-  - 📖 show (You can abbreviate "show" sub command. ("jrp favorite" and "jrp favorite show" are the same.)
-        - 📌 add
-  - 🔍 search
-  - 🧹 remove
-  - ✨ clear
 `
         FAVORITE_FLAG_NUMBER             = "number"
         FAVORITE_FLAG_NUMBER_SHORTHAND   = "n"
@@ -3598,11 +3557,15 @@ func GetFavoriteAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file49" style="display: none">package constant
 
 const (
+        FAVORITE_ADD_USE           = "add"
         FAVORITE_ADD_HELP_TEMPLATE = `⭐📌 Favorite (add) phrase(s) in the history of the "generate" command.
 
 You can specify the phrase(s) to favorite with ID argument(s).
 You have to get ID from the "history" command.
 Multiple ID's can be specified separated by spaces.
+
+This command can make the phrase(s) easier to find.
+And you will not be able to remove the phrase(s) with executing "history remove" and "history clear".
 
 Usage:
   jrp favorite add [flag]
@@ -3613,15 +3576,7 @@ Flags:
   -h, --help  🤝 help for add
 
 Arguments:
-  ID  🆔 add the favorite by the ID (e.g: 1 2 3).
-`
-        FAVORITE_ADD_USE   = "add"
-        FAVORITE_ADD_SHORT = "⭐📌 Favorite (add) phrase(s) in the history of the \"generate\" command."
-        FAVORITE_ADD_LONG  = `⭐📌 Favorite (add) phrase(s) in the history of the "generate" command.
-
-You can specify the phrase(s) to favorite with ID argument(s).
-You have to get ID from the "history" command.
-Multiple ID's can be specified separated by spaces.
+  ID  🆔 add the favorite by the ID (e.g: 1 2 3)
 `
         FAVORITE_ADD_MESSAGE_NO_ID_SPECIFIED    = "⚡ No ID argument(s) specified..."
         FAVORITE_ADD_MESSAGE_ADDED_SUCCESSFULLY = "✅ Favorite successfully!"
@@ -3638,6 +3593,7 @@ func GetFavoriteAddAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file50" style="display: none">package constant
 
 const (
+        FAVORITE_CLEAR_USE           = "clear"
         FAVORITE_CLEAR_HELP_TEMPLATE = `⭐✨ Clear the favorited phrase(s).
 
 You can clear all favorited phrase(s).
@@ -3652,14 +3608,6 @@ Usage:
 Flags:
   -no-confirm  🚫 do not confirm before clearing the history
   -h, --help   🤝 help for clear
-`
-        FAVORITE_CLEAR_USE   = "clear"
-        FAVORITE_CLEAR_SHORT = "⭐✨ Clear the favorited phrase(s)."
-        FAVORITE_CLEAR_LONG  = `⭐✨ Clear the favorited phrase(s).
-
-You can clear all favorited phrase(s).
-This is the same as the "favorite remove -a" command.
-This does not remove the history of the "generate" command, just remove the favorite.
 `
         FAVORITE_CLEAR_FLAG_NO_CONFIRM             = "no-confirm"
         FAVORITE_CLEAR_FLAG_NO_CONFIRM_SHORTHAND   = ""
@@ -3681,6 +3629,7 @@ func GetFavoriteClearAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file51" style="display: none">package constant
 
 const (
+        FAVORITE_REMOVE_USE           = "remove"
         FAVORITE_REMOVE_HELP_TEMPLATE = `⭐🧹 Remove the favorited phrase(s).
 
 You can specify the favorited phrase(s) to remove with ID argument(s).
@@ -3688,7 +3637,7 @@ You have to get ID from the "history" command.
 Multiple ID's can be specified separated by spaces.
 This does not remove the history of the "generate" command, just remove the favorited status.
 
-Also, you can remove all favorite by flag "-a" or "--all".
+Also, you can remove all favorited phrase(s) by flag "-a" or "--all".
 This is the same as the "favorite clear" command.
 
 Usage:
@@ -3697,27 +3646,16 @@ Usage:
   jrp favorite r      [flag]
 
 Flags:
-  -a, --all   📁 remove all favorite.
+  -a, --all   ✨ remove all favorited phrase(s)
   -h, --help  🤝 help for remove
 
 Arguments:
-  ID  🆔 remove the favorite by the ID (e.g: 1 2 3).
-`
-        FAVORITE_REMOVE_USE   = "remove"
-        FAVORITE_REMOVE_SHORT = "⭐🧹 Remove the favorited phrase(s)."
-        FAVORITE_REMOVE_LONG  = `⭐🧹 Remove the favorited phrase(s).
-
-You can specify the favorited phrase(s) to remove with ID argument(s).
-You have to get ID from the "history" command.
-Multiple ID's can be specified separated by spaces.
-
-Also, you can remove all favorite by flag "-a" or "--all".
-This is the same as the "favorite clear" command.
+  ID  🆔 remove the favorite by the ID (e.g: 1 2 3)
 `
         FAVORITE_REMOVE_FLAG_ALL             = "all"
         FAVORITE_REMOVE_FLAG_ALL_SHORTHAND   = "a"
         FAVORITE_REMOVE_FLAG_ALL_DEFAULT     = false
-        FAVORITE_REMOVE_FLAG_ALL_DESCRIPTION = "show all phrases in the favorite"
+        FAVORITE_REMOVE_FLAG_ALL_DESCRIPTION = "remove all favorited phrase(s)"
 
         FAVORITE_REMOVE_MESSAGE_NO_ID_SPECIFIED      = "⚡ No ID argument(s) specified..."
         FAVORITE_REMOVE_MESSAGE_REMOVED_SUCCESSFULLY = "✅ Removed favorited phrase(s) successfully!"
@@ -3734,6 +3672,7 @@ func GetFavoriteRemoveAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file52" style="display: none">package constant
 
 const (
+        FAVORITE_SEARCH_USE           = "search"
         FAVORITE_SEARCH_HELP_TEMPLATE = `⭐🔍 Search the favorited phrase(s).
 
 You can search favorited phrase(s) with keyword argument(s).
@@ -3754,30 +3693,14 @@ Usage:
   jrp favorite S      [flag]
 
 Flags:
-  -A, --and     🧠 search phrase(s) by AND condition.
-  -n, --number  📏 number how many results to show (default 10, e.g: 50).
-  -a, --all     📁 show all results in the favorite.
-  -P, --plain   📝 plain text output instead of table output.
+  -A, --and     🧠 search phrase(s) by AND condition
+  -n, --number  📏 number how many results to show (default 10, e.g: 50)
+  -a, --all     📁 show all results
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for search
 
 Arguments:
-  keywords  💬 search phrase(s) by keywords. Multiple keywords are separated by space.
-`
-        FAVORITE_SEARCH_USE   = "search"
-        FAVORITE_SEARCH_SHORT = "⭐🔍 Search the favorited phrase(s)."
-        FAVORITE_SEARCH_LONG  = `⭐🔍 Search the favorited phrase(s).
-
-You can search favorited phrase(s) with keyword argument(s).
-Multiple keywords are separated by a space.
-
-If you want to search favorited phrase(s) by AND condition, you can use flag "-A" or "--and".
-OR condition is by default.
-
-You can specify how many results to show with flag "-n" or "--number".
-If you don't specify the number of phrases, jrp will show the most recent 10 results by default.
-
-Also, you can show all results by flag "-a" or "--all".
-If you use the flag, the number flag will be ignored.
+  keywords  💬 search phrase(s) by keywords (multiple keywords are separated by space)
 `
         FAVORITE_SEARCH_FLAG_AND                = "and"
         FAVORITE_SEARCH_FLAG_AND_SHORTHAND      = "A"
@@ -3808,6 +3731,7 @@ func GetFavoriteSearchAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file53" style="display: none">package constant
 
 const (
+        FAVORITE_SHOW_USE           = "show"
         FAVORITE_SHOW_HELP_TEMPLATE = `⭐📖 Show the favorited phrase(s).
 
 You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
@@ -3824,24 +3748,13 @@ Usage:
   jrp favorite s    [flag]
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50).
-  -a, --all     📁 show all phrases in the favorite.
-  -P, --plain   📝 plain text output instead of table output.
+  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -a, --all     📁 show all favorited phrase(s)
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for show
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50).
-`
-        FAVORITE_SHOW_USE   = "show"
-        FAVORITE_SHOW_SHORT = "⭐📖 Show the favorited phrase(s)."
-        FAVORITE_SHOW_LONG  = `⭐📖 Show the favorited phrase(s).
-
-You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
-jrp will get the most recent favorited phrase(s).
-If you don't specify the number of phrases, jrp will show the most recent 10 phrases by default.
-
-Also, you can show all phrases in the favorite by flag "-a" or "--all".
-If you use the flag, the number flag or argument will be ignored.
+  number  📏 number how many phrases to show (default 10, e.g: 50)
 `
         FAVORITE_SHOW_FLAG_NUMBER             = "number"
         FAVORITE_SHOW_FLAG_NUMBER_SHORTHAND   = "n"
@@ -3867,6 +3780,7 @@ func GetFavoriteShowAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file54" style="display: none">package constant
 
 const (
+        GENERATE_USE           = "generate"
         GENARETE_HELP_TEMPLATE = `✨ Generate Japanese random phrase(s).
 
 You can specify how many phrases to generate by flag "-n" or "--number" or a number argument.
@@ -3881,25 +3795,15 @@ Usage:
   jrp g        [flags]
 
 Flags:
-  -n, --number   🔢 number of phrases to generate (default 1, e.g: 10).
-  -p  --prefix   💬 prefix of phrase(s) to generate.
-  -s  --suffix   💬 suffix of phrase(s) to generate.
-  -d  --dry-run  🧪 generate phrase(s) without saving to the history.
-  -P, --plain    📝 plain text output instead of table output.
+  -n, --number   🔢 number of phrases to generate (default 1, e.g: 10)
+  -p  --prefix   💬 prefix of phrase(s) to generate
+  -s  --suffix   💬 suffix of phrase(s) to generate
+  -d  --dry-run  🧪 generate phrase(s) without saving to the history
+  -P, --plain    📝 plain text output instead of table output
   -h, --help     🤝 help for generate
 
 Arguments:
-  number  🔢 number of phrases to generate (default 1, e.g: 10).
-`
-        GENERATE_USE   = "generate"
-        GENERATE_SHORT = "✨ Generate Japanese random phrase(s)."
-        GENERATE_LONG  = `✨ Generate Japanese random phrase(s).
-
-You can specify how many phrases to generate by flag "-n" or "--number" or a number argument.
-If both are provided, the larger number takes precedence.
-
-And you can specify the prefix or suffix of the phrase(s) to generate
-by the flag "-p" or "--prefix" and "-s" or "--suffix".
+  number  🔢 number of phrases to generate (default 1, e.g: 10)
 `
         GENERATE_FLAG_NUMBER              = "number"
         GENERATE_FLAG_NUMBER_SHORTHAND    = "n"
@@ -3938,6 +3842,7 @@ func GetGenerateAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file55" style="display: none">package constant
 
 const (
+        HISTORY_USE           = "history"
         HISTORY_HELP_TEMPLATE = `📜 Manage the history of the "generate" command.
 
 You can show, remove, search and clear the history of the "generate" command.
@@ -3965,35 +3870,15 @@ Available Subommands:
   clear   📜✨ Clear the history of the "generate" command.
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50).
-  -a, --all     📁 show all phrases in the history.
-  -P, --plain   📝 plain text output instead of table output.
+  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -a, --all     📁 show all history
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for history
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50).
+  number  📏 number how many phrases to show (default 10, e.g: 50)
 
 Use "jrp history [command] --help" for more information about a command.
-`
-        HISTORY_USE   = "history"
-        HISTORY_SHORT = "📜 Manage the history of the \"generate\" command."
-        HISTORY_LONG  = `📜 Manage the history of the "generate" command.
-
-You can show, remove, search and clear the history of the "generate" command.
-
-You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
-jrp will get the most recent phrase(s) from the history.
-If you don't specify the number of phrases, jrp will show the most recent 10 phrases by default.
-
-Also, you can show all phrases in the history by flag "-a" or "--all".
-If you use the flag, the number flag or argument will be ignored.
-
-You can use sub command below...
-
-  - 📖 show (You can abbreviate "show" sub command. ("jrp history" and "jrp history show" are the same.)
-  - 🔍 search
-  - 🧹 remove
-  - ✨ clear
 `
         HISTORY_FLAG_NUMBER             = "number"
         HISTORY_FLAG_NUMBER_SHORTHAND   = "n"
@@ -4019,9 +3904,11 @@ func GetHistoryAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file56" style="display: none">package constant
 
 const (
+        HISTORY_CLEAR_USE           = "clear"
         HISTORY_CLEAR_HELP_TEMPLATE = `📜✨ Clear the history of the "generate" command.
 
 You can clear all history.
+This is the same as the "history remove -a" command.
 Also, you can clear the history even if it is favorited by using the "-f" or ""--force" flag.
 
 Usage:
@@ -4030,16 +3917,9 @@ Usage:
   jrp history c     [flag]
 
 Flags:
-  -f, --force  ✨ clear all the history even if it is favorited
+  -f, --force  💪 clear all the history even if it is favorited
   -no-confirm  🚫 do not confirm before clearing the history
   -h, --help   🤝 help for clear
-`
-        HISTORY_CLEAR_USE   = "clear"
-        HISTORY_CLEAR_SHORT = "📜✨ Clear the history of the \"generate\" command."
-        HISTORY_CLEAR_LONG  = `📜✨ Clear the history of the "generate" command.
-
-You can clear all history.
-Also, you can clear the history even if it is favorited by using the "-f" or ""--force" flag.
 `
         HISTORY_CLEAR_FLAG_FORCE                  = "force"
         HISTORY_CLEAR_FLAG_FORCE_SHORTHAND        = "f"
@@ -4065,11 +3945,15 @@ func GetHistoryClearAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file57" style="display: none">package constant
 
 const (
+        HISTORY_REMOVE_USE           = "remove"
         HISTORY_REMOVE_HELP_TEMPLATE = `📜🧹 Remove the history of the "generate" command.
 
 You can specify the history to remove with ID argument(s).
 You have to get ID from the "history" command.
 Multiple ID's can be specified separated by spaces.
+
+You can remove all history by flag "-a" or "--all".
+This is the same as the "history clear" command.
 
 Also, you can remove the history even if it is favorited by using the "-f" or ""--force" flag.
 
@@ -4079,22 +3963,17 @@ Usage:
   jrp history r      [flag]
 
 Flags:
-  -f, --force  🧹 remove the history even if it is favorited
+  -a, --all    ✨ remove all history
+  -f, --force  💪 remove the history even if it is favorited
   -h, --help   🤝 help for remove
 
 Arguments:
-  ID  🆔 remove the history by the ID (e.g: 1 2 3).
+  ID  🆔 remove the history by the ID (e.g: 1 2 3)
 `
-        HISTORY_REMOVE_USE   = "remove"
-        HISTORY_REMOVE_SHORT = "📜🧹 Show the history of the \"generate\" command."
-        HISTORY_REMOVE_LONG  = `📜🧹 Show the history of the "generate" command.
-
-You can specify the history to remove with ID argument(s).
-You have to get ID from the "history" command.
-Multiple ID's can be specified separated by spaces.
-
-Also, you can remove the history even if it is favorited by using the "-f" or ""--force" flag.
-`
+        HISTORY_REMOVE_FLAG_ALL               = "all"
+        HISTORY_REMOVE_FLAG_ALL_SHORTHAND     = "a"
+        HISTORY_REMOVE_FLAG_ALL_DEFAULT       = false
+        HISTORY_REMOVE_FLAG_ALL_DESCRIPTION   = "remove all history"
         HISTORY_REMOVE_FLAG_FORCE             = "force"
         HISTORY_REMOVE_FLAG_FORCE_SHORTHAND   = "f"
         HISTORY_REMOVE_FLAG_FORCE_DEFAULT     = false
@@ -4115,6 +3994,7 @@ func GetHistoryRemoveAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file58" style="display: none">package constant
 
 const (
+        HISTORY_SEARCH_USE           = "search"
         HISTORY_SEARCH_HELP_TEMPLATE = `📜🔍 Search the history of the "generate" command.
 
 You can search phrase(s) with keyword argument(s).
@@ -4135,30 +4015,14 @@ Usage:
   jrp history S      [flag]
 
 Flags:
-  -A, --and     🧠 search phrase(s) by AND condition.
-  -n, --number  📏 number how many results to show (default 10, e.g: 50).
-  -a, --all     📁 show all results in the history.
-  -P, --plain   📝 plain text output instead of table output.
+  -A, --and     🧠 search phrase(s) by AND condition
+  -n, --number  📏 number how many results to show (default 10, e.g: 50)
+  -a, --all     📁 show all results
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for search
 
 Arguments:
-  keywords  💬 search phrase(s) by keywords. Multiple keywords are separated by space.
-`
-        HISTORY_SEARCH_USE   = "search"
-        HISTORY_SEARCH_SHORT = "📜🔍 Search the history of the \"generate\" command."
-        HISTORY_SEARCH_LONG  = `📜🔍 Search the history of the "generate" command.
-
-You can search phrase(s) with keyword argument(s).
-Multiple keywords are separated by a space.
-
-If you want to search phrase(s) by AND condition, you can use flag "-A" or "--and".
-OR condition is by default.
-
-You can specify how many results to show with flag "-n" or "--number".
-If you don't specify the number of phrases, jrp will show the most recent 10 results by default.
-
-Also, you can show all results in the history by flag "-a" or "--all".
-If you use the flag, the number flag will be ignored.
+  keywords  💬 search phrase(s) by keywords (multiple keywords are separated by space)
 `
         HISTORY_SEARCH_FLAG_AND                = "and"
         HISTORY_SEARCH_FLAG_AND_SHORTHAND      = "A"
@@ -4189,6 +4053,7 @@ func GetHistorySearchAliases() []string <span class="cov8" title="1">{
 		<pre class="file" id="file59" style="display: none">package constant
 
 const (
+        HISTORY_SHOW_USE           = "show"
         HISTORY_SHOW_HELP_TEMPLATE = `📜📖 Show the history of the "generate" command.
 
 You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
@@ -4205,24 +4070,13 @@ Usage:
   jrp history s    [flag]
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50).
-  -a, --all     📁 show all phrases in the history.
-  -P, --plain   📝 plain text output instead of table output.
+  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -a, --all     📁 show all history
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for show
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50).
-`
-        HISTORY_SHOW_USE   = "show"
-        HISTORY_SHOW_SHORT = "📜📖 Show the history of the \"generate\" command."
-        HISTORY_SHOW_LONG  = `📜📖 Show the history of the "generate" command.
-
-You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
-jrp will get the most recent phrase(s) from the history.
-If you don't specify the number of phrases, jrp will show the most recent 10 phrases by default.
-
-Also, you can show all phrases in the history by flag "-a" or "--all".
-If you use the flag, the number flag or argument will be ignored.
+  number  📏 number how many phrases to show (default 10, e.g: 50)
 `
         HISTORY_SHOW_FLAG_NUMBER             = "number"
         HISTORY_SHOW_FLAG_NUMBER_SHORTHAND   = "n"
@@ -4302,8 +4156,6 @@ func NewDownloadCommand(g *GlobalOption) *cobraproxy.CommandInstance <span class
 
         cmd.FieldCommand.Use = constant.DOWNLOAD_USE
         cmd.FieldCommand.Aliases = constant.GetDownloadAliases()
-        cmd.FieldCommand.Short = constant.DOWNLOAD_SHORT
-        cmd.FieldCommand.Long = constant.DOWNLOAD_LONG
         cmd.FieldCommand.RunE = o.downloadRunE
 
         cmd.SetOut(o.Out)
@@ -4431,8 +4283,6 @@ func NewFavoriteCommand(g *GlobalOption) *cobraproxy.CommandInstance <span class
 
         cmd.FieldCommand.Use = constant.FAVORITE_USE
         cmd.FieldCommand.Aliases = constant.GetFavoriteAliases()
-        cmd.FieldCommand.Short = constant.FAVORITE_SHORT
-        cmd.FieldCommand.Long = constant.FAVORITE_LONG
         cmd.FieldCommand.Args = cobra.MaximumNArgs(1)
         cmd.FieldCommand.RunE = o.favoriteRunE
 
@@ -4603,8 +4453,6 @@ func NewFavoriteAddCommand(g *GlobalOption) *cobraproxy.CommandInstance <span cl
 
         cmd.FieldCommand.Use = constant.FAVORITE_ADD_USE
         cmd.FieldCommand.Aliases = constant.GetFavoriteAddAliases()
-        cmd.FieldCommand.Short = constant.FAVORITE_ADD_SHORT
-        cmd.FieldCommand.Long = constant.FAVORITE_ADD_LONG
         cmd.FieldCommand.RunE = o.favoriteAddRunE
 
         cmd.SetOut(g.Out)
@@ -4741,8 +4589,6 @@ func NewFavoriteClearCommand(g *GlobalOption, promptuiProxy promptuiproxy.Prompt
 
         cmd.FieldCommand.Use = constant.FAVORITE_CLEAR_USE
         cmd.FieldCommand.Aliases = constant.GetFavoriteClearAliases()
-        cmd.FieldCommand.Short = constant.FAVORITE_CLEAR_SHORT
-        cmd.FieldCommand.Long = constant.FAVORITE_CLEAR_LONG
         cmd.FieldCommand.RunE = o.favoriteClearRunE
 
         cmd.PersistentFlags().BoolVarP(
@@ -4877,8 +4723,6 @@ func NewFavoriteRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance <span
 
         cmd.FieldCommand.Use = constant.FAVORITE_REMOVE_USE
         cmd.FieldCommand.Aliases = constant.GetFavoriteRemoveAliases()
-        cmd.FieldCommand.Short = constant.FAVORITE_REMOVE_SHORT
-        cmd.FieldCommand.Long = constant.FAVORITE_REMOVE_LONG
         cmd.FieldCommand.RunE = o.favoriteRemoveRunE
 
         cmd.PersistentFlags().BoolVarP(
@@ -5041,8 +4885,6 @@ func NewFavoriteSearchCommand(g *GlobalOption) *cobraproxy.CommandInstance <span
 
         cmd.FieldCommand.Use = constant.FAVORITE_SEARCH_USE
         cmd.FieldCommand.Aliases = constant.GetFavoriteSearchAliases()
-        cmd.FieldCommand.Short = constant.FAVORITE_SEARCH_SHORT
-        cmd.FieldCommand.Long = constant.FAVORITE_SEARCH_LONG
         cmd.FieldCommand.RunE = o.favoriteSearchRunE
 
         cmd.PersistentFlags().BoolVarP(
@@ -5224,8 +5066,6 @@ func NewFavoriteShowCommand(g *GlobalOption) *cobraproxy.CommandInstance <span c
 
         cmd.FieldCommand.Use = constant.FAVORITE_SHOW_USE
         cmd.FieldCommand.Aliases = constant.GetFavoriteShowAliases()
-        cmd.FieldCommand.Short = constant.FAVORITE_SHOW_SHORT
-        cmd.FieldCommand.Long = constant.FAVORITE_SHOW_LONG
         cmd.FieldCommand.Args = cobra.MaximumNArgs(1)
         cmd.FieldCommand.RunE = o.favoriteShowRunE
 
@@ -5418,8 +5258,6 @@ func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance <span class
 
         cmd.FieldCommand.Use = constant.GENERATE_USE
         cmd.FieldCommand.Aliases = constant.GetGenerateAliases()
-        cmd.FieldCommand.Short = constant.GENERATE_SHORT
-        cmd.FieldCommand.Long = constant.GENERATE_LONG
         cmd.FieldCommand.Args = cobra.MaximumNArgs(1)
         cmd.FieldCommand.RunE = o.generateRunE
 
@@ -5690,8 +5528,6 @@ func NewHistoryCommand(g *GlobalOption) *cobraproxy.CommandInstance <span class=
         cmd := cobraProxy.NewCommand()
         cmd.FieldCommand.Use = constant.HISTORY_USE
         cmd.FieldCommand.Aliases = constant.GetHistoryAliases()
-        cmd.FieldCommand.Short = constant.HISTORY_SHORT
-        cmd.FieldCommand.Long = constant.HISTORY_LONG
         cmd.FieldCommand.Args = cobra.MaximumNArgs(1)
         cmd.FieldCommand.RunE = o.historyRunE
 
@@ -5864,8 +5700,6 @@ func NewHistoryClearCommand(g *GlobalOption, promptuiProxy promptuiproxy.Promptu
 
         cmd.FieldCommand.Use = constant.HISTORY_CLEAR_USE
         cmd.FieldCommand.Aliases = constant.GetHistoryClearAliases()
-        cmd.FieldCommand.Short = constant.HISTORY_CLEAR_SHORT
-        cmd.FieldCommand.Long = constant.HISTORY_CLEAR_LONG
         cmd.FieldCommand.RunE = o.historyClearRunE
 
         cmd.PersistentFlags().BoolVarP(
@@ -5976,6 +5810,7 @@ type historyRemoveOption struct {
         Out                   ioproxy.WriterInstanceInterface
         ErrOut                ioproxy.WriterInstanceInterface
         Args                  []string
+        All                   bool
         Force                 bool
         DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
         JrpRepository         repository.JrpRepositoryInterface
@@ -6007,10 +5842,15 @@ func NewHistoryRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance <span 
 
         cmd.FieldCommand.Use = constant.HISTORY_REMOVE_USE
         cmd.FieldCommand.Aliases = constant.GetHistoryRemoveAliases()
-        cmd.FieldCommand.Short = constant.HISTORY_REMOVE_SHORT
-        cmd.FieldCommand.Long = constant.HISTORY_REMOVE_LONG
         cmd.FieldCommand.RunE = o.historyRemoveRunE
 
+        cmd.PersistentFlags().BoolVarP(
+                &amp;o.All,
+                constant.HISTORY_REMOVE_FLAG_ALL,
+                constant.HISTORY_REMOVE_FLAG_ALL_SHORTHAND,
+                constant.HISTORY_REMOVE_FLAG_ALL_DEFAULT,
+                constant.HISTORY_REMOVE_FLAG_ALL_DESCRIPTION,
+        )
         cmd.PersistentFlags().BoolVarP(
                 &amp;o.Force,
                 constant.HISTORY_REMOVE_FLAG_FORCE,
@@ -6036,14 +5876,16 @@ func (o *historyRemoveOption) historyRemoveRunE(_ *cobra.Command, _ []string) er
         // set ID
         <span class="cov8" title="1">strconvProxy := strconvproxy.New()
         var IDs []int
-        for _, arg := range o.Args[2:] </span><span class="cov8" title="1">{
-                if id, err := strconvProxy.Atoi(arg); err != nil </span><span class="cov8" title="1">{
-                        continue</span>
-                } else<span class="cov8" title="1"> {
-                        IDs = append(IDs, id)
-                }</span>
+        if !o.All </span><span class="cov8" title="1">{
+                for _, arg := range o.Args[2:] </span><span class="cov8" title="1">{
+                        if id, err := strconvProxy.Atoi(arg); err != nil </span><span class="cov8" title="1">{
+                                continue</span>
+                        } else<span class="cov8" title="1"> {
+                                IDs = append(IDs, id)
+                        }</span>
+                }
         }
-        <span class="cov8" title="1">if len(IDs) == 0 </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if len(IDs) == 0 &amp;&amp; !o.All </span><span class="cov8" title="1">{
                 // if no ID is specified, print write and return
                 colorProxy := colorproxy.New()
                 o.Utility.PrintlnWithWriter(o.Out, colorProxy.YellowString(constant.HISTORY_REMOVE_MESSAGE_NO_ID_SPECIFIED))
@@ -6067,12 +5909,19 @@ func (o *historyRemoveOption) historyRemoveRunE(_ *cobra.Command, _ []string) er
 
 // historyRemove is the function that removes history by IDs.
 func (o *historyRemoveOption) historyRemove(jrpDBFilePath string, IDs []int) error <span class="cov8" title="1">{
-        // if IDs are specified, remove history by IDs
-        res, err := o.JrpRepository.RemoveHistoryByIDs(jrpDBFilePath, IDs, o.Force)
-        o.writeHistoryRemoveResult(res)
+        var res repository.RemoveStatus
+        var err error
+        if o.All </span><span class="cov8" title="1">{
+                // if all flag is set, remove all history
+                res, err = o.JrpRepository.RemoveHistoryAll(jrpDBFilePath, o.Force)
+        }</span> else<span class="cov8" title="1"> {
+                // if IDs are specified, remove history by IDs
+                res, err = o.JrpRepository.RemoveHistoryByIDs(jrpDBFilePath, IDs, o.Force)
+        }</span>
+        <span class="cov8" title="1">o.writeHistoryRemoveResult(res)
 
-        return err
-}</span>
+        return err</span>
+}
 
 // writeHistoryRemoveResult writes the result of history remove.
 func (o *historyRemoveOption) writeHistoryRemoveResult(result repository.RemoveStatus) <span class="cov8" title="1">{
@@ -6162,8 +6011,6 @@ func NewHistorySearchCommand(g *GlobalOption) *cobraproxy.CommandInstance <span 
 
         cmd.FieldCommand.Use = constant.HISTORY_SEARCH_USE
         cmd.FieldCommand.Aliases = constant.GetHistorySearchAliases()
-        cmd.FieldCommand.Short = constant.HISTORY_SEARCH_SHORT
-        cmd.FieldCommand.Long = constant.HISTORY_SEARCH_LONG
         cmd.FieldCommand.RunE = o.historySearchRunE
 
         cmd.PersistentFlags().BoolVarP(
@@ -6344,8 +6191,6 @@ func NewHistoryShowCommand(g *GlobalOption) *cobraproxy.CommandInstance <span cl
         cmd := cobraProxy.NewCommand()
 
         cmd.FieldCommand.Use = constant.HISTORY_SHOW_USE
-        cmd.FieldCommand.Short = constant.HISTORY_SHOW_SHORT
-        cmd.FieldCommand.Long = constant.HISTORY_SHOW_LONG
         cmd.FieldCommand.Args = cobra.MaximumNArgs(1)
         cmd.FieldCommand.RunE = o.historyShowRunE
 
@@ -6590,8 +6435,6 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
         cmd := cobraProxy.NewCommand()
 
         cmd.FieldCommand.Use = constant.ROOT_USE
-        cmd.FieldCommand.Short = constant.ROOT_SHORT
-        cmd.FieldCommand.Long = constant.ROOT_LONG
         cmd.FieldCommand.Version = v.GetVersion(ver)
         cmd.FieldCommand.SilenceErrors = true
         cmd.FieldCommand.SilenceUsage = true
@@ -6824,8 +6667,6 @@ func NewVersionCommand(g *GlobalOption) *cobraproxy.CommandInstance <span class=
         cmd := cobraProxy.NewCommand()
 
         cmd.FieldCommand.Use = constant.VERSION_USE
-        cmd.FieldCommand.Short = constant.VERSION_SHORT
-        cmd.FieldCommand.Long = constant.VERSION_LONG
         cmd.FieldCommand.RunE = g.versionRunE
 
         cmd.SetOut(g.Out)
