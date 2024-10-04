@@ -1,6 +1,7 @@
 package constant
 
 const (
+	GENERATE_USE           = "generate"
 	GENARETE_HELP_TEMPLATE = `✨ Generate Japanese random phrase(s).
 
 You can specify how many phrases to generate by flag "-n" or "--number" or a number argument.
@@ -24,16 +25,6 @@ Flags:
 
 Arguments:
   number  🔢 number of phrases to generate (default 1, e.g: 10).
-`
-	GENERATE_USE   = "generate"
-	GENERATE_SHORT = "✨ Generate Japanese random phrase(s)."
-	GENERATE_LONG  = `✨ Generate Japanese random phrase(s).
-
-You can specify how many phrases to generate by flag "-n" or "--number" or a number argument.
-If both are provided, the larger number takes precedence.
-
-And you can specify the prefix or suffix of the phrase(s) to generate
-by the flag "-p" or "--prefix" and "-s" or "--suffix".
 `
 	GENERATE_FLAG_NUMBER              = "number"
 	GENERATE_FLAG_NUMBER_SHORTHAND    = "n"

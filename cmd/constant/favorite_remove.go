@@ -1,6 +1,7 @@
 package constant
 
 const (
+	FAVORITE_REMOVE_USE           = "remove"
 	FAVORITE_REMOVE_HELP_TEMPLATE = `⭐🧹 Remove the favorited phrase(s).
 
 You can specify the favorited phrase(s) to remove with ID argument(s).
@@ -22,17 +23,6 @@ Flags:
 
 Arguments:
   ID  🆔 remove the favorite by the ID (e.g: 1 2 3).
-`
-	FAVORITE_REMOVE_USE   = "remove"
-	FAVORITE_REMOVE_SHORT = "⭐🧹 Remove the favorited phrase(s)."
-	FAVORITE_REMOVE_LONG  = `⭐🧹 Remove the favorited phrase(s).
-
-You can specify the favorited phrase(s) to remove with ID argument(s).
-You have to get ID from the "history" command.
-Multiple ID's can be specified separated by spaces.
-
-Also, you can remove all favorite by flag "-a" or "--all".
-This is the same as the "favorite clear" command.
 `
 	FAVORITE_REMOVE_FLAG_ALL             = "all"
 	FAVORITE_REMOVE_FLAG_ALL_SHORTHAND   = "a"

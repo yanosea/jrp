@@ -56,8 +56,6 @@ func NewHistoryRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 
 	cmd.FieldCommand.Use = constant.HISTORY_REMOVE_USE
 	cmd.FieldCommand.Aliases = constant.GetHistoryRemoveAliases()
-	cmd.FieldCommand.Short = constant.HISTORY_REMOVE_SHORT
-	cmd.FieldCommand.Long = constant.HISTORY_REMOVE_LONG
 	cmd.FieldCommand.RunE = o.historyRemoveRunE
 
 	cmd.PersistentFlags().BoolVarP(

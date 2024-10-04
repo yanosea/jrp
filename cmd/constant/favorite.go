@@ -1,6 +1,7 @@
 package constant
 
 const (
+	FAVORITE_USE           = "favorite"
 	FAVORITE_HELP_TEMPLATE = `⭐ Manage the favorited phrase(s) of the history of "generate" command.
 
 You can favorite (add) generated phrase(s) with its ID(s).
@@ -39,29 +40,6 @@ Arguments:
   number  📏 number how many phrases to show (default 10, e.g: 50).
 
 Use "jrp favorite [command] --help" for more information about a command.
-`
-	FAVORITE_USE   = "favorite"
-	FAVORITE_SHORT = "⭐ Manage the favorited phrase(s) of the history of \"generate\" command."
-	FAVORITE_LONG  = `⭐ Manage the favorited phrase(s) of the history of "generate" command.
-
-You can favorite (add) generated phrase(s) with its ID(s).
-Also, You can show, remove, search and clear the phrase(s) you favorited.
-
-You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
-jrp will get the most recent favorited phrase(s).
-If you don't specify the number of phrases, jrp will show the most recent 10 phrases by default.
-If both are provided, the larger number takes precedence.
-
-Also, you can show all phrases in the favorite by flag "-a" or "--all".
-If you use the flag, the number flag or argument will be ignored.
-
-You can use sub command below...
-
-  - 📖 show (You can abbreviate "show" sub command. ("jrp favorite" and "jrp favorite show" are the same.)
-	- 📌 add
-  - 🔍 search
-  - 🧹 remove
-  - ✨ clear
 `
 	FAVORITE_FLAG_NUMBER             = "number"
 	FAVORITE_FLAG_NUMBER_SHORTHAND   = "n"

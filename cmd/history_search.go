@@ -67,8 +67,6 @@ func NewHistorySearchCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 
 	cmd.FieldCommand.Use = constant.HISTORY_SEARCH_USE
 	cmd.FieldCommand.Aliases = constant.GetHistorySearchAliases()
-	cmd.FieldCommand.Short = constant.HISTORY_SEARCH_SHORT
-	cmd.FieldCommand.Long = constant.HISTORY_SEARCH_LONG
 	cmd.FieldCommand.RunE = o.historySearchRunE
 
 	cmd.PersistentFlags().BoolVarP(

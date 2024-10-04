@@ -1,6 +1,7 @@
 package constant
 
 const (
+	HISTORY_USE           = "history"
 	HISTORY_HELP_TEMPLATE = `📜 Manage the history of the "generate" command.
 
 You can show, remove, search and clear the history of the "generate" command.
@@ -37,26 +38,6 @@ Arguments:
   number  📏 number how many phrases to show (default 10, e.g: 50).
 
 Use "jrp history [command] --help" for more information about a command.
-`
-	HISTORY_USE   = "history"
-	HISTORY_SHORT = "📜 Manage the history of the \"generate\" command."
-	HISTORY_LONG  = `📜 Manage the history of the "generate" command.
-
-You can show, remove, search and clear the history of the "generate" command.
-
-You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
-jrp will get the most recent phrase(s) from the history.
-If you don't specify the number of phrases, jrp will show the most recent 10 phrases by default.
-
-Also, you can show all phrases in the history by flag "-a" or "--all".
-If you use the flag, the number flag or argument will be ignored.
-
-You can use sub command below...
-
-  - 📖 show (You can abbreviate "show" sub command. ("jrp history" and "jrp history show" are the same.)
-  - 🔍 search
-  - 🧹 remove
-  - ✨ clear
 `
 	HISTORY_FLAG_NUMBER             = "number"
 	HISTORY_FLAG_NUMBER_SHORTHAND   = "n"

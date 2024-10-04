@@ -59,8 +59,6 @@ func NewHistoryClearCommand(g *GlobalOption, promptuiProxy promptuiproxy.Promptu
 
 	cmd.FieldCommand.Use = constant.HISTORY_CLEAR_USE
 	cmd.FieldCommand.Aliases = constant.GetHistoryClearAliases()
-	cmd.FieldCommand.Short = constant.HISTORY_CLEAR_SHORT
-	cmd.FieldCommand.Long = constant.HISTORY_CLEAR_LONG
 	cmd.FieldCommand.RunE = o.historyClearRunE
 
 	cmd.PersistentFlags().BoolVarP(

@@ -16,8 +16,6 @@ func NewVersionCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 	cmd := cobraProxy.NewCommand()
 
 	cmd.FieldCommand.Use = constant.VERSION_USE
-	cmd.FieldCommand.Short = constant.VERSION_SHORT
-	cmd.FieldCommand.Long = constant.VERSION_LONG
 	cmd.FieldCommand.RunE = g.versionRunE
 
 	cmd.SetOut(g.Out)

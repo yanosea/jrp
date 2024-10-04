@@ -67,8 +67,6 @@ func NewFavoriteSearchCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 
 	cmd.FieldCommand.Use = constant.FAVORITE_SEARCH_USE
 	cmd.FieldCommand.Aliases = constant.GetFavoriteSearchAliases()
-	cmd.FieldCommand.Short = constant.FAVORITE_SEARCH_SHORT
-	cmd.FieldCommand.Long = constant.FAVORITE_SEARCH_LONG
 	cmd.FieldCommand.RunE = o.favoriteSearchRunE
 
 	cmd.PersistentFlags().BoolVarP(

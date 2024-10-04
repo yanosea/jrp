@@ -1,6 +1,7 @@
 package constant
 
 const (
+	FAVORITE_ADD_USE           = "add"
 	FAVORITE_ADD_HELP_TEMPLATE = `⭐📌 Favorite (add) phrase(s) in the history of the "generate" command.
 
 You can specify the phrase(s) to favorite with ID argument(s).
@@ -17,14 +18,6 @@ Flags:
 
 Arguments:
   ID  🆔 add the favorite by the ID (e.g: 1 2 3).
-`
-	FAVORITE_ADD_USE   = "add"
-	FAVORITE_ADD_SHORT = "⭐📌 Favorite (add) phrase(s) in the history of the \"generate\" command."
-	FAVORITE_ADD_LONG  = `⭐📌 Favorite (add) phrase(s) in the history of the "generate" command.
-
-You can specify the phrase(s) to favorite with ID argument(s).
-You have to get ID from the "history" command.
-Multiple ID's can be specified separated by spaces.
 `
 	FAVORITE_ADD_MESSAGE_NO_ID_SPECIFIED    = "⚡ No ID argument(s) specified..."
 	FAVORITE_ADD_MESSAGE_ADDED_SUCCESSFULLY = "✅ Favorite successfully!"

@@ -67,8 +67,6 @@ func NewFavoriteCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 
 	cmd.FieldCommand.Use = constant.FAVORITE_USE
 	cmd.FieldCommand.Aliases = constant.GetFavoriteAliases()
-	cmd.FieldCommand.Short = constant.FAVORITE_SHORT
-	cmd.FieldCommand.Long = constant.FAVORITE_LONG
 	cmd.FieldCommand.Args = cobra.MaximumNArgs(1)
 	cmd.FieldCommand.RunE = o.favoriteRunE
 

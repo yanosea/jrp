@@ -1,6 +1,7 @@
 package constant
 
 const (
+	HISTORY_CLEAR_USE           = "clear"
 	HISTORY_CLEAR_HELP_TEMPLATE = `📜✨ Clear the history of the "generate" command.
 
 You can clear all history.
@@ -15,13 +16,6 @@ Flags:
   -f, --force  ✨ clear all the history even if it is favorited
   -no-confirm  🚫 do not confirm before clearing the history
   -h, --help   🤝 help for clear
-`
-	HISTORY_CLEAR_USE   = "clear"
-	HISTORY_CLEAR_SHORT = "📜✨ Clear the history of the \"generate\" command."
-	HISTORY_CLEAR_LONG  = `📜✨ Clear the history of the "generate" command.
-
-You can clear all history.
-Also, you can clear the history even if it is favorited by using the "-f" or ""--force" flag.
 `
 	HISTORY_CLEAR_FLAG_FORCE                  = "force"
 	HISTORY_CLEAR_FLAG_FORCE_SHORTHAND        = "f"

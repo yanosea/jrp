@@ -84,8 +84,6 @@ func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 
 	cmd.FieldCommand.Use = constant.GENERATE_USE
 	cmd.FieldCommand.Aliases = constant.GetGenerateAliases()
-	cmd.FieldCommand.Short = constant.GENERATE_SHORT
-	cmd.FieldCommand.Long = constant.GENERATE_LONG
 	cmd.FieldCommand.Args = cobra.MaximumNArgs(1)
 	cmd.FieldCommand.RunE = o.generateRunE
 

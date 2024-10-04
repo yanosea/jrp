@@ -58,8 +58,6 @@ func NewFavoriteClearCommand(g *GlobalOption, promptuiProxy promptuiproxy.Prompt
 
 	cmd.FieldCommand.Use = constant.FAVORITE_CLEAR_USE
 	cmd.FieldCommand.Aliases = constant.GetFavoriteClearAliases()
-	cmd.FieldCommand.Short = constant.FAVORITE_CLEAR_SHORT
-	cmd.FieldCommand.Long = constant.FAVORITE_CLEAR_LONG
 	cmd.FieldCommand.RunE = o.favoriteClearRunE
 
 	cmd.PersistentFlags().BoolVarP(

@@ -56,8 +56,6 @@ func NewFavoriteRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 
 	cmd.FieldCommand.Use = constant.FAVORITE_REMOVE_USE
 	cmd.FieldCommand.Aliases = constant.GetFavoriteRemoveAliases()
-	cmd.FieldCommand.Short = constant.FAVORITE_REMOVE_SHORT
-	cmd.FieldCommand.Long = constant.FAVORITE_REMOVE_LONG
 	cmd.FieldCommand.RunE = o.favoriteRemoveRunE
 
 	cmd.PersistentFlags().BoolVarP(

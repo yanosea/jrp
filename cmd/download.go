@@ -55,8 +55,6 @@ func NewDownloadCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 
 	cmd.FieldCommand.Use = constant.DOWNLOAD_USE
 	cmd.FieldCommand.Aliases = constant.GetDownloadAliases()
-	cmd.FieldCommand.Short = constant.DOWNLOAD_SHORT
-	cmd.FieldCommand.Long = constant.DOWNLOAD_LONG
 	cmd.FieldCommand.RunE = o.downloadRunE
 
 	cmd.SetOut(o.Out)

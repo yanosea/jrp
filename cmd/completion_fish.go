@@ -13,8 +13,6 @@ func NewCompletionFishCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 	cmd := cobraProxy.NewCommand()
 
 	cmd.FieldCommand.Use = constant.COMPLETION_FISH_USE
-	cmd.FieldCommand.Short = constant.COMPLETION_FISH_SHORT
-	cmd.FieldCommand.Long = constant.COMPLETION_FISH_LONG
 	cmd.FieldCommand.RunE = g.completionFishRunE
 
 	cmd.SetOut(g.Out)

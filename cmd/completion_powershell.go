@@ -13,8 +13,6 @@ func NewCompletionPowerShellCommand(g *GlobalOption) *cobraproxy.CommandInstance
 	cmd := cobraProxy.NewCommand()
 
 	cmd.FieldCommand.Use = constant.COMPLETION_POWERSHELL_USE
-	cmd.FieldCommand.Short = constant.COMPLETION_POWERSHELL_SHORT
-	cmd.FieldCommand.Long = constant.COMPLETION_POWERSHELL_LONG
 	cmd.FieldCommand.RunE = g.completionPowerShellRunE
 
 	cmd.SetOut(g.Out)

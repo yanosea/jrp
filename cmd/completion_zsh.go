@@ -13,8 +13,6 @@ func NewCompletionZshCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 	cmd := cobraProxy.NewCommand()
 
 	cmd.FieldCommand.Use = constant.COMPLETION_ZSH_USE
-	cmd.FieldCommand.Short = constant.COMPLETION_ZSH_SHORT
-	cmd.FieldCommand.Long = constant.COMPLETION_ZSH_LONG
 	cmd.FieldCommand.RunE = g.completionZshRunE
 
 	cmd.SetOut(g.Out)

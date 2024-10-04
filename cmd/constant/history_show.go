@@ -1,6 +1,7 @@
 package constant
 
 const (
+	HISTORY_SHOW_USE           = "show"
 	HISTORY_SHOW_HELP_TEMPLATE = `📜📖 Show the history of the "generate" command.
 
 You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
@@ -24,17 +25,6 @@ Flags:
 
 Arguments:
   number  📏 number how many phrases to show (default 10, e.g: 50).
-`
-	HISTORY_SHOW_USE   = "show"
-	HISTORY_SHOW_SHORT = "📜📖 Show the history of the \"generate\" command."
-	HISTORY_SHOW_LONG  = `📜📖 Show the history of the "generate" command.
-
-You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
-jrp will get the most recent phrase(s) from the history.
-If you don't specify the number of phrases, jrp will show the most recent 10 phrases by default.
-
-Also, you can show all phrases in the history by flag "-a" or "--all".
-If you use the flag, the number flag or argument will be ignored.
 `
 	HISTORY_SHOW_FLAG_NUMBER             = "number"
 	HISTORY_SHOW_FLAG_NUMBER_SHORTHAND   = "n"

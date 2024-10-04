@@ -1,6 +1,7 @@
 package constant
 
 const (
+	FAVORITE_SEARCH_USE           = "search"
 	FAVORITE_SEARCH_HELP_TEMPLATE = `⭐🔍 Search the favorited phrase(s).
 
 You can search favorited phrase(s) with keyword argument(s).
@@ -29,22 +30,6 @@ Flags:
 
 Arguments:
   keywords  💬 search phrase(s) by keywords. Multiple keywords are separated by space.
-`
-	FAVORITE_SEARCH_USE   = "search"
-	FAVORITE_SEARCH_SHORT = "⭐🔍 Search the favorited phrase(s)."
-	FAVORITE_SEARCH_LONG  = `⭐🔍 Search the favorited phrase(s).
-
-You can search favorited phrase(s) with keyword argument(s).
-Multiple keywords are separated by a space.
-
-If you want to search favorited phrase(s) by AND condition, you can use flag "-A" or "--and".
-OR condition is by default.
-
-You can specify how many results to show with flag "-n" or "--number".
-If you don't specify the number of phrases, jrp will show the most recent 10 results by default.
-
-Also, you can show all results by flag "-a" or "--all".
-If you use the flag, the number flag will be ignored.
 `
 	FAVORITE_SEARCH_FLAG_AND                = "and"
 	FAVORITE_SEARCH_FLAG_AND_SHORTHAND      = "A"

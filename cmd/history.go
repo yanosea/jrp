@@ -66,8 +66,6 @@ func NewHistoryCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 	cmd := cobraProxy.NewCommand()
 	cmd.FieldCommand.Use = constant.HISTORY_USE
 	cmd.FieldCommand.Aliases = constant.GetHistoryAliases()
-	cmd.FieldCommand.Short = constant.HISTORY_SHORT
-	cmd.FieldCommand.Long = constant.HISTORY_LONG
 	cmd.FieldCommand.Args = cobra.MaximumNArgs(1)
 	cmd.FieldCommand.RunE = o.historyRunE
 

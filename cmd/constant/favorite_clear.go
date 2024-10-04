@@ -1,6 +1,7 @@
 package constant
 
 const (
+	FAVORITE_CLEAR_USE           = "clear"
 	FAVORITE_CLEAR_HELP_TEMPLATE = `⭐✨ Clear the favorited phrase(s).
 
 You can clear all favorited phrase(s).
@@ -15,14 +16,6 @@ Usage:
 Flags:
   -no-confirm  🚫 do not confirm before clearing the history
   -h, --help   🤝 help for clear
-`
-	FAVORITE_CLEAR_USE   = "clear"
-	FAVORITE_CLEAR_SHORT = "⭐✨ Clear the favorited phrase(s)."
-	FAVORITE_CLEAR_LONG  = `⭐✨ Clear the favorited phrase(s).
-
-You can clear all favorited phrase(s).
-This is the same as the "favorite remove -a" command.
-This does not remove the history of the "generate" command, just remove the favorite.
 `
 	FAVORITE_CLEAR_FLAG_NO_CONFIRM             = "no-confirm"
 	FAVORITE_CLEAR_FLAG_NO_CONFIRM_SHORTHAND   = ""

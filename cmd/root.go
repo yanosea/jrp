@@ -136,8 +136,6 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
 	cmd := cobraProxy.NewCommand()
 
 	cmd.FieldCommand.Use = constant.ROOT_USE
-	cmd.FieldCommand.Short = constant.ROOT_SHORT
-	cmd.FieldCommand.Long = constant.ROOT_LONG
 	cmd.FieldCommand.Version = v.GetVersion(ver)
 	cmd.FieldCommand.SilenceErrors = true
 	cmd.FieldCommand.SilenceUsage = true

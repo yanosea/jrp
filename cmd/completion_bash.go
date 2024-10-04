@@ -13,8 +13,6 @@ func NewCompletionBashCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 	cmd := cobraProxy.NewCommand()
 
 	cmd.FieldCommand.Use = constant.COMPLETION_BASH_USE
-	cmd.FieldCommand.Short = constant.COMPLETION_BASH_SHORT
-	cmd.FieldCommand.Long = constant.COMPLETION_BASH_LONG
 	cmd.FieldCommand.RunE = g.completionBashRunE
 
 	cmd.SetOut(g.Out)

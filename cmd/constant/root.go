@@ -1,6 +1,7 @@
 package constant
 
 const (
+	ROOT_USE           = "jrp"
 	ROOT_HELP_TEMPLATE = `🎲 jrp is the CLI tool to generate Japanese random phrase(s).
 
 You can generate Japanese random phrase(s).
@@ -37,18 +38,6 @@ Arguments:
   number  🔢 number of phrases to generate (e.g: 10).
 
 Use "jrp [command] --help" for more information about a command.
-`
-	ROOT_USE   = "jrp"
-	ROOT_SHORT = "🎲 jrp is the CLI tool to generate Japanese random phrase(s)."
-	ROOT_LONG  = `🎲 jrp is the CLI tool to generate Japanese random phrase(s).
-
-You can generate Japanese random phrase(s).
-
-You can specify how many phrases to generate by flag "-n" or "--number" or a number argument.
-If both are provided, the larger number takes precedence.
-
-And you can specify the prefix or suffix of the phrase(s) to generate
-by the flag "-p" or "--prefix" and "-s" or "--suffix".
 `
 	ROOT_FLAG_NUMBER              = "number"
 	ROOT_FLAG_NUMBER_SHORTHAND    = "n"

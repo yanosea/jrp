@@ -1,6 +1,7 @@
 package constant
 
 const (
+	FAVORITE_SHOW_USE           = "show"
 	FAVORITE_SHOW_HELP_TEMPLATE = `⭐📖 Show the favorited phrase(s).
 
 You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
@@ -24,17 +25,6 @@ Flags:
 
 Arguments:
   number  📏 number how many phrases to show (default 10, e.g: 50).
-`
-	FAVORITE_SHOW_USE   = "show"
-	FAVORITE_SHOW_SHORT = "⭐📖 Show the favorited phrase(s)."
-	FAVORITE_SHOW_LONG  = `⭐📖 Show the favorited phrase(s).
-
-You can specify how many phrases to show by flag "-n" or "--number" or a number argument.
-jrp will get the most recent favorited phrase(s).
-If you don't specify the number of phrases, jrp will show the most recent 10 phrases by default.
-
-Also, you can show all phrases in the favorite by flag "-a" or "--all".
-If you use the flag, the number flag or argument will be ignored.
 `
 	FAVORITE_SHOW_FLAG_NUMBER             = "number"
 	FAVORITE_SHOW_FLAG_NUMBER_SHORTHAND   = "n"

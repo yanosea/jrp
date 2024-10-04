@@ -1,6 +1,7 @@
 package constant
 
 const (
+	HISTORY_REMOVE_USE           = "remove"
 	HISTORY_REMOVE_HELP_TEMPLATE = `📜🧹 Remove the history of the "generate" command.
 
 You can specify the history to remove with ID argument(s).
@@ -20,16 +21,6 @@ Flags:
 
 Arguments:
   ID  🆔 remove the history by the ID (e.g: 1 2 3).
-`
-	HISTORY_REMOVE_USE   = "remove"
-	HISTORY_REMOVE_SHORT = "📜🧹 Show the history of the \"generate\" command."
-	HISTORY_REMOVE_LONG  = `📜🧹 Show the history of the "generate" command.
-
-You can specify the history to remove with ID argument(s).
-You have to get ID from the "history" command.
-Multiple ID's can be specified separated by spaces.
-
-Also, you can remove the history even if it is favorited by using the "-f" or ""--force" flag.
 `
 	HISTORY_REMOVE_FLAG_FORCE             = "force"
 	HISTORY_REMOVE_FLAG_FORCE_SHORTHAND   = "f"
