@@ -131,6 +131,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -166,6 +167,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -201,6 +203,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -260,6 +263,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -319,6 +323,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "2"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -378,6 +383,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -427,6 +433,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1", "2"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -476,6 +483,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -551,6 +559,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -626,6 +635,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "3", "4"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -701,6 +711,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1", "2"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -757,6 +768,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "2", "3"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -823,6 +835,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -885,6 +898,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -947,6 +961,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "2"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1009,6 +1024,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1071,6 +1087,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1", "2"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1133,6 +1150,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1211,6 +1229,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1289,6 +1308,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "3", "4"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1367,6 +1387,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1", "2"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1445,6 +1466,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "2", "3"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1523,6 +1545,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1585,6 +1608,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1647,6 +1671,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "2"},
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1709,6 +1734,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1"},
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1761,6 +1787,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1", "2"},
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1813,6 +1840,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1891,6 +1919,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -1969,6 +1998,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "3", "4"},
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -2047,6 +2077,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1", "2"},
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -2106,6 +2137,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "2", "3"},
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -2167,6 +2199,591 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 			},
 		},
 		{
+			name: "positive testing (no jrps in the database file, not favorited, not force, all)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  []string{"history", "remove"},
+						All:                   true,
+						Force:                 false,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.YellowString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_NONE) + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (one jrp in the database file, not favorited, not force, all)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  []string{"history", "remove"},
+						All:                   true,
+						Force:                 false,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.GreenString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_SUCCESSFULLY) + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (one jrp in the database file, favorited, not force, all)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  []string{"history", "remove"},
+						All:                   true,
+						Force:                 false,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.YellowString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_NONE) + "\n",
+			wantStdErr: "",
+			wantJrps: []model.Jrp{
+				{
+					ID:          1,
+					Phrase:      "test1",
+					Prefix:      sqlProxy.StringToNullString(""),
+					Suffix:      sqlProxy.StringToNullString(""),
+					IsFavorited: 1,
+					CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+					UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+				},
+			},
+			wantErr: false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (one jrp in the database file, favorited, force, all)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  []string{"history", "remove"},
+						All:                   true,
+						Force:                 true,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.GreenString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_SUCCESSFULLY) + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, both not favorited, not force, all)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  []string{"history", "remove"},
+						All:                   true,
+						Force:                 false,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.GreenString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_SUCCESSFULLY) + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, one is favorited, the other is not, not force, all)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  []string{"history", "remove"},
+						All:                   true,
+						Force:                 false,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.GreenString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_SUCCESSFULLY) + "\n",
+			wantStdErr: "",
+			wantJrps: []model.Jrp{
+				{
+					ID:          1,
+					Phrase:      "test1",
+					Prefix:      sqlProxy.StringToNullString(""),
+					Suffix:      sqlProxy.StringToNullString(""),
+					IsFavorited: 1,
+					CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+					UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+				},
+			},
+			wantErr: false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, both favorited, not force, all)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  []string{"history", "remove"},
+						All:                   true,
+						Force:                 false,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.YellowString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_NONE) + "\n",
+			wantStdErr: "",
+			wantJrps: []model.Jrp{
+				{
+					ID:          1,
+					Phrase:      "test1",
+					Prefix:      sqlProxy.StringToNullString(""),
+					Suffix:      sqlProxy.StringToNullString(""),
+					IsFavorited: 1,
+					CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+					UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+				},
+				{
+					ID:          2,
+					Phrase:      "test2",
+					Prefix:      sqlProxy.StringToNullString(""),
+					Suffix:      sqlProxy.StringToNullString(""),
+					IsFavorited: 1,
+					CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+					UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+				},
+			},
+			wantErr: false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, both not favorited, force, all)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  []string{"history", "remove"},
+						All:                   true,
+						Force:                 true,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.GreenString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_SUCCESSFULLY) + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, one is favorited, the other is not, force, all)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  []string{"history", "remove"},
+						All:                   true,
+						Force:                 true,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.GreenString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_SUCCESSFULLY) + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, both favorited, force, all)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  []string{"history", "remove"},
+						All:                   true,
+						Force:                 true,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.GreenString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_SUCCESSFULLY) + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
 			name: "negative testing (DBFileDirPathProvider.GetJrpDBFileDirPath() failed)",
 			fields: fields{
 				t: t,
@@ -2175,6 +2792,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1", "2"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: mockDBFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -2210,6 +2828,7 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"history", "remove", "1", "2"},
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -2308,6 +2927,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 		Out                   ioproxy.WriterInstanceInterface
 		ErrOut                ioproxy.WriterInstanceInterface
 		Args                  []string
+		All                   bool
 		Force                 bool
 		DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 		JrpRepository         repository.JrpRepositoryInterface
@@ -2332,6 +2952,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  nil,
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2360,6 +2981,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2388,6 +3010,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  nil,
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2440,6 +3063,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2492,6 +3116,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "2"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2544,6 +3169,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "1"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2586,6 +3212,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "1", "2"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2628,6 +3255,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  nil,
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2696,6 +3324,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2764,6 +3393,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "3", "4"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2832,6 +3462,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "1", "2"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2881,6 +3512,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "2", "3"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2940,6 +3572,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  nil,
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -2995,6 +3628,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3050,6 +3684,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "2"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3105,6 +3740,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "1"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3160,6 +3796,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "1", "2"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3215,6 +3852,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  nil,
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3286,6 +3924,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3357,6 +3996,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "3", "4"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3428,6 +4068,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "1", "2"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3499,6 +4140,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "2", "3"},
+				All:                   false,
 				Force:                 false,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3570,6 +4212,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  nil,
+				All:                   false,
 				Force:                 true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3625,6 +4268,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{},
+				All:                   false,
 				Force:                 true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3680,6 +4324,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "2"},
+				All:                   false,
 				Force:                 true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3735,6 +4380,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "1"},
+				All:                   false,
 				Force:                 true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3780,6 +4426,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "1", "2"},
+				All:                   false,
 				Force:                 true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3825,6 +4472,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  nil,
+				All:                   false,
 				Force:                 true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3896,6 +4544,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{},
+				All:                   false,
 				Force:                 true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -3967,6 +4616,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "3", "4"},
+				All:                   false,
 				Force:                 true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -4038,6 +4688,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "1", "2"},
+				All:                   false,
 				Force:                 true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -4090,6 +4741,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   osproxy.Stdout,
 				ErrOut:                osproxy.Stderr,
 				Args:                  []string{"history", "remove", "2", "3"},
+				All:                   false,
 				Force:                 true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
@@ -4146,6 +4798,522 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				}
 			},
 		},
+
+		{
+			name: "positive testing (no jrps in the database file, not favorited, not force, all)",
+			fields: fields{
+				Out:                   osproxy.Stdout,
+				ErrOut:                osproxy.Stderr,
+				Args:                  []string{"history", "remove"},
+				All:                   true,
+				Force:                 false,
+				DBFileDirPathProvider: dbFileDirPathProvider,
+				JrpRepository:         jrpRepository,
+				Utility:               util,
+			},
+			args: args{
+				jrpDBFilePath: jrpDBFilePath,
+				IDs:           []int{},
+			},
+			wantJrps: nil,
+			wantErr:  false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (one jrp in the database file, not favorited, not force, all)",
+			fields: fields{
+				Out:                   osproxy.Stdout,
+				ErrOut:                osproxy.Stderr,
+				Args:                  []string{"history", "remove"},
+				All:                   true,
+				Force:                 false,
+				DBFileDirPathProvider: dbFileDirPathProvider,
+				JrpRepository:         jrpRepository,
+				Utility:               util,
+			},
+			args: args{
+				jrpDBFilePath: jrpDBFilePath,
+				IDs:           []int{},
+			},
+			wantJrps: nil,
+			wantErr:  false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (one jrp in the database file, favorited, not force, all)",
+			fields: fields{
+				Out:                   osproxy.Stdout,
+				ErrOut:                osproxy.Stderr,
+				Args:                  []string{"history", "remove"},
+				All:                   true,
+				Force:                 false,
+				DBFileDirPathProvider: dbFileDirPathProvider,
+				JrpRepository:         jrpRepository,
+				Utility:               util,
+			},
+			args: args{
+				jrpDBFilePath: jrpDBFilePath,
+				IDs:           []int{},
+			},
+			wantJrps: []model.Jrp{
+				{
+					ID:          1,
+					Phrase:      "test1",
+					Prefix:      sqlProxy.StringToNullString(""),
+					Suffix:      sqlProxy.StringToNullString(""),
+					IsFavorited: 1,
+					CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+					UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+				},
+			},
+			wantErr: false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (one jrp in the database file, favorited, force, all)",
+			fields: fields{
+				Out:                   osproxy.Stdout,
+				ErrOut:                osproxy.Stderr,
+				Args:                  []string{"history", "remove"},
+				All:                   true,
+				Force:                 true,
+				DBFileDirPathProvider: dbFileDirPathProvider,
+				JrpRepository:         jrpRepository,
+				Utility:               util,
+			},
+			args: args{
+				jrpDBFilePath: jrpDBFilePath,
+				IDs:           []int{},
+			},
+			wantJrps: nil,
+			wantErr:  false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, both not favorited, not force, all)",
+			fields: fields{
+				Out:                   osproxy.Stdout,
+				ErrOut:                osproxy.Stderr,
+				Args:                  []string{"history", "remove"},
+				All:                   true,
+				Force:                 false,
+				DBFileDirPathProvider: dbFileDirPathProvider,
+				JrpRepository:         jrpRepository,
+				Utility:               util,
+			},
+			args: args{
+				jrpDBFilePath: jrpDBFilePath,
+				IDs:           []int{},
+			},
+			wantJrps: nil,
+			wantErr:  false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, one is favorited, the other is not, not force, all)",
+			fields: fields{
+				Out:                   osproxy.Stdout,
+				ErrOut:                osproxy.Stderr,
+				Args:                  []string{"history", "remove"},
+				All:                   true,
+				Force:                 false,
+				DBFileDirPathProvider: dbFileDirPathProvider,
+				JrpRepository:         jrpRepository,
+				Utility:               util,
+			},
+			args: args{
+				jrpDBFilePath: jrpDBFilePath,
+				IDs:           []int{},
+			},
+			wantJrps: []model.Jrp{
+				{
+					ID:          1,
+					Phrase:      "test1",
+					Prefix:      sqlProxy.StringToNullString(""),
+					Suffix:      sqlProxy.StringToNullString(""),
+					IsFavorited: 1,
+					CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+					UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+				},
+			},
+			wantErr: false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, both favorited, not force, all)",
+			fields: fields{
+				Out:                   osproxy.Stdout,
+				ErrOut:                osproxy.Stderr,
+				Args:                  []string{"history", "remove"},
+				All:                   true,
+				Force:                 false,
+				DBFileDirPathProvider: dbFileDirPathProvider,
+				JrpRepository:         jrpRepository,
+				Utility:               util,
+			},
+			args: args{
+				jrpDBFilePath: jrpDBFilePath,
+				IDs:           []int{},
+			},
+			wantJrps: []model.Jrp{
+				{
+					ID:          1,
+					Phrase:      "test1",
+					Prefix:      sqlProxy.StringToNullString(""),
+					Suffix:      sqlProxy.StringToNullString(""),
+					IsFavorited: 1,
+					CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+					UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+				},
+				{
+					ID:          2,
+					Phrase:      "test2",
+					Prefix:      sqlProxy.StringToNullString(""),
+					Suffix:      sqlProxy.StringToNullString(""),
+					IsFavorited: 1,
+					CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+					UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+				},
+			},
+			wantErr: false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, both not favorited, force, all)",
+			fields: fields{
+				Out:                   osproxy.Stdout,
+				ErrOut:                osproxy.Stderr,
+				Args:                  []string{"history", "remove"},
+				All:                   true,
+				Force:                 true,
+				DBFileDirPathProvider: dbFileDirPathProvider,
+				JrpRepository:         jrpRepository,
+				Utility:               util,
+			},
+			args: args{
+				jrpDBFilePath: jrpDBFilePath,
+				IDs:           []int{},
+			},
+			wantJrps: nil,
+			wantErr:  false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, one is favorited, the other is not, force, all)",
+			fields: fields{
+				Out:                   osproxy.Stdout,
+				ErrOut:                osproxy.Stderr,
+				Args:                  []string{"history", "remove"},
+				All:                   true,
+				Force:                 true,
+				DBFileDirPathProvider: dbFileDirPathProvider,
+				JrpRepository:         jrpRepository,
+				Utility:               util,
+			},
+			args: args{
+				jrpDBFilePath: jrpDBFilePath,
+				IDs:           []int{},
+			},
+			wantJrps: nil,
+			wantErr:  false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (two jrps in the database file, both favorited, force, all)",
+			fields: fields{
+				Out:                   osproxy.Stdout,
+				ErrOut:                osproxy.Stderr,
+				Args:                  []string{"history", "remove"},
+				All:                   true,
+				Force:                 true,
+				DBFileDirPathProvider: dbFileDirPathProvider,
+				JrpRepository:         jrpRepository,
+				Utility:               util,
+			},
+			args: args{
+				jrpDBFilePath: jrpDBFilePath,
+				IDs:           []int{},
+			},
+			wantJrps: nil,
+			wantErr:  false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.SaveHistory(
+					jrpDBFilePath,
+					[]model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString(""),
+							Suffix:    sqlProxy.StringToNullString(""),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					},
+				); err != nil {
+					t.Errorf("JrpRepository.SaveHistory() : error =\n%v", err)
+				}
+				if _, err := jrpRepository.AddFavoriteByIDs(jrpDBFilePath, []int{1, 2}); err != nil {
+					t.Errorf("JrpRepository.AddFavoriteByIDs() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -4158,6 +5326,7 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Out:                   tt.fields.Out,
 				ErrOut:                tt.fields.ErrOut,
 				Args:                  tt.fields.Args,
+				All:                   tt.fields.All,
 				Force:                 tt.fields.Force,
 				DBFileDirPathProvider: tt.fields.DBFileDirPathProvider,
 				JrpRepository:         tt.fields.JrpRepository,
@@ -4228,6 +5397,7 @@ func Test_historyRemoveOption_writeHistoryRemoveResult(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  osproxy.Args[1:],
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -4250,6 +5420,7 @@ func Test_historyRemoveOption_writeHistoryRemoveResult(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  osproxy.Args[1:],
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -4272,6 +5443,7 @@ func Test_historyRemoveOption_writeHistoryRemoveResult(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  osproxy.Args[1:],
+						All:                   false,
 						Force:                 false,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
@@ -4294,6 +5466,7 @@ func Test_historyRemoveOption_writeHistoryRemoveResult(t *testing.T) {
 						Out:                   capturer.OutBuffer,
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  osproxy.Args[1:],
+						All:                   false,
 						Force:                 true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,

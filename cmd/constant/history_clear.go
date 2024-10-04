@@ -5,6 +5,7 @@ const (
 	HISTORY_CLEAR_HELP_TEMPLATE = `📜✨ Clear the history of the "generate" command.
 
 You can clear all history.
+This is the same as the "history remove -a" command.
 Also, you can clear the history even if it is favorited by using the "-f" or ""--force" flag.
 
 Usage:
