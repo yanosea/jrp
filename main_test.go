@@ -303,7 +303,7 @@ func Test_main(t *testing.T) {
 			wantErr:               false,
 		},
 		{
-			name: "clear histories (jrp favorite clear)",
+			name: "clear histories (jrp favorite clear --no-confirm)",
 			fields: fields{
 				t: t,
 				fnc: func() {
@@ -316,7 +316,7 @@ func Test_main(t *testing.T) {
 				},
 				capturer: capturer,
 			},
-			args:                  []string{"path/to/jrp", "history", "clear"},
+			args:                  []string{"path/to/jrp", "history", "clear", "--no-confirm"},
 			wantStdOut:            colorProxy.GreenString(constant.HISTORY_CLEAR_MESSAGE_CLEARED_SUCCESSFULLY) + "\n",
 			wantStdErr:            "",
 			wantJrpCount:          1,
