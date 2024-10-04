@@ -12,6 +12,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
 	"github.com/yanosea/jrp/app/proxy/os"
+	"github.com/yanosea/jrp/app/proxy/promptui"
 	"github.com/yanosea/jrp/app/proxy/sort"
 	"github.com/yanosea/jrp/app/proxy/sql"
 	"github.com/yanosea/jrp/app/proxy/strconv"
@@ -27,13 +28,15 @@ type historyRemoveOption struct {
 	Args                  []string
 	All                   bool
 	Force                 bool
+	NoConfirm             bool
 	DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 	JrpRepository         repository.JrpRepositoryInterface
+	PromptuiProxy         promptuiproxy.Promptui
 	Utility               utility.UtilityInterface
 }
 
 // NewHistoryRemoveCommand creates a new history remove command.
-func NewHistoryRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance {
+func NewHistoryRemoveCommand(g *GlobalOption, promptuiProxy promptuiproxy.Promptui) *cobraproxy.CommandInstance {
 	o := &historyRemoveOption{
 		Out:     g.Out,
 		ErrOut:  g.ErrOut,
@@ -51,6 +54,7 @@ func NewHistoryRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
+	o.PromptuiProxy = promptuiProxy
 
 	cobraProxy := cobraproxy.New()
 	cmd := cobraProxy.NewCommand()
@@ -72,6 +76,13 @@ func NewHistoryRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		constant.HISTORY_REMOVE_FLAG_FORCE_SHORTHAND,
 		constant.HISTORY_REMOVE_FLAG_FORCE_DEFAULT,
 		constant.HISTORY_REMOVE_FLAG_FORCE_DESCRIPTION,
+	)
+	cmd.PersistentFlags().BoolVarP(
+		&o.NoConfirm,
+		constant.HISTORY_REMOVE_FLAG_NO_CONFIRM,
+		constant.HISTORY_REMOVE_FLAG_NO_CONFIRM_SHORTHAND,
+		constant.HISTORY_REMOVE_FLAG_NO_CONFIRM_DEFAULT,
+		constant.HISTORY_REMOVE_FLAG_NO_CONFIRM_DESCRIPTION,
 	)
 
 	cmd.SetOut(g.Out)
@@ -116,6 +127,22 @@ func (o *historyRemoveOption) historyRemoveRunE(_ *cobra.Command, _ []string) er
 	// create the directory if it does not exist
 	if err := o.Utility.CreateDirIfNotExist(jrpDBFileDirPath); err != nil {
 		return err
+	}
+
+	// write prompt if all flag is set and no-confirm option is not set
+	if o.All && !o.NoConfirm {
+		colorProxy := colorproxy.New()
+		prompt := o.PromptuiProxy.NewPrompt()
+		prompt.SetLabel(colorProxy.YellowString(constant.HISTORY_REMOVE_PROMPT_REMOVE_ALL_LABEL))
+		result, err := prompt.Run()
+		if err != nil {
+			return err
+		}
+		if result != "y" && result != "Y" {
+			// write canceled message and do nothing
+			o.Utility.PrintlnWithWriter(o.Out, constant.HISTORY_REMOVE_MESSAGE_REMOVE_ALL_CANCELED)
+			return nil
+		}
 	}
 
 	filepathProxy := filepathproxy.New()

@@ -12,6 +12,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
 	"github.com/yanosea/jrp/app/proxy/os"
+	"github.com/yanosea/jrp/app/proxy/promptui"
 	"github.com/yanosea/jrp/app/proxy/sort"
 	"github.com/yanosea/jrp/app/proxy/sql"
 	"github.com/yanosea/jrp/app/proxy/strconv"
@@ -26,13 +27,15 @@ type favoriteRemoveOption struct {
 	ErrOut                ioproxy.WriterInstanceInterface
 	Args                  []string
 	All                   bool
+	NoConfirm             bool
 	DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 	JrpRepository         repository.JrpRepositoryInterface
+	PromptuiProxy         promptuiproxy.Promptui
 	Utility               utility.UtilityInterface
 }
 
 // NewFavoriteRemoveCommand creates a new favorite remove command.
-func NewFavoriteRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance {
+func NewFavoriteRemoveCommand(g *GlobalOption, promptuiProxy promptuiproxy.Promptui) *cobraproxy.CommandInstance {
 	o := &favoriteRemoveOption{
 		Out:     g.Out,
 		ErrOut:  g.ErrOut,
@@ -50,6 +53,7 @@ func NewFavoriteRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
+	o.PromptuiProxy = promptuiProxy
 
 	cobraProxy := cobraproxy.New()
 	cmd := cobraProxy.NewCommand()
@@ -64,6 +68,13 @@ func NewFavoriteRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		constant.FAVORITE_REMOVE_FLAG_ALL_SHORTHAND,
 		constant.FAVORITE_REMOVE_FLAG_ALL_DEFAULT,
 		constant.FAVORITE_REMOVE_FLAG_ALL_DESCRIPTION,
+	)
+	cmd.PersistentFlags().BoolVarP(
+		&o.NoConfirm,
+		constant.FAVORITE_REMOVE_FLAG_NO_CONFIRM,
+		constant.FAVORITE_REMOVE_FLAG_NO_CONFIRM_SHORTHAND,
+		constant.FAVORITE_REMOVE_FLAG_NO_CONFIRM_DEFAULT,
+		constant.FAVORITE_REMOVE_FLAG_NO_CONFIRM_DESCRIPTION,
 	)
 
 	cmd.SetOut(g.Out)
@@ -108,6 +119,22 @@ func (o *favoriteRemoveOption) favoriteRemoveRunE(_ *cobra.Command, _ []string) 
 	// create the directory if it does not exist
 	if err := o.Utility.CreateDirIfNotExist(jrpDBFileDirPath); err != nil {
 		return err
+	}
+
+	// write prompt if all flag is set and no-confirm option is not set
+	if o.All && !o.NoConfirm {
+		colorProxy := colorproxy.New()
+		prompt := o.PromptuiProxy.NewPrompt()
+		prompt.SetLabel(colorProxy.YellowString(constant.FAVORITE_REMOVE_PROMPT_REMOVE_ALL_LABEL))
+		result, err := prompt.Run()
+		if err != nil {
+			return err
+		}
+		if result != "y" && result != "Y" {
+			// write canceled message and do nothing
+			o.Utility.PrintlnWithWriter(o.Out, constant.FAVORITE_REMOVE_MESSAGE_REMOVE_ALL_CANCELED)
+			return nil
+		}
 	}
 
 	filepathProxy := filepathproxy.New()
