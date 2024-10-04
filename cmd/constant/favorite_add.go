@@ -8,6 +8,9 @@ You can specify the phrase(s) to favorite with ID argument(s).
 You have to get ID from the "history" command.
 Multiple ID's can be specified separated by spaces.
 
+This command can make the phrase(s) easier to find.
+And you will not be able to remove the phrase(s) with executing "history remove" and "history clear".
+
 Usage:
   jrp favorite add [flag]
   jrp favorite ad  [flag]
@@ -17,7 +20,7 @@ Flags:
   -h, --help  🤝 help for add
 
 Arguments:
-  ID  🆔 add the favorite by the ID (e.g: 1 2 3).
+  ID  🆔 add the favorite by the ID (e.g: 1 2 3)
 `
 	FAVORITE_ADD_MESSAGE_NO_ID_SPECIFIED    = "⚡ No ID argument(s) specified..."
 	FAVORITE_ADD_MESSAGE_ADDED_SUCCESSFULLY = "✅ Favorite successfully!"

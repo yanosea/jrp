@@ -18,11 +18,11 @@ Usage:
   jrp favorite r      [flag]
 
 Flags:
-  -a, --all   📁 remove all favorite.
+  -a, --all   ✨ remove all favorited phrase(s)
   -h, --help  🤝 help for remove
 
 Arguments:
-  ID  🆔 remove the favorite by the ID (e.g: 1 2 3).
+  ID  🆔 remove the favorite by the ID (e.g: 1 2 3)
 `
 	FAVORITE_REMOVE_FLAG_ALL             = "all"
 	FAVORITE_REMOVE_FLAG_ALL_SHORTHAND   = "a"

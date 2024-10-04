@@ -18,13 +18,13 @@ Usage:
   jrp favorite s    [flag]
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50).
-  -a, --all     📁 show all phrases in the favorite.
-  -P, --plain   📝 plain text output instead of table output.
+  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -a, --all     📁 show all favorited phrase(s)
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for show
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50).
+  number  📏 number how many phrases to show (default 10, e.g: 50)
 `
 	FAVORITE_SHOW_FLAG_NUMBER             = "number"
 	FAVORITE_SHOW_FLAG_NUMBER_SHORTHAND   = "n"

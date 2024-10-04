@@ -22,14 +22,14 @@ Usage:
   jrp history S      [flag]
 
 Flags:
-  -A, --and     🧠 search phrase(s) by AND condition.
-  -n, --number  📏 number how many results to show (default 10, e.g: 50).
-  -a, --all     📁 show all results in the history.
-  -P, --plain   📝 plain text output instead of table output.
+  -A, --and     🧠 search phrase(s) by AND condition
+  -n, --number  📏 number how many results to show (default 10, e.g: 50)
+  -a, --all     📁 show all results
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for search
 
 Arguments:
-  keywords  💬 search phrase(s) by keywords. Multiple keywords are separated by space.
+  keywords  💬 search phrase(s) by keywords (multiple keywords are separated by space)
 `
 	HISTORY_SEARCH_FLAG_AND                = "and"
 	HISTORY_SEARCH_FLAG_AND_SHORTHAND      = "A"

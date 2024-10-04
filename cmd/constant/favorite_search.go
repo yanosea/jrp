@@ -22,14 +22,14 @@ Usage:
   jrp favorite S      [flag]
 
 Flags:
-  -A, --and     🧠 search phrase(s) by AND condition.
-  -n, --number  📏 number how many results to show (default 10, e.g: 50).
-  -a, --all     📁 show all results in the favorite.
-  -P, --plain   📝 plain text output instead of table output.
+  -A, --and     🧠 search phrase(s) by AND condition
+  -n, --number  📏 number how many results to show (default 10, e.g: 50)
+  -a, --all     📁 show all results
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for search
 
 Arguments:
-  keywords  💬 search phrase(s) by keywords. Multiple keywords are separated by space.
+  keywords  💬 search phrase(s) by keywords (multiple keywords are separated by space)
 `
 	FAVORITE_SEARCH_FLAG_AND                = "and"
 	FAVORITE_SEARCH_FLAG_AND_SHORTHAND      = "A"

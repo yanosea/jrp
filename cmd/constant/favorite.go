@@ -31,13 +31,13 @@ Available Subommands:
   clear   ⭐✨ Clear the favorited phrase(s).
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50).
-  -a, --all     📁 show all phrases in the favorite.
-  -P, --plain   📝 plain text output instead of table output.
+  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -a, --all     📁 show all favorited phrase(s)
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for favorite
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50).
+  number  📏 number how many phrases to show (default 10, e.g: 50)
 
 Use "jrp favorite [command] --help" for more information about a command.
 `

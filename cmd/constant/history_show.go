@@ -18,13 +18,13 @@ Usage:
   jrp history s    [flag]
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50).
-  -a, --all     📁 show all phrases in the history.
-  -P, --plain   📝 plain text output instead of table output.
+  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -a, --all     📁 show all history
+  -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for show
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50).
+  number  📏 number how many phrases to show (default 10, e.g: 50)
 `
 	HISTORY_SHOW_FLAG_NUMBER             = "number"
 	HISTORY_SHOW_FLAG_NUMBER_SHORTHAND   = "n"

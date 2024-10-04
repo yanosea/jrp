@@ -16,11 +16,11 @@ Usage:
   jrp history r      [flag]
 
 Flags:
-  -f, --force  🧹 remove the history even if it is favorited
+  -f, --force  💪 remove the history even if it is favorited
   -h, --help   🤝 help for remove
 
 Arguments:
-  ID  🆔 remove the history by the ID (e.g: 1 2 3).
+  ID  🆔 remove the history by the ID (e.g: 1 2 3)
 `
 	HISTORY_REMOVE_FLAG_FORCE             = "force"
 	HISTORY_REMOVE_FLAG_FORCE_SHORTHAND   = "f"

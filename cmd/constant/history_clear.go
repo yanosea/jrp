@@ -13,7 +13,7 @@ Usage:
   jrp history c     [flag]
 
 Flags:
-  -f, --force  ✨ clear all the history even if it is favorited
+  -f, --force  💪 clear all the history even if it is favorited
   -no-confirm  🚫 do not confirm before clearing the history
   -h, --help   🤝 help for clear
 `

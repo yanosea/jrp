@@ -16,15 +16,15 @@ Usage:
   jrp g        [flags]
 
 Flags:
-  -n, --number   🔢 number of phrases to generate (default 1, e.g: 10).
-  -p  --prefix   💬 prefix of phrase(s) to generate.
-  -s  --suffix   💬 suffix of phrase(s) to generate.
-  -d  --dry-run  🧪 generate phrase(s) without saving to the history.
-  -P, --plain    📝 plain text output instead of table output.
+  -n, --number   🔢 number of phrases to generate (default 1, e.g: 10)
+  -p  --prefix   💬 prefix of phrase(s) to generate
+  -s  --suffix   💬 suffix of phrase(s) to generate
+  -d  --dry-run  🧪 generate phrase(s) without saving to the history
+  -P, --plain    📝 plain text output instead of table output
   -h, --help     🤝 help for generate
 
 Arguments:
-  number  🔢 number of phrases to generate (default 1, e.g: 10).
+  number  🔢 number of phrases to generate (default 1, e.g: 10)
 `
 	GENERATE_FLAG_NUMBER              = "number"
 	GENERATE_FLAG_NUMBER_SHORTHAND    = "n"
