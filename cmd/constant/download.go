@@ -2,7 +2,7 @@ package constant
 
 const (
 	DOWNLOAD_USE           = "download"
-	DOWNLOAD_HELP_TEMPLATE = `📦 Download WordNet Japan sqlite3 database file from the official site.
+	DOWNLOAD_HELP_TEMPLATE = `📦 Download WordNet Japan sqlite database file from the official web site.
 
 You have to download WordNet Japan sqlite database file to use jrp at first.
 jrp will download archive file from the official web site and decompress it to the database file.

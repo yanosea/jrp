@@ -25,7 +25,7 @@
 You can save the generated phrase(s) to the history and manage them.  
 Also, you can save the generated phrase(s) to the favorite and manage them.
 
-This tool uses [WordNet Japan sqlite3 database file](https://bond-lab.github.io/wnja/jpn/downloads.html).
+This tool uses [WordNet Japan sqlite database file](https://bond-lab.github.io/wnja/jpn/downloads.html).
 
 ## 💻 Usage
 
@@ -35,7 +35,7 @@ Usage:
   jrp [command]
 
 Available Subcommands:
-  download, dl,   d  📦 Download WordNet Japan sqlite3 database file from the official site.
+  download, dl,   d  📦 Download WordNet Japan sqlite database file from the official web site.
   generate, gen,  g  ✨ Generate Japanese random phrase(s). You can abbreviate "generate" sub command. ("jrp" and "jrp generate" are the same.)
   history,  hist, h  📜 Manage the history of the "generate" command.
   favorite, fav,  f  ⭐ Manage the favorited phrase(s) of the history of "generate" command.
@@ -58,7 +58,7 @@ Arguments:
 
 ## 🌍 Environments
 
-### 📁 Directory to store WordNet Japan sqlite3 database file
+### 📁 Directory to store WordNet Japan sqlite database file
 
 Default : `$XDG_DATA_HOME/jrp` or `$HOME/.local/share/jrp`
 
@@ -66,7 +66,7 @@ Default : `$XDG_DATA_HOME/jrp` or `$HOME/.local/share/jrp`
 export JRP_WNJPN_DB_FILE_DIR=/path/to/your/directory
 ```
 
-### 📁 Directory to store jrp sqlite3 database file
+### 📁 Directory to store jrp sqlite database file
 
 Default : `$XDG_DATA_HOME/jrp` or `$HOME/.local/share/jrp`
 
@@ -141,13 +141,13 @@ Remove the binary you downloaded and placed in your `$PATH`.
 If you've set jrp envs, please replace `$HOME/.local/share/jrp` with envs you've set.  
 These below commands are in the case of default. Ofcourse you can remove whole the directory.
 
-#### 💾 Remove WordNet Japan sqlite3 database file
+#### 💾 Remove WordNet Japan sqlite database file
 
 ```sh
 rm $HOME/.local/share/jrp/wnjpn.db
 ```
 
-#### 💾 Remove jrp sqlite3 database file
+#### 💾 Remove jrp sqlite database file
 
 ```sh
 rm $HOME/.local/share/jrp/jrp.db

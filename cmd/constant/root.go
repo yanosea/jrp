@@ -17,7 +17,7 @@ Usage:
   jrp [command]
 
 Available Subcommands:
-  download, dl,   d  📦 Download WordNet Japan sqlite3 database file from the official site.
+  download, dl,   d  📦 Download WordNet Japan sqlite database file from the official web site.
   generate, gen,  g  ✨ Generate Japanese random phrase(s). You can abbreviate "generate" sub command. ("jrp" and "jrp generate" are the same.)
   history,  hist, h  📜 Manage the history of the "generate" command.
   favorite, fav,  f  ⭐ Manage the favorited phrase(s) of the history of "generate" command.

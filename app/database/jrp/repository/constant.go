@@ -43,6 +43,6 @@ const (
 )
 
 const (
-	// jrp sqlite3 database file name
+	// jrp sqlite database file name
 	JRP_DB_FILE_NAME = "jrp.db"
 )

@@ -44,7 +44,7 @@ func New(
 // GenerateJrp generates jrps.
 func (g *Generator) GenerateJrp(wnJpnDBFilePath string, num int, word string, mode GenerateMode) (GenerateResult, []jrp.Jrp, error) {
 	if _, err := g.OsProxy.Stat(wnJpnDBFilePath); g.OsProxy.IsNotExist(err) {
-		// if WordNet Japan sqlite3 database file does not exist, return warning
+		// if WordNet Japan sqlite database file does not exist, return warning
 		return DBFileNotFound, nil, nil
 	}
 
