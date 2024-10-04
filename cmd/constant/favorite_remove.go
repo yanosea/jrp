@@ -9,7 +9,7 @@ You have to get ID from the "history" command.
 Multiple ID's can be specified separated by spaces.
 This does not remove the history of the "generate" command, just remove the favorited status.
 
-Also, you can remove all favorite by flag "-a" or "--all".
+Also, you can remove all favorited phrase(s) by flag "-a" or "--all".
 This is the same as the "favorite clear" command.
 
 Usage:
@@ -27,7 +27,7 @@ Arguments:
 	FAVORITE_REMOVE_FLAG_ALL             = "all"
 	FAVORITE_REMOVE_FLAG_ALL_SHORTHAND   = "a"
 	FAVORITE_REMOVE_FLAG_ALL_DEFAULT     = false
-	FAVORITE_REMOVE_FLAG_ALL_DESCRIPTION = "remove all phrase(s) in the favorite"
+	FAVORITE_REMOVE_FLAG_ALL_DESCRIPTION = "remove all favorited phrase(s)"
 
 	FAVORITE_REMOVE_MESSAGE_NO_ID_SPECIFIED      = "⚡ No ID argument(s) specified..."
 	FAVORITE_REMOVE_MESSAGE_REMOVED_SUCCESSFULLY = "✅ Removed favorited phrase(s) successfully!"
