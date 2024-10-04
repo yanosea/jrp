@@ -6,7 +6,7 @@ const (
 You can specify the favorited phrase(s) to remove with ID argument(s).
 You have to get ID from the "history" command.
 Multiple ID's can be specified separated by spaces.
-This does not remove the history of the "generate" command, just remove the favorite.
+This does not remove the history of the "generate" command, just remove the favorited status.
 
 Also, you can remove all favorite by flag "-a" or "--all".
 This is the same as the "favorite clear" command.

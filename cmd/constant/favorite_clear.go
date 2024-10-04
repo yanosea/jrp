@@ -5,7 +5,7 @@ const (
 
 You can clear all favorited phrase(s).
 This is the same as the "favorite remove -a" command.
-This does not clear the history of the "generate" command, just clear the favorite.
+This does not clear the history of the "generate" command, just clear the favorited status.
 
 Usage:
   jrp favorite clear [flag]
