@@ -97,9 +97,9 @@
 				
 				<option value="file20">github.com/yanosea/jrp/app/proxy/pflag/flagsetinstance.go (100.0%)</option>
 				
-				<option value="file21">github.com/yanosea/jrp/app/proxy/promptui/promptinstance.go (0.0%)</option>
+				<option value="file21">github.com/yanosea/jrp/app/proxy/promptui/promptinstance.go (100.0%)</option>
 				
-				<option value="file22">github.com/yanosea/jrp/app/proxy/promptui/promptuiproxy.go (50.0%)</option>
+				<option value="file22">github.com/yanosea/jrp/app/proxy/promptui/promptuiproxy.go (100.0%)</option>
 				
 				<option value="file23">github.com/yanosea/jrp/app/proxy/rand/randproxy.go (100.0%)</option>
 				
@@ -2541,12 +2541,12 @@ type PromptInstance struct {
 }
 
 // Run is a proxy for promptui.Prompt.Run.
-func (p *PromptInstance) Run() (string, error) <span class="cov0" title="0">{
+func (p *PromptInstance) Run() (string, error) <span class="cov8" title="1">{
         return p.FieldPrompt.Run()
 }</span>
 
 // SetLabel is a proxy for promptui.Prompt.Label.
-func (p *PromptInstance) SetLabel(label string) <span class="cov0" title="0">{
+func (p *PromptInstance) SetLabel(label string) <span class="cov8" title="1">{
         p.FieldPrompt.Label = label
 }</span>
 </pre>
@@ -2571,7 +2571,7 @@ func New() Promptui <span class="cov8" title="1">{
 }</span>
 
 // NewPrompt is a proxy for getting promptui.Prompt struct.
-func (*PromptuiProxy) NewPrompt() PromptInstanceInterface <span class="cov0" title="0">{
+func (*PromptuiProxy) NewPrompt() PromptInstanceInterface <span class="cov8" title="1">{
         return &amp;PromptInstance{FieldPrompt: &amp;promptui.Prompt{}}
 }</span>
 </pre>
