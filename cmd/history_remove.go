@@ -25,6 +25,7 @@ type historyRemoveOption struct {
 	Out                   ioproxy.WriterInstanceInterface
 	ErrOut                ioproxy.WriterInstanceInterface
 	Args                  []string
+	All                   bool
 	Force                 bool
 	DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 	JrpRepository         repository.JrpRepositoryInterface
@@ -59,6 +60,13 @@ func NewHistoryRemoveCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 	cmd.FieldCommand.RunE = o.historyRemoveRunE
 
 	cmd.PersistentFlags().BoolVarP(
+		&o.All,
+		constant.HISTORY_REMOVE_FLAG_ALL,
+		constant.HISTORY_REMOVE_FLAG_ALL_SHORTHAND,
+		constant.HISTORY_REMOVE_FLAG_ALL_DEFAULT,
+		constant.HISTORY_REMOVE_FLAG_ALL_DESCRIPTION,
+	)
+	cmd.PersistentFlags().BoolVarP(
 		&o.Force,
 		constant.HISTORY_REMOVE_FLAG_FORCE,
 		constant.HISTORY_REMOVE_FLAG_FORCE_SHORTHAND,
@@ -83,14 +91,16 @@ func (o *historyRemoveOption) historyRemoveRunE(_ *cobra.Command, _ []string) er
 	// set ID
 	strconvProxy := strconvproxy.New()
 	var IDs []int
-	for _, arg := range o.Args[2:] {
-		if id, err := strconvProxy.Atoi(arg); err != nil {
-			continue
-		} else {
-			IDs = append(IDs, id)
+	if !o.All {
+		for _, arg := range o.Args[2:] {
+			if id, err := strconvProxy.Atoi(arg); err != nil {
+				continue
+			} else {
+				IDs = append(IDs, id)
+			}
 		}
 	}
-	if len(IDs) == 0 {
+	if len(IDs) == 0 && !o.All {
 		// if no ID is specified, print write and return
 		colorProxy := colorproxy.New()
 		o.Utility.PrintlnWithWriter(o.Out, colorProxy.YellowString(constant.HISTORY_REMOVE_MESSAGE_NO_ID_SPECIFIED))
@@ -114,8 +124,15 @@ func (o *historyRemoveOption) historyRemoveRunE(_ *cobra.Command, _ []string) er
 
 // historyRemove is the function that removes history by IDs.
 func (o *historyRemoveOption) historyRemove(jrpDBFilePath string, IDs []int) error {
-	// if IDs are specified, remove history by IDs
-	res, err := o.JrpRepository.RemoveHistoryByIDs(jrpDBFilePath, IDs, o.Force)
+	var res repository.RemoveStatus
+	var err error
+	if o.All {
+		// if all flag is set, remove all history
+		res, err = o.JrpRepository.RemoveHistoryAll(jrpDBFilePath, o.Force)
+	} else {
+		// if IDs are specified, remove history by IDs
+		res, err = o.JrpRepository.RemoveHistoryByIDs(jrpDBFilePath, IDs, o.Force)
+	}
 	o.writeHistoryRemoveResult(res)
 
 	return err

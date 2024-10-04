@@ -8,6 +8,9 @@ You can specify the history to remove with ID argument(s).
 You have to get ID from the "history" command.
 Multiple ID's can be specified separated by spaces.
 
+You can remove all history by flag "-a" or "--all".
+This is the same as the "history clear" command.
+
 Also, you can remove the history even if it is favorited by using the "-f" or ""--force" flag.
 
 Usage:
@@ -16,12 +19,17 @@ Usage:
   jrp history r      [flag]
 
 Flags:
+  -a, --all    ✨ remove all history
   -f, --force  💪 remove the history even if it is favorited
   -h, --help   🤝 help for remove
 
 Arguments:
   ID  🆔 remove the history by the ID (e.g: 1 2 3)
 `
+	HISTORY_REMOVE_FLAG_ALL               = "all"
+	HISTORY_REMOVE_FLAG_ALL_SHORTHAND     = "a"
+	HISTORY_REMOVE_FLAG_ALL_DEFAULT       = false
+	HISTORY_REMOVE_FLAG_ALL_DESCRIPTION   = "remove all history"
 	HISTORY_REMOVE_FLAG_FORCE             = "force"
 	HISTORY_REMOVE_FLAG_FORCE_SHORTHAND   = "f"
 	HISTORY_REMOVE_FLAG_FORCE_DEFAULT     = false
