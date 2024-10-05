@@ -15,6 +15,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
 	"github.com/yanosea/jrp/app/proxy/os"
+	"github.com/yanosea/jrp/app/proxy/promptui"
 	"github.com/yanosea/jrp/app/proxy/sort"
 	"github.com/yanosea/jrp/app/proxy/sql"
 	"github.com/yanosea/jrp/app/proxy/strconv"
@@ -25,18 +26,21 @@ import (
 
 	"github.com/yanosea/jrp/mock/app/library/dbfiledirpathprovider"
 	"github.com/yanosea/jrp/mock/app/library/utility"
+	"github.com/yanosea/jrp/mock/app/proxy/promptui"
 	"github.com/yanosea/jrp/test/testutility"
 	"go.uber.org/mock/gomock"
 )
 
 func TestNewHistoryRemoveCommand(t *testing.T) {
 	type args struct {
-		g *GlobalOption
+		g             *GlobalOption
+		promptuiProxy promptuiproxy.Promptui
 	}
 	tests := []struct {
 		name      string
 		args      args
 		wantError bool
+		setup     func(*gomock.Controller, *args)
 	}{
 		{
 			name: "positive testing",
@@ -46,13 +50,22 @@ func TestNewHistoryRemoveCommand(t *testing.T) {
 					osproxy.New(),
 					strconvproxy.New(),
 				),
+				promptuiProxy: nil,
 			},
 			wantError: false,
+			setup: func(mockCtrl *gomock.Controller, args *args) {
+				mockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+				mockPromptInstance.EXPECT().SetLabel(gomock.Any())
+				mockPromptInstance.EXPECT().Run().Return("y", nil)
+				mockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+				mockPromptuiProxy.EXPECT().NewPrompt().Return(mockPromptInstance)
+				args.promptuiProxy = mockPromptuiProxy
+			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := NewHistoryRemoveCommand(tt.args.g)
+			got := NewHistoryRemoveCommand(tt.args.g, tt.args.promptuiProxy)
 			if err := got.Execute(); (err != nil) != tt.wantError {
 				t.Errorf("NewHistoryRemoveCommand().Execute() : error =\n%v", err)
 			}
@@ -102,6 +115,21 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 	)
 	mockCtrl := gomock.NewController(t)
 	defer mockCtrl.Finish()
+	mockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+	mockPromptInstance.EXPECT().SetLabel(gomock.Any()).AnyTimes()
+	mockPromptInstance.EXPECT().Run().Return("y", nil).AnyTimes()
+	mockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+	mockPromptuiProxy.EXPECT().NewPrompt().Return(mockPromptInstance).AnyTimes()
+	noMockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+	noMockPromptInstance.EXPECT().SetLabel(gomock.Any())
+	noMockPromptInstance.EXPECT().Run().Return("n", nil)
+	noMockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+	noMockPromptuiProxy.EXPECT().NewPrompt().Return(noMockPromptInstance)
+	errMockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+	errMockPromptInstance.EXPECT().SetLabel(gomock.Any())
+	errMockPromptInstance.EXPECT().Run().Return("", errors.New("PromptInstance.Run() failed"))
+	errMockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+	errMockPromptuiProxy.EXPECT().NewPrompt().Return(errMockPromptInstance)
 	mockDBFileDirPathProvider := mockdbfiledirpathprovider.NewMockDBFileDirPathProvidable(mockCtrl)
 	mockDBFileDirPathProvider.EXPECT().GetJrpDBFileDirPath().Return("", errors.New("DBFileDirPathProvider.GetJrpDBFileDirPath() failed"))
 	mockUtility := mockutility.NewMockUtilityInterface(mockCtrl)
@@ -123,6 +151,82 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 		cleanup    func()
 	}{
 		{
+			name: "positive testing (answering not yes on the prompt)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  osproxy.Args[1:],
+						All:                   true,
+						Force:                 false,
+						NoConfirm:             false,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						PromptuiProxy:         noMockPromptuiProxy,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: constant.HISTORY_REMOVE_MESSAGE_REMOVE_ALL_CANCELED + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (set no-confirm option)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  osproxy.Args[1:],
+						All:                   true,
+						Force:                 false,
+						NoConfirm:             true,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						PromptuiProxy:         nil,
+						Utility:               util,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						t.Errorf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.YellowString(constant.HISTORY_REMOVE_MESSAGE_REMOVED_NONE) + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
 			name: "positive testing (no jrps in the database file, args are nil)",
 			fields: fields{
 				t: t,
@@ -133,8 +237,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  nil,
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -169,8 +275,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -205,8 +313,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  nil,
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -265,8 +375,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -325,8 +437,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "2"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -385,8 +499,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -435,8 +551,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1", "2"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -485,8 +603,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  nil,
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -561,8 +681,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -637,8 +759,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "3", "4"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -713,8 +837,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1", "2"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -770,8 +896,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "2", "3"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -837,8 +965,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  nil,
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -900,8 +1030,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -963,8 +1095,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "2"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1026,8 +1160,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1089,8 +1225,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1", "2"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1152,8 +1290,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  nil,
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1231,8 +1371,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1310,8 +1452,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "3", "4"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1389,8 +1533,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1", "2"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1468,8 +1614,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "2", "3"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1547,8 +1695,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  nil,
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1610,8 +1760,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{},
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1673,8 +1825,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "2"},
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1736,8 +1890,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1"},
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1789,8 +1945,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1", "2"},
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1842,8 +2000,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  nil,
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -1921,8 +2081,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{},
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2000,8 +2162,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "3", "4"},
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2079,8 +2243,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1", "2"},
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2139,8 +2305,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "2", "3"},
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2209,8 +2377,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove"},
 						All:                   true,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2245,8 +2415,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove"},
 						All:                   true,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2295,8 +2467,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove"},
 						All:                   true,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2358,8 +2532,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove"},
 						All:                   true,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2411,8 +2587,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove"},
 						All:                   true,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2468,8 +2646,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove"},
 						All:                   true,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2538,8 +2718,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove"},
 						All:                   true,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2617,8 +2799,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove"},
 						All:                   true,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2674,8 +2858,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove"},
 						All:                   true,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2734,8 +2920,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove"},
 						All:                   true,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2794,8 +2982,10 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1", "2"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: mockDBFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
@@ -2830,9 +3020,49 @@ func Test_historyRemoveOption_historyRemoveRunE(t *testing.T) {
 						Args:                  []string{"history", "remove", "1", "2"},
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               mockUtility,
+					}
+					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
+						fmt.Printf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "",
+			wantStdErr: testutility.TEST_OUTPUT_ANY,
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "negative testing (PromptInstance.run() failed)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					historyRemoveOption := &historyRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  osproxy.Args[1:],
+						All:                   true,
+						Force:                 false,
+						NoConfirm:             false,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						PromptuiProxy:         errMockPromptuiProxy,
+						Utility:               util,
 					}
 					if err := historyRemoveOption.historyRemoveRunE(nil, nil); err != nil {
 						fmt.Printf("historyRemoveOption.historyRemoveRunE() : error =\n%v", err)
@@ -2922,6 +3152,13 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 		strconvproxy.New(),
 		stringsproxy.New(),
 	)
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+	mockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+	mockPromptInstance.EXPECT().SetLabel(gomock.Any()).AnyTimes()
+	mockPromptInstance.EXPECT().Run().Return("y", nil).AnyTimes()
+	mockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+	mockPromptuiProxy.EXPECT().NewPrompt().Return(mockPromptInstance).AnyTimes()
 
 	type fields struct {
 		Out                   ioproxy.WriterInstanceInterface
@@ -2929,8 +3166,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 		Args                  []string
 		All                   bool
 		Force                 bool
+		NoConfirm             bool
 		DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 		JrpRepository         repository.JrpRepositoryInterface
+		PromptuiProxy         promptuiproxy.Promptui
 		Utility               utility.UtilityInterface
 	}
 	type args struct {
@@ -2954,8 +3193,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  nil,
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -2983,8 +3224,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3012,8 +3255,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  nil,
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3065,8 +3310,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3118,8 +3365,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "2"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3171,8 +3420,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "1"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3214,8 +3465,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "1", "2"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3257,8 +3510,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  nil,
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3326,8 +3581,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3395,8 +3652,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "3", "4"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3464,8 +3723,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "1", "2"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3514,8 +3775,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "2", "3"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3574,8 +3837,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  nil,
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3630,8 +3895,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3686,8 +3953,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "2"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3742,8 +4011,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "1"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3798,8 +4069,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "1", "2"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3854,8 +4127,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  nil,
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3926,8 +4201,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -3998,8 +4275,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "3", "4"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4070,8 +4349,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "1", "2"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4142,8 +4423,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "2", "3"},
 				All:                   false,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4214,8 +4497,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  nil,
 				All:                   false,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4270,8 +4555,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{},
 				All:                   false,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4326,8 +4613,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "2"},
 				All:                   false,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4382,8 +4671,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "1"},
 				All:                   false,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4428,8 +4719,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "1", "2"},
 				All:                   false,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4474,8 +4767,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  nil,
 				All:                   false,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4546,8 +4841,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{},
 				All:                   false,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4618,8 +4915,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "3", "4"},
 				All:                   false,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4690,8 +4989,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "1", "2"},
 				All:                   false,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4743,8 +5044,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove", "2", "3"},
 				All:                   false,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4807,8 +5110,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove"},
 				All:                   true,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4836,8 +5141,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove"},
 				All:                   true,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4879,8 +5186,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove"},
 				All:                   true,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4935,8 +5244,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove"},
 				All:                   true,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -4981,8 +5292,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove"},
 				All:                   true,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -5031,8 +5344,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove"},
 				All:                   true,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -5094,8 +5409,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove"},
 				All:                   true,
 				Force:                 false,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -5166,8 +5483,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove"},
 				All:                   true,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -5216,8 +5535,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove"},
 				All:                   true,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -5269,8 +5590,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  []string{"history", "remove"},
 				All:                   true,
 				Force:                 true,
+				NoConfirm:             true,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				JrpRepository:         jrpRepository,
+				PromptuiProxy:         mockPromptuiProxy,
 				Utility:               util,
 			},
 			args: args{
@@ -5328,8 +5651,10 @@ func Test_historyRemoveOption_historyRemove(t *testing.T) {
 				Args:                  tt.fields.Args,
 				All:                   tt.fields.All,
 				Force:                 tt.fields.Force,
+				NoConfirm:             tt.fields.NoConfirm,
 				DBFileDirPathProvider: tt.fields.DBFileDirPathProvider,
 				JrpRepository:         tt.fields.JrpRepository,
+				PromptuiProxy:         tt.fields.PromptuiProxy,
 				Utility:               tt.fields.Utility,
 			}
 			if err := o.historyRemove(tt.args.jrpDBFilePath, tt.args.IDs); (err != nil) != tt.wantErr {
@@ -5375,6 +5700,13 @@ func Test_historyRemoveOption_writeHistoryRemoveResult(t *testing.T) {
 		osProxy,
 		strconvproxy.New(),
 	)
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+	mockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+	mockPromptInstance.EXPECT().SetLabel(gomock.Any()).AnyTimes()
+	mockPromptInstance.EXPECT().Run().Return("y", nil).AnyTimes()
+	mockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+	mockPromptuiProxy.EXPECT().NewPrompt().Return(mockPromptInstance).AnyTimes()
 
 	type fields struct {
 		t        *testing.T
@@ -5399,8 +5731,10 @@ func Test_historyRemoveOption_writeHistoryRemoveResult(t *testing.T) {
 						Args:                  osproxy.Args[1:],
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					historyRemoveOption.writeHistoryRemoveResult(repository.RemovedSuccessfully)
@@ -5422,8 +5756,10 @@ func Test_historyRemoveOption_writeHistoryRemoveResult(t *testing.T) {
 						Args:                  osproxy.Args[1:],
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					historyRemoveOption.writeHistoryRemoveResult(repository.RemovedFailed)
@@ -5445,8 +5781,10 @@ func Test_historyRemoveOption_writeHistoryRemoveResult(t *testing.T) {
 						Args:                  osproxy.Args[1:],
 						All:                   false,
 						Force:                 false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					historyRemoveOption.writeHistoryRemoveResult(repository.RemovedNone)
@@ -5468,8 +5806,10 @@ func Test_historyRemoveOption_writeHistoryRemoveResult(t *testing.T) {
 						Args:                  osproxy.Args[1:],
 						All:                   false,
 						Force:                 true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					historyRemoveOption.writeHistoryRemoveResult(repository.RemovedNotAll)

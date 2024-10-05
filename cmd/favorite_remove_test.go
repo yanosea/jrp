@@ -14,6 +14,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/filepath"
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/os"
+	"github.com/yanosea/jrp/app/proxy/promptui"
 	"github.com/yanosea/jrp/app/proxy/sort"
 	"github.com/yanosea/jrp/app/proxy/sql"
 	"github.com/yanosea/jrp/app/proxy/strconv"
@@ -24,18 +25,21 @@ import (
 
 	"github.com/yanosea/jrp/mock/app/library/dbfiledirpathprovider"
 	"github.com/yanosea/jrp/mock/app/library/utility"
+	"github.com/yanosea/jrp/mock/app/proxy/promptui"
 	"github.com/yanosea/jrp/test/testutility"
 	"go.uber.org/mock/gomock"
 )
 
 func TestNewFavoriteRemoveCommand(t *testing.T) {
 	type args struct {
-		g *GlobalOption
+		g             *GlobalOption
+		promptuiProxy promptuiproxy.Promptui
 	}
 	tests := []struct {
 		name      string
 		args      args
 		wantError bool
+		setup     func(*gomock.Controller, *args)
 	}{
 		{
 			name: "positive testing",
@@ -45,13 +49,22 @@ func TestNewFavoriteRemoveCommand(t *testing.T) {
 					osproxy.New(),
 					strconvproxy.New(),
 				),
+				promptuiProxy: nil,
 			},
 			wantError: false,
+			setup: func(mockCtrl *gomock.Controller, args *args) {
+				mockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+				mockPromptInstance.EXPECT().SetLabel(gomock.Any())
+				mockPromptInstance.EXPECT().Run().Return("y", nil)
+				mockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+				mockPromptuiProxy.EXPECT().NewPrompt().Return(mockPromptInstance)
+				args.promptuiProxy = mockPromptuiProxy
+			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := NewFavoriteRemoveCommand(tt.args.g)
+			got := NewFavoriteRemoveCommand(tt.args.g, tt.args.promptuiProxy)
 			if err := got.Execute(); (err != nil) != tt.wantError {
 				t.Errorf("NewFavoriteRemoveCommand().Execute() : error =\n%v", err)
 			}
@@ -101,6 +114,21 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 	)
 	mockCtrl := gomock.NewController(t)
 	defer mockCtrl.Finish()
+	mockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+	mockPromptInstance.EXPECT().SetLabel(gomock.Any()).AnyTimes()
+	mockPromptInstance.EXPECT().Run().Return("y", nil).AnyTimes()
+	mockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+	mockPromptuiProxy.EXPECT().NewPrompt().Return(mockPromptInstance).AnyTimes()
+	noMockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+	noMockPromptInstance.EXPECT().SetLabel(gomock.Any())
+	noMockPromptInstance.EXPECT().Run().Return("n", nil)
+	noMockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+	noMockPromptuiProxy.EXPECT().NewPrompt().Return(noMockPromptInstance)
+	errMockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+	errMockPromptInstance.EXPECT().SetLabel(gomock.Any())
+	errMockPromptInstance.EXPECT().Run().Return("", errors.New("PromptInstance.Run() failed"))
+	errMockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+	errMockPromptuiProxy.EXPECT().NewPrompt().Return(errMockPromptInstance)
 	mockDBFileDirPathProvider := mockdbfiledirpathprovider.NewMockDBFileDirPathProvidable(mockCtrl)
 	mockDBFileDirPathProvider.EXPECT().GetJrpDBFileDirPath().Return("", errors.New("DBFileDirPathProvider.GetJrpDBFileDirPath() failed"))
 	mockUtility := mockutility.NewMockUtilityInterface(mockCtrl)
@@ -122,6 +150,80 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 		cleanup    func()
 	}{
 		{
+			name: "positive testing (answering not yes on the prompt)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					favoriteRemoveOption := &favoriteRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  osproxy.Args[1:],
+						All:                   true,
+						NoConfirm:             false,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						PromptuiProxy:         noMockPromptuiProxy,
+						Utility:               util,
+					}
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: constant.FAVORITE_REMOVE_MESSAGE_REMOVE_ALL_CANCELED + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (set no-confirm option)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					favoriteRemoveOption := &favoriteRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  osproxy.Args[1:],
+						All:                   true,
+						NoConfirm:             true,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						PromptuiProxy:         nil,
+						Utility:               util,
+					}
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						t.Errorf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: colorProxy.YellowString(constant.FAVORITE_REMOVE_MESSAGE_REMOVED_NONE) + "\n",
+			wantStdErr: "",
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
 			name: "positive testing (no jrps in the database file, args are nil)",
 			fields: fields{
 				t: t,
@@ -131,8 +233,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -166,8 +270,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -201,8 +307,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -250,8 +358,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -299,8 +409,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -348,8 +460,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -397,8 +511,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -446,8 +562,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -502,8 +620,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -558,8 +678,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "3", "4"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -614,8 +736,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -670,8 +794,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2", "3"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -726,8 +852,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -788,8 +916,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -850,8 +980,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -912,8 +1044,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -964,8 +1098,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1016,8 +1152,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1094,8 +1232,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1172,8 +1312,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "3", "4"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1250,8 +1392,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1309,8 +1453,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2", "3"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1378,8 +1524,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1427,8 +1575,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1476,8 +1626,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1525,8 +1677,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1574,8 +1728,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1623,8 +1779,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1679,8 +1837,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1735,8 +1895,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "3", "4"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1791,8 +1953,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1847,8 +2011,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2", "3"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1903,8 +2069,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -1955,8 +2123,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -2007,8 +2177,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -2059,8 +2231,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -2111,8 +2285,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -2163,8 +2339,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -2222,8 +2400,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -2281,8 +2461,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "3", "4"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -2340,6 +2522,7 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
 						Utility:               util,
@@ -2399,8 +2582,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2", "3"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -2458,8 +2643,10 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: mockDBFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
@@ -2493,9 +2680,48 @@ func Test_favoriteRemoveOption_favoriteRemoveRunE(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               mockUtility,
+					}
+					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
+						fmt.Printf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "",
+			wantStdErr: testutility.TEST_OUTPUT_ANY,
+			wantJrps:   nil,
+			wantErr:    false,
+			setup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "negative testing (PromptInstance.run() failed)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					favoriteRemoveOption := &favoriteRemoveOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  osproxy.Args[1:],
+						All:                   true,
+						NoConfirm:             false,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						JrpRepository:         jrpRepository,
+						PromptuiProxy:         errMockPromptuiProxy,
+						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemoveRunE(nil, nil); err != nil {
 						fmt.Printf("favoriteRemoveOption.favoriteRemoveRunE() : error =\n%v", err)
@@ -2591,6 +2817,13 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 		strconvproxy.New(),
 		stringsproxy.New(),
 	)
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+	mockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+	mockPromptInstance.EXPECT().SetLabel(gomock.Any()).AnyTimes()
+	mockPromptInstance.EXPECT().Run().Return("y", nil).AnyTimes()
+	mockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+	mockPromptuiProxy.EXPECT().NewPrompt().Return(mockPromptInstance).AnyTimes()
 
 	type fields struct {
 		t        *testing.T
@@ -2617,8 +2850,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
@@ -2652,8 +2887,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
@@ -2687,8 +2924,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
@@ -2736,6 +2975,7 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
 						Utility:               util,
@@ -2785,8 +3025,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2}); err != nil {
@@ -2834,8 +3076,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1}); err != nil {
@@ -2883,8 +3127,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
@@ -2932,8 +3178,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
@@ -2988,8 +3236,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
@@ -3044,8 +3294,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "3", "4"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4}); err != nil {
@@ -3100,8 +3352,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
@@ -3156,8 +3410,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2", "3"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3}); err != nil {
@@ -3212,8 +3468,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
@@ -3274,8 +3532,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
@@ -3336,8 +3596,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2}); err != nil {
@@ -3398,8 +3660,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1}); err != nil {
@@ -3450,8 +3714,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
@@ -3502,8 +3768,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
@@ -3580,8 +3848,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
@@ -3658,8 +3928,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "3", "4"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4}); err != nil {
@@ -3736,8 +4008,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
@@ -3795,8 +4069,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2", "3"},
 						All:                   false,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3}); err != nil {
@@ -3864,8 +4140,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
@@ -3913,8 +4191,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
@@ -3962,8 +4242,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2}); err != nil {
@@ -4011,8 +4293,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1}); err != nil {
@@ -4060,8 +4344,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
@@ -4109,8 +4395,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
@@ -4165,8 +4453,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
@@ -4221,8 +4511,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "3", "4"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4}); err != nil {
@@ -4277,8 +4569,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
@@ -4333,8 +4627,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2", "3"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3}); err != nil {
@@ -4389,8 +4685,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
@@ -4441,8 +4739,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
@@ -4493,8 +4793,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2}); err != nil {
@@ -4545,8 +4847,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1}); err != nil {
@@ -4597,8 +4901,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
@@ -4649,8 +4955,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  nil,
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, nil); err != nil {
@@ -4708,8 +5016,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{}); err != nil {
@@ -4767,8 +5077,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "3", "4"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{3, 4}); err != nil {
@@ -4826,8 +5138,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "1", "2"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{1, 2}); err != nil {
@@ -4885,8 +5199,10 @@ func Test_favoriteRemoveOption_favoriteRemove(t *testing.T) {
 						ErrOut:                capturer.ErrBuffer,
 						Args:                  []string{"favorite", "remove", "2", "3"},
 						All:                   true,
+						NoConfirm:             true,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					if err := favoriteRemoveOption.favoriteRemove(jrpDBFilePath, []int{2, 3}); err != nil {
@@ -4993,6 +5309,13 @@ func Test_favoriteRemoveOption_writeFavoriteRemoveResult(t *testing.T) {
 		osProxy,
 		strconvproxy.New(),
 	)
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+	mockPromptInstance := mockpromptuiproxy.NewMockPromptInstanceInterface(mockCtrl)
+	mockPromptInstance.EXPECT().SetLabel(gomock.Any()).AnyTimes()
+	mockPromptInstance.EXPECT().Run().Return("y", nil).AnyTimes()
+	mockPromptuiProxy := mockpromptuiproxy.NewMockPromptui(mockCtrl)
+	mockPromptuiProxy.EXPECT().NewPrompt().Return(mockPromptInstance).AnyTimes()
 
 	type fields struct {
 		t        *testing.T
@@ -5017,6 +5340,7 @@ func Test_favoriteRemoveOption_writeFavoriteRemoveResult(t *testing.T) {
 						Args:                  osproxy.Args[1:],
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					favoriteRemoveOption.writeFavoriteRemoveResult(repository.RemovedSuccessfully)
@@ -5038,6 +5362,7 @@ func Test_favoriteRemoveOption_writeFavoriteRemoveResult(t *testing.T) {
 						Args:                  osproxy.Args[1:],
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					favoriteRemoveOption.writeFavoriteRemoveResult(repository.RemovedFailed)
@@ -5059,6 +5384,7 @@ func Test_favoriteRemoveOption_writeFavoriteRemoveResult(t *testing.T) {
 						Args:                  osproxy.Args[1:],
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					favoriteRemoveOption.writeFavoriteRemoveResult(repository.RemovedNone)
@@ -5080,6 +5406,7 @@ func Test_favoriteRemoveOption_writeFavoriteRemoveResult(t *testing.T) {
 						Args:                  osproxy.Args[1:],
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						JrpRepository:         jrpRepository,
+						PromptuiProxy:         mockPromptuiProxy,
 						Utility:               util,
 					}
 					favoriteRemoveOption.writeFavoriteRemoveResult(repository.RemovedNotAll)

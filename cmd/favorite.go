@@ -97,7 +97,7 @@ func NewFavoriteCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 	cmd.AddCommand(
 		NewFavoriteShowCommand(g),
 		NewFavoriteAddCommand(g),
-		NewFavoriteRemoveCommand(g),
+		NewFavoriteRemoveCommand(g, promptuiproxy.New()),
 		NewFavoriteSearchCommand(g),
 		NewFavoriteClearCommand(g, promptuiproxy.New()),
 	)

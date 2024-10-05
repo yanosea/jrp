@@ -94,7 +94,7 @@ func NewHistoryCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 
 	cmd.AddCommand(
 		NewHistoryShowCommand(g),
-		NewHistoryRemoveCommand(g),
+		NewHistoryRemoveCommand(g, promptuiproxy.New()),
 		NewHistorySearchCommand(g),
 		NewHistoryClearCommand(g, promptuiproxy.New()),
 	)
