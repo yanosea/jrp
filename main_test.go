@@ -2,7 +2,6 @@
 package main
 
 import (
-	"strings"
 	"testing"
 
 	jrprepository "github.com/yanosea/jrp/app/database/jrp/repository"
@@ -358,10 +357,10 @@ func Test_main(t *testing.T) {
 				tt.fields.t,
 				tt.fields.fnc,
 			)
-			stdout = removeTabAndSpaceAndLf(stdout)
-			stderr = removeTabAndSpaceAndLf(stderr)
-			tt.wantStdOut = removeTabAndSpaceAndLf(tt.wantStdOut)
-			tt.wantStdErr = removeTabAndSpaceAndLf(tt.wantStdErr)
+			stdout = testutility.RemoveTabAndSpaceAndLf(stdout)
+			stderr = testutility.RemoveTabAndSpaceAndLf(stderr)
+			tt.wantStdOut = testutility.RemoveTabAndSpaceAndLf(tt.wantStdOut)
+			tt.wantStdErr = testutility.RemoveTabAndSpaceAndLf(tt.wantStdErr)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Capturer.CaptureOutput() : error =\n%v, wantErr =\n%v", err, tt.wantErr)
 			}
@@ -393,8 +392,4 @@ func Test_main(t *testing.T) {
 	if err := osProxy.RemoveAll(wnjpnDBFilePath); err != nil {
 		t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 	}
-}
-
-func removeTabAndSpaceAndLf(s string) string {
-	return strings.ReplaceAll(strings.ReplaceAll(strings.ReplaceAll(s, "\t", ""), " ", ""), "\n", "")
 }
