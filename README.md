@@ -14,10 +14,10 @@
 [![Latest Release](https://img.shields.io/github/v/release/yanosea/jrp?style=flat-square)](https://github.com/yanosea/jrp/releases/latest)
 <br/>
 [Coverage Report](https://yanosea.github.io/jrp/coverage.html)
+<br/>
+![demo](docs/demo.gif "demo")
 
 </div>
-
-![demo](docs/demo.gif "demo")
 
 ## ℹ️ About
 
