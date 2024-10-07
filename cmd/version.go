@@ -1,36 +1,41 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 
-	"github.com/yanosea/jrp/constant"
-	"github.com/yanosea/jrp/internal/buildinfo"
-	"github.com/yanosea/jrp/logic"
-	"github.com/yanosea/jrp/util"
+	"github.com/yanosea/jrp/app/library/versionprovider"
+	"github.com/yanosea/jrp/app/proxy/cobra"
+	"github.com/yanosea/jrp/app/proxy/debug"
+	fmtproxy "github.com/yanosea/jrp/app/proxy/fmt"
+	"github.com/yanosea/jrp/cmd/constant"
 )
 
-func newVersionCommand(globalOption *GlobalOption) *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   constant.VERSION_USE,
-		Short: constant.VERSION_SHORT,
-		Long:  constant.VERSION_LONG,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return globalOption.version()
-		},
-	}
+// NewVersionCommand creates a new version command.
+func NewVersionCommand(g *GlobalOption) *cobraproxy.CommandInstance {
+	cobraProxy := cobraproxy.New()
+	cmd := cobraProxy.NewCommand()
 
-	cmd.SetOut(globalOption.Out)
-	cmd.SetErr(globalOption.ErrOut)
+	cmd.FieldCommand.Use = constant.VERSION_USE
+	cmd.FieldCommand.RunE = g.versionRunE
+
+	cmd.SetOut(g.Out)
+	cmd.SetErr(g.ErrOut)
 	cmd.SetHelpTemplate(constant.VERSION_HELP_TEMPLATE)
 
 	return cmd
 }
 
+// versionRunE is the function that is called when the version command is executed.
+func (g *GlobalOption) versionRunE(_ *cobra.Command, _ []string) error {
+	return g.version()
+}
+
+// version shows the version of jrp.
 func (g *GlobalOption) version() error {
-	v := logic.NewJrpVersionGetter(buildinfo.RealBuildInfoProvider{})
-	// show version
-	util.PrintlnWithWriter(g.Out, fmt.Sprintf(constant.VERSION_MESSAGE_TEMPLATE, v.GetVersion(version)))
+	v := versionprovider.New(debugproxy.New())
+	fmtProxy := fmtproxy.New()
+	// get version from buildinfo and write it
+	g.Utility.PrintlnWithWriter(g.Out, fmtProxy.Sprintf(constant.VERSION_MESSAGE_TEMPLATE, v.GetVersion(ver)))
+
 	return nil
 }

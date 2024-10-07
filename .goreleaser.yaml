@@ -17,7 +17,7 @@ builds:
       - darwin
     ldflags:
       - -s -w
-      - -X github.com/yanosea/jrp/cmd.version=v{{.Version}}
+      - -X github.com/yanosea/jrp/cmd.ver=v{{.Version}}
 
 archives:
   - format: tar.gz
