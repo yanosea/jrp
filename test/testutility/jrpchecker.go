@@ -15,7 +15,7 @@ type JrpCheckerInterface interface {
 	GetJrpSeq(jrpDBFilePath string) (int, error)
 	IsExist(jrpDBFilePath string, id int) (bool, error)
 	IsFavorited(jrpDBFilePath string, id int) (bool, error)
-	IsSameJrps(got, want []model.Jrp) bool
+	IsSameJrps(got, want []*model.Jrp) bool
 }
 
 // JrpChecker is a struct for checking Jrp.
@@ -132,7 +132,7 @@ func (j *JrpChecker) IsFavorited(jrpDBFilePath string, id int) (bool, error) {
 }
 
 // IsSameJrps checks if jrps are the same.
-func (j *JrpChecker) IsSameJrps(got, want []model.Jrp) bool {
+func (j *JrpChecker) IsSameJrps(got, want []*model.Jrp) bool {
 	if len(got) != len(want) {
 		return false
 	}

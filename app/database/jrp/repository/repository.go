@@ -11,17 +11,17 @@ import (
 
 // JrpRepositoryInterface is an interface for JrpRepository.
 type JrpRepositoryInterface interface {
-	SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (SaveStatus, error)
-	GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error)
-	GetHistoryWithNumber(jrpDBFilePath string, number int) ([]model.Jrp, error)
-	SearchHistoryWithNumber(jrpDBFilePath string, number int, keywords []string, and bool) ([]model.Jrp, error)
-	SearchAllHistory(jrpDBFilePath string, keywords []string, and bool) ([]model.Jrp, error)
+	SaveHistory(jrpDBFilePath string, jrps []*model.Jrp) (SaveStatus, error)
+	GetAllHistory(jrpDBFilePath string) ([]*model.Jrp, error)
+	GetHistoryWithNumber(jrpDBFilePath string, number int) ([]*model.Jrp, error)
+	SearchHistoryWithNumber(jrpDBFilePath string, number int, keywords []string, and bool) ([]*model.Jrp, error)
+	SearchAllHistory(jrpDBFilePath string, keywords []string, and bool) ([]*model.Jrp, error)
 	RemoveHistoryByIDs(jrpDBFilePath string, ids []int, force bool) (RemoveStatus, error)
 	RemoveHistoryAll(jrpDBFilePath string, force bool) (RemoveStatus, error)
-	GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error)
-	GetFavoriteWithNumber(jrpDBFilePath string, number int) ([]model.Jrp, error)
-	SearchAllFavorite(jrpDBFilePath string, keywords []string, and bool) ([]model.Jrp, error)
-	SearchFavoriteWithNumber(jrpDBFilePath string, number int, keywords []string, and bool) ([]model.Jrp, error)
+	GetAllFavorite(jrpDBFilePath string) ([]*model.Jrp, error)
+	GetFavoriteWithNumber(jrpDBFilePath string, number int) ([]*model.Jrp, error)
+	SearchAllFavorite(jrpDBFilePath string, keywords []string, and bool) ([]*model.Jrp, error)
+	SearchFavoriteWithNumber(jrpDBFilePath string, number int, keywords []string, and bool) ([]*model.Jrp, error)
 	AddFavoriteByIDs(jrpDBFilePath string, ids []int) (AddStatus, error)
 	RemoveFavoriteByIDs(jrpDBFilePath string, ids []int) (RemoveStatus, error)
 	RemoveFavoriteAll(jrpDBFilePath string) (RemoveStatus, error)
@@ -51,7 +51,7 @@ func New(
 }
 
 // SaveHistory saves jrps as  history.
-func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (SaveStatus, error) {
+func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []*model.Jrp) (SaveStatus, error) {
 	var deferErr error
 	// if jrps is nil or empty, return nil
 	if jrps == nil || len(jrps) <= 0 {
@@ -103,12 +103,21 @@ func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (Save
 		if err != nil {
 			return SavedFailed, err
 		}
+
+		// get count
 		c, err := res.RowsAffected()
 		if err != nil {
 			// failed to get rows affected
 			return SavedFailed, err
 		}
 		count += c
+
+		// set ID
+		i, err := res.LastInsertId()
+		if err != nil {
+			return SavedFailed, err
+		}
+		jrp.ID = int(i)
 	}
 
 	// commit transaction
@@ -125,7 +134,7 @@ func (j JrpRepository) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (Save
 }
 
 // GetAllHistory gets all jrps as history.
-func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error) {
+func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]*model.Jrp, error) {
 	var deferErr error
 	// connect to db
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
@@ -151,9 +160,9 @@ func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error) 
 	}()
 
 	// scan rows
-	var allHistory []model.Jrp
+	var allHistory []*model.Jrp
 	for rows.Next() {
-		var history model.Jrp
+		history := &model.Jrp{}
 		if err := rows.Scan(
 			&history.ID,
 			&history.Phrase,
@@ -175,7 +184,7 @@ func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error) 
 }
 
 // GetHistoryWithNumber gets history with number.
-func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([]model.Jrp, error) {
+func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([]*model.Jrp, error) {
 	var deferErr error
 	if number <= 0 {
 		// if number is less than or equal to 0, return nil
@@ -215,9 +224,9 @@ func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([
 	}()
 
 	// scan rows
-	var allHistory []model.Jrp
+	var allHistory []*model.Jrp
 	for rows.Next() {
-		var history model.Jrp
+		history := &model.Jrp{}
 		if err := rows.Scan(
 			&history.ID,
 			&history.Phrase,
@@ -244,7 +253,7 @@ func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([
 }
 
 // SearchAllHistory searches all jrps as history with keywords.
-func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string, and bool) ([]model.Jrp, error) {
+func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string, and bool) ([]*model.Jrp, error) {
 	var deferErr error
 	if keywords == nil || len(keywords) <= 0 {
 		// if keywords is nil or empty, return nil
@@ -297,9 +306,9 @@ func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string,
 	}()
 
 	// scan rows
-	var searchedAllHistory []model.Jrp
+	var searchedAllHistory []*model.Jrp
 	for rows.Next() {
-		var history model.Jrp
+		history := &model.Jrp{}
 		if err := rows.Scan(
 			&history.ID,
 			&history.Phrase,
@@ -326,7 +335,7 @@ func (j JrpRepository) SearchHistoryWithNumber(
 	number int,
 	keywords []string,
 	and bool,
-) ([]model.Jrp, error) {
+) ([]*model.Jrp, error) {
 	var deferErr error
 	if number <= 0 || keywords == nil || len(keywords) <= 0 {
 		// if number is less than or equal to 0 or keywords is nil or empty
@@ -380,9 +389,9 @@ func (j JrpRepository) SearchHistoryWithNumber(
 	}()
 
 	// scan rows
-	var searchedHistory []model.Jrp
+	var searchedHistory []*model.Jrp
 	for rows.Next() {
-		var history model.Jrp
+		history := &model.Jrp{}
 		if err := rows.Scan(
 			&history.ID,
 			&history.Phrase,
@@ -548,7 +557,7 @@ func (j JrpRepository) RemoveHistoryAll(jrpDBFilePath string, force bool) (Remov
 }
 
 // GetAllFavorite gets all jrps that are favorited.
-func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error) {
+func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]*model.Jrp, error) {
 	var deferErr error
 	// connect to db
 	db, err := j.SqlProxy.Open(sqlproxy.Sqlite, jrpDBFilePath)
@@ -574,9 +583,9 @@ func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error)
 	}()
 
 	// scan rows
-	var allFavorite []model.Jrp
+	var allFavorite []*model.Jrp
 	for rows.Next() {
-		var favorite model.Jrp
+		favorite := &model.Jrp{}
 		if err := rows.Scan(
 			&favorite.ID,
 			&favorite.Phrase,
@@ -598,7 +607,7 @@ func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error)
 }
 
 // GetFavoriteWithNumber gets jrps that are favorited with number.
-func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) ([]model.Jrp, error) {
+func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) ([]*model.Jrp, error) {
 	var deferErr error
 	if number <= 0 {
 		// if number is less than or equal to 0, return nil
@@ -638,9 +647,9 @@ func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) (
 	}()
 
 	// scan rows
-	var allFavorite []model.Jrp
+	var allFavorite []*model.Jrp
 	for rows.Next() {
-		var favorite model.Jrp
+		favorite := &model.Jrp{}
 		if err := rows.Scan(
 			&favorite.ID,
 			&favorite.Phrase,
@@ -667,7 +676,7 @@ func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) (
 }
 
 // SearchAllFavorite searches all jrps that are favorited with keywords.
-func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string, and bool) ([]model.Jrp, error) {
+func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string, and bool) ([]*model.Jrp, error) {
 	var deferErr error
 	if keywords == nil || len(keywords) <= 0 {
 		// if keywords is nil or empty, return nil
@@ -720,9 +729,9 @@ func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string
 	}()
 
 	// scan rows
-	var searchedAllFavorite []model.Jrp
+	var searchedAllFavorite []*model.Jrp
 	for rows.Next() {
-		var favorite model.Jrp
+		favorite := &model.Jrp{}
 		if err := rows.Scan(&favorite.ID,
 			&favorite.Phrase,
 			&favorite.Prefix,
@@ -748,7 +757,7 @@ func (j JrpRepository) SearchFavoriteWithNumber(
 	number int,
 	keywords []string,
 	and bool,
-) ([]model.Jrp, error) {
+) ([]*model.Jrp, error) {
 	var deferErr error
 	if number <= 0 || keywords == nil || len(keywords) <= 0 {
 		// if number is less than or equal to 0 or keywords is nil or empty
@@ -802,9 +811,9 @@ func (j JrpRepository) SearchFavoriteWithNumber(
 	}()
 
 	// scan rows
-	var searchedFavorite []model.Jrp
+	var searchedFavorite []*model.Jrp
 	for rows.Next() {
-		var favorite model.Jrp
+		favorite := &model.Jrp{}
 		if err := rows.Scan(
 			&favorite.ID,
 			&favorite.Phrase,

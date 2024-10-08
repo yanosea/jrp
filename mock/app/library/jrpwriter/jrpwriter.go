@@ -41,7 +41,7 @@ func (m *MockJrpWritable) EXPECT() *MockJrpWritableMockRecorder {
 }
 
 // WriteAsTable mocks base method.
-func (m *MockJrpWritable) WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []model.Jrp) {
+func (m *MockJrpWritable) WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "WriteAsTable", writer, jrps)
 }
@@ -53,7 +53,7 @@ func (mr *MockJrpWritableMockRecorder) WriteAsTable(writer, jrps any) *gomock.Ca
 }
 
 // WriteGenerateResultAsTable mocks base method.
-func (m *MockJrpWritable) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []model.Jrp) {
+func (m *MockJrpWritable) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp) {
 	m.ctrl.T.Helper()
 	m.ctrl.Call(m, "WriteGenerateResultAsTable", writer, jrps)
 }

@@ -130,7 +130,7 @@ func (o *favoriteOption) favoriteRunE(_ *cobra.Command, _ []string) error {
 
 // favorite shows the favorite.
 func (o *favoriteOption) favorite(jrpDBFilePath string) error {
-	var favorites []model.Jrp
+	var favorites []*model.Jrp
 	var err error
 	if o.All {
 		// if all flag is set, get all favorite
@@ -161,7 +161,7 @@ func (o *favoriteOption) favorite(jrpDBFilePath string) error {
 }
 
 // writeFavoriteResult writes the favorite result.
-func (o *favoriteOption) writeFavoriteResult(favorites []model.Jrp) {
+func (o *favoriteOption) writeFavoriteResult(favorites []*model.Jrp) {
 	if len(favorites) != 0 {
 		if o.Plain {
 			for _, favorite := range favorites {

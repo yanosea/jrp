@@ -141,7 +141,7 @@ func (o *historySearchOption) historySearchRunE(_ *cobra.Command, _ []string) er
 
 // historySearch searches the history with the given keywords.
 func (o *historySearchOption) historySearch(jrpDBFilePath string, keywords []string) error {
-	var histories []model.Jrp
+	var histories []*model.Jrp
 	var err error
 	if o.All {
 		// if all flag is set, search all history
@@ -161,7 +161,7 @@ func (o *historySearchOption) historySearch(jrpDBFilePath string, keywords []str
 }
 
 // writeHistorySearchResult writes the history search result.
-func (o *historySearchOption) writeHistorySearchResult(histories []model.Jrp) {
+func (o *historySearchOption) writeHistorySearchResult(histories []*model.Jrp) {
 	if len(histories) != 0 {
 		if o.Plain {
 			for _, hist := range histories {

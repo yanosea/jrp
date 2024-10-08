@@ -248,7 +248,7 @@ func (o *rootOption) root(
 	word string,
 	mode generator.GenerateMode,
 ) error {
-	var jrps []model.Jrp
+	var jrps []*model.Jrp
 	var err error
 	jrps, err = o.rootGenerate(wnJpnDBFilePath, word, mode)
 	if err != nil {
@@ -264,7 +264,7 @@ func (o *rootOption) root(
 }
 
 // rootGenerate generates jrpss.
-func (o *rootOption) rootGenerate(wnJpnDBFilePath string, word string, mode generator.GenerateMode) ([]model.Jrp, error) {
+func (o *rootOption) rootGenerate(wnJpnDBFilePath string, word string, mode generator.GenerateMode) ([]*model.Jrp, error) {
 	strconvProxy := strconvproxy.New()
 	res, jrps, err := o.Generator.GenerateJrp(
 		wnJpnDBFilePath,
@@ -303,7 +303,7 @@ func (o *rootOption) writeRootGenerateResult(result generator.GenerateResult) {
 }
 
 // rootSave saves jrpss.
-func (o *rootOption) rootSave(jrpDBFilePath string, jrps []model.Jrp) error {
+func (o *rootOption) rootSave(jrpDBFilePath string, jrps []*model.Jrp) error {
 	var res jrprepository.SaveStatus
 	var err error
 	if !o.DryRun && len(jrps) != 0 {
@@ -335,7 +335,7 @@ func (o *rootOption) writeRootSaveResult(result jrprepository.SaveStatus) {
 }
 
 // writeRootResult writes the result of the root command.
-func (o *rootOption) writeRootResult(jrps []model.Jrp) {
+func (o *rootOption) writeRootResult(jrps []*model.Jrp) {
 	if len(jrps) != 0 {
 		if o.Plain {
 			for _, jrp := range jrps {

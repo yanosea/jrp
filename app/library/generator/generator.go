@@ -12,7 +12,7 @@ import (
 
 // Generatable is an interface for Generator.
 type Generatable interface {
-	GenerateJrp(wnJpnDBFilePath string, num int, word string, mode GenerateMode) (GenerateResult, []jrp.Jrp, error)
+	GenerateJrp(wnJpnDBFilePath string, num int, word string, mode GenerateMode) (GenerateResult, []*jrp.Jrp, error)
 }
 
 // Generatoor is a struct that implements Generatable interface.
@@ -42,7 +42,7 @@ func New(
 }
 
 // GenerateJrp generates jrps.
-func (g *Generator) GenerateJrp(wnJpnDBFilePath string, num int, word string, mode GenerateMode) (GenerateResult, []jrp.Jrp, error) {
+func (g *Generator) GenerateJrp(wnJpnDBFilePath string, num int, word string, mode GenerateMode) (GenerateResult, []*jrp.Jrp, error) {
 	if _, err := g.OsProxy.Stat(wnJpnDBFilePath); g.OsProxy.IsNotExist(err) {
 		// if WordNet Japan sqlite database file does not exist, return warning
 		return DBFileNotFound, nil, nil
@@ -88,8 +88,8 @@ func (g *Generator) getJrps(num int,
 	argPrefix string,
 	argSuffix string,
 	mode GenerateMode,
-) []jrp.Jrp {
-	jrps := make([]jrp.Jrp, 0)
+) []*jrp.Jrp {
+	jrps := make([]*jrp.Jrp, 0)
 	createdAt := g.TimeProxy.Now()
 
 	for i := 0; i < num; i++ {
@@ -133,7 +133,7 @@ func (g *Generator) getJrps(num int,
 			argPrefix = ""
 		}
 
-		jrp := jrp.Jrp{
+		jrp := &jrp.Jrp{
 			Phrase:    prefixWord + suffixWord,
 			Prefix:    g.SqlProxy.StringToNullString(argPrefix),
 			Suffix:    g.SqlProxy.StringToNullString(argSuffix),
