@@ -102,14 +102,14 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 	}
 	type args struct {
 		jrpDBFilePath string
-		jrps          []model.Jrp
+		jrps          []*model.Jrp
 	}
 	tests := []struct {
 		name       string
 		fields     fields
 		args       args
 		wantStatus SaveStatus
-		wantJrps   []model.Jrp
+		wantJrps   []*model.Jrp
 		wantErr    bool
 		setup      func(mockCtrl *gomock.Controller, tt *fields)
 		cleanup    func()
@@ -150,7 +150,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps:          []model.Jrp{},
+				jrps:          []*model.Jrp{},
 			},
 			wantStatus: SavedNone,
 			wantJrps:   nil,
@@ -176,7 +176,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -187,7 +187,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				},
 			},
 			wantStatus: SavedSuccessfully,
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -219,7 +219,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -237,7 +237,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				},
 			},
 			wantStatus: SavedSuccessfully,
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -277,7 +277,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test2",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -288,7 +288,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				},
 			},
 			wantStatus: SavedSuccessfully,
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -313,7 +313,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							ID:        1,
 							Phrase:    "test1",
@@ -343,7 +343,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test2",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -361,7 +361,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				},
 			},
 			wantStatus: SavedSuccessfully,
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -394,7 +394,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							ID:        1,
 							Phrase:    "test1",
@@ -423,7 +423,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -459,7 +459,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -498,7 +498,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -538,7 +538,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -581,7 +581,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -627,7 +627,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -667,7 +667,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 			},
 		},
 		{
-			name: "negative testing (tx.Commit() failed)",
+			name: "negative testing (res.LastInsertId() failed)",
 			fields: fields{
 				FmtProxy:     fmtproxy.New(),
 				SortProxy:    sortproxy.New(),
@@ -675,7 +675,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -694,6 +694,56 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				}
 				mockResultInstance := mocksqlproxy.NewMockResultInstanceInterface(mockCtrl)
 				mockResultInstance.EXPECT().RowsAffected().Return(int64(0), nil)
+				mockResultInstance.EXPECT().LastInsertId().Return(int64(0), errors.New("ResultInstance.LastInsertId() failed"))
+				mockStmtInstance := mocksqlproxy.NewMockStmtInstanceInterface(mockCtrl)
+				mockStmtInstance.EXPECT().Exec(gomock.Any()).Return(mockResultInstance, nil)
+				mockStmtInstance.EXPECT().Close().Return(nil)
+				mockTxInstance := mocksqlproxy.NewMockTxInstanceInterface(mockCtrl)
+				mockTxInstance.EXPECT().Rollback().Return(nil)
+				mockDBInstance := mocksqlproxy.NewMockDBInstanceInterface(mockCtrl)
+				mockDBInstance.EXPECT().Exec(gomock.Any()).Return(&sqlproxy.ResultInstance{}, nil)
+				mockDBInstance.EXPECT().Begin().Return(mockTxInstance, nil)
+				mockDBInstance.EXPECT().Prepare(gomock.Any()).Return(mockStmtInstance, nil)
+				mockDBInstance.EXPECT().Close().Return(nil)
+				mockSqlProxy := mocksqlproxy.NewMockSql(mockCtrl)
+				mockSqlProxy.EXPECT().Open(gomock.Any(), gomock.Any()).Return(mockDBInstance, nil)
+				tt.SqlProxy = mockSqlProxy
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("Os.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "negative testing (tx.Commit() failed)",
+			fields: fields{
+				FmtProxy:     fmtproxy.New(),
+				SortProxy:    sortproxy.New(),
+				SqlProxy:     nil,
+				StringsProxy: stringsproxy.New(),
+			},
+			args: args{
+				jrps: []*model.Jrp{
+					{
+						Phrase:    "test1",
+						Prefix:    sqlProxy.StringToNullString(""),
+						Suffix:    sqlProxy.StringToNullString(""),
+						CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						UpdatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+					},
+				},
+			},
+			wantStatus: SavedFailed,
+			wantJrps:   nil,
+			wantErr:    true,
+			setup: func(mockCtrl *gomock.Controller, tt *fields) {
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("Os.RemoveAll() : error =\n%v", err)
+				}
+				mockResultInstance := mocksqlproxy.NewMockResultInstanceInterface(mockCtrl)
+				mockResultInstance.EXPECT().RowsAffected().Return(int64(0), nil)
+				mockResultInstance.EXPECT().LastInsertId().Return(int64(0), nil)
 				mockStmtInstance := mocksqlproxy.NewMockStmtInstanceInterface(mockCtrl)
 				mockStmtInstance.EXPECT().Exec(gomock.Any()).Return(mockResultInstance, nil)
 				mockStmtInstance.EXPECT().Close().Return(nil)
@@ -724,7 +774,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -743,6 +793,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 				}
 				mockResultInstance := mocksqlproxy.NewMockResultInstanceInterface(mockCtrl)
 				mockResultInstance.EXPECT().RowsAffected().Return(int64(10), nil)
+				mockResultInstance.EXPECT().LastInsertId().Return(int64(0), nil)
 				mockStmtInstance := mocksqlproxy.NewMockStmtInstanceInterface(mockCtrl)
 				mockStmtInstance.EXPECT().Exec(gomock.Any()).Return(mockResultInstance, nil)
 				mockStmtInstance.EXPECT().Close().Return(nil)
@@ -842,7 +893,7 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    []model.Jrp
+		want    []*model.Jrp
 		wantErr bool
 		setup   func(mockCtrl *gomock.Controller, tt *fields)
 		cleanup func()
@@ -884,7 +935,7 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -901,7 +952,7 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -932,7 +983,7 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -957,7 +1008,7 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1003,7 +1054,7 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1045,7 +1096,7 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1090,7 +1141,7 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1136,7 +1187,7 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1237,7 +1288,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    []model.Jrp
+		want    []*model.Jrp
 		wantErr bool
 		setup   func(mockCtrl *gomock.Controller, tt *fields)
 		cleanup func()
@@ -1362,7 +1413,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1401,7 +1452,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1432,7 +1483,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        1,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -1449,7 +1500,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1480,7 +1531,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        2,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -1497,7 +1548,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1536,7 +1587,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1582,7 +1633,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1620,7 +1671,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        1,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        2,
 					Phrase:    "test2",
@@ -1637,7 +1688,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1675,7 +1726,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        2,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -1700,7 +1751,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1746,7 +1797,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1788,7 +1839,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1833,7 +1884,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1879,7 +1930,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1928,7 +1979,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1973,7 +2024,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        2,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        2,
 					Phrase:    "test2",
@@ -1998,7 +2049,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2099,7 +2150,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    []model.Jrp
+		want    []*model.Jrp
 		wantErr bool
 		setup   func(mockCtrl *gomock.Controller, tt *fields)
 		cleanup func()
@@ -2125,7 +2176,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2165,7 +2216,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2205,7 +2256,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2245,7 +2296,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2285,7 +2336,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2325,7 +2376,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2357,7 +2408,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -2374,7 +2425,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2406,7 +2457,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -2423,7 +2474,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2455,7 +2506,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -2480,7 +2531,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2519,7 +2570,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -2544,7 +2595,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2583,7 +2634,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "凛",
@@ -2600,7 +2651,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2639,7 +2690,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "凛として時雨",
@@ -2656,7 +2707,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2695,7 +2746,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "凛",
@@ -2720,7 +2771,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2766,7 +2817,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "凛として時雨1",
@@ -2791,7 +2842,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2845,7 +2896,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2888,7 +2939,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2933,7 +2984,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2980,7 +3031,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3083,7 +3134,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    []model.Jrp
+		want    []*model.Jrp
 		wantErr bool
 		setup   func(*gomock.Controller, *fields)
 		cleanup func()
@@ -3110,7 +3161,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3151,7 +3202,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3192,7 +3243,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3233,7 +3284,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3274,7 +3325,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3315,7 +3366,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3356,7 +3407,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3389,7 +3440,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -3406,7 +3457,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3439,7 +3490,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -3456,7 +3507,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3489,7 +3540,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -3514,7 +3565,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3554,7 +3605,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        2,
 					Phrase:    "test2",
@@ -3571,7 +3622,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3611,7 +3662,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -3636,7 +3687,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3676,7 +3727,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        2,
 					Phrase:    "test2",
@@ -3693,7 +3744,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3733,7 +3784,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "凛",
@@ -3750,7 +3801,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3790,7 +3841,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "凛として時雨",
@@ -3807,7 +3858,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3847,7 +3898,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "凛",
@@ -3872,7 +3923,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3919,7 +3970,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        2,
 					Phrase:    "時雨",
@@ -3936,7 +3987,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -3983,7 +4034,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "凛として時雨1",
@@ -4008,7 +4059,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4055,7 +4106,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:        2,
 					Phrase:    "凛として時雨2",
@@ -4072,7 +4123,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4127,7 +4178,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4171,7 +4222,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4218,7 +4269,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4266,7 +4317,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4394,7 +4445,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4434,7 +4485,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4474,7 +4525,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4514,7 +4565,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4554,7 +4605,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4597,7 +4648,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4637,7 +4688,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4680,7 +4731,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4720,7 +4771,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4767,7 +4818,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4817,7 +4868,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4867,7 +4918,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4914,7 +4965,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -4964,7 +5015,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5014,7 +5065,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5057,7 +5108,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5103,7 +5154,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5150,7 +5201,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5200,7 +5251,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5375,7 +5426,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5416,7 +5467,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5460,7 +5511,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5508,7 +5559,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5559,7 +5610,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5637,7 +5688,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5678,7 +5729,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5722,7 +5773,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5770,7 +5821,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5821,7 +5872,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5872,7 +5923,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5916,7 +5967,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -5963,7 +6014,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6011,7 +6062,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6062,7 +6113,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6117,7 +6168,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6173,7 +6224,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6230,7 +6281,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6350,7 +6401,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    []model.Jrp
+		want    []*model.Jrp
 		wantErr bool
 		setup   func(mockCtrl *gomock.Controller, tt *fields)
 		cleanup func()
@@ -6398,7 +6449,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6428,7 +6479,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -6446,7 +6497,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6487,7 +6538,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6524,7 +6575,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -6551,7 +6602,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6591,7 +6642,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -6609,7 +6660,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6657,7 +6708,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6701,7 +6752,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6745,7 +6796,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6790,7 +6841,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -6891,7 +6942,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    []model.Jrp
+		want    []*model.Jrp
 		wantErr bool
 		setup   func(mockCtrl *gomock.Controller, tt *fields)
 		cleanup func()
@@ -7016,7 +7067,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7058,7 +7109,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7100,7 +7151,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7131,7 +7182,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        1,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -7149,7 +7200,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7191,7 +7242,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7222,7 +7273,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        2,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -7240,7 +7291,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7282,7 +7333,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7331,7 +7382,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7369,7 +7420,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        1,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -7387,7 +7438,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7436,7 +7487,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7474,7 +7525,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        2,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -7501,7 +7552,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7542,7 +7593,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        2,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -7560,7 +7611,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7609,7 +7660,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7654,7 +7705,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7702,7 +7753,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7751,7 +7802,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7803,7 +7854,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7851,7 +7902,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				jrpDBFilePath: jrpDBFilePath,
 				number:        2,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          2,
 					Phrase:      "test2",
@@ -7878,7 +7929,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -7982,7 +8033,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    []model.Jrp
+		want    []*model.Jrp
 		wantErr bool
 		setup   func(mockCtrl *gomock.Controller, tt *fields)
 		cleanup func()
@@ -8008,7 +8059,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8051,7 +8102,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8094,7 +8145,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8137,7 +8188,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8180,7 +8231,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8223,7 +8274,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8266,7 +8317,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8298,7 +8349,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -8316,7 +8367,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8359,7 +8410,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8391,7 +8442,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -8409,7 +8460,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8452,7 +8503,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8491,7 +8542,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -8518,7 +8569,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8560,7 +8611,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -8578,7 +8629,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8628,7 +8679,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8667,7 +8718,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -8694,7 +8745,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8736,7 +8787,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -8754,7 +8805,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8804,7 +8855,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8851,7 +8902,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8890,7 +8941,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛",
@@ -8908,7 +8959,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8958,7 +9009,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -8997,7 +9048,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛として時雨",
@@ -9015,7 +9066,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9065,7 +9116,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9111,7 +9162,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛",
@@ -9138,7 +9189,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9195,7 +9246,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9241,7 +9292,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛として時雨1",
@@ -9268,7 +9319,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9317,7 +9368,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛として時雨1",
@@ -9335,7 +9386,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9392,7 +9443,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9438,7 +9489,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9487,7 +9538,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9537,7 +9588,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9643,7 +9694,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    []model.Jrp
+		want    []*model.Jrp
 		wantErr bool
 		setup   func(*gomock.Controller, *fields)
 		cleanup func()
@@ -9670,7 +9721,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9714,7 +9765,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9758,7 +9809,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9802,7 +9853,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9846,7 +9897,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9890,7 +9941,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9934,7 +9985,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -9978,7 +10029,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10011,7 +10062,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -10029,7 +10080,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10073,7 +10124,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10106,7 +10157,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -10124,7 +10175,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10168,7 +10219,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10208,7 +10259,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -10235,7 +10286,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10278,7 +10329,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -10296,7 +10347,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10347,7 +10398,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10387,7 +10438,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          2,
 					Phrase:      "test2",
@@ -10405,7 +10456,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10448,7 +10499,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -10466,7 +10517,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10517,7 +10568,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10557,7 +10608,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -10584,7 +10635,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10627,7 +10678,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -10645,7 +10696,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10696,7 +10747,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10736,7 +10787,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          2,
 					Phrase:      "test2",
@@ -10754,7 +10805,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10797,7 +10848,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"test"},
 				and:           true,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -10815,7 +10866,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10866,7 +10917,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10906,7 +10957,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛",
@@ -10924,7 +10975,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -10975,7 +11026,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11015,7 +11066,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛として時雨",
@@ -11033,7 +11084,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11084,7 +11135,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11131,7 +11182,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛",
@@ -11158,7 +11209,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11208,7 +11259,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛",
@@ -11226,7 +11277,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11284,7 +11335,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11331,7 +11382,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          2,
 					Phrase:      "時雨",
@@ -11349,7 +11400,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11399,7 +11450,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛",
@@ -11417,7 +11468,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11475,7 +11526,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11522,7 +11573,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛として時雨1",
@@ -11549,7 +11600,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11599,7 +11650,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛として時雨1",
@@ -11617,7 +11668,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11675,7 +11726,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11722,7 +11773,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          2,
 					Phrase:      "凛として時雨2",
@@ -11740,7 +11791,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11790,7 +11841,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				keywords:      []string{"凛", "時雨"},
 				and:           false,
 			},
-			want: []model.Jrp{
+			want: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "凛として時雨1",
@@ -11808,7 +11859,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "凛として時雨1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11866,7 +11917,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11913,7 +11964,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -11963,7 +12014,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12014,7 +12065,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12143,7 +12194,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12182,7 +12233,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12221,7 +12272,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12260,7 +12311,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12299,7 +12350,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12341,7 +12392,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12380,7 +12431,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12426,7 +12477,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12475,7 +12526,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12517,7 +12568,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12562,7 +12613,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12608,7 +12659,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12656,7 +12707,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12799,7 +12850,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12841,7 +12892,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12883,7 +12934,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12925,7 +12976,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -12964,7 +13015,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13006,7 +13057,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13048,7 +13099,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13094,7 +13145,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13143,7 +13194,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13192,7 +13243,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13237,7 +13288,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13285,7 +13336,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13334,7 +13385,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13386,7 +13437,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13554,7 +13605,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13594,7 +13645,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13637,7 +13688,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13684,7 +13735,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13734,7 +13785,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13784,7 +13835,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13830,7 +13881,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13877,7 +13928,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
 					t.Errorf("Os.RemoveAll() : error =\n%v", err)
 				}
-				if _, err := jrpRepository.SaveHistory(jrpDBFilePath, []model.Jrp{
+				if _, err := jrpRepository.SaveHistory(jrpDBFilePath, []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -13927,7 +13978,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -13980,7 +14031,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -14035,7 +14086,7 @@ func TestJrpRepository_RemoveFavoriteAll(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),

@@ -151,7 +151,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 		fields     fields
 		wantStdOut string
 		wantStdErr string
-		wantJrps   []model.Jrp
+		wantJrps   []*model.Jrp
 		wantErr    bool
 		setup      func()
 		cleanup    func()
@@ -299,7 +299,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -350,7 +350,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -393,7 +393,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.HISTORY_CLEAR_MESSAGE_CLEARED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -411,7 +411,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -465,7 +465,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -519,7 +519,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -577,7 +577,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -627,7 +627,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.HISTORY_CLEAR_MESSAGE_CLEARED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -654,7 +654,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -715,7 +715,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -768,7 +768,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.GreenString(constant.HISTORY_CLEAR_MESSAGE_CLEARED_SUCCESSFULLY) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -786,7 +786,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -847,7 +847,7 @@ func Test_historyClearOption_historyClearRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1080,7 +1080,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 		name     string
 		fields   fields
 		args     args
-		wantJrps []model.Jrp
+		wantJrps []*model.Jrp
 		wantErr  bool
 		setup    func(*gomock.Controller, *fields)
 		cleanup  func()
@@ -1138,7 +1138,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1180,7 +1180,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1215,7 +1215,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
 			},
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -1233,7 +1233,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1278,7 +1278,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1324,7 +1324,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1373,7 +1373,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1415,7 +1415,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
 			},
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -1442,7 +1442,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1494,7 +1494,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1539,7 +1539,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
 			},
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -1557,7 +1557,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1609,7 +1609,7 @@ func Test_historyClearOption_historyClear(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),

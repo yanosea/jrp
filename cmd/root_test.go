@@ -1378,13 +1378,13 @@ func Test_rootOption_rootSave(t *testing.T) {
 	}
 	type args struct {
 		jrpDBFilePath string
-		jrps          []model.Jrp
+		jrps          []*model.Jrp
 	}
 	tests := []struct {
 		name     string
 		fields   fields
 		args     args
-		wantJrps []model.Jrp
+		wantJrps []*model.Jrp
 		wantErr  bool
 		setup    func(mockCtrl *gomock.Controller, tt *fields)
 		cleanup  func()
@@ -1444,7 +1444,7 @@ func Test_rootOption_rootSave(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps:          []model.Jrp{},
+				jrps:          []*model.Jrp{},
 			},
 			wantJrps: nil,
 			wantErr:  false,
@@ -1479,7 +1479,7 @@ func Test_rootOption_rootSave(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -1489,7 +1489,7 @@ func Test_rootOption_rootSave(t *testing.T) {
 					},
 				},
 			},
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -1531,7 +1531,7 @@ func Test_rootOption_rootSave(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -1548,7 +1548,7 @@ func Test_rootOption_rootSave(t *testing.T) {
 					},
 				},
 			},
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:        1,
 					Phrase:    "test1",
@@ -1633,7 +1633,7 @@ func Test_rootOption_rootSave(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps:          []model.Jrp{},
+				jrps:          []*model.Jrp{},
 			},
 			wantJrps: nil,
 			wantErr:  false,
@@ -1668,7 +1668,7 @@ func Test_rootOption_rootSave(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -1711,7 +1711,7 @@ func Test_rootOption_rootSave(t *testing.T) {
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
-				jrps: []model.Jrp{
+				jrps: []*model.Jrp{
 					{
 						Phrase:    "test1",
 						Prefix:    sqlProxy.StringToNullString(""),
@@ -2076,7 +2076,7 @@ func Test_rootOption_writeRootResult(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.writeRootResult([]model.Jrp{})
+					rootOption.writeRootResult([]*model.Jrp{})
 				},
 				capturer: capturer,
 			},
@@ -2105,18 +2105,19 @@ func Test_rootOption_writeRootResult(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.writeRootResult([]model.Jrp{
-						{
-							Phrase:    "test",
-							Prefix:    sqlProxy.StringToNullString("prefix"),
-							Suffix:    sqlProxy.StringToNullString("suffix"),
-							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
-						},
-					})
+					rootOption.writeRootResult(
+						[]*model.Jrp{
+							{
+								Phrase:    "test",
+								Prefix:    sqlProxy.StringToNullString("prefix"),
+								Suffix:    sqlProxy.StringToNullString("suffix"),
+								CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							},
+						})
 				},
 				capturer: capturer,
 			},
-			wantStdOut: "PHRASE\tPREFIX\tSUFFIX\tCREATED AT\ntest\tprefix\tsuffix\t9999-12-31 00:00:00\n\t\t\t\nTOTAL : 1\t\t\t\n",
+			wantStdOut: "ID\tPHRASE\tPREFIX\tSUFFIX\tCREATED AT\n0\ttest\tprefix\tsuffix\t9999-12-31 00:00:00\n\t\t\t\nTOTAL : 1\t\t\t\n",
 			wantStdErr: "",
 			wantErr:    false,
 		},
@@ -2141,24 +2142,25 @@ func Test_rootOption_writeRootResult(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.writeRootResult([]model.Jrp{
-						{
-							Phrase:    "test1",
-							Prefix:    sqlProxy.StringToNullString("prefix1"),
-							Suffix:    sqlProxy.StringToNullString("suffix1"),
-							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
-						},
-						{
-							Phrase:    "test2",
-							Prefix:    sqlProxy.StringToNullString("prefix2"),
-							Suffix:    sqlProxy.StringToNullString("suffix2"),
-							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
-						},
-					})
+					rootOption.writeRootResult(
+						[]*model.Jrp{
+							{
+								Phrase:    "test1",
+								Prefix:    sqlProxy.StringToNullString("prefix1"),
+								Suffix:    sqlProxy.StringToNullString("suffix1"),
+								CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							},
+							{
+								Phrase:    "test2",
+								Prefix:    sqlProxy.StringToNullString("prefix2"),
+								Suffix:    sqlProxy.StringToNullString("suffix2"),
+								CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							},
+						})
 				},
 				capturer: capturer,
 			},
-			wantStdOut: "PHRASE\tPREFIX\tSUFFIX\tCREATED AT\ntest1\tprefix1\tsuffix1\t9999-12-31 00:00:00\ntest2\tprefix2\tsuffix2\t9999-12-31 00:00:00\n\t\t\t\nTOTAL : 2\t\t\t\n",
+			wantStdOut: "ID\tPHRASE\tPREFIX\tSUFFIX\tCREATED AT\n0\ttest1\tprefix1\tsuffix1\t9999-12-31 00:00:00\n0\ttest2\tprefix2\tsuffix2\t9999-12-31 00:00:00\n\t\t\t\nTOTAL : 2\t\t\t\n",
 			wantStdErr: "",
 			wantErr:    false,
 		},
@@ -2212,7 +2214,7 @@ func Test_rootOption_writeRootResult(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.writeRootResult([]model.Jrp{})
+					rootOption.writeRootResult([]*model.Jrp{})
 				},
 				capturer: capturer,
 			},
@@ -2241,14 +2243,15 @@ func Test_rootOption_writeRootResult(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.writeRootResult([]model.Jrp{
-						{
-							Phrase:    "test",
-							Prefix:    sqlProxy.StringToNullString("prefix"),
-							Suffix:    sqlProxy.StringToNullString("suffix"),
-							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
-						},
-					})
+					rootOption.writeRootResult(
+						[]*model.Jrp{
+							{
+								Phrase:    "test",
+								Prefix:    sqlProxy.StringToNullString("prefix"),
+								Suffix:    sqlProxy.StringToNullString("suffix"),
+								CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							},
+						})
 				},
 				capturer: capturer,
 			},
@@ -2277,20 +2280,21 @@ func Test_rootOption_writeRootResult(t *testing.T) {
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
 					}
-					rootOption.writeRootResult([]model.Jrp{
-						{
-							Phrase:    "test1",
-							Prefix:    sqlProxy.StringToNullString("prefix1"),
-							Suffix:    sqlProxy.StringToNullString("suffix1"),
-							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
-						},
-						{
-							Phrase:    "test2",
-							Prefix:    sqlProxy.StringToNullString("prefix2"),
-							Suffix:    sqlProxy.StringToNullString("suffix2"),
-							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
-						},
-					})
+					rootOption.writeRootResult(
+						[]*model.Jrp{
+							{
+								Phrase:    "test1",
+								Prefix:    sqlProxy.StringToNullString("prefix1"),
+								Suffix:    sqlProxy.StringToNullString("suffix1"),
+								CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							},
+							{
+								Phrase:    "test2",
+								Prefix:    sqlProxy.StringToNullString("prefix2"),
+								Suffix:    sqlProxy.StringToNullString("suffix2"),
+								CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							},
+						})
 				},
 				capturer: capturer,
 			},
