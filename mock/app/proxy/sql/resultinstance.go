@@ -38,6 +38,21 @@ func (m *MockResultInstanceInterface) EXPECT() *MockResultInstanceInterfaceMockR
 	return m.recorder
 }
 
+// LastInsertId mocks base method.
+func (m *MockResultInstanceInterface) LastInsertId() (int64, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "LastInsertId")
+	ret0, _ := ret[0].(int64)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// LastInsertId indicates an expected call of LastInsertId.
+func (mr *MockResultInstanceInterfaceMockRecorder) LastInsertId() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "LastInsertId", reflect.TypeOf((*MockResultInstanceInterface)(nil).LastInsertId))
+}
+
 // RowsAffected mocks base method.
 func (m *MockResultInstanceInterface) RowsAffected() (int64, error) {
 	m.ctrl.T.Helper()
