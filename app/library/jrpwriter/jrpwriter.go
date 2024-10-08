@@ -36,8 +36,8 @@ func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInte
 		return
 	}
 
-	headers := []string{"phrase", "prefix", "suffix", "created_at"}
 	rowFunc := func(jrp model.Jrp) []string {
+	headers := []string{"id", "phrase", "prefix", "suffix", "created_at"}
 		prefix := ""
 		if jrp.Prefix.FieldNullString.Valid {
 			prefix = jrp.Prefix.FieldNullString.String
@@ -47,6 +47,7 @@ func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInte
 			suffix = jrp.Suffix.FieldNullString.String
 		}
 		return []string{
+			j.StrconvProxy.Itoa(jrp.ID),
 			jrp.Phrase,
 			prefix,
 			suffix,
