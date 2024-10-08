@@ -6,7 +6,7 @@ import (
 	"github.com/yanosea/jrp/app/library/versionprovider"
 	"github.com/yanosea/jrp/app/proxy/cobra"
 	"github.com/yanosea/jrp/app/proxy/debug"
-	fmtproxy "github.com/yanosea/jrp/app/proxy/fmt"
+	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/cmd/constant"
 )
 
