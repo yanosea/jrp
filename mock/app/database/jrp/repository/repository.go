@@ -56,10 +56,10 @@ func (mr *MockJrpRepositoryInterfaceMockRecorder) AddFavoriteByIDs(jrpDBFilePath
 }
 
 // GetAllFavorite mocks base method.
-func (m *MockJrpRepositoryInterface) GetAllFavorite(jrpDBFilePath string) ([]model.Jrp, error) {
+func (m *MockJrpRepositoryInterface) GetAllFavorite(jrpDBFilePath string) ([]*model.Jrp, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAllFavorite", jrpDBFilePath)
-	ret0, _ := ret[0].([]model.Jrp)
+	ret0, _ := ret[0].([]*model.Jrp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -71,10 +71,10 @@ func (mr *MockJrpRepositoryInterfaceMockRecorder) GetAllFavorite(jrpDBFilePath a
 }
 
 // GetAllHistory mocks base method.
-func (m *MockJrpRepositoryInterface) GetAllHistory(jrpDBFilePath string) ([]model.Jrp, error) {
+func (m *MockJrpRepositoryInterface) GetAllHistory(jrpDBFilePath string) ([]*model.Jrp, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetAllHistory", jrpDBFilePath)
-	ret0, _ := ret[0].([]model.Jrp)
+	ret0, _ := ret[0].([]*model.Jrp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -86,10 +86,10 @@ func (mr *MockJrpRepositoryInterfaceMockRecorder) GetAllHistory(jrpDBFilePath an
 }
 
 // GetFavoriteWithNumber mocks base method.
-func (m *MockJrpRepositoryInterface) GetFavoriteWithNumber(jrpDBFilePath string, number int) ([]model.Jrp, error) {
+func (m *MockJrpRepositoryInterface) GetFavoriteWithNumber(jrpDBFilePath string, number int) ([]*model.Jrp, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetFavoriteWithNumber", jrpDBFilePath, number)
-	ret0, _ := ret[0].([]model.Jrp)
+	ret0, _ := ret[0].([]*model.Jrp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -101,10 +101,10 @@ func (mr *MockJrpRepositoryInterfaceMockRecorder) GetFavoriteWithNumber(jrpDBFil
 }
 
 // GetHistoryWithNumber mocks base method.
-func (m *MockJrpRepositoryInterface) GetHistoryWithNumber(jrpDBFilePath string, number int) ([]model.Jrp, error) {
+func (m *MockJrpRepositoryInterface) GetHistoryWithNumber(jrpDBFilePath string, number int) ([]*model.Jrp, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GetHistoryWithNumber", jrpDBFilePath, number)
-	ret0, _ := ret[0].([]model.Jrp)
+	ret0, _ := ret[0].([]*model.Jrp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -176,7 +176,7 @@ func (mr *MockJrpRepositoryInterfaceMockRecorder) RemoveHistoryByIDs(jrpDBFilePa
 }
 
 // SaveHistory mocks base method.
-func (m *MockJrpRepositoryInterface) SaveHistory(jrpDBFilePath string, jrps []model.Jrp) (repository.SaveStatus, error) {
+func (m *MockJrpRepositoryInterface) SaveHistory(jrpDBFilePath string, jrps []*model.Jrp) (repository.SaveStatus, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SaveHistory", jrpDBFilePath, jrps)
 	ret0, _ := ret[0].(repository.SaveStatus)
@@ -191,10 +191,10 @@ func (mr *MockJrpRepositoryInterfaceMockRecorder) SaveHistory(jrpDBFilePath, jrp
 }
 
 // SearchAllFavorite mocks base method.
-func (m *MockJrpRepositoryInterface) SearchAllFavorite(jrpDBFilePath string, keywords []string, and bool) ([]model.Jrp, error) {
+func (m *MockJrpRepositoryInterface) SearchAllFavorite(jrpDBFilePath string, keywords []string, and bool) ([]*model.Jrp, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchAllFavorite", jrpDBFilePath, keywords, and)
-	ret0, _ := ret[0].([]model.Jrp)
+	ret0, _ := ret[0].([]*model.Jrp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -206,10 +206,10 @@ func (mr *MockJrpRepositoryInterfaceMockRecorder) SearchAllFavorite(jrpDBFilePat
 }
 
 // SearchAllHistory mocks base method.
-func (m *MockJrpRepositoryInterface) SearchAllHistory(jrpDBFilePath string, keywords []string, and bool) ([]model.Jrp, error) {
+func (m *MockJrpRepositoryInterface) SearchAllHistory(jrpDBFilePath string, keywords []string, and bool) ([]*model.Jrp, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchAllHistory", jrpDBFilePath, keywords, and)
-	ret0, _ := ret[0].([]model.Jrp)
+	ret0, _ := ret[0].([]*model.Jrp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -221,10 +221,10 @@ func (mr *MockJrpRepositoryInterfaceMockRecorder) SearchAllHistory(jrpDBFilePath
 }
 
 // SearchFavoriteWithNumber mocks base method.
-func (m *MockJrpRepositoryInterface) SearchFavoriteWithNumber(jrpDBFilePath string, number int, keywords []string, and bool) ([]model.Jrp, error) {
+func (m *MockJrpRepositoryInterface) SearchFavoriteWithNumber(jrpDBFilePath string, number int, keywords []string, and bool) ([]*model.Jrp, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchFavoriteWithNumber", jrpDBFilePath, number, keywords, and)
-	ret0, _ := ret[0].([]model.Jrp)
+	ret0, _ := ret[0].([]*model.Jrp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
@@ -236,10 +236,10 @@ func (mr *MockJrpRepositoryInterfaceMockRecorder) SearchFavoriteWithNumber(jrpDB
 }
 
 // SearchHistoryWithNumber mocks base method.
-func (m *MockJrpRepositoryInterface) SearchHistoryWithNumber(jrpDBFilePath string, number int, keywords []string, and bool) ([]model.Jrp, error) {
+func (m *MockJrpRepositoryInterface) SearchHistoryWithNumber(jrpDBFilePath string, number int, keywords []string, and bool) ([]*model.Jrp, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "SearchHistoryWithNumber", jrpDBFilePath, number, keywords, and)
-	ret0, _ := ret[0].([]model.Jrp)
+	ret0, _ := ret[0].([]*model.Jrp)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }

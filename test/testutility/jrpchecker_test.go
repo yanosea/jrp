@@ -130,7 +130,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -172,7 +172,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -211,7 +211,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -253,7 +253,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -298,7 +298,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -420,7 +420,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -460,7 +460,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -500,7 +500,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -543,7 +543,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -589,7 +589,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -711,7 +711,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -751,7 +751,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -791,7 +791,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -834,7 +834,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -880,7 +880,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -951,8 +951,8 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 		StringsProxy stringsproxy.Strings
 	}
 	type args struct {
-		got  []model.Jrp
-		want []model.Jrp
+		got  []*model.Jrp
+		want []*model.Jrp
 	}
 	tests := []struct {
 		name   string
@@ -970,7 +970,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				got: []model.Jrp{
+				got: []*model.Jrp{
 					{
 						ID:          1,
 						Phrase:      "test1",
@@ -981,7 +981,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 						UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 					},
 				},
-				want: []model.Jrp{},
+				want: []*model.Jrp{},
 			},
 			want: false,
 		},
@@ -995,7 +995,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				got: []model.Jrp{
+				got: []*model.Jrp{
 					{
 						ID:          1,
 						Phrase:      "test1",
@@ -1006,7 +1006,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 						UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 					},
 				},
-				want: []model.Jrp{
+				want: []*model.Jrp{
 					{
 						ID:          1,
 						Phrase:      "test1",
@@ -1030,7 +1030,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				got: []model.Jrp{
+				got: []*model.Jrp{
 					{
 						ID:          1,
 						Phrase:      "test1",
@@ -1041,7 +1041,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 						UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 					},
 				},
-				want: []model.Jrp{
+				want: []*model.Jrp{
 					{
 						ID:          1,
 						Phrase:      "test1",
@@ -1065,7 +1065,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				got: []model.Jrp{
+				got: []*model.Jrp{
 					{
 						ID:          1,
 						Phrase:      "test1",
@@ -1076,7 +1076,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 						UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 					},
 				},
-				want: []model.Jrp{
+				want: []*model.Jrp{
 					{
 						ID:          1,
 						Phrase:      "test1",
@@ -1100,7 +1100,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 				StringsProxy: stringsproxy.New(),
 			},
 			args: args{
-				got: []model.Jrp{
+				got: []*model.Jrp{
 					{
 						ID:          1,
 						Phrase:      "test1",
@@ -1111,7 +1111,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 						UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 					},
 				},
-				want: []model.Jrp{
+				want: []*model.Jrp{
 					{
 						ID:          1,
 						Phrase:      "test1",

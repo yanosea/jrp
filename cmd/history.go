@@ -127,7 +127,7 @@ func (o *historyOption) historyRunE(_ *cobra.Command, _ []string) error {
 
 // history searches the history.
 func (o *historyOption) history(jrpDBFilePath string) error {
-	var histories []model.Jrp
+	var histories []*model.Jrp
 	var err error
 	if o.All {
 		// if all flag is set, get all history
@@ -158,7 +158,7 @@ func (o *historyOption) history(jrpDBFilePath string) error {
 }
 
 // writeHistoryResult writes the history result.
-func (o *historyOption) writeHistoryResult(histories []model.Jrp) {
+func (o *historyOption) writeHistoryResult(histories []*model.Jrp) {
 	if len(histories) != 0 {
 		if o.Plain {
 			for _, history := range histories {

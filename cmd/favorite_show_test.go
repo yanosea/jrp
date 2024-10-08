@@ -189,7 +189,7 @@ func Test_favoriteShowOption_favoriteShowRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -243,7 +243,7 @@ func Test_favoriteShowOption_favoriteShowRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -304,7 +304,7 @@ func Test_favoriteShowOption_favoriteShowRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -365,7 +365,7 @@ func Test_favoriteShowOption_favoriteShowRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -419,7 +419,7 @@ func Test_favoriteShowOption_favoriteShowRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -473,7 +473,7 @@ func Test_favoriteShowOption_favoriteShowRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -527,7 +527,7 @@ func Test_favoriteShowOption_favoriteShowRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -701,7 +701,7 @@ func Test_favoriteShowShowShowOption_favoriteShowShowShow(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -755,7 +755,7 @@ func Test_favoriteShowShowShowOption_favoriteShowShowShow(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -816,7 +816,7 @@ func Test_favoriteShowShowShowOption_favoriteShowShowShow(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -940,7 +940,7 @@ func Test_favoriteShowShowShowOption_favoriteShowShowShow(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1064,7 +1064,7 @@ func Test_favoriteShowShowShowOption_favoriteShowShowShow(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1188,7 +1188,7 @@ func Test_favoriteShowShowShowOption_favoriteShowShowShow(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1312,7 +1312,7 @@ func Test_favoriteShowShowShowOption_favoriteShowShowShow(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1519,7 +1519,7 @@ func Test_favoriteShowShowOption_writeFavoriteShowResult(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					favoriteShowOption.writeFavoriteShowResult([]model.Jrp{})
+					favoriteShowOption.writeFavoriteShowResult([]*model.Jrp{})
 				},
 				capturer: capturer,
 			},
@@ -1544,7 +1544,7 @@ func Test_favoriteShowShowOption_writeFavoriteShowResult(t *testing.T) {
 						Utility:               util,
 					}
 					favoriteShowOption.writeFavoriteShowResult(
-						[]model.Jrp{
+						[]*model.Jrp{
 							{
 								ID:          1,
 								Phrase:      "test",
@@ -1580,7 +1580,7 @@ func Test_favoriteShowShowOption_writeFavoriteShowResult(t *testing.T) {
 						Utility:               util,
 					}
 					favoriteShowOption.writeFavoriteShowResult(
-						[]model.Jrp{
+						[]*model.Jrp{
 							{
 								ID:          1,
 								Phrase:      "test1",
@@ -1648,7 +1648,7 @@ func Test_favoriteShowShowOption_writeFavoriteShowResult(t *testing.T) {
 						JrpWriter:             jrpWriter,
 						Utility:               util,
 					}
-					favoriteShowOption.writeFavoriteShowResult([]model.Jrp{})
+					favoriteShowOption.writeFavoriteShowResult([]*model.Jrp{})
 				},
 				capturer: capturer,
 			},
@@ -1673,7 +1673,7 @@ func Test_favoriteShowShowOption_writeFavoriteShowResult(t *testing.T) {
 						Utility:               util,
 					}
 					favoriteShowOption.writeFavoriteShowResult(
-						[]model.Jrp{
+						[]*model.Jrp{
 							{
 								ID:          1,
 								Phrase:      "test",
@@ -1709,7 +1709,7 @@ func Test_favoriteShowShowOption_writeFavoriteShowResult(t *testing.T) {
 						Utility:               util,
 					}
 					favoriteShowOption.writeFavoriteShowResult(
-						[]model.Jrp{
+						[]*model.Jrp{
 							{
 								ID:          1,
 								Phrase:      "test1",

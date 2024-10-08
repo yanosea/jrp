@@ -93,7 +93,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, []model.Jrp{})
+					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, []*model.Jrp{})
 				},
 				capturer: capturer,
 			},
@@ -106,7 +106,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrps := []model.Jrp{
+					jrps := []*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString("prefix"),
@@ -118,7 +118,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 				},
 				capturer: capturer,
 			},
-			wantStdOut: "PHRASE\tPREFIX\tSUFFIX\tCREATED AT\ntest\tprefix\tsuffix\t9999-12-31 00:00:00\n\t\t\t\nTOTAL : 1\t\t\t\n",
+			wantStdOut: "ID\tPHRASE\tPREFIX\tSUFFIX\tCREATED AT\n0\ttest\tprefix\tsuffix\t9999-12-31 00:00:00\n\t\t\t\nTOTAL : 1\t\t\t\n",
 			wantStdErr: "",
 			wantErr:    false,
 		},
@@ -127,7 +127,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrps := []model.Jrp{
+					jrps := []*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString("prefix1"),
@@ -145,7 +145,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 				},
 				capturer: capturer,
 			},
-			wantStdOut: "PHRASE\tPREFIX\tSUFFIX\tCREATED AT\ntest1\tprefix1\tsuffix1\t9999-12-31 00:00:00\ntest2\tprefix2\tsuffix2\t9999-12-31 00:00:00\n\t\t\t\nTOTAL : 2\t\t\t\n",
+			wantStdOut: "ID\tPHRASE\tPREFIX\tSUFFIX\tCREATED AT\n0\ttest1\tprefix1\tsuffix1\t9999-12-31 00:00:00\n0\ttest2\tprefix2\tsuffix2\t9999-12-31 00:00:00\n\t\t\t\nTOTAL : 2\t\t\t\n",
 			wantStdErr: "",
 			wantErr:    false,
 		},
@@ -216,7 +216,7 @@ func TestJrpWriter_WriteAsTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrpWriter.WriteAsTable(osproxy.Stdout, []model.Jrp{})
+					jrpWriter.WriteAsTable(osproxy.Stdout, []*model.Jrp{})
 				},
 				capturer: capturer,
 			},
@@ -229,7 +229,7 @@ func TestJrpWriter_WriteAsTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrps := []model.Jrp{
+					jrps := []*model.Jrp{
 						{
 							ID:          1,
 							Phrase:      "test",
@@ -252,7 +252,7 @@ func TestJrpWriter_WriteAsTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrps := []model.Jrp{
+					jrps := []*model.Jrp{
 						{
 							ID:          1,
 							Phrase:      "test1",
@@ -315,7 +315,7 @@ func TestJrpWriter_writeTable(t *testing.T) {
 		tablewriterproxy.New(),
 	)
 	headers := []string{"phrase"}
-	rowFunc := func(jrp model.Jrp) []string {
+	rowFunc := func(jrp *model.Jrp) []string {
 		return []string{
 			jrp.Phrase,
 		}
@@ -350,7 +350,7 @@ func TestJrpWriter_writeTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrpWriter.writeTable(osproxy.Stdout, []model.Jrp{}, headers, rowFunc)
+					jrpWriter.writeTable(osproxy.Stdout, []*model.Jrp{}, headers, rowFunc)
 				},
 				capturer: capturer,
 			},
@@ -362,7 +362,7 @@ func TestJrpWriter_writeTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrps := []model.Jrp{
+					jrps := []*model.Jrp{
 						{
 							Phrase: "test",
 						},
@@ -378,7 +378,7 @@ func TestJrpWriter_writeTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrps := []model.Jrp{
+					jrps := []*model.Jrp{
 						{
 							Phrase: "test1",
 						}, {

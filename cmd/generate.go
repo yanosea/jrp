@@ -183,7 +183,7 @@ func (o *generateOption) generate(
 	word string,
 	mode generator.GenerateMode,
 ) error {
-	var jrps []model.Jrp
+	var jrps []*model.Jrp
 	var err error
 	jrps, err = o.generateGenerate(wnJpnDBFilePath, word, mode)
 	if err != nil {
@@ -199,7 +199,7 @@ func (o *generateOption) generate(
 }
 
 // generateGenerate generates jrps.
-func (o *generateOption) generateGenerate(wnJpnDBFilePath string, word string, mode generator.GenerateMode) ([]model.Jrp, error) {
+func (o *generateOption) generateGenerate(wnJpnDBFilePath string, word string, mode generator.GenerateMode) ([]*model.Jrp, error) {
 	strconvProxy := strconvproxy.New()
 	res, jrps, err := o.Generator.GenerateJrp(
 		wnJpnDBFilePath,
@@ -238,7 +238,7 @@ func (o *generateOption) writeGenerateGenerateResult(result generator.GenerateRe
 }
 
 // generateSave saves jrps.
-func (o *generateOption) generateSave(jrpDBFilePath string, jrps []model.Jrp) error {
+func (o *generateOption) generateSave(jrpDBFilePath string, jrps []*model.Jrp) error {
 	var res jrprepository.SaveStatus
 	var err error
 	if !o.DryRun && len(jrps) != 0 {
@@ -271,7 +271,7 @@ func (o *generateOption) writeGenerateSaveResult(result jrprepository.SaveStatus
 }
 
 // writeGenerateResult writes the result of generate command.
-func (o *generateOption) writeGenerateResult(jrps []model.Jrp) {
+func (o *generateOption) writeGenerateResult(jrps []*model.Jrp) {
 	if len(jrps) != 0 {
 		if o.Plain {
 			for _, jrp := range jrps {

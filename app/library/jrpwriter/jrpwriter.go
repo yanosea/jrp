@@ -9,8 +9,8 @@ import (
 
 // JrpWritable is an interface for JrpWriter.
 type JrpWritable interface {
-	WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []model.Jrp)
-	WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []model.Jrp)
+	WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp)
+	WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp)
 }
 
 // JrpWriter is a struct that implements JrpWritable.
@@ -31,13 +31,13 @@ func New(
 }
 
 // WriteGenerateResultAsTable writes the generate result as table.
-func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []model.Jrp) {
+func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp) {
 	if jrps == nil || len(jrps) <= 0 {
 		return
 	}
 
-	headers := []string{"phrase", "prefix", "suffix", "created_at"}
-	rowFunc := func(jrp model.Jrp) []string {
+	headers := []string{"id", "phrase", "prefix", "suffix", "created_at"}
+	rowFunc := func(jrp *model.Jrp) []string {
 		prefix := ""
 		if jrp.Prefix.FieldNullString.Valid {
 			prefix = jrp.Prefix.FieldNullString.String
@@ -47,6 +47,7 @@ func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInte
 			suffix = jrp.Suffix.FieldNullString.String
 		}
 		return []string{
+			j.StrconvProxy.Itoa(jrp.ID),
 			jrp.Phrase,
 			prefix,
 			suffix,
@@ -58,13 +59,13 @@ func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInte
 }
 
 // WriteAsTable writes the jrps as table.
-func (j *JrpWriter) WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []model.Jrp) {
+func (j *JrpWriter) WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp) {
 	if jrps == nil || len(jrps) <= 0 {
 		return
 	}
 
 	headers := []string{"id", "phrase", "prefix", "suffix", "is_favorited", "created_at", "updated_at"}
-	rowFunc := func(jrp model.Jrp) []string {
+	rowFunc := func(jrp *model.Jrp) []string {
 		prefix := ""
 		if jrp.Prefix.FieldNullString.Valid {
 			prefix = jrp.Prefix.FieldNullString.String
@@ -92,7 +93,7 @@ func (j *JrpWriter) WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []
 }
 
 // writeTable writes the table.
-func (j *JrpWriter) writeTable(writer ioproxy.WriterInstanceInterface, jrps []model.Jrp, headers []string, rowFunc func(model.Jrp) []string) {
+func (j *JrpWriter) writeTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp, headers []string, rowFunc func(*model.Jrp) []string) {
 	if jrps == nil || len(jrps) <= 0 {
 		return
 	}

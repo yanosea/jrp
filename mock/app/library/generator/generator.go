@@ -41,11 +41,11 @@ func (m *MockGeneratable) EXPECT() *MockGeneratableMockRecorder {
 }
 
 // GenerateJrp mocks base method.
-func (m *MockGeneratable) GenerateJrp(wnJpnDBFilePath string, num int, word string, mode generator.GenerateMode) (generator.GenerateResult, []model.Jrp, error) {
+func (m *MockGeneratable) GenerateJrp(wnJpnDBFilePath string, num int, word string, mode generator.GenerateMode) (generator.GenerateResult, []*model.Jrp, error) {
 	m.ctrl.T.Helper()
 	ret := m.ctrl.Call(m, "GenerateJrp", wnJpnDBFilePath, num, word, mode)
 	ret0, _ := ret[0].(generator.GenerateResult)
-	ret1, _ := ret[1].([]model.Jrp)
+	ret1, _ := ret[1].([]*model.Jrp)
 	ret2, _ := ret[2].(error)
 	return ret0, ret1, ret2
 }

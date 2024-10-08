@@ -141,7 +141,7 @@ func (o *favoriteSearchOption) favoriteSearchRunE(_ *cobra.Command, _ []string) 
 
 // favoriteSearch searches favorite.
 func (o *favoriteSearchOption) favoriteSearch(jrpDBFilePath string, keywords []string) error {
-	var favorites []model.Jrp
+	var favorites []*model.Jrp
 	var err error
 	if o.All {
 		// if all flag is set, search all favorite
@@ -161,7 +161,7 @@ func (o *favoriteSearchOption) favoriteSearch(jrpDBFilePath string, keywords []s
 }
 
 // writeFavoriteSearchResult writes the favorite search result.
-func (o *favoriteSearchOption) writeFavoriteSearchResult(favorites []model.Jrp) {
+func (o *favoriteSearchOption) writeFavoriteSearchResult(favorites []*model.Jrp) {
 	if len(favorites) != 0 {
 		if o.Plain {
 			for _, favorite := range favorites {

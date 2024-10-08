@@ -116,7 +116,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 		fields     fields
 		wantStdOut string
 		wantStdErr string
-		wantJrps   []model.Jrp
+		wantJrps   []*model.Jrp
 		wantErr    bool
 		setup      func()
 		cleanup    func()
@@ -218,7 +218,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -266,7 +266,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -314,7 +314,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -354,7 +354,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.GreenString(constant.FAVORITE_ADD_MESSAGE_ADDED_SUCCESSFULLY) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -372,7 +372,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -412,7 +412,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NOT_ALL) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -430,7 +430,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -478,7 +478,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -533,7 +533,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -588,7 +588,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -635,7 +635,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.GreenString(constant.FAVORITE_ADD_MESSAGE_ADDED_SUCCESSFULLY) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -662,7 +662,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -709,7 +709,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NOT_ALL) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          2,
 					Phrase:      "test2",
@@ -727,7 +727,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -774,7 +774,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -792,7 +792,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -835,7 +835,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -853,7 +853,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -896,7 +896,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -914,7 +914,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -957,7 +957,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_NO_ID_SPECIFIED) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -984,7 +984,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1034,7 +1034,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_NO_ID_SPECIFIED) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -1061,7 +1061,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1111,7 +1111,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -1138,7 +1138,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1188,7 +1188,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -1215,7 +1215,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1265,7 +1265,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -1291,7 +1291,7 @@ func Test_favoriteAddOption_favoriteAddRunE(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1472,7 +1472,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 		fields     fields
 		wantStdOut string
 		wantStdErr string
-		wantJrps   []model.Jrp
+		wantJrps   []*model.Jrp
 		wantErr    bool
 		setup      func()
 		cleanup    func()
@@ -1574,7 +1574,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1622,7 +1622,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1670,7 +1670,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1710,7 +1710,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.GreenString(constant.FAVORITE_ADD_MESSAGE_ADDED_SUCCESSFULLY) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -1728,7 +1728,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1768,7 +1768,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NOT_ALL) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -1786,7 +1786,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1834,7 +1834,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1889,7 +1889,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1944,7 +1944,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -1991,7 +1991,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.GreenString(constant.FAVORITE_ADD_MESSAGE_ADDED_SUCCESSFULLY) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -2018,7 +2018,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2065,7 +2065,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NOT_ALL) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          2,
 					Phrase:      "test2",
@@ -2083,7 +2083,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2130,7 +2130,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -2148,7 +2148,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2191,7 +2191,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -2209,7 +2209,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2252,7 +2252,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test",
@@ -2270,7 +2270,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2313,7 +2313,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -2340,7 +2340,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2390,7 +2390,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -2417,7 +2417,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2467,7 +2467,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -2494,7 +2494,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2544,7 +2544,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -2571,7 +2571,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
@@ -2621,7 +2621,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 			},
 			wantStdOut: colorProxy.YellowString(constant.FAVORITE_ADD_MESSAGE_ADDED_NONE) + "\n",
 			wantStdErr: "",
-			wantJrps: []model.Jrp{
+			wantJrps: []*model.Jrp{
 				{
 					ID:          1,
 					Phrase:      "test1",
@@ -2647,7 +2647,7 @@ func Test_favoriteAddOption_favoriteAdd(t *testing.T) {
 				}
 				if _, err := jrpRepository.SaveHistory(
 					jrpDBFilePath,
-					[]model.Jrp{
+					[]*model.Jrp{
 						{
 							Phrase:    "test1",
 							Prefix:    sqlProxy.StringToNullString(""),
