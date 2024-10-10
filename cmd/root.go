@@ -17,6 +17,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/filepath"
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
+	"github.com/yanosea/jrp/app/proxy/keyboard"
 	"github.com/yanosea/jrp/app/proxy/os"
 	"github.com/yanosea/jrp/app/proxy/rand"
 	"github.com/yanosea/jrp/app/proxy/sort"
@@ -187,6 +188,7 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
 		NewFavoriteCommand(g),
 		NewGenerateCommand(g),
 		NewHistoryCommand(g),
+		NewInteractiveCommand(g, keyboardproxy.New()),
 		NewVersionCommand(g),
 		NewCompletionCommand(g),
 	)
