@@ -280,7 +280,7 @@ func (o *generateOption) writeGenerateResult(jrps []*model.Jrp) {
 			}
 		} else {
 			// if plain flag is not set, write the favorite as a table
-			o.JrpWriter.WriteGenerateResultAsTable(o.Out, jrps)
+			o.JrpWriter.WriteGenerateResultAsTable(o.Out, jrps, !o.DryRun)
 		}
 	}
 }

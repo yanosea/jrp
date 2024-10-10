@@ -80,7 +80,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, nil)
+					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, nil, false)
 				},
 				capturer: capturer,
 			},
@@ -93,7 +93,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, []*model.Jrp{})
+					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, []*model.Jrp{}, false)
 				},
 				capturer: capturer,
 			},
@@ -102,7 +102,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 			wantErr:    false,
 		},
 		{
-			name: "positive testing (jrps are one)",
+			name: "positive testing (jrps are one, does not show id)",
 			fields: fields{
 				t: t,
 				fnc: func() {
@@ -114,7 +114,28 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					}
-					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, jrps)
+					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, jrps, false)
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "PHRASE\tPREFIX\tSUFFIX\tCREATED AT\ntest\tprefix\tsuffix\t9999-12-31 00:00:00\n\t\t\t\nTOTAL : 1\t\t\t\n",
+			wantStdErr: "",
+			wantErr:    false,
+		},
+		{
+			name: "positive testing (jrps are one, show id)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					jrps := []*model.Jrp{
+						{
+							Phrase:    "test",
+							Prefix:    sqlProxy.StringToNullString("prefix"),
+							Suffix:    sqlProxy.StringToNullString("suffix"),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					}
+					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, jrps, true)
 				},
 				capturer: capturer,
 			},
@@ -123,7 +144,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 			wantErr:    false,
 		},
 		{
-			name: "positive testing (jrps are two)",
+			name: "positive testing (jrps are two, does not show id)",
 			fields: fields{
 				t: t,
 				fnc: func() {
@@ -141,7 +162,34 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
 						},
 					}
-					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, jrps)
+					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, jrps, false)
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "PHRASE\tPREFIX\tSUFFIX\tCREATED AT\ntest1\tprefix1\tsuffix1\t9999-12-31 00:00:00\ntest2\tprefix2\tsuffix2\t9999-12-31 00:00:00\n\t\t\t\nTOTAL : 2\t\t\t\n",
+			wantStdErr: "",
+			wantErr:    false,
+		},
+		{
+			name: "positive testing (jrps are two, show id)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					jrps := []*model.Jrp{
+						{
+							Phrase:    "test1",
+							Prefix:    sqlProxy.StringToNullString("prefix1"),
+							Suffix:    sqlProxy.StringToNullString("suffix1"),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							Phrase:    "test2",
+							Prefix:    sqlProxy.StringToNullString("prefix2"),
+							Suffix:    sqlProxy.StringToNullString("suffix2"),
+							CreatedAt: timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					}
+					jrpWriter.WriteGenerateResultAsTable(osproxy.Stdout, jrps, true)
 				},
 				capturer: capturer,
 			},

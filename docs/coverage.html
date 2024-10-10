@@ -1752,7 +1752,7 @@ import (
 
 // JrpWritable is an interface for JrpWriter.
 type JrpWritable interface {
-        WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp)
+        WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp, showID bool)
         WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp)
 }
 
@@ -1774,13 +1774,17 @@ func New(
 }</span>
 
 // WriteGenerateResultAsTable writes the generate result as table.
-func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp) <span class="cov8" title="1">{
+func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp, showID bool) <span class="cov8" title="1">{
         if jrps == nil || len(jrps) &lt;= 0 </span><span class="cov8" title="1">{
                 return
         }</span>
 
-        <span class="cov8" title="1">headers := []string{"id", "phrase", "prefix", "suffix", "created_at"}
-        rowFunc := func(jrp *model.Jrp) []string </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">headers := []string{"phrase", "prefix", "suffix", "created_at"}
+        if showID </span><span class="cov8" title="1">{
+                headers = append([]string{"id"}, headers...)
+        }</span>
+
+        <span class="cov8" title="1">rowFunc := func(jrp *model.Jrp) []string </span><span class="cov8" title="1">{
                 prefix := ""
                 if jrp.Prefix.FieldNullString.Valid </span><span class="cov8" title="1">{
                         prefix = jrp.Prefix.FieldNullString.String
@@ -1789,13 +1793,16 @@ func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInte
                 if jrp.Suffix.FieldNullString.Valid </span><span class="cov8" title="1">{
                         suffix = jrp.Suffix.FieldNullString.String
                 }</span>
-                <span class="cov8" title="1">return []string{
-                        j.StrconvProxy.Itoa(jrp.ID),
+                <span class="cov8" title="1">row := []string{
                         jrp.Phrase,
                         prefix,
                         suffix,
                         jrp.CreatedAt.Format("2006-01-02 15:04:05"),
+                }
+                if showID </span><span class="cov8" title="1">{
+                        row = append([]string{j.StrconvProxy.Itoa(jrp.ID)}, row...)
                 }</span>
+                <span class="cov8" title="1">return row</span>
         }
 
         <span class="cov8" title="1">j.writeTable(writer, jrps, headers, rowFunc)</span>
@@ -5511,7 +5518,7 @@ func (o *generateOption) writeGenerateResult(jrps []*model.Jrp) <span class="cov
                         }</span>
                 } else<span class="cov8" title="1"> {
                         // if plain flag is not set, write the favorite as a table
-                        o.JrpWriter.WriteGenerateResultAsTable(o.Out, jrps)
+                        o.JrpWriter.WriteGenerateResultAsTable(o.Out, jrps, !o.DryRun)
                 }</span>
         }
 }
@@ -6727,7 +6734,7 @@ func (o *rootOption) writeRootResult(jrps []*model.Jrp) <span class="cov8" title
                         }</span>
                 } else<span class="cov8" title="1"> {
                         // if plain flag is not set, write the favorite as a table
-                        o.JrpWriter.WriteGenerateResultAsTable(o.Out, jrps)
+                        o.JrpWriter.WriteGenerateResultAsTable(o.Out, jrps, !o.DryRun)
                 }</span>
         }
 }

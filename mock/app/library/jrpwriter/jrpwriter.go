@@ -53,13 +53,13 @@ func (mr *MockJrpWritableMockRecorder) WriteAsTable(writer, jrps any) *gomock.Ca
 }
 
 // WriteGenerateResultAsTable mocks base method.
-func (m *MockJrpWritable) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp) {
+func (m *MockJrpWritable) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp, showID bool) {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "WriteGenerateResultAsTable", writer, jrps)
+	m.ctrl.Call(m, "WriteGenerateResultAsTable", writer, jrps, showID)
 }
 
 // WriteGenerateResultAsTable indicates an expected call of WriteGenerateResultAsTable.
-func (mr *MockJrpWritableMockRecorder) WriteGenerateResultAsTable(writer, jrps any) *gomock.Call {
+func (mr *MockJrpWritableMockRecorder) WriteGenerateResultAsTable(writer, jrps, showID any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WriteGenerateResultAsTable", reflect.TypeOf((*MockJrpWritable)(nil).WriteGenerateResultAsTable), writer, jrps)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "WriteGenerateResultAsTable", reflect.TypeOf((*MockJrpWritable)(nil).WriteGenerateResultAsTable), writer, jrps, showID)
 }
