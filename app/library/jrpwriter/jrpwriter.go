@@ -9,7 +9,7 @@ import (
 
 // JrpWritable is an interface for JrpWriter.
 type JrpWritable interface {
-	WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp)
+	WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp, showID bool)
 	WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp)
 }
 
@@ -31,12 +31,16 @@ func New(
 }
 
 // WriteGenerateResultAsTable writes the generate result as table.
-func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp) {
+func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp, showID bool) {
 	if jrps == nil || len(jrps) <= 0 {
 		return
 	}
 
-	headers := []string{"id", "phrase", "prefix", "suffix", "created_at"}
+	headers := []string{"phrase", "prefix", "suffix", "created_at"}
+	if showID {
+		headers = append([]string{"id"}, headers...)
+	}
+
 	rowFunc := func(jrp *model.Jrp) []string {
 		prefix := ""
 		if jrp.Prefix.FieldNullString.Valid {
@@ -46,13 +50,16 @@ func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInte
 		if jrp.Suffix.FieldNullString.Valid {
 			suffix = jrp.Suffix.FieldNullString.String
 		}
-		return []string{
-			j.StrconvProxy.Itoa(jrp.ID),
+		row := []string{
 			jrp.Phrase,
 			prefix,
 			suffix,
 			jrp.CreatedAt.Format("2006-01-02 15:04:05"),
 		}
+		if showID {
+			row = append([]string{j.StrconvProxy.Itoa(jrp.ID)}, row...)
+		}
+		return row
 	}
 
 	j.writeTable(writer, jrps, headers, rowFunc)
