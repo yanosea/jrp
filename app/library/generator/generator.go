@@ -113,9 +113,9 @@ func (g *Generator) getJrps(num int,
 			argSuffix = ""
 		case WithPrefix:
 			// get random number for suffix
-			randomIndexSuffix := g.RandProxy.Intn(len(allAVWords))
+			randomIndexSuffix := g.RandProxy.Intn(len(allNWords))
 			// get random prefix word
-			randomSuffix := allAVWords[randomIndexSuffix]
+			randomSuffix := allNWords[randomIndexSuffix]
 			// set prefix word and suffix word
 			prefixWord = argPrefix
 			suffixWord = randomSuffix.Lemma.FieldNullString.String
@@ -123,9 +123,9 @@ func (g *Generator) getJrps(num int,
 			argSuffix = ""
 		case WithSuffix:
 			// get random number for argPrefix
-			randomIndexPrefix := g.RandProxy.Intn(len(allNWords))
+			randomIndexPrefix := g.RandProxy.Intn(len(allAVWords))
 			// get random prefix word
-			randomPrefix := allNWords[randomIndexPrefix]
+			randomPrefix := allAVWords[randomIndexPrefix]
 			// set prefix word and suffix word
 			prefixWord = randomPrefix.Lemma.FieldNullString.String
 			suffixWord = argSuffix
