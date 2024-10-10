@@ -6,6 +6,7 @@ import (
 
 // Color is an interface for color.
 type Color interface {
+	BlueString(format string, a ...interface{}) string
 	GreenString(format string, a ...interface{}) string
 	RedString(format string, a ...interface{}) string
 	YellowString(format string, a ...interface{}) string
@@ -17,6 +18,11 @@ type ColorProxy struct{}
 // New is a constructor for BufferProxy.
 func New() Color {
 	return &ColorProxy{}
+}
+
+// BlueString is a proxy for color.BlueString.
+func (*ColorProxy) BlueString(format string, a ...interface{}) string {
+	return color.BlueString(format, a...)
 }
 
 // GreenString is a proxy for color.GreenString.
