@@ -38,6 +38,25 @@ func (m *MockColor) EXPECT() *MockColorMockRecorder {
 	return m.recorder
 }
 
+// BlueString mocks base method.
+func (m *MockColor) BlueString(format string, a ...any) string {
+	m.ctrl.T.Helper()
+	varargs := []any{format}
+	for _, a_2 := range a {
+		varargs = append(varargs, a_2)
+	}
+	ret := m.ctrl.Call(m, "BlueString", varargs...)
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// BlueString indicates an expected call of BlueString.
+func (mr *MockColorMockRecorder) BlueString(format any, a ...any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]any{format}, a...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BlueString", reflect.TypeOf((*MockColor)(nil).BlueString), varargs...)
+}
+
 // GreenString mocks base method.
 func (m *MockColor) GreenString(format string, a ...any) string {
 	m.ctrl.T.Helper()
