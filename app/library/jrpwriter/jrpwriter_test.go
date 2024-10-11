@@ -386,27 +386,29 @@ func TestJrpWriter_writeTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrpWriter.writeTable(osproxy.Stdout, nil, headers, rowFunc)
+					jrpWriter.writeTable(osproxy.Stdout, nil, headers, rowFunc, false)
 				},
 				capturer: capturer,
 			},
 			wantStdOut: "",
 			wantStdErr: "",
 			wantErr:    false,
-		}, {
+		},
+		{
 			name: "positive testing (jrps are empty)",
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrpWriter.writeTable(osproxy.Stdout, []*model.Jrp{}, headers, rowFunc)
+					jrpWriter.writeTable(osproxy.Stdout, []*model.Jrp{}, headers, rowFunc, false)
 				},
 				capturer: capturer,
 			},
 			wantStdOut: "",
 			wantStdErr: "",
 			wantErr:    false,
-		}, {
-			name: "positive testing (jrps are one)",
+		},
+		{
+			name: "positive testing (jrps are one, show total)",
 			fields: fields{
 				t: t,
 				fnc: func() {
@@ -415,14 +417,15 @@ func TestJrpWriter_writeTable(t *testing.T) {
 							Phrase: "test",
 						},
 					}
-					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc)
+					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc, true)
 				},
 				capturer: capturer,
 			},
 			wantStdOut: "PHRASE\ntest\n\t\nTOTAL : 1\n",
 			wantStdErr: "",
-		}, {
-			name: "positive testing (jrps are two)",
+		},
+		{
+			name: "positive testing (jrps are two, show total)",
 			fields: fields{
 				t: t,
 				fnc: func() {
@@ -433,11 +436,47 @@ func TestJrpWriter_writeTable(t *testing.T) {
 							Phrase: "test2",
 						},
 					}
-					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc)
+					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc, true)
 				},
 				capturer: capturer,
 			},
 			wantStdOut: "PHRASE\ntest1\ntest2\n\t\nTOTAL : 2\n",
+			wantStdErr: "",
+			wantErr:    false,
+		},
+		{
+			name: "positive testing (jrps are one, do not show total)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					jrps := []*model.Jrp{
+						{
+							Phrase: "test",
+						},
+					}
+					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc, false)
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "PHRASE\ntest\n",
+			wantStdErr: "",
+		}, {
+			name: "positive testing (jrps are two, do not show total)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					jrps := []*model.Jrp{
+						{
+							Phrase: "test1",
+						}, {
+							Phrase: "test2",
+						},
+					}
+					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc, false)
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "PHRASE\ntest1\ntest2\n",
 			wantStdErr: "",
 			wantErr:    false,
 		},
