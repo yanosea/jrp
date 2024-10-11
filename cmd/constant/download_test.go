@@ -19,7 +19,7 @@ func TestGetDownloadAliases(t *testing.T) {
 			got := GetDownloadAliases()
 			for i, v := range got {
 				if v != tt.want[i] {
-					t.Errorf("GetDownloadAliases()[%v] =\n%v, want\n%v", i, got, tt.want)
+					t.Errorf("GetDownloadAliases() : [%v] =\n%v, want\n%v", i, got, tt.want)
 				}
 			}
 		})

@@ -19,7 +19,7 @@ func TestGetFavoriteAliases(t *testing.T) {
 			got := GetFavoriteAliases()
 			for i, v := range got {
 				if v != tt.want[i] {
-					t.Errorf("GetFavoriteAliases()[%v] =\n%v, want\n%v", i, got, tt.want)
+					t.Errorf("GetFavoriteAliases() : [%v] =\n%v, want\n%v", i, got, tt.want)
 				}
 			}
 		})
