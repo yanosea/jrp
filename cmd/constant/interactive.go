@@ -26,20 +26,25 @@ Flags:
   -p  --prefix   💬 prefix of phrase(s) to generate
   -s  --suffix   💬 suffix of phrase(s) to generate
   -P, --plain    📝 plain text output instead of table output
+  -t  --timeout  ⏱️  timeout second for the interactive mode (default 30, e.g: 10)
   -h, --help     🤝 help for generate
 `
-	INTERACTIVE_FLAG_PREFIX             = "prifix"
-	INTERACTIVE_FLAG_PREFIX_SHORTHAND   = "p"
-	INTERACTIVE_FLAG_PREFIX_DEFAULT     = ""
-	INTERACTIVE_FLAG_PREFIX_DESCRIPTION = "prefix of phrase(s) to generate"
-	INTERACTIVE_FLAG_SUFFIX             = "suffix"
-	INTERACTIVE_FLAG_SUFFIX_SHORTHAND   = "s"
-	INTERACTIVE_FLAG_SUFFIX_DEFAULT     = ""
-	INTERACTIVE_FLAG_SUFFIX_DESCRIPTION = "suffix of phrase(s) to generate"
-	INTERACTIVE_FLAG_PLAIN              = "plain"
-	INTERACTIVE_FLAG_PLAIN_SHORTHAND    = "P"
-	INTERACTIVE_FLAG_PLAIN_DEFAULT      = false
-	INTERACTIVE_FLAG_PLAIN_DESCRIPTION  = "plain text output instead of table output"
+	INTERACTIVE_FLAG_PREFIX              = "prifix"
+	INTERACTIVE_FLAG_PREFIX_SHORTHAND    = "p"
+	INTERACTIVE_FLAG_PREFIX_DEFAULT      = ""
+	INTERACTIVE_FLAG_PREFIX_DESCRIPTION  = "prefix of phrase(s) to generate"
+	INTERACTIVE_FLAG_SUFFIX              = "suffix"
+	INTERACTIVE_FLAG_SUFFIX_SHORTHAND    = "s"
+	INTERACTIVE_FLAG_SUFFIX_DEFAULT      = ""
+	INTERACTIVE_FLAG_SUFFIX_DESCRIPTION  = "suffix of phrase(s) to generate"
+	INTERACTIVE_FLAG_PLAIN               = "plain"
+	INTERACTIVE_FLAG_PLAIN_SHORTHAND     = "P"
+	INTERACTIVE_FLAG_PLAIN_DEFAULT       = false
+	INTERACTIVE_FLAG_PLAIN_DESCRIPTION   = "plain text output instead of table output"
+	INTERACTIVE_FLAG_TIMEOUT             = "timeout"
+	INTERACTIVE_FLAG_TIMEOUT_SHORTHAND   = "t"
+	INTERACTIVE_FLAG_TIMEOUT_DEFAULT     = 30
+	INTERACTIVE_FLAG_TIMEOUT_DESCRIPTION = "timeout second for the interactive mode (default 30, e.g: 10)"
 
 	INTERACTIVE_MESSAGE_GENERATE_FAILURE         = "❌ Failed to generate the phrase(s)..."
 	INTERACTIVE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED = "⚡ You have to execute \"download\" to use jrp..."

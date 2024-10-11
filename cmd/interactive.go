@@ -35,6 +35,7 @@ type interactiveOption struct {
 	Prefix                string
 	Suffix                string
 	Plain                 bool
+	Timeout               int
 	DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 	Generator             generator.Generatable
 	JrpRepository         jrprepository.JrpRepositoryInterface
@@ -106,6 +107,13 @@ func NewInteractiveCommand(g *GlobalOption, keyboardProxy keyboardproxy.Keyboard
 		constant.INTERACTIVE_FLAG_PLAIN_DEFAULT,
 		constant.INTERACTIVE_FLAG_PLAIN_DESCRIPTION,
 	)
+	cmd.PersistentFlags().IntVarP(
+		&o.Timeout,
+		constant.INTERACTIVE_FLAG_TIMEOUT,
+		constant.INTERACTIVE_FLAG_TIMEOUT_SHORTHAND,
+		constant.INTERACTIVE_FLAG_TIMEOUT_DEFAULT,
+		constant.INTERACTIVE_FLAG_TIMEOUT_DESCRIPTION,
+	)
 
 	cmd.SetOut(o.Out)
 	cmd.SetErr(o.ErrOut)
@@ -164,21 +172,21 @@ func (o *interactiveOption) interactive(
 	var err error
 	var interactiveAnswer constant.InteractiveAnswer
 	phase := 1
-	// leave a blank line
-	o.Utility.PrintlnWithWriter(o.Out, "")
 	// loop until the user wants to exit
 	for {
-		// write phase
-		o.writePhase(phase)
 		// generate jrp
 		jrp, res, err = o.interactiveGenerate(wnJpnDBFilePath, word, mode)
 		if err != nil || res != generator.GeneratedSuccessfully {
 			return err
 		}
+		// leave a blank line
+		o.Utility.PrintlnWithWriter(o.Out, "")
+		// write phase
+		o.writePhase(phase)
 		// write generated jrp
 		o.writeInteractiveGeneratedJrp(jrp)
 		// get interactive status
-		interactiveAnswer, err = o.getInteractiveInteractiveAnswer()
+		interactiveAnswer, err = o.getInteractiveInteractiveAnswer(o.Timeout)
 		if err != nil {
 			return err
 		}
@@ -324,7 +332,7 @@ func (o *interactiveOption) writeInteractiveFavoriteResult(result jrprepository.
 }
 
 // getInteractiveInteractiveAnswer gets the interactive answer.
-func (o *interactiveOption) getInteractiveInteractiveAnswer() (constant.InteractiveAnswer, error) {
+func (o *interactiveOption) getInteractiveInteractiveAnswer(timeoutSec int) (constant.InteractiveAnswer, error) {
 	o.Utility.PrintlnWithWriter(o.Out, constant.INTERACTIVE_PROMPT_LABEL)
 	// open keyboard
 	if err := o.KeyboardProxy.Open(); err != nil {
@@ -332,7 +340,7 @@ func (o *interactiveOption) getInteractiveInteractiveAnswer() (constant.Interact
 	}
 	defer o.KeyboardProxy.Close()
 	// get answer
-	answer, _, err := o.KeyboardProxy.GetKey()
+	answer, _, err := o.KeyboardProxy.GetKey(timeoutSec)
 	if err != nil {
 		return constant.InteractiveAnswerSkipAndExit, err
 	}
