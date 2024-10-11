@@ -343,10 +343,10 @@ func TestJrpWriter_WriteAsTable(t *testing.T) {
 				t.Errorf("Capturer.CaptureOutput() : error =\n%v, wantErr =\n%v", err, tt.wantErr)
 			}
 			if stdout != tt.wantStdOut {
-				t.Errorf("JrpWriter.WriteJrpAsTable() : stdout =\n%v, wantStdOut =\n%v", stdout, tt.wantStdOut)
+				t.Errorf("JrpWriter.WriteAsTable() : stdout =\n%v, wantStdOut =\n%v", stdout, tt.wantStdOut)
 			}
 			if stderr != tt.wantStdErr {
-				t.Errorf("JrpWriter.WriteJrpAsTable() : stderr =\n%v, wantStdErr =\n%v", stderr, tt.wantStdErr)
+				t.Errorf("JrpWriter.WriteAsTable() : stderr =\n%v, wantStdErr =\n%v", stderr, tt.wantStdErr)
 			}
 		})
 	}
