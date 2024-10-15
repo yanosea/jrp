@@ -31,9 +31,5 @@ func (n *NullStringInstance) Scan(value interface{}) error {
 
 // Value implements the driver Valuer interface.
 func (n *NullStringInstance) Value() (driver.Value, error) {
-	var v driver.Value
-	if n.FieldNullString == nil || !n.FieldNullString.Valid {
-		v = nil
-	}
-	return v, nil
+	return n.FieldNullString.String, nil
 }

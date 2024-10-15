@@ -8,7 +8,6 @@ import (
 
 // Sql is an interface for sql.
 type Sql interface {
-	IfNullToNullString(nullStringInstance *NullStringInstance) *NullStringInstance
 	Open(driverName string, dataSourceName string) (DBInstanceInterface, error)
 	StringToNullString(s string) *NullStringInstance
 }
@@ -19,19 +18,6 @@ type SqlProxy struct{}
 // New is a constructor for SqlProxy.
 func New() Sql {
 	return &SqlProxy{}
-}
-
-// IfNullToNullString returns a NullStringInstance if the argument is nil.
-func (*SqlProxy) IfNullToNullString(nullStringInstance *NullStringInstance) *NullStringInstance {
-	if nullStringInstance == nil {
-		nullStringInstance = &NullStringInstance{
-			FieldNullString: &sql.NullString{
-				String: "",
-				Valid:  false,
-			},
-		}
-	}
-	return nullStringInstance
 }
 
 // Open is a proxy for sql.Open.
