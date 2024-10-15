@@ -401,10 +401,8 @@ func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]*model.Jrp, error)
                 ); err != nil </span><span class="cov8" title="1">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">history.Prefix = j.SqlProxy.IfNullToNullString(history.Prefix)
-                history.Suffix = j.SqlProxy.IfNullToNullString(history.Suffix)
 
-                allHistory = append(allHistory, history)</span>
+                <span class="cov8" title="1">allHistory = append(allHistory, history)</span>
         }
 
         <span class="cov8" title="1">return allHistory, deferErr</span>
@@ -465,10 +463,8 @@ func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([
                 ); err != nil </span><span class="cov8" title="1">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">history.Prefix = j.SqlProxy.IfNullToNullString(history.Prefix)
-                history.Suffix = j.SqlProxy.IfNullToNullString(history.Suffix)
 
-                allHistory = append(allHistory, history)</span>
+                <span class="cov8" title="1">allHistory = append(allHistory, history)</span>
         }
 
         // sort by ID asc
@@ -547,10 +543,8 @@ func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string,
                 ); err != nil </span><span class="cov8" title="1">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">history.Prefix = j.SqlProxy.IfNullToNullString(history.Prefix)
-                history.Suffix = j.SqlProxy.IfNullToNullString(history.Suffix)
 
-                searchedAllHistory = append(searchedAllHistory, history)</span>
+                <span class="cov8" title="1">searchedAllHistory = append(searchedAllHistory, history)</span>
         }
 
         <span class="cov8" title="1">return searchedAllHistory, deferErr</span>
@@ -630,10 +624,8 @@ func (j JrpRepository) SearchHistoryWithNumber(
                 ); err != nil </span><span class="cov8" title="1">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">history.Prefix = j.SqlProxy.IfNullToNullString(history.Prefix)
-                history.Suffix = j.SqlProxy.IfNullToNullString(history.Suffix)
 
-                searchedHistory = append(searchedHistory, history)</span>
+                <span class="cov8" title="1">searchedHistory = append(searchedHistory, history)</span>
         }
 
         // sort by ID asc
@@ -824,10 +816,8 @@ func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]*model.Jrp, error
                 ); err != nil </span><span class="cov8" title="1">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">favorite.Prefix = j.SqlProxy.IfNullToNullString(favorite.Prefix)
-                favorite.Suffix = j.SqlProxy.IfNullToNullString(favorite.Suffix)
 
-                allFavorite = append(allFavorite, favorite)</span>
+                <span class="cov8" title="1">allFavorite = append(allFavorite, favorite)</span>
         }
 
         <span class="cov8" title="1">return allFavorite, deferErr</span>
@@ -888,10 +878,8 @@ func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) (
                 ); err != nil </span><span class="cov8" title="1">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">favorite.Prefix = j.SqlProxy.IfNullToNullString(favorite.Prefix)
-                favorite.Suffix = j.SqlProxy.IfNullToNullString(favorite.Suffix)
 
-                allFavorite = append(allFavorite, favorite)</span>
+                <span class="cov8" title="1">allFavorite = append(allFavorite, favorite)</span>
         }
 
         // sort by ID asc
@@ -969,10 +957,8 @@ func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string
                 ); err != nil </span><span class="cov8" title="1">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">favorite.Prefix = j.SqlProxy.IfNullToNullString(favorite.Prefix)
-                favorite.Suffix = j.SqlProxy.IfNullToNullString(favorite.Suffix)
 
-                searchedAllFavorite = append(searchedAllFavorite, favorite)</span>
+                <span class="cov8" title="1">searchedAllFavorite = append(searchedAllFavorite, favorite)</span>
         }
 
         <span class="cov8" title="1">return searchedAllFavorite, deferErr</span>
@@ -1052,10 +1038,8 @@ func (j JrpRepository) SearchFavoriteWithNumber(
                 ); err != nil </span><span class="cov8" title="1">{
                         return nil, err
                 }</span>
-                <span class="cov8" title="1">favorite.Prefix = j.SqlProxy.IfNullToNullString(favorite.Prefix)
-                favorite.Suffix = j.SqlProxy.IfNullToNullString(favorite.Suffix)
 
-                searchedFavorite = append(searchedFavorite, favorite)</span>
+                <span class="cov8" title="1">searchedFavorite = append(searchedFavorite, favorite)</span>
         }
 
         // sort by ID asc
@@ -2799,12 +2783,8 @@ func (n *NullStringInstance) Scan(value interface{}) error <span class="cov8" ti
 
 // Value implements the driver Valuer interface.
 func (n *NullStringInstance) Value() (driver.Value, error) <span class="cov8" title="1">{
-        var v driver.Value
-        if n.FieldNullString == nil || !n.FieldNullString.Valid </span><span class="cov8" title="1">{
-                v = nil
-        }</span>
-        <span class="cov8" title="1">return v, nil</span>
-}
+        return n.FieldNullString.String, nil
+}</span>
 </pre>
 		
 		<pre class="file" id="file29" style="display: none">package sqlproxy
@@ -2901,7 +2881,6 @@ import (
 
 // Sql is an interface for sql.
 type Sql interface {
-        IfNullToNullString(nullStringInstance *NullStringInstance) *NullStringInstance
         Open(driverName string, dataSourceName string) (DBInstanceInterface, error)
         StringToNullString(s string) *NullStringInstance
 }
@@ -2913,19 +2892,6 @@ type SqlProxy struct{}
 func New() Sql <span class="cov8" title="1">{
         return &amp;SqlProxy{}
 }</span>
-
-// IfNullToNullString returns a NullStringInstance if the argument is nil.
-func (*SqlProxy) IfNullToNullString(nullStringInstance *NullStringInstance) *NullStringInstance <span class="cov8" title="1">{
-        if nullStringInstance == nil </span><span class="cov8" title="1">{
-                nullStringInstance = &amp;NullStringInstance{
-                        FieldNullString: &amp;sql.NullString{
-                                String: "",
-                                Valid:  false,
-                        },
-                }
-        }</span>
-        <span class="cov8" title="1">return nullStringInstance</span>
-}
 
 // Open is a proxy for sql.Open.
 func (*SqlProxy) Open(driverName string, dataSourceName string) (DBInstanceInterface, error) <span class="cov8" title="1">{
