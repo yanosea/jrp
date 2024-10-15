@@ -174,8 +174,6 @@ func (j JrpRepository) GetAllHistory(jrpDBFilePath string) ([]*model.Jrp, error)
 		); err != nil {
 			return nil, err
 		}
-		history.Prefix = j.SqlProxy.IfNullToNullString(history.Prefix)
-		history.Suffix = j.SqlProxy.IfNullToNullString(history.Suffix)
 
 		allHistory = append(allHistory, history)
 	}
@@ -238,8 +236,6 @@ func (j JrpRepository) GetHistoryWithNumber(jrpDBFilePath string, number int) ([
 		); err != nil {
 			return nil, err
 		}
-		history.Prefix = j.SqlProxy.IfNullToNullString(history.Prefix)
-		history.Suffix = j.SqlProxy.IfNullToNullString(history.Suffix)
 
 		allHistory = append(allHistory, history)
 	}
@@ -320,8 +316,6 @@ func (j JrpRepository) SearchAllHistory(jrpDBFilePath string, keywords []string,
 		); err != nil {
 			return nil, err
 		}
-		history.Prefix = j.SqlProxy.IfNullToNullString(history.Prefix)
-		history.Suffix = j.SqlProxy.IfNullToNullString(history.Suffix)
 
 		searchedAllHistory = append(searchedAllHistory, history)
 	}
@@ -403,8 +397,6 @@ func (j JrpRepository) SearchHistoryWithNumber(
 		); err != nil {
 			return nil, err
 		}
-		history.Prefix = j.SqlProxy.IfNullToNullString(history.Prefix)
-		history.Suffix = j.SqlProxy.IfNullToNullString(history.Suffix)
 
 		searchedHistory = append(searchedHistory, history)
 	}
@@ -597,8 +589,6 @@ func (j JrpRepository) GetAllFavorite(jrpDBFilePath string) ([]*model.Jrp, error
 		); err != nil {
 			return nil, err
 		}
-		favorite.Prefix = j.SqlProxy.IfNullToNullString(favorite.Prefix)
-		favorite.Suffix = j.SqlProxy.IfNullToNullString(favorite.Suffix)
 
 		allFavorite = append(allFavorite, favorite)
 	}
@@ -661,8 +651,6 @@ func (j JrpRepository) GetFavoriteWithNumber(jrpDBFilePath string, number int) (
 		); err != nil {
 			return nil, err
 		}
-		favorite.Prefix = j.SqlProxy.IfNullToNullString(favorite.Prefix)
-		favorite.Suffix = j.SqlProxy.IfNullToNullString(favorite.Suffix)
 
 		allFavorite = append(allFavorite, favorite)
 	}
@@ -742,8 +730,6 @@ func (j JrpRepository) SearchAllFavorite(jrpDBFilePath string, keywords []string
 		); err != nil {
 			return nil, err
 		}
-		favorite.Prefix = j.SqlProxy.IfNullToNullString(favorite.Prefix)
-		favorite.Suffix = j.SqlProxy.IfNullToNullString(favorite.Suffix)
 
 		searchedAllFavorite = append(searchedAllFavorite, favorite)
 	}
@@ -825,8 +811,6 @@ func (j JrpRepository) SearchFavoriteWithNumber(
 		); err != nil {
 			return nil, err
 		}
-		favorite.Prefix = j.SqlProxy.IfNullToNullString(favorite.Prefix)
-		favorite.Suffix = j.SqlProxy.IfNullToNullString(favorite.Suffix)
 
 		searchedFavorite = append(searchedFavorite, favorite)
 	}
