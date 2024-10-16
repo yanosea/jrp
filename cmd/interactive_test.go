@@ -15,6 +15,7 @@ import (
 	"github.com/yanosea/jrp/app/library/jrpwriter"
 	"github.com/yanosea/jrp/app/library/utility"
 	"github.com/yanosea/jrp/app/proxy/buffer"
+	"github.com/yanosea/jrp/app/proxy/cobra"
 	"github.com/yanosea/jrp/app/proxy/color"
 	"github.com/yanosea/jrp/app/proxy/filepath"
 	"github.com/yanosea/jrp/app/proxy/fmt"
@@ -4174,5 +4175,367 @@ func Test_interactiveOption_writePhase(t *testing.T) {
 				t.Errorf("interactiveOption.writePhase() : stderr =\n%v, wantStdErr =\n%v", stderr, tt.wantStdErr)
 			}
 		})
+	}
+}
+
+func Test_switchToInteractiveCommand(t *testing.T) {
+	osProxy := osproxy.New()
+	filepathProxy := filepathproxy.New()
+	dbFileDirPathProvider := dbfiledirpathprovider.New(
+		filepathProxy,
+		osProxy,
+		userproxy.New(),
+	)
+	util := utility.New(
+		fmtproxy.New(),
+		osProxy,
+		strconvproxy.New(),
+	)
+	dl := downloader.New(
+		filepathProxy,
+		gzipproxy.New(),
+		httpproxy.New(),
+		ioproxy.New(),
+		osProxy,
+		util,
+	)
+	wnJpnDBFileDirPath, err := dbFileDirPathProvider.GetWNJpnDBFileDirPath()
+	if err != nil {
+		t.Errorf("DBFileDirPathProvider.GetWNJpnDBFileDirPath() : error =\n%v", err)
+	}
+	wnJpnDBFilePath := filepathProxy.Join(wnJpnDBFileDirPath, downloader.WNJPN_DB_FILE_NAME)
+	jrpDBFileDirPath, err := dbFileDirPathProvider.GetJrpDBFileDirPath()
+	if err != nil {
+		t.Errorf("DBFileDirPathProvider.GetJrpDBFileDirPath() : error =\n%v", err)
+	}
+	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, jrprepository.JRP_DB_FILE_NAME)
+
+	type args struct {
+		out           ioproxy.WriterInstanceInterface
+		errOut        ioproxy.WriterInstanceInterface
+		args          []string
+		utility       utility.UtilityInterface
+		prefix        string
+		suffix        string
+		plain         bool
+		timeout       int
+		keyboardProxy keyboardproxy.Keyboard
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+		setup   func(mockCtrl *gomock.Controller, args *args) func()
+		cleanup func()
+	}{
+		{
+			name: "positive testing",
+			args: args{
+				out:    osproxy.Stdout,
+				errOut: osproxy.Stderr,
+				args:   nil,
+				utility: utility.New(
+					fmtproxy.New(),
+					osproxy.New(),
+					strconvproxy.New(),
+				),
+				prefix:        "",
+				suffix:        "",
+				plain:         false,
+				timeout:       30,
+				keyboardProxy: nil,
+			},
+			wantErr: false,
+			setup: func(mockCtrl *gomock.Controller, args *args) func() {
+				if _, err := dl.DownloadWNJpnDBFile(wnJpnDBFileDirPath); err != nil {
+					t.Errorf("Downloader.DownloadWNJpnDBFile() : error =\n%v", err)
+				}
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				mockKeyboardProxy := mockkeyboardproxy.NewMockKeyboard(mockCtrl)
+				mockKeyboardProxy.EXPECT().Open().Return(nil)
+				mockKeyboardProxy.EXPECT().Close()
+				s := ","
+				r := rune(s[0])
+				mockKeyboardProxy.EXPECT().GetKey(30).Return(r, keyboard.KeyEnter, nil)
+				args.keyboardProxy = mockKeyboardProxy
+				return func() {}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(wnJpnDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "negative testing (setFlagsFunc() failed)",
+			args: args{
+				out:    osproxy.Stdout,
+				errOut: osproxy.Stderr,
+				args:   nil,
+				utility: utility.New(
+					fmtproxy.New(),
+					osproxy.New(),
+					strconvproxy.New(),
+				),
+				prefix:        "",
+				suffix:        "",
+				plain:         false,
+				timeout:       30,
+				keyboardProxy: nil,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, args *args) func() {
+				return mockSetFlagsFunc(true)
+			},
+		},
+		{
+			name: "negative testing (runSwitchedInteractiveCommandFunc() failed)",
+			args: args{
+				out:    osproxy.Stdout,
+				errOut: osproxy.Stderr,
+				args:   nil,
+				utility: utility.New(
+					fmtproxy.New(),
+					osproxy.New(),
+					strconvproxy.New(),
+				),
+				prefix:        "",
+				suffix:        "",
+				plain:         false,
+				timeout:       30,
+				keyboardProxy: nil,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, args *args) func() {
+				return mockRunSwitchedInteractiveCommandFunc(true)
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			var teardown func()
+			if tt.setup != nil {
+				mockCtrl := gomock.NewController(t)
+				defer mockCtrl.Finish()
+				teardown = tt.setup(mockCtrl, &tt.args)
+			}
+			if teardown != nil {
+				defer teardown()
+			}
+			if err := switchToInteractiveCommand(
+				tt.args.out,
+				tt.args.errOut,
+				tt.args.args,
+				tt.args.utility,
+				tt.args.prefix,
+				tt.args.suffix,
+				tt.args.plain,
+				tt.args.timeout,
+				tt.args.keyboardProxy,
+			); (err != nil) != tt.wantErr {
+				t.Errorf("switchToInteractiveCommand() : error =\n%v, wantErr =\n%v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_setFlags(t *testing.T) {
+	cobraProxy := cobraproxy.New()
+
+	type args struct {
+		cmd   *cobraproxy.CommandInstance
+		flags map[string]string
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+		setup   func(args *args)
+	}{
+		{
+			name: "positive testing",
+			args: args{
+				cmd: nil,
+				flags: map[string]string{
+					"prefix": "prefix",
+				},
+			},
+			wantErr: false,
+			setup: func(args *args) {
+				o := &interactiveOption{}
+				cmd := cobraProxy.NewCommand()
+				cmd.PersistentFlags().StringVarP(
+					&o.Prefix,
+					"prefix",
+					"p",
+					"",
+					"prefix",
+				)
+				args.cmd = cmd
+			},
+		},
+		{
+			name: "negative testing (CommandInstance.PersistentFlags().Set() failed)",
+			args: args{
+				cmd: nil,
+				flags: map[string]string{
+					"dummy": "dummy",
+				},
+			},
+			wantErr: true,
+			setup: func(args *args) {
+				o := &interactiveOption{}
+				cmd := cobraProxy.NewCommand()
+				cmd.PersistentFlags().StringVarP(
+					&o.Prefix,
+					"prefix",
+					"p",
+					"",
+					"prefix",
+				)
+				args.cmd = cmd
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.setup != nil {
+				tt.setup(&tt.args)
+			}
+			if err := setFlags(tt.args.cmd, tt.args.flags); (err != nil) != tt.wantErr {
+				t.Errorf("setFlags() : error =\n%v, wantErr =\n%v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Test_runSwitchedInteractiveCommand(t *testing.T) {
+	osProxy := osproxy.New()
+	filepathProxy := filepathproxy.New()
+	dbFileDirPathProvider := dbfiledirpathprovider.New(
+		filepathProxy,
+		osProxy,
+		userproxy.New(),
+	)
+	util := utility.New(
+		fmtproxy.New(),
+		osProxy,
+		strconvproxy.New(),
+	)
+	dl := downloader.New(
+		filepathProxy,
+		gzipproxy.New(),
+		httpproxy.New(),
+		ioproxy.New(),
+		osProxy,
+		util,
+	)
+	wnJpnDBFileDirPath, err := dbFileDirPathProvider.GetWNJpnDBFileDirPath()
+	if err != nil {
+		t.Errorf("DBFileDirPathProvider.GetWNJpnDBFileDirPath() : error =\n%v", err)
+	}
+	wnJpnDBFilePath := filepathProxy.Join(wnJpnDBFileDirPath, downloader.WNJPN_DB_FILE_NAME)
+	jrpDBFileDirPath, err := dbFileDirPathProvider.GetJrpDBFileDirPath()
+	if err != nil {
+		t.Errorf("DBFileDirPathProvider.GetJrpDBFileDirPath() : error =\n%v", err)
+	}
+	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, jrprepository.JRP_DB_FILE_NAME)
+
+	type args struct {
+		switchedInteractiveCommand *cobraproxy.CommandInstance
+	}
+	tests := []struct {
+		name    string
+		args    args
+		wantErr bool
+		setup   func(mockCtrl *gomock.Controller, args *args)
+		cleanup func()
+	}{
+		{
+			name: "positive testing",
+			args: args{
+				switchedInteractiveCommand: nil,
+			},
+			wantErr: false,
+			setup: func(mockCtrl *gomock.Controller, args *args) {
+				if _, err := dl.DownloadWNJpnDBFile(wnJpnDBFileDirPath); err != nil {
+					t.Errorf("Downloader.DownloadWNJpnDBFile() : error =\n%v", err)
+				}
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				g := &GlobalOption{
+					Out:    osproxy.Stdout,
+					ErrOut: osproxy.Stderr,
+					Args:   nil,
+					Utility: utility.New(
+						fmtproxy.New(),
+						osproxy.New(),
+						strconvproxy.New(),
+					),
+				}
+				mockKeyboardProxy := mockkeyboardproxy.NewMockKeyboard(mockCtrl)
+				mockKeyboardProxy.EXPECT().Open().Return(nil)
+				mockKeyboardProxy.EXPECT().Close()
+				s := ","
+				r := rune(s[0])
+				mockKeyboardProxy.EXPECT().GetKey(30).Return(r, keyboard.KeyEnter, nil)
+				args.switchedInteractiveCommand = NewInteractiveCommand(g, mockKeyboardProxy)
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(wnJpnDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+				if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if tt.setup != nil {
+				mockCtrl := gomock.NewController(t)
+				defer mockCtrl.Finish()
+				tt.setup(mockCtrl, &tt.args)
+			}
+			if err := runSwitchedInteractiveCommand(tt.args.switchedInteractiveCommand); (err != nil) != tt.wantErr {
+				t.Errorf("runSwitchedInteractiveCommand() : error =\n%v, wantErr =\n%v", err, tt.wantErr)
+			}
+			if tt.cleanup != nil {
+				tt.cleanup()
+			}
+		})
+	}
+}
+
+func mockSetFlagsFunc(returnError bool) func() {
+	origSetFlags := setFlagsFunc
+	setFlagsFunc = func(cmd *cobraproxy.CommandInstance, flags map[string]string) error {
+		if returnError {
+			return errors.New("setFlagsFunc() failed")
+		}
+		return nil
+	}
+	return func() {
+		setFlagsFunc = origSetFlags
+	}
+}
+
+func mockRunSwitchedInteractiveCommandFunc(returnError bool) func() {
+	origRunSwitchedInteractiveCommandFunc := runSwitchedInteractiveCommandFunc
+	runSwitchedInteractiveCommandFunc = func(cmd *cobraproxy.CommandInstance) error {
+		if returnError {
+			return errors.New("runSwitchedInteractiveCommandFunc() failed")
+		}
+		return nil
+	}
+	return func() {
+		runSwitchedInteractiveCommandFunc = origRunSwitchedInteractiveCommandFunc
 	}
 }
