@@ -14,7 +14,7 @@ by the flag "-p" or "--prefix" and "-s" or "--suffix".
 
 Those commands below are the same.
   "jrp" : "jrp generate"
-  "jrp interactive" : "jrp generate interactive" : "jrp generate --interactive"
+  "jrp interactive" : "jrp --interactive" : "jrp generate interactive" : "jrp generate --interactive"
 
 Usage:
   jrp [flags]
