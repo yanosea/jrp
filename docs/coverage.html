@@ -2143,6 +2143,7 @@ type CommandInstanceInterface interface {
         Execute() error
         GetCommand() *cobra.Command
         PersistentFlags() *pflagproxy.FlagSetInstance
+        RunE(cmd *cobra.Command, args []string) error
         SetArgs(args []string)
         SetErr(io ioproxy.WriterInstanceInterface)
         SetHelpTemplate(s string)
@@ -2174,6 +2175,11 @@ func (c *CommandInstance) GetCommand() *cobra.Command <span class="cov8" title="
 // PersistentFlags is a proxy for cobra.Command.PersistentFlags.
 func (c *CommandInstance) PersistentFlags() *pflagproxy.FlagSetInstance <span class="cov8" title="1">{
         return &amp;pflagproxy.FlagSetInstance{FieldFlagSet: c.FieldCommand.PersistentFlags()}
+}</span>
+
+// RunE is a proxy for cobra.Command.RunE.
+func (c *CommandInstance) RunE(cmd *cobra.Command, args []string) error <span class="cov8" title="1">{
+        return c.FieldCommand.RunE(cmd, args)
 }</span>
 
 // SetArgs is a proxy for cobra.Command.SetArgs.
@@ -2607,6 +2613,7 @@ import (
 type FlagSetInstanceInterface interface {
         BoolVarP(p *bool, name string, shorthand string, value bool, usage string)
         IntVarP(p *int, name string, shorthand string, value int, usage string)
+        Set(name, value string) error
         StringVarP(p *string, name string, shorthand string, value string, usage string)
 }
 
@@ -2623,6 +2630,11 @@ func (f *FlagSetInstance) BoolVarP(p *bool, name string, shorthand string, value
 // IntVarP is a proxy for pflag.FlagSet.IntVarP.
 func (f *FlagSetInstance) IntVarP(p *int, name string, shorthand string, value int, usage string) <span class="cov8" title="1">{
         f.FieldFlagSet.IntVarP(p, name, shorthand, value, usage)
+}</span>
+
+// Set is a proxy for pflag.FlagSet.Set.
+func (f *FlagSetInstance) Set(name, value string) error <span class="cov8" title="1">{
+        return f.FieldFlagSet.Set(name, value)
 }</span>
 
 // StringVarP is a proxy for pflag.FlagSet.StringVarP.
@@ -3101,6 +3113,7 @@ import (
 // Strconv is an interface for strconv.
 type Strconv interface {
         Atoi(s string) (int, error)
+        FormatBool(b bool) string
         Itoa(i int) string
 }
 
@@ -3115,6 +3128,10 @@ func New() Strconv <span class="cov8" title="1">{
 // Atoi is a proxy for strconv.Atoi.
 func (*StrconvProxy) Atoi(s string) (int, error) <span class="cov8" title="1">{
         return strconv.Atoi(s)
+}</span>
+
+func (*StrconvProxy) FormatBool(b bool) string <span class="cov8" title="1">{
+        return strconv.FormatBool(b)
 }</span>
 
 // Itoa is a proxy for strconv.Itoa.
@@ -3898,36 +3915,46 @@ Usage:
   jrp g        [flags]
 
 Flags:
-  -n, --number   🔢 number of phrases to generate (default 1, e.g: 10)
-  -p  --prefix   💬 prefix of phrase(s) to generate
-  -s  --suffix   💬 suffix of phrase(s) to generate
-  -d  --dry-run  🧪 generate phrase(s) without saving to the history
-  -P, --plain    📝 plain text output instead of table output
-  -h, --help     🤝 help for generate
+  -n, --number       🔢 number of phrases to generate (default 1, e.g: 10)
+  -p  --prefix       💬 prefix of phrase(s) to generate
+  -s  --suffix       💬 suffix of phrase(s) to generate
+  -d  --dry-run      🧪 generate phrase(s) without saving to the history
+  -P, --plain        📝 plain text output instead of table output
+  -i, --interactive  💬 generate Japanese random phrase(s) interactively
+  -t, --timeout      ⏱️  timeout in seconds for the interactive mode (default 30, e.g: 10)
+  -h, --help         🤝 help for generate
 
 Arguments:
   number  🔢 number of phrases to generate (default 1, e.g: 10)
 `
-        GENERATE_FLAG_NUMBER              = "number"
-        GENERATE_FLAG_NUMBER_SHORTHAND    = "n"
-        GENERATE_FLAG_NUMBER_DEFAULT      = 1
-        GENERATE_FLAG_NUMBER_DESCRIPTION  = "number of phrases to generate"
-        GENERATE_FLAG_PREFIX              = "prifix"
-        GENERATE_FLAG_PREFIX_SHORTHAND    = "p"
-        GENERATE_FLAG_PREFIX_DEFAULT      = ""
-        GENERATE_FLAG_PREFIX_DESCRIPTION  = "prefix of phrase(s) to generate"
-        GENERATE_FLAG_SUFFIX              = "suffix"
-        GENERATE_FLAG_SUFFIX_SHORTHAND    = "s"
-        GENERATE_FLAG_SUFFIX_DEFAULT      = ""
-        GENERATE_FLAG_SUFFIX_DESCRIPTION  = "suffix of phrase(s) to generate"
-        GENERATE_FLAG_DRY_RUN             = "dry-run"
-        GENERATE_FLAG_DRY_RUN_SHORTHAND   = "d"
-        GENERATE_FLAG_DRY_RUN_DEFAULT     = false
-        GENERATE_FLAG_DRY_RUN_DESCRIPTION = "generate phrase(s) without saving to the history"
-        GENERATE_FLAG_PLAIN               = "plain"
-        GENERATE_FLAG_PLAIN_SHORTHAND     = "P"
-        GENERATE_FLAG_PLAIN_DEFAULT       = false
-        GENERATE_FLAG_PLAIN_DESCRIPTION   = "plain text output instead of table output"
+        GENERATE_FLAG_NUMBER                  = "number"
+        GENERATE_FLAG_NUMBER_SHORTHAND        = "n"
+        GENERATE_FLAG_NUMBER_DEFAULT          = 1
+        GENERATE_FLAG_NUMBER_DESCRIPTION      = "number of phrases to generate"
+        GENERATE_FLAG_PREFIX                  = "prifix"
+        GENERATE_FLAG_PREFIX_SHORTHAND        = "p"
+        GENERATE_FLAG_PREFIX_DEFAULT          = ""
+        GENERATE_FLAG_PREFIX_DESCRIPTION      = "prefix of phrase(s) to generate"
+        GENERATE_FLAG_SUFFIX                  = "suffix"
+        GENERATE_FLAG_SUFFIX_SHORTHAND        = "s"
+        GENERATE_FLAG_SUFFIX_DEFAULT          = ""
+        GENERATE_FLAG_SUFFIX_DESCRIPTION      = "suffix of phrase(s) to generate"
+        GENERATE_FLAG_DRY_RUN                 = "dry-run"
+        GENERATE_FLAG_DRY_RUN_SHORTHAND       = "d"
+        GENERATE_FLAG_DRY_RUN_DEFAULT         = false
+        GENERATE_FLAG_DRY_RUN_DESCRIPTION     = "generate phrase(s) without saving to the history"
+        GENERATE_FLAG_PLAIN                   = "plain"
+        GENERATE_FLAG_PLAIN_SHORTHAND         = "P"
+        GENERATE_FLAG_PLAIN_DEFAULT           = false
+        GENERATE_FLAG_PLAIN_DESCRIPTION       = "plain text output instead of table output"
+        GENERATE_FLAG_INTERACTIVE             = "interactive"
+        GENERATE_FLAG_INTERACTIVE_SHORTHAND   = "i"
+        GENERATE_FLAG_INTERACTIVE_DEFAULT     = false
+        GENERATE_FLAG_INTERACTIVE_DESCRIPTION = "generate Japanese random phrase(s) interactively"
+        GENERATE_FLAG_TIMEOUT                 = "timeout"
+        GENERATE_FLAG_TIMEOUT_SHORTHAND       = "t"
+        GENERATE_FLAG_TIMEOUT_DEFAULT         = 30
+        GENERATE_FLAG_TIMEOUT_DESCRIPTION     = "timeout in seconds for the interactive mode (default 30, e.g: 10)"
 
         GENERATE_MESSAGE_GENERATE_FAILURE         = "❌ Failed to generate the phrase(s)..."
         GENERATE_MESSAGE_NOTIFY_DOWNLOAD_REQUIRED = "⚡ You have to execute \"download\" to use jrp..."
@@ -4238,7 +4265,7 @@ Flags:
   -s  --suffix   💬 suffix of phrase(s) to generate
   -P, --plain    📝 plain text output instead of table output
   -t  --timeout  ⏱️  timeout second for the interactive mode (default 30, e.g: 10)
-  -h, --help     🤝 help for generate
+  -h, --help     🤝 help for interactive
 `
         INTERACTIVE_FLAG_PREFIX              = "prifix"
         INTERACTIVE_FLAG_PREFIX_SHORTHAND    = "p"
@@ -5421,6 +5448,7 @@ import (
         "github.com/yanosea/jrp/app/proxy/filepath"
         "github.com/yanosea/jrp/app/proxy/fmt"
         "github.com/yanosea/jrp/app/proxy/io"
+        "github.com/yanosea/jrp/app/proxy/keyboard"
         "github.com/yanosea/jrp/app/proxy/os"
         "github.com/yanosea/jrp/app/proxy/rand"
         "github.com/yanosea/jrp/app/proxy/sort"
@@ -5443,16 +5471,19 @@ type generateOption struct {
         Suffix                string
         DryRun                bool
         Plain                 bool
+        Interactive           bool
+        Timeout               int
         DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
         Generator             generator.Generatable
         JrpRepository         jrprepository.JrpRepositoryInterface
         JrpWriter             jrpwriter.JrpWritable
         WNJpnRepository       wnjpnrepository.WNJpnRepositoryInterface
         Utility               utility.UtilityInterface
+        KeyboardProxy         keyboardproxy.Keyboard
 }
 
 // NewGenerateCommand creates a new generate command.
-func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance <span class="cov8" title="1">{
+func NewGenerateCommand(g *GlobalOption, keyboardProxy keyboardproxy.Keyboard) *cobraproxy.CommandInstance <span class="cov8" title="1">{
         o := &amp;generateOption{
                 Out:     g.Out,
                 ErrOut:  g.ErrOut,
@@ -5484,6 +5515,7 @@ func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance <span class
                 timeproxy.New(),
                 o.WNJpnRepository,
         )
+        o.KeyboardProxy = keyboardProxy
 
         cobraProxy := cobraproxy.New()
         cmd := cobraProxy.NewCommand()
@@ -5528,6 +5560,20 @@ func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance <span class
                 constant.GENERATE_FLAG_PLAIN_DEFAULT,
                 constant.GENERATE_FLAG_PLAIN_DESCRIPTION,
         )
+        cmd.PersistentFlags().BoolVarP(
+                &amp;o.Interactive,
+                constant.GENERATE_FLAG_INTERACTIVE,
+                constant.GENERATE_FLAG_INTERACTIVE_SHORTHAND,
+                constant.GENERATE_FLAG_INTERACTIVE_DEFAULT,
+                constant.GENERATE_FLAG_INTERACTIVE_DESCRIPTION,
+        )
+        cmd.PersistentFlags().IntVarP(
+                &amp;o.Timeout,
+                constant.GENERATE_FLAG_TIMEOUT,
+                constant.GENERATE_FLAG_TIMEOUT_SHORTHAND,
+                constant.GENERATE_FLAG_TIMEOUT_DEFAULT,
+                constant.GENERATE_FLAG_TIMEOUT_DESCRIPTION,
+        )
 
         cmd.SetOut(o.Out)
         cmd.SetErr(o.ErrOut)
@@ -5540,7 +5586,22 @@ func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance <span class
 
 // generateRunE is the function that is called when the generate command is executed.
 func (o *generateOption) generateRunE(_ *cobra.Command, _ []string) error <span class="cov8" title="1">{
-        var word string
+        if o.Interactive </span><span class="cov8" title="1">{
+                // if interactive flag is set, switch to interactive command
+                return switchToInteractiveCommand(
+                        o.Out,
+                        o.ErrOut,
+                        o.Args,
+                        o.Utility,
+                        o.Prefix,
+                        o.Suffix,
+                        o.Plain,
+                        o.Timeout,
+                        o.KeyboardProxy,
+                )
+        }</span>
+
+        <span class="cov8" title="1">var word string
         var mode generator.GenerateMode
         if o.Prefix != "" &amp;&amp; o.Suffix != "" </span><span class="cov8" title="1">{
                 // if both prefix and suffix are provided, notify to use only one
@@ -6934,6 +6995,68 @@ func (o *interactiveOption) writePhase(phase int) <span class="cov8" title="1">{
         // leave a blank line
         o.Utility.PrintlnWithWriter(o.Out, "")
 }</span>
+
+// switchToInteractiveCommand switches to interactive command.
+func switchToInteractiveCommand(
+        out ioproxy.WriterInstanceInterface,
+        errOut ioproxy.WriterInstanceInterface,
+        args []string,
+        utility utility.UtilityInterface,
+        prefix string,
+        suffix string,
+        plain bool,
+        timeout int,
+        keyboardProxy keyboardproxy.Keyboard,
+) error <span class="cov8" title="1">{
+        // regenerate GlobalOption
+        g := &amp;GlobalOption{
+                Out:     out,
+                ErrOut:  errOut,
+                Args:    args,
+                Utility: utility,
+        }
+        interactiveCmd := NewInteractiveCommand(g, keyboardProxy)
+        strconvProxy := strconvproxy.New()
+        // consolidate flags
+        flags := map[string]string{
+                constant.INTERACTIVE_FLAG_PREFIX:  prefix,
+                constant.INTERACTIVE_FLAG_SUFFIX:  suffix,
+                constant.INTERACTIVE_FLAG_PLAIN:   strconvProxy.FormatBool(plain),
+                constant.INTERACTIVE_FLAG_TIMEOUT: strconvProxy.Itoa(timeout),
+        }
+        // set each flag
+        if err := setFlagsFunc(interactiveCmd, flags); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        // run interactive command
+        <span class="cov8" title="1">if err := runSwitchedInteractiveCommandFunc(interactiveCmd); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// setFlagsFunc is the function that sets flags to the command.
+var setFlagsFunc = setFlags
+
+// setFlags sets flags to the command.
+func setFlags(cmd *cobraproxy.CommandInstance, flags map[string]string) error <span class="cov8" title="1">{
+        for name, value := range flags </span><span class="cov8" title="1">{
+                if err := cmd.PersistentFlags().Set(name, value); err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+        }
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// runSwitchedInteractiveCommandFunc is the function that runs switched interactive command.
+var runSwitchedInteractiveCommandFunc = runSwitchedInteractiveCommand
+
+// runSwitchedInteractiveCommand runs switched interactive command.
+func runSwitchedInteractiveCommand(switchedInteractiveCommand *cobraproxy.CommandInstance) error <span class="cov8" title="1">{
+        return switchedInteractiveCommand.RunE(nil, nil)
+}</span>
 </pre>
 		
 		<pre class="file" id="file76" style="display: none">package cmd
@@ -6990,12 +7113,15 @@ type rootOption struct {
         Suffix                string
         DryRun                bool
         Plain                 bool
+        Interactive           bool
+        Timeout               int
         DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
         Generator             generator.Generatable
         JrpRepository         jrprepository.JrpRepositoryInterface
         JrpWriter             jrpwriter.JrpWritable
         WNJpnRepository       wnjpnrepository.WNJpnRepositoryInterface
         Utility               utility.UtilityInterface
+        KeyboardProxy         keyboardproxy.Keyboard
 }
 
 // NewGlobalOption creates a new global option.
@@ -7068,6 +7194,7 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
                 timeproxy.New(),
                 o.WNJpnRepository,
         )
+        o.KeyboardProxy = keyboardproxy.New()
 
         v := versionprovider.New(debugproxy.New())
 
@@ -7116,17 +7243,30 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
                 constant.ROOT_FLAG_PLAIN_DEFAULT,
                 constant.ROOT_FLAG_PLAIN_DESCRIPTION,
         )
+        cmd.PersistentFlags().BoolVarP(
+                &amp;o.Interactive,
+                constant.ROOT_FLAG_INTERACTIVE,
+                constant.ROOT_FLAG_INTERACTIVE_SHORTHAND,
+                constant.ROOT_FLAG_INTERACTIVE_DEFAULT,
+                constant.ROOT_FLAG_INTERACTIVE_DESCRIPTION,
+        )
+        cmd.PersistentFlags().IntVarP(
+                &amp;o.Timeout,
+                constant.ROOT_FLAG_TIMEOUT,
+                constant.ROOT_FLAG_TIMEOUT_SHORTHAND,
+                constant.ROOT_FLAG_TIMEOUT_DEFAULT,
+                constant.ROOT_FLAG_TIMEOUT_DESCRIPTION,
+        )
 
         cmd.SetOut(ow)
         cmd.SetErr(ew)
         cmd.SetHelpTemplate(constant.ROOT_HELP_TEMPLATE)
-
         cmd.AddCommand(
                 NewDownloadCommand(g),
                 NewFavoriteCommand(g),
-                NewGenerateCommand(g),
+                NewGenerateCommand(g, o.KeyboardProxy),
                 NewHistoryCommand(g),
-                NewInteractiveCommand(g, keyboardproxy.New()),
+                NewInteractiveCommand(g, o.KeyboardProxy),
                 NewVersionCommand(g),
                 NewCompletionCommand(g),
         )
@@ -7138,7 +7278,22 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
 
 // rootRunE is the function to run root command.
 func (o *rootOption) rootRunE(_ *cobra.Command, _ []string) error <span class="cov8" title="1">{
-        var word string
+        if o.Interactive </span><span class="cov8" title="1">{
+                // if interactive flag is set, switch to interactive command
+                return switchToInteractiveCommand(
+                        o.Out,
+                        o.ErrOut,
+                        o.Args,
+                        o.Utility,
+                        o.Prefix,
+                        o.Suffix,
+                        o.Plain,
+                        o.Timeout,
+                        o.KeyboardProxy,
+                )
+        }</span>
+
+        <span class="cov8" title="1">var word string
         var mode generator.GenerateMode
         if o.Prefix != "" &amp;&amp; o.Suffix != "" </span><span class="cov8" title="1">{
                 // if both prefix and suffix are provided, notify to use only one
