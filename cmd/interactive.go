@@ -177,6 +177,7 @@ func (o *interactiveOption) interactive(
 		// generate jrp
 		jrp, res, err = o.interactiveGenerate(wnJpnDBFilePath, word, mode)
 		if err != nil || res != generator.GeneratedSuccessfully {
+			// if failed to generate, exit
 			return err
 		}
 		// leave a blank line
@@ -188,6 +189,7 @@ func (o *interactiveOption) interactive(
 		// get interactive status
 		interactiveAnswer, err = o.getInteractiveInteractiveAnswer(o.Timeout)
 		if err != nil {
+			// if failed to get answer, exit
 			return err
 		}
 		if interactiveAnswer == constant.InteractiveAnswerSaveAndFavoriteAndContinue ||
@@ -197,6 +199,7 @@ func (o *interactiveOption) interactive(
 			// save jrp
 			err = o.interactiveSave(jrpDBFilePath, jrp, interactiveAnswer)
 			if err != nil {
+				// if failed to save, exit
 				return err
 			}
 		}
@@ -205,6 +208,7 @@ func (o *interactiveOption) interactive(
 			// favorite jrp
 			err = o.interactiveFavorite(jrpDBFilePath, jrp)
 			if err != nil {
+				// if failed to favorite, exit
 				return err
 			}
 		}
@@ -333,6 +337,7 @@ func (o *interactiveOption) writeInteractiveFavoriteResult(result jrprepository.
 
 // getInteractiveInteractiveAnswer gets the interactive answer.
 func (o *interactiveOption) getInteractiveInteractiveAnswer(timeoutSec int) (constant.InteractiveAnswer, error) {
+	// write prompt
 	o.Utility.PrintlnWithWriter(o.Out, constant.INTERACTIVE_PROMPT_LABEL)
 	// open keyboard
 	if err := o.KeyboardProxy.Open(); err != nil {
