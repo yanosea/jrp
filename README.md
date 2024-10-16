@@ -21,7 +21,7 @@
 
 ## ℹ️ About
 
-`jrp` is the CLI tool to generate Japanese random phrase(s). (It's jokeey tool!)  
+`jrp` is the CLI jokeey tool to generate Japanese random phrase(s).  
 You can save the generated phrase(s) to the history and manage them.  
 Also, you can save the generated phrase(s) to the favorite and manage them.
 
