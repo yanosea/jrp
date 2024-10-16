@@ -12,13 +12,17 @@ If both are provided, the larger number takes precedence.
 And you can specify the prefix or suffix of the phrase(s) to generate
 by the flag "-p" or "--prefix" and "-s" or "--suffix".
 
+Those commands below are the same.
+  "jrp" : "jrp generate"
+  "jrp interactive" : "jrp generate interactive" : "jrp generate --interactive"
+
 Usage:
   jrp [flags]
   jrp [command]
 
 Available Subcommands:
   download,    dl,   d  📦 Download WordNet Japan sqlite database file from the official web site.
-  generate,    gen,  g  ✨ Generate Japanese random phrase(s). You can abbreviate "generate" sub command. ("jrp" and "jrp generate" are the same.)
+  generate,    gen,  g  ✨ Generate Japanese random phrase(s).
   history,     hist, h  📜 Manage the history of the "generate" command.
   favorite,    fav,  f  ⭐ Manage the favorited phrase(s) of the history of "generate" command.
   interactive, int,  i  💬 Generate Japanese random phrase(s) interactively.
