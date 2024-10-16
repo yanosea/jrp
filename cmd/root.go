@@ -60,6 +60,7 @@ type rootOption struct {
 	JrpWriter             jrpwriter.JrpWritable
 	WNJpnRepository       wnjpnrepository.WNJpnRepositoryInterface
 	Utility               utility.UtilityInterface
+	KeyboardProxy         keyboardproxy.Keyboard
 }
 
 // NewGlobalOption creates a new global option.
@@ -132,6 +133,7 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
 		timeproxy.New(),
 		o.WNJpnRepository,
 	)
+	o.KeyboardProxy = keyboardproxy.New()
 
 	v := versionprovider.New(debugproxy.New())
 
@@ -198,13 +200,12 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
 	cmd.SetOut(ow)
 	cmd.SetErr(ew)
 	cmd.SetHelpTemplate(constant.ROOT_HELP_TEMPLATE)
-
 	cmd.AddCommand(
 		NewDownloadCommand(g),
 		NewFavoriteCommand(g),
-		NewGenerateCommand(g),
+		NewGenerateCommand(g, o.KeyboardProxy),
 		NewHistoryCommand(g),
-		NewInteractiveCommand(g, keyboardproxy.New()),
+		NewInteractiveCommand(g, o.KeyboardProxy),
 		NewVersionCommand(g),
 		NewCompletionCommand(g),
 	)
@@ -227,6 +228,7 @@ func (o *rootOption) rootRunE(_ *cobra.Command, _ []string) error {
 			o.Suffix,
 			o.Plain,
 			o.Timeout,
+			o.KeyboardProxy,
 		)
 	}
 

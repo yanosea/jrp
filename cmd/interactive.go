@@ -387,6 +387,7 @@ func switchToInteractiveCommand(
 	suffix string,
 	plain bool,
 	timeout int,
+	keyboardProxy keyboardproxy.Keyboard,
 ) error {
 	// regenerate GlobalOption
 	g := &GlobalOption{
@@ -395,7 +396,7 @@ func switchToInteractiveCommand(
 		Args:    args,
 		Utility: utility,
 	}
-	interactiveCmd := NewInteractiveCommand(g, keyboardproxy.New())
+	interactiveCmd := NewInteractiveCommand(g, keyboardProxy)
 	strconvProxy := strconvproxy.New()
 	// consolidate flags
 	flags := map[string]string{
@@ -405,15 +406,35 @@ func switchToInteractiveCommand(
 		constant.INTERACTIVE_FLAG_TIMEOUT: strconvProxy.Itoa(timeout),
 	}
 	// set each flag
-	for name, value := range flags {
-		if err := interactiveCmd.PersistentFlags().Set(name, value); err != nil {
-			return err
-		}
+	if err := setFlagsFunc(interactiveCmd, flags); err != nil {
+		return err
 	}
 	// run interactive command
-	if err := interactiveCmd.RunE(nil, nil); err != nil {
+	if err := runSwitchedInteractiveCommandFunc(interactiveCmd); err != nil {
 		return err
 	}
 
 	return nil
+}
+
+// setFlagsFunc is the function that sets flags to the command.
+var setFlagsFunc = setFlags
+
+// setFlags sets flags to the command.
+func setFlags(cmd *cobraproxy.CommandInstance, flags map[string]string) error {
+	for name, value := range flags {
+		if err := cmd.PersistentFlags().Set(name, value); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// runSwitchedInteractiveCommandFunc is the function that runs switched interactive command.
+var runSwitchedInteractiveCommandFunc = runSwitchedInteractiveCommand
+
+// runSwitchedInteractiveCommand runs switched interactive command.
+func runSwitchedInteractiveCommand(switchedInteractiveCommand *cobraproxy.CommandInstance) error {
+	return switchedInteractiveCommand.RunE(nil, nil)
 }

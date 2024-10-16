@@ -15,6 +15,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/filepath"
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
+	"github.com/yanosea/jrp/app/proxy/keyboard"
 	"github.com/yanosea/jrp/app/proxy/os"
 	"github.com/yanosea/jrp/app/proxy/rand"
 	"github.com/yanosea/jrp/app/proxy/sort"
@@ -45,10 +46,11 @@ type generateOption struct {
 	JrpWriter             jrpwriter.JrpWritable
 	WNJpnRepository       wnjpnrepository.WNJpnRepositoryInterface
 	Utility               utility.UtilityInterface
+	KeyboardProxy         keyboardproxy.Keyboard
 }
 
 // NewGenerateCommand creates a new generate command.
-func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance {
+func NewGenerateCommand(g *GlobalOption, keyboardProxy keyboardproxy.Keyboard) *cobraproxy.CommandInstance {
 	o := &generateOption{
 		Out:     g.Out,
 		ErrOut:  g.ErrOut,
@@ -80,6 +82,7 @@ func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		timeproxy.New(),
 		o.WNJpnRepository,
 	)
+	o.KeyboardProxy = keyboardProxy
 
 	cobraProxy := cobraproxy.New()
 	cmd := cobraProxy.NewCommand()
@@ -161,6 +164,7 @@ func (o *generateOption) generateRunE(_ *cobra.Command, _ []string) error {
 			o.Suffix,
 			o.Plain,
 			o.Timeout,
+			o.KeyboardProxy,
 		)
 	}
 
