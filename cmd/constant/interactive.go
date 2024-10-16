@@ -27,7 +27,7 @@ Flags:
   -s  --suffix   💬 suffix of phrase(s) to generate
   -P, --plain    📝 plain text output instead of table output
   -t  --timeout  ⏱️  timeout second for the interactive mode (default 30, e.g: 10)
-  -h, --help     🤝 help for generate
+  -h, --help     🤝 help for interactive
 `
 	INTERACTIVE_FLAG_PREFIX              = "prifix"
 	INTERACTIVE_FLAG_PREFIX_SHORTHAND    = "p"
