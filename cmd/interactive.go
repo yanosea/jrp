@@ -376,3 +376,44 @@ func (o *interactiveOption) writePhase(phase int) {
 	// leave a blank line
 	o.Utility.PrintlnWithWriter(o.Out, "")
 }
+
+// switchToInteractiveCommand switches to interactive command.
+func switchToInteractiveCommand(
+	out ioproxy.WriterInstanceInterface,
+	errOut ioproxy.WriterInstanceInterface,
+	args []string,
+	utility utility.UtilityInterface,
+	prefix string,
+	suffix string,
+	plain bool,
+	timeout int,
+) error {
+	// regenerate GlobalOption
+	g := &GlobalOption{
+		Out:     out,
+		ErrOut:  errOut,
+		Args:    args,
+		Utility: utility,
+	}
+	interactiveCmd := NewInteractiveCommand(g, keyboardproxy.New())
+	strconvProxy := strconvproxy.New()
+	// consolidate flags
+	flags := map[string]string{
+		constant.INTERACTIVE_FLAG_PREFIX:  prefix,
+		constant.INTERACTIVE_FLAG_SUFFIX:  suffix,
+		constant.INTERACTIVE_FLAG_PLAIN:   strconvProxy.FormatBool(plain),
+		constant.INTERACTIVE_FLAG_TIMEOUT: strconvProxy.Itoa(timeout),
+	}
+	// set each flag
+	for name, value := range flags {
+		if err := interactiveCmd.PersistentFlags().Set(name, value); err != nil {
+			return err
+		}
+	}
+	// run interactive command
+	if err := interactiveCmd.RunE(nil, nil); err != nil {
+		return err
+	}
+
+	return nil
+}
