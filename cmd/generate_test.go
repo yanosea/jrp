@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/eiannone/keyboard"
+
 	"github.com/yanosea/jrp/app/database/jrp/model"
 	jrprepository "github.com/yanosea/jrp/app/database/jrp/repository"
 	wnjpnrepository "github.com/yanosea/jrp/app/database/wnjpn/repository"
@@ -20,6 +22,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/gzip"
 	"github.com/yanosea/jrp/app/proxy/http"
 	"github.com/yanosea/jrp/app/proxy/io"
+	"github.com/yanosea/jrp/app/proxy/keyboard"
 	"github.com/yanosea/jrp/app/proxy/os"
 	"github.com/yanosea/jrp/app/proxy/rand"
 	"github.com/yanosea/jrp/app/proxy/sort"
@@ -34,13 +37,15 @@ import (
 	mockjrprepository "github.com/yanosea/jrp/mock/app/database/jrp/repository"
 	"github.com/yanosea/jrp/mock/app/library/dbfiledirpathprovider"
 	"github.com/yanosea/jrp/mock/app/library/generator"
+	"github.com/yanosea/jrp/mock/app/proxy/keyboard"
 	"github.com/yanosea/jrp/test/testutility"
 	"go.uber.org/mock/gomock"
 )
 
 func TestNewGenerateCommand(t *testing.T) {
 	type args struct {
-		g *GlobalOption
+		g             *GlobalOption
+		keyboardProxy keyboardproxy.Keyboard
 	}
 	tests := []struct {
 		name      string
@@ -55,13 +60,14 @@ func TestNewGenerateCommand(t *testing.T) {
 					osproxy.New(),
 					strconvproxy.New(),
 				),
+				keyboardProxy: nil,
 			},
 			wantError: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := NewGenerateCommand(tt.args.g)
+			got := NewGenerateCommand(tt.args.g, tt.args.keyboardProxy)
 			if err := got.Execute(); (err != nil) != tt.wantError {
 				t.Errorf("NewGenerateCommand().Execute() error =\n%v, wantError =\n%v", err, tt.wantError)
 			}
@@ -131,6 +137,12 @@ func Test_generateOption_generateRunE(t *testing.T) {
 	mockDBFileDirPathProviderFailsGetJrpDBFileDirPath := mockdbfiledirpathprovider.NewMockDBFileDirPathProvidable(mockCtrl)
 	mockDBFileDirPathProviderFailsGetJrpDBFileDirPath.EXPECT().GetWNJpnDBFileDirPath().Return("", nil)
 	mockDBFileDirPathProviderFailsGetJrpDBFileDirPath.EXPECT().GetJrpDBFileDirPath().Return("", errors.New("DBFileDirPathProvider.GetJrpDBFileDirPath() failed"))
+	mockKeyboardProxy := mockkeyboardproxy.NewMockKeyboard(mockCtrl)
+	mockKeyboardProxy.EXPECT().Open().Return(nil)
+	mockKeyboardProxy.EXPECT().Close()
+	s := ","
+	r := rune(s[0])
+	mockKeyboardProxy.EXPECT().GetKey(30).Return(r, keyboard.KeyEnter, nil)
 
 	type fields struct {
 		t        *testing.T
@@ -160,6 +172,8 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
@@ -201,12 +215,15 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generateRunE(nil, nil); err != nil {
 						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
@@ -242,12 +259,15 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						Suffix:                "suffix",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generateRunE(nil, nil); err != nil {
 						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
@@ -283,12 +303,15 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generateRunE(nil, nil); err != nil {
 						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
@@ -324,12 +347,15 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						Suffix:                "suffix",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generateRunE(nil, nil); err != nil {
 						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
@@ -365,12 +391,15 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generateRunE(nil, nil); err != nil {
 						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
@@ -406,12 +435,15 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generateRunE(nil, nil); err != nil {
 						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
@@ -434,6 +466,50 @@ func Test_generateOption_generateRunE(t *testing.T) {
 			},
 		},
 		{
+			name: "positive testing (interactive)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					generateOption := &generateOption{
+						Out:                   capturer.OutBuffer,
+						ErrOut:                capturer.ErrBuffer,
+						Args:                  osproxy.Args[1:],
+						Number:                1,
+						Prefix:                "",
+						Suffix:                "",
+						DryRun:                false,
+						Plain:                 false,
+						Interactive:           true,
+						Timeout:               30,
+						DBFileDirPathProvider: dbFileDirPathProvider,
+						Generator:             gen,
+						JrpRepository:         jrpRepository,
+						JrpWriter:             jrpWriter,
+						WNJpnRepository:       wnJpnRepository,
+						Utility:               util,
+						KeyboardProxy:         mockKeyboardProxy,
+					}
+					if err := generateOption.generateRunE(nil, nil); err != nil {
+						t.Errorf("generateOption.generateRunE() : error =\n%v", err)
+					}
+				},
+				capturer: capturer,
+			},
+			wantStdOut: testutility.TEST_OUTPUT_ANY,
+			wantStdErr: "",
+			wantErr:    false,
+			setup: func() {
+				if _, err := dl.DownloadWNJpnDBFile(wnJpnDBFileDirPath); err != nil {
+					t.Errorf("Downloader.DownloadWNJpnDBFile() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.RemoveAll(wnJpnDBFilePath); err != nil {
+					t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+				}
+			},
+		},
+		{
 			name: "negative testing (DBFileDirPathProvider.GetWNJpnDBFileDirPath() failed)",
 			fields: fields{
 				t: t,
@@ -447,12 +523,15 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: mockDBFileDirPathProviderFailsWNJpnDBFileDirPath,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generateRunE(nil, nil); err != nil {
 						fmt.Printf("generateOption.generateRunE() : error =\n%v", err)
@@ -488,12 +567,15 @@ func Test_generateOption_generateRunE(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: mockDBFileDirPathProviderFailsGetJrpDBFileDirPath,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generateRunE(nil, nil); err != nil {
 						fmt.Printf("generateOption.generateRunE() : error =\n%v", err)
@@ -636,12 +718,15 @@ func Test_generateOption_generate(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
 						t.Errorf("generateOption.generate() : error =\n%v", err)
@@ -677,12 +762,15 @@ func Test_generateOption_generate(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
 						t.Errorf("generateOption.generate() : error =\n%v", err)
@@ -718,12 +806,15 @@ func Test_generateOption_generate(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             mockGenerator,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
 						fmt.Printf("generateOption.generate() : error =\n%v", err)
@@ -759,12 +850,15 @@ func Test_generateOption_generate(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         mockJrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					if err := generateOption.generate(wnJpnDBFilePath, jrpDBFilePath, "", generator.WithNoPrefixOrSuffix); err != nil {
 						fmt.Printf("generateOption.generate() : error =\n%v", err)
@@ -871,12 +965,15 @@ func Test_generateOption_generateGenerate(t *testing.T) {
 		Suffix                string
 		DryRun                bool
 		Plain                 bool
+		Interactive           bool
+		Timeout               int
 		DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 		Generator             generator.Generatable
 		JrpRepository         jrprepository.JrpRepositoryInterface
 		JrpWriter             jrpwriter.JrpWritable
 		WNJpnRepository       wnjpnrepository.WNJpnRepositoryInterface
 		Utility               utility.UtilityInterface
+		KeyboardProxy         keyboardproxy.Keyboard
 	}
 	type args struct {
 		wnJpnDBFilePath string
@@ -903,12 +1000,15 @@ func Test_generateOption_generateGenerate(t *testing.T) {
 				Suffix:                "",
 				DryRun:                false,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             gen,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				wnJpnDBFilePath: wnJpnDBFilePath,
@@ -939,12 +1039,15 @@ func Test_generateOption_generateGenerate(t *testing.T) {
 				Suffix:                "",
 				DryRun:                false,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             gen,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				wnJpnDBFilePath: wnJpnDBFilePath,
@@ -975,12 +1078,15 @@ func Test_generateOption_generateGenerate(t *testing.T) {
 				Suffix:                "suffix",
 				DryRun:                false,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             nil,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				wnJpnDBFilePath: wnJpnDBFilePath,
@@ -1020,12 +1126,15 @@ func Test_generateOption_generateGenerate(t *testing.T) {
 				Suffix:                tt.fields.Suffix,
 				DryRun:                tt.fields.DryRun,
 				Plain:                 tt.fields.Plain,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: tt.fields.DBFileDirPathProvider,
 				Generator:             tt.fields.Generator,
 				JrpRepository:         tt.fields.JrpRepository,
 				JrpWriter:             tt.fields.JrpWriter,
 				WNJpnRepository:       tt.fields.WNJpnRepository,
 				Utility:               tt.fields.Utility,
+				KeyboardProxy:         nil,
 			}
 			got, err := o.generateGenerate(tt.args.wnJpnDBFilePath, tt.args.word, tt.args.mode)
 			if (err != nil) != tt.wantErr {
@@ -1110,12 +1219,15 @@ func Test_generateOption_writeGenerateGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateGenerateResult(generator.GeneratedSuccessfully)
 				},
@@ -1139,12 +1251,15 @@ func Test_generateOption_writeGenerateGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateGenerateResult(generator.DBFileNotFound)
 				},
@@ -1168,12 +1283,15 @@ func Test_generateOption_writeGenerateGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateGenerateResult(generator.GeneratedFailed)
 				},
@@ -1262,12 +1380,15 @@ func Test_generateOption_generateSave(t *testing.T) {
 		Suffix                string
 		DryRun                bool
 		Plain                 bool
+		Interactive           bool
+		Timeout               int
 		DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 		Generator             generator.Generatable
 		JrpRepository         jrprepository.JrpRepositoryInterface
 		JrpWriter             jrpwriter.JrpWritable
 		WNJpnRepository       wnjpnrepository.WNJpnRepositoryInterface
 		Utility               utility.UtilityInterface
+		KeyboardProxy         keyboardproxy.Keyboard
 	}
 	type args struct {
 		jrpDBFilePath string
@@ -1293,12 +1414,15 @@ func Test_generateOption_generateSave(t *testing.T) {
 				Suffix:                "",
 				DryRun:                false,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             gen,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
@@ -1328,12 +1452,15 @@ func Test_generateOption_generateSave(t *testing.T) {
 				Suffix:                "",
 				DryRun:                false,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             gen,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
@@ -1363,12 +1490,15 @@ func Test_generateOption_generateSave(t *testing.T) {
 				Suffix:                "",
 				DryRun:                false,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             gen,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
@@ -1415,12 +1545,15 @@ func Test_generateOption_generateSave(t *testing.T) {
 				Suffix:                "",
 				DryRun:                false,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             gen,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
@@ -1482,12 +1615,15 @@ func Test_generateOption_generateSave(t *testing.T) {
 				Suffix:                "",
 				DryRun:                true,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             gen,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
@@ -1517,12 +1653,15 @@ func Test_generateOption_generateSave(t *testing.T) {
 				Suffix:                "",
 				DryRun:                true,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             gen,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
@@ -1552,12 +1691,15 @@ func Test_generateOption_generateSave(t *testing.T) {
 				Suffix:                "",
 				DryRun:                true,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             gen,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
@@ -1595,12 +1737,15 @@ func Test_generateOption_generateSave(t *testing.T) {
 				Suffix:                "",
 				DryRun:                true,
 				Plain:                 false,
+				Interactive:           false,
+				Timeout:               30,
 				DBFileDirPathProvider: dbFileDirPathProvider,
 				Generator:             gen,
 				JrpRepository:         jrpRepository,
 				JrpWriter:             jrpWriter,
 				WNJpnRepository:       wnJpnRepository,
 				Utility:               util,
+				KeyboardProxy:         nil,
 			},
 			args: args{
 				jrpDBFilePath: jrpDBFilePath,
@@ -1651,12 +1796,15 @@ func Test_generateOption_generateSave(t *testing.T) {
 				Suffix:                tt.fields.Suffix,
 				DryRun:                tt.fields.DryRun,
 				Plain:                 tt.fields.Plain,
+				Interactive:           tt.fields.Interactive,
+				Timeout:               tt.fields.Timeout,
 				DBFileDirPathProvider: tt.fields.DBFileDirPathProvider,
 				Generator:             tt.fields.Generator,
 				JrpRepository:         tt.fields.JrpRepository,
 				JrpWriter:             tt.fields.JrpWriter,
 				WNJpnRepository:       tt.fields.WNJpnRepository,
 				Utility:               tt.fields.Utility,
+				KeyboardProxy:         nil,
 			}
 			if err := o.generateSave(tt.args.jrpDBFilePath, tt.args.jrps); (err != nil) != tt.wantErr {
 				t.Errorf("generateOption.generateSave() : error = %v, wantErr %v", err, tt.wantErr)
@@ -1743,12 +1891,15 @@ func Test_generateOption_writeGenerateSaveResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateSaveResult(jrprepository.SavedSuccessfully)
 				},
@@ -1772,12 +1923,15 @@ func Test_generateOption_writeGenerateSaveResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateSaveResult(jrprepository.SavedFailed)
 				},
@@ -1801,12 +1955,15 @@ func Test_generateOption_writeGenerateSaveResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateSaveResult(jrprepository.SavedNone)
 				},
@@ -1830,12 +1987,15 @@ func Test_generateOption_writeGenerateSaveResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateSaveResult(jrprepository.SavedNotAll)
 				},
@@ -1933,12 +2093,15 @@ func Test_generateOption_writeGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateResult(nil)
 				},
@@ -1962,12 +2125,15 @@ func Test_generateOption_writeGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateResult([]*model.Jrp{})
 				},
@@ -1991,12 +2157,15 @@ func Test_generateOption_writeGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateResult([]*model.Jrp{
 						{
@@ -2027,12 +2196,15 @@ func Test_generateOption_writeGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 false,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateResult([]*model.Jrp{
 						{
@@ -2069,12 +2241,15 @@ func Test_generateOption_writeGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 true,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateResult(nil)
 				},
@@ -2098,12 +2273,15 @@ func Test_generateOption_writeGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 true,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateResult([]*model.Jrp{})
 				},
@@ -2127,12 +2305,15 @@ func Test_generateOption_writeGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 true,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateResult([]*model.Jrp{
 						{
@@ -2163,12 +2344,15 @@ func Test_generateOption_writeGenerateResult(t *testing.T) {
 						Suffix:                "",
 						DryRun:                false,
 						Plain:                 true,
+						Interactive:           false,
+						Timeout:               30,
 						DBFileDirPathProvider: dbFileDirPathProvider,
 						Generator:             gen,
 						JrpRepository:         jrpRepository,
 						JrpWriter:             jrpWriter,
 						WNJpnRepository:       wnJpnRepository,
 						Utility:               util,
+						KeyboardProxy:         nil,
 					}
 					generateOption.writeGenerateResult([]*model.Jrp{
 						{

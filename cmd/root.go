@@ -17,6 +17,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/filepath"
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
+	"github.com/yanosea/jrp/app/proxy/keyboard"
 	"github.com/yanosea/jrp/app/proxy/os"
 	"github.com/yanosea/jrp/app/proxy/rand"
 	"github.com/yanosea/jrp/app/proxy/sort"
@@ -51,12 +52,15 @@ type rootOption struct {
 	Suffix                string
 	DryRun                bool
 	Plain                 bool
+	Interactive           bool
+	Timeout               int
 	DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 	Generator             generator.Generatable
 	JrpRepository         jrprepository.JrpRepositoryInterface
 	JrpWriter             jrpwriter.JrpWritable
 	WNJpnRepository       wnjpnrepository.WNJpnRepositoryInterface
 	Utility               utility.UtilityInterface
+	KeyboardProxy         keyboardproxy.Keyboard
 }
 
 // NewGlobalOption creates a new global option.
@@ -129,6 +133,7 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
 		timeproxy.New(),
 		o.WNJpnRepository,
 	)
+	o.KeyboardProxy = keyboardproxy.New()
 
 	v := versionprovider.New(debugproxy.New())
 
@@ -177,16 +182,30 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
 		constant.ROOT_FLAG_PLAIN_DEFAULT,
 		constant.ROOT_FLAG_PLAIN_DESCRIPTION,
 	)
+	cmd.PersistentFlags().BoolVarP(
+		&o.Interactive,
+		constant.ROOT_FLAG_INTERACTIVE,
+		constant.ROOT_FLAG_INTERACTIVE_SHORTHAND,
+		constant.ROOT_FLAG_INTERACTIVE_DEFAULT,
+		constant.ROOT_FLAG_INTERACTIVE_DESCRIPTION,
+	)
+	cmd.PersistentFlags().IntVarP(
+		&o.Timeout,
+		constant.ROOT_FLAG_TIMEOUT,
+		constant.ROOT_FLAG_TIMEOUT_SHORTHAND,
+		constant.ROOT_FLAG_TIMEOUT_DEFAULT,
+		constant.ROOT_FLAG_TIMEOUT_DESCRIPTION,
+	)
 
 	cmd.SetOut(ow)
 	cmd.SetErr(ew)
 	cmd.SetHelpTemplate(constant.ROOT_HELP_TEMPLATE)
-
 	cmd.AddCommand(
 		NewDownloadCommand(g),
 		NewFavoriteCommand(g),
-		NewGenerateCommand(g),
+		NewGenerateCommand(g, o.KeyboardProxy),
 		NewHistoryCommand(g),
+		NewInteractiveCommand(g, o.KeyboardProxy),
 		NewVersionCommand(g),
 		NewCompletionCommand(g),
 	)
@@ -198,6 +217,21 @@ func NewRootCommand(ow, ew ioproxy.WriterInstanceInterface, cmdArgs []string) co
 
 // rootRunE is the function to run root command.
 func (o *rootOption) rootRunE(_ *cobra.Command, _ []string) error {
+	if o.Interactive {
+		// if interactive flag is set, switch to interactive command
+		return switchToInteractiveCommand(
+			o.Out,
+			o.ErrOut,
+			o.Args,
+			o.Utility,
+			o.Prefix,
+			o.Suffix,
+			o.Plain,
+			o.Timeout,
+			o.KeyboardProxy,
+		)
+	}
+
 	var word string
 	var mode generator.GenerateMode
 	if o.Prefix != "" && o.Suffix != "" {

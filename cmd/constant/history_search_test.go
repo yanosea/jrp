@@ -19,7 +19,7 @@ func TestGetHistorySearchAliases(t *testing.T) {
 			got := GetHistorySearchAliases()
 			for i, v := range got {
 				if v != tt.want[i] {
-					t.Errorf("GetHistorySearchAliases()[%v] =\n%v, want\n%v", i, got, tt.want)
+					t.Errorf("GetHistorySearchAliases() : [%v] =\n%v, want\n%v", i, got, tt.want)
 				}
 			}
 		})

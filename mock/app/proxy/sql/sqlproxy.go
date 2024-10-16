@@ -39,20 +39,6 @@ func (m *MockSql) EXPECT() *MockSqlMockRecorder {
 	return m.recorder
 }
 
-// IfNullToNullString mocks base method.
-func (m *MockSql) IfNullToNullString(nullStringInstance *sqlproxy.NullStringInstance) *sqlproxy.NullStringInstance {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "IfNullToNullString", nullStringInstance)
-	ret0, _ := ret[0].(*sqlproxy.NullStringInstance)
-	return ret0
-}
-
-// IfNullToNullString indicates an expected call of IfNullToNullString.
-func (mr *MockSqlMockRecorder) IfNullToNullString(nullStringInstance any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IfNullToNullString", reflect.TypeOf((*MockSql)(nil).IfNullToNullString), nullStringInstance)
-}
-
 // Open mocks base method.
 func (m *MockSql) Open(driverName, dataSourceName string) (sqlproxy.DBInstanceInterface, error) {
 	m.ctrl.T.Helper()

@@ -4,6 +4,7 @@ go 1.20
 
 require (
 	github.com/briandowns/spinner v1.23.1
+	github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203
 	github.com/fatih/color v1.17.0
 	github.com/manifoldco/promptui v0.9.0
 	github.com/olekukonko/tablewriter v0.0.5

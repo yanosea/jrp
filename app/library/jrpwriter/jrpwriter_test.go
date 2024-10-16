@@ -343,10 +343,141 @@ func TestJrpWriter_WriteAsTable(t *testing.T) {
 				t.Errorf("Capturer.CaptureOutput() : error =\n%v, wantErr =\n%v", err, tt.wantErr)
 			}
 			if stdout != tt.wantStdOut {
-				t.Errorf("JrpWriter.WriteJrpAsTable() : stdout =\n%v, wantStdOut =\n%v", stdout, tt.wantStdOut)
+				t.Errorf("JrpWriter.WriteAsTable() : stdout =\n%v, wantStdOut =\n%v", stdout, tt.wantStdOut)
 			}
 			if stderr != tt.wantStdErr {
-				t.Errorf("JrpWriter.WriteJrpAsTable() : stderr =\n%v, wantStdErr =\n%v", stderr, tt.wantStdErr)
+				t.Errorf("JrpWriter.WriteAsTable() : stderr =\n%v, wantStdErr =\n%v", stderr, tt.wantStdErr)
+			}
+		})
+	}
+}
+
+func TestJrpWriter_WriteInteractiveResultAsTable(t *testing.T) {
+	capturer := testutility.NewCapturer(
+		bufferproxy.New(),
+		bufferproxy.New(),
+		osproxy.New(),
+	)
+	jrpWriter := New(
+		strconvproxy.New(),
+		tablewriterproxy.New(),
+	)
+	sqlProxy := sqlproxy.New()
+	timeProxy := timeproxy.New()
+
+	type fields struct {
+		t        *testing.T
+		fnc      func()
+		capturer *testutility.Capturer
+	}
+	tests := []struct {
+		name       string
+		fields     fields
+		wantStdOut string
+		wantStdErr string
+		wantErr    bool
+	}{
+		{
+			name: "positive testing (jrps are nil)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					jrpWriter.WriteInteractiveResultAsTable(osproxy.Stdout, nil)
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "",
+			wantStdErr: "",
+			wantErr:    false,
+		},
+		{
+			name: "positive testing (jrps are empty)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					jrpWriter.WriteInteractiveResultAsTable(osproxy.Stdout, []*model.Jrp{})
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "",
+			wantStdErr: "",
+			wantErr:    false,
+		},
+		{
+			name: "positive testing (jrps are one)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					jrps := []*model.Jrp{
+						{
+							ID:          1,
+							Phrase:      "test",
+							Prefix:      sqlProxy.StringToNullString("prefix"),
+							Suffix:      sqlProxy.StringToNullString("suffix"),
+							IsFavorited: 0,
+							CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					}
+					jrpWriter.WriteInteractiveResultAsTable(osproxy.Stdout, jrps)
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "PHRASE\tPREFIX\tSUFFIX\tCREATED AT\ntest\tprefix\tsuffix\t9999-12-31 00:00:00\n\t\t\t\t\n",
+			wantStdErr: "",
+		},
+		{
+			name: "positive testing (jrps are two)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					jrps := []*model.Jrp{
+						{
+							ID:          1,
+							Phrase:      "test1",
+							Prefix:      sqlProxy.StringToNullString("prefix1"),
+							Suffix:      sqlProxy.StringToNullString("suffix1"),
+							IsFavorited: 0,
+							CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+						{
+							ID:          1,
+							Phrase:      "test2",
+							Prefix:      sqlProxy.StringToNullString("prefix2"),
+							Suffix:      sqlProxy.StringToNullString("suffix2"),
+							IsFavorited: 1,
+							CreatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+							UpdatedAt:   timeProxy.Date(9999, 12, 31, 0, 0, 0, 0, &timeproxy.UTC),
+						},
+					}
+					jrpWriter.WriteInteractiveResultAsTable(osproxy.Stdout, jrps)
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "PHRASE\tPREFIX\tSUFFIX\tCREATED AT\ntest1\tprefix1\tsuffix1\t9999-12-31 00:00:00\n\ttest2\tprefix2\tsuffix2\t9999-12-31 00:00:00\n\t\t\t\t\n",
+			wantStdErr: "",
+			wantErr:    false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			stdout, stderr, err := tt.fields.capturer.CaptureOutput(
+				tt.fields.t,
+				tt.fields.fnc,
+			)
+			stdout = testutility.RemoveTabAndSpaceAndLf(stdout)
+			stderr = testutility.RemoveTabAndSpaceAndLf(stderr)
+			tt.wantStdOut = testutility.RemoveTabAndSpaceAndLf(tt.wantStdOut)
+			tt.wantStdErr = testutility.RemoveTabAndSpaceAndLf(tt.wantStdErr)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Capturer.CaptureOutput() : error =\n%v, wantErr =\n%v", err, tt.wantErr)
+			}
+			if stdout != tt.wantStdOut {
+				t.Errorf("JrpWriter.WriteInteractiveResultAsTable() : stdout =\n%v, wantStdOut =\n%v", stdout, tt.wantStdOut)
+			}
+			if stderr != tt.wantStdErr {
+				t.Errorf("JrpWriter.WriteInteractiveResultAsTable() : stderr =\n%v, wantStdErr =\n%v", stderr, tt.wantStdErr)
 			}
 		})
 	}
@@ -386,27 +517,29 @@ func TestJrpWriter_writeTable(t *testing.T) {
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrpWriter.writeTable(osproxy.Stdout, nil, headers, rowFunc)
+					jrpWriter.writeTable(osproxy.Stdout, nil, headers, rowFunc, false)
 				},
 				capturer: capturer,
 			},
 			wantStdOut: "",
 			wantStdErr: "",
 			wantErr:    false,
-		}, {
+		},
+		{
 			name: "positive testing (jrps are empty)",
 			fields: fields{
 				t: t,
 				fnc: func() {
-					jrpWriter.writeTable(osproxy.Stdout, []*model.Jrp{}, headers, rowFunc)
+					jrpWriter.writeTable(osproxy.Stdout, []*model.Jrp{}, headers, rowFunc, false)
 				},
 				capturer: capturer,
 			},
 			wantStdOut: "",
 			wantStdErr: "",
 			wantErr:    false,
-		}, {
-			name: "positive testing (jrps are one)",
+		},
+		{
+			name: "positive testing (jrps are one, show total)",
 			fields: fields{
 				t: t,
 				fnc: func() {
@@ -415,14 +548,15 @@ func TestJrpWriter_writeTable(t *testing.T) {
 							Phrase: "test",
 						},
 					}
-					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc)
+					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc, true)
 				},
 				capturer: capturer,
 			},
 			wantStdOut: "PHRASE\ntest\n\t\nTOTAL : 1\n",
 			wantStdErr: "",
-		}, {
-			name: "positive testing (jrps are two)",
+		},
+		{
+			name: "positive testing (jrps are two, show total)",
 			fields: fields{
 				t: t,
 				fnc: func() {
@@ -433,11 +567,47 @@ func TestJrpWriter_writeTable(t *testing.T) {
 							Phrase: "test2",
 						},
 					}
-					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc)
+					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc, true)
 				},
 				capturer: capturer,
 			},
 			wantStdOut: "PHRASE\ntest1\ntest2\n\t\nTOTAL : 2\n",
+			wantStdErr: "",
+			wantErr:    false,
+		},
+		{
+			name: "positive testing (jrps are one, do not show total)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					jrps := []*model.Jrp{
+						{
+							Phrase: "test",
+						},
+					}
+					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc, false)
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "PHRASE\ntest\n",
+			wantStdErr: "",
+		}, {
+			name: "positive testing (jrps are two, do not show total)",
+			fields: fields{
+				t: t,
+				fnc: func() {
+					jrps := []*model.Jrp{
+						{
+							Phrase: "test1",
+						}, {
+							Phrase: "test2",
+						},
+					}
+					jrpWriter.writeTable(osproxy.Stdout, jrps, headers, rowFunc, false)
+				},
+				capturer: capturer,
+			},
+			wantStdOut: "PHRASE\ntest1\ntest2\n",
 			wantStdErr: "",
 			wantErr:    false,
 		},

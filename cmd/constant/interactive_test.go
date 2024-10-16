@@ -4,22 +4,22 @@ import (
 	"testing"
 )
 
-func TestGetFavoriteAliases(t *testing.T) {
+func TestGetInteractiveAliases(t *testing.T) {
 	tests := []struct {
 		name string
 		want []string
 	}{
 		{
 			name: "positive testing",
-			want: []string{"fav", "f"},
+			want: []string{"int", "i"},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := GetFavoriteAliases()
+			got := GetInteractiveAliases()
 			for i, v := range got {
 				if v != tt.want[i] {
-					t.Errorf("GetFavoriteAliases() : [%v] =\n%v, want\n%v", i, got, tt.want)
+					t.Errorf("GetInteractiveAliases() : [%v] =\n%v, want\n%v", i, got, tt.want)
 				}
 			}
 		})

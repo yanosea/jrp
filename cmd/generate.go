@@ -15,6 +15,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/filepath"
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/io"
+	"github.com/yanosea/jrp/app/proxy/keyboard"
 	"github.com/yanosea/jrp/app/proxy/os"
 	"github.com/yanosea/jrp/app/proxy/rand"
 	"github.com/yanosea/jrp/app/proxy/sort"
@@ -37,16 +38,19 @@ type generateOption struct {
 	Suffix                string
 	DryRun                bool
 	Plain                 bool
+	Interactive           bool
+	Timeout               int
 	DBFileDirPathProvider dbfiledirpathprovider.DBFileDirPathProvidable
 	Generator             generator.Generatable
 	JrpRepository         jrprepository.JrpRepositoryInterface
 	JrpWriter             jrpwriter.JrpWritable
 	WNJpnRepository       wnjpnrepository.WNJpnRepositoryInterface
 	Utility               utility.UtilityInterface
+	KeyboardProxy         keyboardproxy.Keyboard
 }
 
 // NewGenerateCommand creates a new generate command.
-func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance {
+func NewGenerateCommand(g *GlobalOption, keyboardProxy keyboardproxy.Keyboard) *cobraproxy.CommandInstance {
 	o := &generateOption{
 		Out:     g.Out,
 		ErrOut:  g.ErrOut,
@@ -78,6 +82,7 @@ func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		timeproxy.New(),
 		o.WNJpnRepository,
 	)
+	o.KeyboardProxy = keyboardProxy
 
 	cobraProxy := cobraproxy.New()
 	cmd := cobraProxy.NewCommand()
@@ -122,10 +127,27 @@ func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 		constant.GENERATE_FLAG_PLAIN_DEFAULT,
 		constant.GENERATE_FLAG_PLAIN_DESCRIPTION,
 	)
+	cmd.PersistentFlags().BoolVarP(
+		&o.Interactive,
+		constant.GENERATE_FLAG_INTERACTIVE,
+		constant.GENERATE_FLAG_INTERACTIVE_SHORTHAND,
+		constant.GENERATE_FLAG_INTERACTIVE_DEFAULT,
+		constant.GENERATE_FLAG_INTERACTIVE_DESCRIPTION,
+	)
+	cmd.PersistentFlags().IntVarP(
+		&o.Timeout,
+		constant.GENERATE_FLAG_TIMEOUT,
+		constant.GENERATE_FLAG_TIMEOUT_SHORTHAND,
+		constant.GENERATE_FLAG_TIMEOUT_DEFAULT,
+		constant.GENERATE_FLAG_TIMEOUT_DESCRIPTION,
+	)
 
 	cmd.SetOut(o.Out)
 	cmd.SetErr(o.ErrOut)
 	cmd.SetHelpTemplate(constant.GENARETE_HELP_TEMPLATE)
+	cmd.AddCommand(
+		NewInteractiveCommand(g, o.KeyboardProxy),
+	)
 
 	cmd.SetArgs(o.Args)
 
@@ -134,6 +156,21 @@ func NewGenerateCommand(g *GlobalOption) *cobraproxy.CommandInstance {
 
 // generateRunE is the function that is called when the generate command is executed.
 func (o *generateOption) generateRunE(_ *cobra.Command, _ []string) error {
+	if o.Interactive {
+		// if interactive flag is set, switch to interactive command
+		return switchToInteractiveCommand(
+			o.Out,
+			o.ErrOut,
+			o.Args,
+			o.Utility,
+			o.Prefix,
+			o.Suffix,
+			o.Plain,
+			o.Timeout,
+			o.KeyboardProxy,
+		)
+	}
+
 	var word string
 	var mode generator.GenerateMode
 	if o.Prefix != "" && o.Suffix != "" {

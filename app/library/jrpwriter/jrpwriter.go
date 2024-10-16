@@ -11,6 +11,7 @@ import (
 type JrpWritable interface {
 	WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp, showID bool)
 	WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp)
+	WriteInteractiveResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp)
 }
 
 // JrpWriter is a struct that implements JrpWritable.
@@ -62,7 +63,7 @@ func (j *JrpWriter) WriteGenerateResultAsTable(writer ioproxy.WriterInstanceInte
 		return row
 	}
 
-	j.writeTable(writer, jrps, headers, rowFunc)
+	j.writeTable(writer, jrps, headers, rowFunc, true)
 }
 
 // WriteAsTable writes the jrps as table.
@@ -96,11 +97,40 @@ func (j *JrpWriter) WriteAsTable(writer ioproxy.WriterInstanceInterface, jrps []
 		}
 	}
 
-	j.writeTable(writer, jrps, headers, rowFunc)
+	j.writeTable(writer, jrps, headers, rowFunc, true)
+}
+
+// WriteInteractiveResultAsTable writes the interactive result as table.
+func (j *JrpWriter) WriteInteractiveResultAsTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp) {
+	if jrps == nil || len(jrps) <= 0 {
+		return
+	}
+
+	headers := []string{"phrase", "prefix", "suffix", "created_at"}
+
+	rowFunc := func(jrp *model.Jrp) []string {
+		prefix := ""
+		if jrp.Prefix.FieldNullString.Valid {
+			prefix = jrp.Prefix.FieldNullString.String
+		}
+		suffix := ""
+		if jrp.Suffix.FieldNullString.Valid {
+			suffix = jrp.Suffix.FieldNullString.String
+		}
+		row := []string{
+			jrp.Phrase,
+			prefix,
+			suffix,
+			jrp.CreatedAt.Format("2006-01-02 15:04:05"),
+		}
+		return row
+	}
+
+	j.writeTable(writer, jrps, headers, rowFunc, false)
 }
 
 // writeTable writes the table.
-func (j *JrpWriter) writeTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp, headers []string, rowFunc func(*model.Jrp) []string) {
+func (j *JrpWriter) writeTable(writer ioproxy.WriterInstanceInterface, jrps []*model.Jrp, headers []string, rowFunc func(*model.Jrp) []string, showTotal bool) {
 	if jrps == nil || len(jrps) <= 0 {
 		return
 	}
@@ -111,7 +141,9 @@ func (j *JrpWriter) writeTable(writer ioproxy.WriterInstanceInterface, jrps []*m
 	}
 	total := j.StrconvProxy.Itoa(len(rows))
 	rows = append(rows, make([]string, len(headers)))
-	rows = append(rows, append([]string{"TOTAL : " + total}, make([]string, len(headers)-1)...))
+	if showTotal {
+		rows = append(rows, append([]string{"TOTAL : " + total}, make([]string, len(headers)-1)...))
+	}
 
 	table := j.getDefaultTableWriter(writer)
 	table.SetHeader(headers)

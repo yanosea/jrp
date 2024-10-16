@@ -27,6 +27,7 @@ mockgen -source=../app/proxy/gzip/gzipproxy.go -destination=../mock/app/proxy/gz
 mockgen -source=../app/proxy/http/httpproxy.go -destination=../mock/app/proxy/http/httpproxy.go -package=mockhttpproxy
 mockgen -source=../app/proxy/http/responseinstance.go -destination=../mock/app/proxy/http/responseinstance.go -package=mockhttpproxy
 mockgen -source=../app/proxy/io/ioproxy.go -destination=../mock/app/proxy/io/ioproxy.go -package=mockioproxy
+mockgen -source=../app/proxy/keyboard/keyboardproxy.go -destination=../mock/app/proxy/keyboard/keyboardproxy.go -package=mockkeyboardproxy
 mockgen -source=../app/proxy/os/osproxy.go -destination=../mock/app/proxy/os/osproxy.go -package=mockosproxy
 mockgen -source=../app/proxy/os/fileinstance.go -destination=../mock/app/proxy/os/fileinstance.go -package=mockosproxy
 mockgen -source=../app/proxy/pflag/pflagproxy.go -destination=../mock/app/proxy/pflag/pflagproxy.go -package=mockpflagproxy

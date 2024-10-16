@@ -13,6 +13,7 @@ type CommandInstanceInterface interface {
 	Execute() error
 	GetCommand() *cobra.Command
 	PersistentFlags() *pflagproxy.FlagSetInstance
+	RunE(cmd *cobra.Command, args []string) error
 	SetArgs(args []string)
 	SetErr(io ioproxy.WriterInstanceInterface)
 	SetHelpTemplate(s string)
@@ -44,6 +45,11 @@ func (c *CommandInstance) GetCommand() *cobra.Command {
 // PersistentFlags is a proxy for cobra.Command.PersistentFlags.
 func (c *CommandInstance) PersistentFlags() *pflagproxy.FlagSetInstance {
 	return &pflagproxy.FlagSetInstance{FieldFlagSet: c.FieldCommand.PersistentFlags()}
+}
+
+// RunE is a proxy for cobra.Command.RunE.
+func (c *CommandInstance) RunE(cmd *cobra.Command, args []string) error {
+	return c.FieldCommand.RunE(cmd, args)
 }
 
 // SetArgs is a proxy for cobra.Command.SetArgs.

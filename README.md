@@ -35,22 +35,25 @@ Usage:
   jrp [command]
 
 Available Subcommands:
-  download, dl,   d  📦 Download WordNet Japan sqlite database file from the official web site.
-  generate, gen,  g  ✨ Generate Japanese random phrase(s). You can abbreviate "generate" sub command. ("jrp" and "jrp generate" are the same.)
-  history,  hist, h  📜 Manage the history of the "generate" command.
-  favorite, fav,  f  ⭐ Manage the favorited phrase(s) of the history of "generate" command.
-  help               🤝 Help for jrp.
-  completion         🔧 Generate the autocompletion script for the specified shell.
-  version            🔖 Show the version of jrp.
+  download,    dl,   d  📦 Download WordNet Japan sqlite database file from the official web site.
+  generate,    gen,  g  ✨ Generate Japanese random phrase(s).
+  history,     hist, h  📜 Manage the history of the "generate" command.
+  favorite,    fav,  f  ⭐ Manage the favorited phrase(s) of the history of "generate" command.
+  interactive, int,  i  💬 Generate Japanese random phrase(s) interactively.
+  help                  🤝 Help for jrp.
+  completion            🔧 Generate the autocompletion script for the specified shell.
+  version               🔖 Show the version of jrp.
 
 Flags:
-  -n, --number   🔢 number of phrases to generate (default 1, e.g: 10)
-  -p  --prefix   💬 prefix of phrase(s) to generate
-  -s  --suffix   💬 suffix of phrase(s) to generate
-  -d  --dry-run  🧪 generate phrase(s) without saving to the history
-  -P, --plain    📝 plain text output instead of table output
-  -h, --help     🤝 help for jrp
-  -v, --version  🔖 version for jrp
+  -n, --number       🔢 number of phrases to generate (default 1, e.g: 10)
+  -p  --prefix       💬 prefix of phrase(s) to generate
+  -s  --suffix       💬 suffix of phrase(s) to generate
+  -d  --dry-run      🧪 generate phrase(s) without saving to the history
+  -P, --plain        📝 plain text output instead of table output
+  -i, --interactive  💬 generate Japanese random phrase(s) interactively
+  -t, --timeout      ⏱️  timeout in seconds for the interactive mode (default 30, e.g: 10)
+  -h, --help         🤝 help for jrp
+  -v, --version      🔖 version for jrp
 
 Arguments:
   number  🔢 number of phrases to generate (e.g: 10)
