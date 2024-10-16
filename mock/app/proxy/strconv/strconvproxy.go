@@ -53,6 +53,20 @@ func (mr *MockStrconvMockRecorder) Atoi(s any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Atoi", reflect.TypeOf((*MockStrconv)(nil).Atoi), s)
 }
 
+// FormatBool mocks base method.
+func (m *MockStrconv) FormatBool(b bool) string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "FormatBool", b)
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// FormatBool indicates an expected call of FormatBool.
+func (mr *MockStrconvMockRecorder) FormatBool(b any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "FormatBool", reflect.TypeOf((*MockStrconv)(nil).FormatBool), b)
+}
+
 // Itoa mocks base method.
 func (m *MockStrconv) Itoa(i int) string {
 	m.ctrl.T.Helper()

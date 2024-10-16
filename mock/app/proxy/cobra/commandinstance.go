@@ -100,6 +100,20 @@ func (mr *MockCommandInstanceInterfaceMockRecorder) PersistentFlags() *gomock.Ca
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "PersistentFlags", reflect.TypeOf((*MockCommandInstanceInterface)(nil).PersistentFlags))
 }
 
+// RunE mocks base method.
+func (m *MockCommandInstanceInterface) RunE(cmd *cobra.Command, args []string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RunE", cmd, args)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RunE indicates an expected call of RunE.
+func (mr *MockCommandInstanceInterfaceMockRecorder) RunE(cmd, args any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RunE", reflect.TypeOf((*MockCommandInstanceInterface)(nil).RunE), cmd, args)
+}
+
 // SetArgs mocks base method.
 func (m *MockCommandInstanceInterface) SetArgs(args []string) {
 	m.ctrl.T.Helper()

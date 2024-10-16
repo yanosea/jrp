@@ -7,6 +7,7 @@ import (
 // Strconv is an interface for strconv.
 type Strconv interface {
 	Atoi(s string) (int, error)
+	FormatBool(b bool) string
 	Itoa(i int) string
 }
 
@@ -21,6 +22,10 @@ func New() Strconv {
 // Atoi is a proxy for strconv.Atoi.
 func (*StrconvProxy) Atoi(s string) (int, error) {
 	return strconv.Atoi(s)
+}
+
+func (*StrconvProxy) FormatBool(b bool) string {
+	return strconv.FormatBool(b)
 }
 
 // Itoa is a proxy for strconv.Itoa.

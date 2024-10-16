@@ -8,6 +8,7 @@ import (
 type FlagSetInstanceInterface interface {
 	BoolVarP(p *bool, name string, shorthand string, value bool, usage string)
 	IntVarP(p *int, name string, shorthand string, value int, usage string)
+	Set(name, value string) error
 	StringVarP(p *string, name string, shorthand string, value string, usage string)
 }
 
@@ -24,6 +25,11 @@ func (f *FlagSetInstance) BoolVarP(p *bool, name string, shorthand string, value
 // IntVarP is a proxy for pflag.FlagSet.IntVarP.
 func (f *FlagSetInstance) IntVarP(p *int, name string, shorthand string, value int, usage string) {
 	f.FieldFlagSet.IntVarP(p, name, shorthand, value, usage)
+}
+
+// Set is a proxy for pflag.FlagSet.Set.
+func (f *FlagSetInstance) Set(name, value string) error {
+	return f.FieldFlagSet.Set(name, value)
 }
 
 // StringVarP is a proxy for pflag.FlagSet.StringVarP.

@@ -62,6 +62,20 @@ func (mr *MockFlagSetInstanceInterfaceMockRecorder) IntVarP(p, name, shorthand, 
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "IntVarP", reflect.TypeOf((*MockFlagSetInstanceInterface)(nil).IntVarP), p, name, shorthand, value, usage)
 }
 
+// Set mocks base method.
+func (m *MockFlagSetInstanceInterface) Set(name, value string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Set", name, value)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Set indicates an expected call of Set.
+func (mr *MockFlagSetInstanceInterfaceMockRecorder) Set(name, value any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockFlagSetInstanceInterface)(nil).Set), name, value)
+}
+
 // StringVarP mocks base method.
 func (m *MockFlagSetInstanceInterface) StringVarP(p *string, name, shorthand, value, usage string) {
 	m.ctrl.T.Helper()
