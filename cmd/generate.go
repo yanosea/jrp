@@ -145,6 +145,9 @@ func NewGenerateCommand(g *GlobalOption, keyboardProxy keyboardproxy.Keyboard) *
 	cmd.SetOut(o.Out)
 	cmd.SetErr(o.ErrOut)
 	cmd.SetHelpTemplate(constant.GENARETE_HELP_TEMPLATE)
+	cmd.AddCommand(
+		NewInteractiveCommand(g, o.KeyboardProxy),
+	)
 
 	cmd.SetArgs(o.Args)
 

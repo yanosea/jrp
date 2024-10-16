@@ -15,6 +15,9 @@ Usage:
   jrp gen      [flags]
   jrp g        [flags]
 
+Available Subcommands:
+  interactive, int,  i  💬 Generate Japanese random phrase(s) interactively.
+
 Flags:
   -n, --number       🔢 number of phrases to generate (default 1, e.g: 10)
   -p  --prefix       💬 prefix of phrase(s) to generate
