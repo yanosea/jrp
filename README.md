@@ -59,6 +59,42 @@ Arguments:
   number  🔢 number of phrases to generate (e.g: 10)
 ```
 
+## 💬 Interactive mode
+
+![demo_interactive](docs/demo_interactive.gif "demo_interactive")
+
+`jrp` can generate Japanese random phrase(s) interactively.  
+You can favorite, save, skip, and exit interactively while generating phrase(s).
+
+To use this mode, run either command below.
+
+```sh
+# Those commands below are equivalent.
+# And they have their aliases. Please check the help message.
+jrp interactive
+# or
+jrp --interactive
+# or
+jrp generate interactive
+# or
+jrp generate --interactive
+```
+
+Press either key below for your action.
+
+- `u`
+  - Favorite, continue.
+- `i`
+  - Favorite, exit.
+- `j`
+  - Save, continue.
+- `k`
+  - Save, exit.
+- `m`
+  - Skip, continue.
+- `other`
+  - Skip, exit.
+
 ## 🌍 Environments
 
 ### 📁 Directory to store WordNet Japan sqlite database file
