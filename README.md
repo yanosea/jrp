@@ -35,13 +35,14 @@ Usage:
   jrp [command]
 
 Available Subcommands:
-  download, dl,   d  📦 Download WordNet Japan sqlite database file from the official web site.
-  generate, gen,  g  ✨ Generate Japanese random phrase(s). You can abbreviate "generate" sub command. ("jrp" and "jrp generate" are the same.)
-  history,  hist, h  📜 Manage the history of the "generate" command.
-  favorite, fav,  f  ⭐ Manage the favorited phrase(s) of the history of "generate" command.
-  help               🤝 Help for jrp.
-  completion         🔧 Generate the autocompletion script for the specified shell.
-  version            🔖 Show the version of jrp.
+  download,    dl,   d  📦 Download WordNet Japan sqlite database file from the official web site.
+  generate,    gen,  g  ✨ Generate Japanese random phrase(s). You can abbreviate "generate" sub command. ("jrp" and "jrp generate" are the same.)
+  history,     hist, h  📜 Manage the history of the "generate" command.
+  favorite,    fav,  f  ⭐ Manage the favorited phrase(s) of the history of "generate" command.
+  interactive, int,  i  💬 Generate Japanese random phrase(s) interactively.
+  help                  🤝 Help for jrp.
+  completion            🔧 Generate the autocompletion script for the specified shell.
+  version               🔖 Show the version of jrp.
 
 Flags:
   -n, --number   🔢 number of phrases to generate (default 1, e.g: 10)
