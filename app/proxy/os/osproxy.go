@@ -17,6 +17,7 @@ type Os interface {
 	Pipe() (*FileInstance, *FileInstance, error)
 	Remove(name string) error
 	RemoveAll(path string) error
+	Rename(oldpath, newpath string) error
 	Stat(name string) (*fsproxy.FileInfoInstance, error)
 	TempDir() string
 }
@@ -75,6 +76,11 @@ func (*OsProxy) Remove(name string) error {
 // RemoveAll is a proxy for os.RemoveAll.
 func (*OsProxy) RemoveAll(path string) error {
 	return os.RemoveAll(path)
+}
+
+// Rename is a proxy for os.Rename.
+func (*OsProxy) Rename(oldpath, newpath string) error {
+	return os.Rename(oldpath, newpath)
 }
 
 // Stat is a proxy for os.Stat.
