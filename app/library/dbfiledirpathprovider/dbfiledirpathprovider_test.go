@@ -11,7 +11,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/user"
 
 	"github.com/yanosea/jrp/mock/app/proxy/user"
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/testutility"
 	"go.uber.org/mock/gomock"
 )
 

@@ -1,4 +1,4 @@
-package testutility
+package capture
 
 import (
 	"testing"
@@ -19,8 +19,8 @@ type Capturer struct {
 	OsProxy   osproxy.Os
 }
 
-// NewCapturer is a constructor for Capturer.
-func NewCapturer(
+// New is a constructor for Capturer.
+func New(
 	outBuffer bufferproxy.Buffer,
 	errBuffer bufferproxy.Buffer,
 	osProxy osproxy.Os,

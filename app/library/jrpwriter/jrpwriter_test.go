@@ -13,7 +13,8 @@ import (
 	"github.com/yanosea/jrp/app/proxy/tablewriter"
 	"github.com/yanosea/jrp/app/proxy/time"
 
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
+	"github.com/yanosea/jrp/test/library/testutility"
 )
 
 func TestNew(t *testing.T) {
@@ -51,7 +52,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osproxy.New(),
@@ -66,7 +67,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -222,7 +223,7 @@ func TestJrpWriter_WriteGenerateResultAsTable(t *testing.T) {
 }
 
 func TestJrpWriter_WriteAsTable(t *testing.T) {
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osproxy.New(),
@@ -237,7 +238,7 @@ func TestJrpWriter_WriteAsTable(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -353,7 +354,7 @@ func TestJrpWriter_WriteAsTable(t *testing.T) {
 }
 
 func TestJrpWriter_WriteInteractiveResultAsTable(t *testing.T) {
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osproxy.New(),
@@ -368,7 +369,7 @@ func TestJrpWriter_WriteInteractiveResultAsTable(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -484,7 +485,7 @@ func TestJrpWriter_WriteInteractiveResultAsTable(t *testing.T) {
 }
 
 func TestJrpWriter_writeTable(t *testing.T) {
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osproxy.New(),
@@ -503,7 +504,7 @@ func TestJrpWriter_writeTable(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string

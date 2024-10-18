@@ -1,4 +1,4 @@
-package testutility
+package jrpchecker
 
 import (
 	"github.com/yanosea/jrp/app/database/jrp/model"
@@ -27,8 +27,8 @@ type JrpChecker struct {
 	StringsProxy stringsproxy.Strings
 }
 
-// NewJrpChecker is a constructor for JrpChecker.
-func NewJrpChecker(
+// New is a constructor for JrpChecker.
+func New(
 	fmtProxy fmtproxy.Fmt,
 	sortProxy sortproxy.Sort,
 	sqlProxy sqlproxy.Sql,

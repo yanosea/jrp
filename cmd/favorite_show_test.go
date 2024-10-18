@@ -26,7 +26,8 @@ import (
 
 	"github.com/yanosea/jrp/mock/app/library/dbfiledirpathprovider"
 	"github.com/yanosea/jrp/mock/app/library/utility"
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
+	"github.com/yanosea/jrp/test/library/testutility"
 	"go.uber.org/mock/gomock"
 )
 
@@ -63,7 +64,7 @@ func TestNewFavoriteShowCommand(t *testing.T) {
 
 func Test_favoriteShowOption_favoriteShowRunE(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -109,7 +110,7 @@ func Test_favoriteShowOption_favoriteShowRunE(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -581,7 +582,7 @@ func Test_favoriteShowOption_favoriteShowRunE(t *testing.T) {
 
 func Test_favoriteShowShowShowOption_favoriteShowShowShow(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -621,7 +622,7 @@ func Test_favoriteShowShowShowOption_favoriteShowShowShow(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -1436,7 +1437,7 @@ func Test_favoriteShowShowShowOption_favoriteShowShowShow(t *testing.T) {
 
 func Test_favoriteShowShowOption_writeFavoriteShowResult(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -1470,7 +1471,7 @@ func Test_favoriteShowShowOption_writeFavoriteShowResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string

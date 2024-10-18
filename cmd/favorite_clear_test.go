@@ -28,7 +28,9 @@ import (
 	"github.com/yanosea/jrp/mock/app/library/dbfiledirpathprovider"
 	"github.com/yanosea/jrp/mock/app/library/utility"
 	"github.com/yanosea/jrp/mock/app/proxy/promptui"
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
+	"github.com/yanosea/jrp/test/library/jrpchecker"
+	"github.com/yanosea/jrp/test/library/testutility"
 	"go.uber.org/mock/gomock"
 )
 
@@ -81,7 +83,7 @@ func TestNewFavoriteClearCommand(t *testing.T) {
 
 func Test_favoriteClearOption_favoriteClearRunE(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -112,7 +114,7 @@ func Test_favoriteClearOption_favoriteClearRunE(t *testing.T) {
 	filepathProxy := filepathproxy.New()
 	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, repository.JRP_DB_FILE_NAME)
 	timeProxy := timeproxy.New()
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -144,7 +146,7 @@ func Test_favoriteClearOption_favoriteClearRunE(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -712,7 +714,7 @@ func Test_favoriteClearOption_favoriteClear(t *testing.T) {
 	filepathProxy := filepathproxy.New()
 	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, repository.JRP_DB_FILE_NAME)
 	timeProxy := timeproxy.New()
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -1085,7 +1087,7 @@ func Test_favoriteClearOption_favoriteClear(t *testing.T) {
 
 func Test_favoriteClearOption_writeFavoriteClearResult(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -1120,7 +1122,7 @@ func Test_favoriteClearOption_writeFavoriteClearResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string

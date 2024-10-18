@@ -38,7 +38,9 @@ import (
 	"github.com/yanosea/jrp/mock/app/library/dbfiledirpathprovider"
 	"github.com/yanosea/jrp/mock/app/library/generator"
 	"github.com/yanosea/jrp/mock/app/proxy/keyboard"
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
+	"github.com/yanosea/jrp/test/library/jrpchecker"
+	"github.com/yanosea/jrp/test/library/testutility"
 	"go.uber.org/mock/gomock"
 )
 
@@ -77,7 +79,7 @@ func TestNewGenerateCommand(t *testing.T) {
 
 func Test_generateOption_generateRunE(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -147,7 +149,7 @@ func Test_generateOption_generateRunE(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -625,7 +627,7 @@ func Test_generateOption_generateRunE(t *testing.T) {
 
 func Test_generateOption_generate(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -693,7 +695,7 @@ func Test_generateOption_generate(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -1153,7 +1155,7 @@ func Test_generateOption_generateGenerate(t *testing.T) {
 
 func Test_generateOption_writeGenerateGenerateResult(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -1196,7 +1198,7 @@ func Test_generateOption_writeGenerateGenerateResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -1363,7 +1365,7 @@ func Test_generateOption_generateSave(t *testing.T) {
 	filepathProxy := filepathproxy.New()
 	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, jrprepository.JRP_DB_FILE_NAME)
 	timeProxy := timeproxy.New()
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -1825,7 +1827,7 @@ func Test_generateOption_generateSave(t *testing.T) {
 
 func Test_generateOption_writeGenerateSaveResult(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -1868,7 +1870,7 @@ func Test_generateOption_writeGenerateSaveResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -2027,7 +2029,7 @@ func Test_generateOption_writeGenerateSaveResult(t *testing.T) {
 
 func Test_generateOption_writeGenerateResult(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -2070,7 +2072,7 @@ func Test_generateOption_writeGenerateResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string

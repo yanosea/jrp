@@ -40,7 +40,9 @@ import (
 	"github.com/yanosea/jrp/mock/app/library/generator"
 	"github.com/yanosea/jrp/mock/app/proxy/cobra"
 	"github.com/yanosea/jrp/mock/app/proxy/keyboard"
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
+	"github.com/yanosea/jrp/test/library/jrpchecker"
+	"github.com/yanosea/jrp/test/library/testutility"
 	"go.uber.org/mock/gomock"
 )
 
@@ -182,7 +184,7 @@ func TestNewRootCommand(t *testing.T) {
 
 func Test_rootOption_rootRunE(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -252,7 +254,7 @@ func Test_rootOption_rootRunE(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -731,7 +733,7 @@ func Test_rootOption_rootRunE(t *testing.T) {
 
 func Test_rootOption_root(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -799,7 +801,7 @@ func Test_rootOption_root(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -1259,7 +1261,7 @@ func Test_rootOption_rootGenerate(t *testing.T) {
 
 func Test_rootOption_writeRootGenerateResult(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -1302,7 +1304,7 @@ func Test_rootOption_writeRootGenerateResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -1469,7 +1471,7 @@ func Test_rootOption_rootSave(t *testing.T) {
 	filepathProxy := filepathproxy.New()
 	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, jrprepository.JRP_DB_FILE_NAME)
 	timeProxy := timeproxy.New()
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -1931,7 +1933,7 @@ func Test_rootOption_rootSave(t *testing.T) {
 
 func Test_rootOption_writeRootSaveResult(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -1974,7 +1976,7 @@ func Test_rootOption_writeRootSaveResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -2133,7 +2135,7 @@ func Test_rootOption_writeRootSaveResult(t *testing.T) {
 
 func Test_rootOption_writeRootResult(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -2176,7 +2178,7 @@ func Test_rootOption_writeRootResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string

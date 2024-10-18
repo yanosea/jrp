@@ -24,7 +24,7 @@ import (
 	"github.com/yanosea/jrp/mock/app/library/dbfiledirpathprovider"
 	"github.com/yanosea/jrp/mock/app/library/utility"
 	"github.com/yanosea/jrp/mock/app/proxy/spinner"
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
 	"go.uber.org/mock/gomock"
 )
 
@@ -357,7 +357,7 @@ func Test_downloadOption_download(t *testing.T) {
 
 func Test_downloadOption_writeDownloadResult(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -375,7 +375,7 @@ func Test_downloadOption_writeDownloadResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string

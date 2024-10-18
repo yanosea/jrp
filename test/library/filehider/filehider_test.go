@@ -1,4 +1,4 @@
-package testutility
+package filehider
 
 import (
 	"errors"
@@ -14,7 +14,7 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestNewFileMover(t *testing.T) {
+func TestNew(t *testing.T) {
 	filePathProxy := filepathproxy.New()
 	osProxy := osproxy.New()
 	stringsProxy := stringsproxy.New()
@@ -45,10 +45,10 @@ func TestNewFileMover(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewFileHider(tt.args.filePathProxy, tt.args.osProxy, tt.args.stringsProxy); !reflect.DeepEqual(got.FilePathProxy, tt.want.FilePathProxy) ||
+			if got := New(tt.args.filePathProxy, tt.args.osProxy, tt.args.stringsProxy); !reflect.DeepEqual(got.FilePathProxy, tt.want.FilePathProxy) ||
 				!reflect.DeepEqual(got.OsProxy, tt.want.OsProxy) ||
 				!reflect.DeepEqual(got.StringsProxy, tt.want.StringsProxy) {
-				t.Errorf("NewFileMover() : got =\n%v, want =\n%v", got, tt.want)
+				t.Errorf("New() : got =\n%v, want =\n%v", got, tt.want)
 			}
 		})
 	}
