@@ -215,9 +215,11 @@
 				
 				<option value="file79">github.com/yanosea/jrp/test/testutility/capture.go (100.0%)</option>
 				
-				<option value="file80">github.com/yanosea/jrp/test/testutility/jrpchecker.go (100.0%)</option>
+				<option value="file80">github.com/yanosea/jrp/test/testutility/filehider.go (100.0%)</option>
 				
-				<option value="file81">github.com/yanosea/jrp/test/testutility/utility.go (100.0%)</option>
+				<option value="file81">github.com/yanosea/jrp/test/testutility/jrpchecker.go (100.0%)</option>
+				
+				<option value="file82">github.com/yanosea/jrp/test/testutility/utility.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -2281,6 +2283,8 @@ import (
 
 // FilePath is an interface for filepath.
 type FilePath interface {
+        Base(path string) string
+        Dir(path string) string
         Join(elem ...string) string
 }
 
@@ -2290,6 +2294,15 @@ type FilePathProxy struct{}
 // New is a constructor for FilepathProxy
 func New() FilePath <span class="cov8" title="1">{
         return &amp;FilePathProxy{}
+}</span>
+
+func (*FilePathProxy) Base(path string) string <span class="cov8" title="1">{
+        return filepath.Base(path)
+}</span>
+
+// Dir is a proxy for filepath.Dir.
+func (*FilePathProxy) Dir(path string) string <span class="cov8" title="1">{
+        return filepath.Dir(path)
 }</span>
 
 // Join is a proxy for filepath.Join.
@@ -2531,6 +2544,7 @@ type Os interface {
         Pipe() (*FileInstance, *FileInstance, error)
         Remove(name string) error
         RemoveAll(path string) error
+        Rename(oldpath, newpath string) error
         Stat(name string) (*fsproxy.FileInfoInstance, error)
         TempDir() string
 }
@@ -2589,6 +2603,11 @@ func (*OsProxy) Remove(name string) error <span class="cov8" title="1">{
 // RemoveAll is a proxy for os.RemoveAll.
 func (*OsProxy) RemoveAll(path string) error <span class="cov8" title="1">{
         return os.RemoveAll(path)
+}</span>
+
+// Rename is a proxy for os.Rename.
+func (*OsProxy) Rename(oldpath, newpath string) error <span class="cov8" title="1">{
+        return os.Rename(oldpath, newpath)
 }</span>
 
 // Stat is a proxy for os.Stat.
@@ -3149,6 +3168,7 @@ import (
 // Strings is an interface for strings.
 type Strings interface {
         Join(elems []string, sep string) string
+        TrimPrefix(s, prefix string) string
 }
 
 // StringsProxy is a struct that implements Strings.
@@ -3162,6 +3182,11 @@ func New() Strings <span class="cov8" title="1">{
 // Join is a proxy for strings.Join.
 func (*StringsProxy) Join(elems []string, sep string) string <span class="cov8" title="1">{
         return strings.Join(elems, sep)
+}</span>
+
+// TrimPrefix is a proxy for strings.TrimPrefix.
+func (*StringsProxy) TrimPrefix(s, prefix string) string <span class="cov8" title="1">{
+        return strings.TrimPrefix(s, prefix)
 }</span>
 </pre>
 		
@@ -7609,6 +7634,74 @@ func (c *Capturer) CaptureOutput(t *testing.T, fnc func()) (string, string, erro
 		<pre class="file" id="file80" style="display: none">package testutility
 
 import (
+        "github.com/yanosea/jrp/app/proxy/filepath"
+        "github.com/yanosea/jrp/app/proxy/os"
+        "github.com/yanosea/jrp/app/proxy/strings"
+)
+
+// FileHiderInterface is an interface for hiding and restoring file.
+type FileHiderInterface interface {
+        HideFile(filePath string) (int, error)
+        RestoreFile(index int) error
+}
+
+// FileHider is a struct for hiding and restoring file.
+type FileHider struct {
+        FilePathProxy filepathproxy.FilePath
+        OsProxy       osproxy.Os
+        StringsProxy  stringsproxy.Strings
+        HiddenFiles   []string
+}
+
+// NewFileMover is a constructor for FileMover.
+func NewFileMover(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os, stringsProxy stringsproxy.Strings) *FileHider <span class="cov8" title="1">{
+        return &amp;FileHider{
+                FilePathProxy: filePathProxy,
+                OsProxy:       osProxy,
+                StringsProxy:  stringsProxy,
+                HiddenFiles:   []string{},
+        }
+}</span>
+
+// HideFile hides file by renaming it to hidden file and returns hidden file's index.
+func (f *FileHider) HideFile(filePath string) (int, error) <span class="cov8" title="1">{
+        // extract the directory and file name
+        dir := f.FilePathProxy.Dir(filePath)
+        fileName := f.FilePathProxy.Base(filePath)
+        // create hidden file path
+        hiddenFilePath := f.FilePathProxy.Join(dir, "."+fileName)
+        // rename file to hidden file
+        if err := f.OsProxy.Rename(filePath, hiddenFilePath); err != nil </span><span class="cov8" title="1">{
+                return -1, err
+        }</span>
+        // append hidden file to hidden files
+        <span class="cov8" title="1">f.HiddenFiles = append(f.HiddenFiles, hiddenFilePath)
+        // return hidden file's index
+        return len(f.HiddenFiles) - 1, nil</span>
+}
+
+// RestoreFile restores hidden file to file.
+func (f *FileHider) RestoreFile(index int) error <span class="cov8" title="1">{
+        // get hidden file path
+        hiddenFilePath := f.HiddenFiles[index]
+        // remove the leading dot from the file name
+        restoredFilePath := f.FilePathProxy.Join(
+                f.FilePathProxy.Dir(hiddenFilePath),
+                f.StringsProxy.TrimPrefix(f.FilePathProxy.Base(hiddenFilePath), "."),
+        )
+        // rename hidden file to file
+        if err := f.OsProxy.Rename(hiddenFilePath, restoredFilePath); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        // remove hidden file from hidden files
+        <span class="cov8" title="1">f.HiddenFiles = append(f.HiddenFiles[:index], f.HiddenFiles[index+1:]...)
+        return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file81" style="display: none">package testutility
+
+import (
         "github.com/yanosea/jrp/app/database/jrp/model"
         "github.com/yanosea/jrp/app/proxy/fmt"
         "github.com/yanosea/jrp/app/proxy/sort"
@@ -7793,7 +7886,7 @@ func isSameTimeInstance(a, b *timeproxy.TimeInstance) bool <span class="cov8" ti
 }
 </pre>
 		
-		<pre class="file" id="file81" style="display: none">package testutility
+		<pre class="file" id="file82" style="display: none">package testutility
 
 import (
         "strings"
