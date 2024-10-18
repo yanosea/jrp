@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/yanosea/jrp/app/proxy/filepath"
+	"github.com/yanosea/jrp/app/proxy/fs"
 	"github.com/yanosea/jrp/app/proxy/os"
 	"github.com/yanosea/jrp/app/proxy/strings"
 
@@ -134,6 +135,23 @@ func TestFileHider_HideFile(t *testing.T) {
 			},
 		},
 		{
+			name: "negative testing (file not found)",
+			fields: fields{
+				FilePathProxy: filepathproxy.New(),
+				OsProxy:       osproxy.New(),
+				StringsProxy:  stringsproxy.New(),
+				HiddenFiles:   []string{},
+			},
+			args: args{
+				filePathSlice: []string{filepathProxy.Join(tempDir, "test.txt")},
+			},
+			want:            []int{-1},
+			wantErr:         true,
+			wantHiddenFiles: []string{},
+			setup:           nil,
+			cleanup:         nil,
+		},
+		{
 			name: "negative testing (OsProxy.Rename() failed)",
 			fields: fields{
 				FilePathProxy: filepathproxy.New(),
@@ -152,6 +170,8 @@ func TestFileHider_HideFile(t *testing.T) {
 					t.Errorf("Os.Create() : error =\n%v", err)
 				}
 				mockOsProxy := mockosproxy.NewMockOs(mockCtrl)
+				mockOsProxy.EXPECT().Stat(gomock.Any()).Return(&fsproxy.FileInfoInstance{}, nil)
+				mockOsProxy.EXPECT().IsNotExist(gomock.Any()).Return(false)
 				mockOsProxy.EXPECT().Rename(filepathProxy.Join(tempDir, "test.txt"), filepathProxy.Join(tempDir, ".test.txt")).Return(errors.New("OsProxy.Rename() failed"))
 				fields.OsProxy = mockOsProxy
 			},
@@ -284,6 +304,22 @@ func TestFileHider_RestoreFile(t *testing.T) {
 			},
 		},
 		{
+			name: "negative testing (file not found)",
+			fields: fields{
+				FilePathProxy: filepathproxy.New(),
+				OsProxy:       osproxy.New(),
+				StringsProxy:  stringsproxy.New(),
+				HiddenFiles:   []string{filepathProxy.Join(tempDir, ".test.txt")},
+			},
+			args: args{
+				index: 0,
+			},
+			wantHiddenFiles: []string{filepathProxy.Join(tempDir, ".test.txt")},
+			wantErr:         true,
+			setup:           nil,
+			cleanup:         nil,
+		},
+		{
 			name: "negative testing (OsProxy.Rename() failed)",
 			fields: fields{
 				FilePathProxy: filepathproxy.New(),
@@ -294,13 +330,15 @@ func TestFileHider_RestoreFile(t *testing.T) {
 			args: args{
 				index: 0,
 			},
-			wantErr:         true,
 			wantHiddenFiles: []string{filepathProxy.Join(tempDir, ".test.txt")},
+			wantErr:         true,
 			setup: func(mockCtrl *gomock.Controller, fields *fields) {
 				if _, err := osProxy.Create(filepathProxy.Join(tempDir, ".test.txt")); err != nil {
 					t.Errorf("Os.Create() : error =\n%v", err)
 				}
 				mockOsProxy := mockosproxy.NewMockOs(mockCtrl)
+				mockOsProxy.EXPECT().Stat(gomock.Any()).Return(&fsproxy.FileInfoInstance{}, nil)
+				mockOsProxy.EXPECT().IsNotExist(gomock.Any()).Return(false)
 				mockOsProxy.EXPECT().Rename(filepathProxy.Join(tempDir, ".test.txt"), filepathProxy.Join(tempDir, "test.txt")).Return(errors.New("OsProxy.Rename() failed"))
 				fields.OsProxy = mockOsProxy
 			},
