@@ -213,13 +213,15 @@
 				
 				<option value="file78">github.com/yanosea/jrp/main.go (100.0%)</option>
 				
-				<option value="file79">github.com/yanosea/jrp/test/testutility/capture.go (100.0%)</option>
+				<option value="file79">github.com/yanosea/jrp/test/library/capture/capture.go (100.0%)</option>
 				
-				<option value="file80">github.com/yanosea/jrp/test/testutility/filehider.go (100.0%)</option>
+				<option value="file80">github.com/yanosea/jrp/test/library/filehider/filehider.go (100.0%)</option>
 				
-				<option value="file81">github.com/yanosea/jrp/test/testutility/jrpchecker.go (100.0%)</option>
+				<option value="file81">github.com/yanosea/jrp/test/library/jrpchecker/jrpchecker.go (100.0%)</option>
 				
-				<option value="file82">github.com/yanosea/jrp/test/testutility/utility.go (100.0%)</option>
+				<option value="file82">github.com/yanosea/jrp/test/library/testenvsetter/testenvsetter.go (100.0%)</option>
+				
+				<option value="file83">github.com/yanosea/jrp/test/library/testutility/utility.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -2546,8 +2548,10 @@ type Os interface {
         Remove(name string) error
         RemoveAll(path string) error
         Rename(oldpath, newpath string) error
+        Setenv(key, value string) error
         Stat(name string) (*fsproxy.FileInfoInstance, error)
         TempDir() string
+        Unsetenv(key string) error
 }
 
 // OsProxy is a struct that implements Os.
@@ -2611,6 +2615,11 @@ func (*OsProxy) Rename(oldpath, newpath string) error <span class="cov8" title="
         return os.Rename(oldpath, newpath)
 }</span>
 
+// Setenv is a proxy for os.Setenv.
+func (*OsProxy) Setenv(key, value string) error <span class="cov8" title="1">{
+        return os.Setenv(key, value)
+}</span>
+
 // Stat is a proxy for os.Stat.
 func (*OsProxy) Stat(name string) (*fsproxy.FileInfoInstance, error) <span class="cov8" title="1">{
         fileInfo, err := os.Stat(name)
@@ -2620,6 +2629,11 @@ func (*OsProxy) Stat(name string) (*fsproxy.FileInfoInstance, error) <span class
 // TempDir is a proxy for os.TempDir.
 func (*OsProxy) TempDir() string <span class="cov8" title="1">{
         return os.TempDir()
+}</span>
+
+// Unsetenv is a proxy for os.Unsetenv.
+func (*OsProxy) Unsetenv(key string) error <span class="cov8" title="1">{
+        return os.Unsetenv(key)
 }</span>
 </pre>
 		
@@ -7551,7 +7565,7 @@ func main() <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file79" style="display: none">package testutility
+		<pre class="file" id="file79" style="display: none">package capture
 
 import (
         "testing"
@@ -7572,8 +7586,8 @@ type Capturer struct {
         OsProxy   osproxy.Os
 }
 
-// NewCapturer is a constructor for Capturer.
-func NewCapturer(
+// New is a constructor for Capturer.
+func New(
         outBuffer bufferproxy.Buffer,
         errBuffer bufferproxy.Buffer,
         osProxy osproxy.Os,
@@ -7632,7 +7646,7 @@ func (c *Capturer) CaptureOutput(t *testing.T, fnc func()) (string, string, erro
 }
 </pre>
 		
-		<pre class="file" id="file80" style="display: none">package testutility
+		<pre class="file" id="file80" style="display: none">package filehider
 
 import (
         "github.com/yanosea/jrp/app/proxy/filepath"
@@ -7654,8 +7668,8 @@ type FileHider struct {
         HiddenFiles   []string
 }
 
-// NewFileHider is a constructor for FileHider.
-func NewFileHider(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os, stringsProxy stringsproxy.Strings) *FileHider <span class="cov8" title="1">{
+// New is a constructor for FileHider.
+func New(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os, stringsProxy stringsproxy.Strings) *FileHider <span class="cov8" title="1">{
         return &amp;FileHider{
                 FilePathProxy: filePathProxy,
                 OsProxy:       osProxy,
@@ -7708,7 +7722,7 @@ func (f *FileHider) RestoreFile(index int) error <span class="cov8" title="1">{
 }
 </pre>
 		
-		<pre class="file" id="file81" style="display: none">package testutility
+		<pre class="file" id="file81" style="display: none">package jrpchecker
 
 import (
         "github.com/yanosea/jrp/app/database/jrp/model"
@@ -7737,8 +7751,8 @@ type JrpChecker struct {
         StringsProxy stringsproxy.Strings
 }
 
-// NewJrpChecker is a constructor for JrpChecker.
-func NewJrpChecker(
+// New is a constructor for JrpChecker.
+func New(
         fmtProxy fmtproxy.Fmt,
         sortProxy sortproxy.Sort,
         sqlProxy sqlproxy.Sql,
@@ -7895,7 +7909,63 @@ func isSameTimeInstance(a, b *timeproxy.TimeInstance) bool <span class="cov8" ti
 }
 </pre>
 		
-		<pre class="file" id="file82" style="display: none">package testutility
+		<pre class="file" id="file82" style="display: none">package testenvsetter
+
+import (
+        "github.com/yanosea/jrp/app/library/dbfiledirpathprovider"
+        "github.com/yanosea/jrp/app/proxy/os"
+)
+
+// TestEnvSetterInterface is an interface for setting test environment.
+type TestEnvSetterInterface interface {
+        SetTestEnv() error
+        UnsetTestEnv() error
+}
+
+// TestEnvSetter is a struct for setting test environment.
+type TestEnvSetter struct {
+        OsProxy osproxy.Os
+}
+
+// New is a constructor for TestEnvSetter.
+func New(osProxy osproxy.Os) *TestEnvSetter <span class="cov8" title="1">{
+        return &amp;TestEnvSetter{
+                OsProxy: osProxy,
+        }
+}</span>
+
+// SetTestEnv sets test environment.
+func (t *TestEnvSetter) SetTestEnv() error <span class="cov8" title="1">{
+        //get temporary directory
+        tempDir := t.OsProxy.TempDir()
+        //set JRP_ENV_WNJPN_DB_FILE_DIR to temporary directory
+        if err := t.OsProxy.Setenv(dbfiledirpathprovider.JRP_ENV_WNJPN_DB_FILE_DIR, tempDir); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        //set JRP_ENV_JRP_DB_FILE_DIR to temporary directory
+        <span class="cov8" title="1">if err := t.OsProxy.Setenv(dbfiledirpathprovider.JRP_ENV_JRP_DB_FILE_DIR, tempDir); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+
+// UnsetTestEnv unsets test environment.
+func (t *TestEnvSetter) UnsetTestEnv() error <span class="cov8" title="1">{
+        //unset JRP_ENV_WNJPN_DB_FILE_DIR
+        if err := t.OsProxy.Unsetenv(dbfiledirpathprovider.JRP_ENV_WNJPN_DB_FILE_DIR); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        //unset JRP_ENV_JRP_DB_FILE_DIR
+        <span class="cov8" title="1">if err := t.OsProxy.Unsetenv(dbfiledirpathprovider.JRP_ENV_JRP_DB_FILE_DIR); err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        <span class="cov8" title="1">return nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file83" style="display: none">package testutility
 
 import (
         "strings"
