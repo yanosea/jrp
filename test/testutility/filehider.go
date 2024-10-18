@@ -32,6 +32,10 @@ func NewFileMover(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os, stri
 
 // HideFile hides file by renaming it to hidden file and returns hidden file's index.
 func (f *FileHider) HideFile(filePath string) (int, error) {
+	// check if file exists
+	if _, err := f.OsProxy.Stat(filePath); f.OsProxy.IsNotExist(err) {
+		return -1, err
+	}
 	// extract the directory and file name
 	dir := f.FilePathProxy.Dir(filePath)
 	fileName := f.FilePathProxy.Base(filePath)
@@ -51,6 +55,10 @@ func (f *FileHider) HideFile(filePath string) (int, error) {
 func (f *FileHider) RestoreFile(index int) error {
 	// get hidden file path
 	hiddenFilePath := f.HiddenFiles[index]
+	// check if file exists
+	if _, err := f.OsProxy.Stat(hiddenFilePath); f.OsProxy.IsNotExist(err) {
+		return err
+	}
 	// remove the leading dot from the file name
 	restoredFilePath := f.FilePathProxy.Join(
 		f.FilePathProxy.Dir(hiddenFilePath),
