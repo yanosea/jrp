@@ -20,10 +20,6 @@ import (
 	"github.com/yanosea/jrp/test/testutility"
 )
 
-const (
-	TEST_OUTPUT_ANY = "ANY"
-)
-
 func Test_main(t *testing.T) {
 	osProxy := osproxy.New()
 	capturer := testutility.NewCapturer(
@@ -127,7 +123,7 @@ func Test_main(t *testing.T) {
 				capturer: capturer,
 			},
 			args:                  []string{"path/to/jrp", "generate"},
-			wantStdOut:            TEST_OUTPUT_ANY,
+			wantStdOut:            testutility.TEST_OUTPUT_ANY,
 			wantStdErr:            "",
 			wantJrpCount:          1,
 			wantFavoritedJrpCount: 0,
@@ -148,7 +144,7 @@ func Test_main(t *testing.T) {
 				capturer: capturer,
 			},
 			args:                  []string{"path/to/jrp", "generate", "10"},
-			wantStdOut:            TEST_OUTPUT_ANY,
+			wantStdOut:            testutility.TEST_OUTPUT_ANY,
 			wantStdErr:            "",
 			wantJrpCount:          11,
 			wantFavoritedJrpCount: 0,
@@ -169,7 +165,7 @@ func Test_main(t *testing.T) {
 				capturer: capturer,
 			},
 			args:                  []string{"path/to/jrp", "history", "-a"},
-			wantStdOut:            TEST_OUTPUT_ANY,
+			wantStdOut:            testutility.TEST_OUTPUT_ANY,
 			wantStdErr:            "",
 			wantJrpCount:          11,
 			wantFavoritedJrpCount: 0,
@@ -232,7 +228,7 @@ func Test_main(t *testing.T) {
 				capturer: capturer,
 			},
 			args:                  []string{"path/to/jrp", "favorite", "-a"},
-			wantStdOut:            TEST_OUTPUT_ANY,
+			wantStdOut:            testutility.TEST_OUTPUT_ANY,
 			wantStdErr:            "",
 			wantJrpCount:          11,
 			wantFavoritedJrpCount: 2,
@@ -364,10 +360,10 @@ func Test_main(t *testing.T) {
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Capturer.CaptureOutput() : error =\n%v, wantErr =\n%v", err, tt.wantErr)
 			}
-			if tt.wantStdOut != TEST_OUTPUT_ANY && stdout != tt.wantStdOut {
+			if tt.wantStdOut != testutility.TEST_OUTPUT_ANY && stdout != tt.wantStdOut {
 				t.Errorf("main() : stdout =\n%v, wantStdOut =\n%v", stdout, tt.wantStdOut)
 			}
-			if tt.wantStdErr != TEST_OUTPUT_ANY && stderr != tt.wantStdErr {
+			if tt.wantStdErr != testutility.TEST_OUTPUT_ANY && stderr != tt.wantStdErr {
 				t.Errorf("main() : stderr =\n%v, wantStdErr =\n%v", stderr, tt.wantStdErr)
 			}
 			jrps, err := jrpRepository.GetAllHistory(jrpDBFilePath)
