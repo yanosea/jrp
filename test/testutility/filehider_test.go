@@ -45,7 +45,7 @@ func TestNewFileMover(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewFileMover(tt.args.filePathProxy, tt.args.osProxy, tt.args.stringsProxy); !reflect.DeepEqual(got.FilePathProxy, tt.want.FilePathProxy) ||
+			if got := NewFileHider(tt.args.filePathProxy, tt.args.osProxy, tt.args.stringsProxy); !reflect.DeepEqual(got.FilePathProxy, tt.want.FilePathProxy) ||
 				!reflect.DeepEqual(got.OsProxy, tt.want.OsProxy) ||
 				!reflect.DeepEqual(got.StringsProxy, tt.want.StringsProxy) {
 				t.Errorf("NewFileMover() : got =\n%v, want =\n%v", got, tt.want)
