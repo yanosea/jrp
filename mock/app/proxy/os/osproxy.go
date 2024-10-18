@@ -184,6 +184,20 @@ func (mr *MockOsMockRecorder) Rename(oldpath, newpath any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Rename", reflect.TypeOf((*MockOs)(nil).Rename), oldpath, newpath)
 }
 
+// Setenv mocks base method.
+func (m *MockOs) Setenv(key, value string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Setenv", key, value)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Setenv indicates an expected call of Setenv.
+func (mr *MockOsMockRecorder) Setenv(key, value any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Setenv", reflect.TypeOf((*MockOs)(nil).Setenv), key, value)
+}
+
 // Stat mocks base method.
 func (m *MockOs) Stat(name string) (*fsproxy.FileInfoInstance, error) {
 	m.ctrl.T.Helper()
@@ -211,4 +225,18 @@ func (m *MockOs) TempDir() string {
 func (mr *MockOsMockRecorder) TempDir() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TempDir", reflect.TypeOf((*MockOs)(nil).TempDir))
+}
+
+// Unsetenv mocks base method.
+func (m *MockOs) Unsetenv(key string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Unsetenv", key)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Unsetenv indicates an expected call of Unsetenv.
+func (mr *MockOsMockRecorder) Unsetenv(key any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Unsetenv", reflect.TypeOf((*MockOs)(nil).Unsetenv), key)
 }

@@ -18,8 +18,10 @@ type Os interface {
 	Remove(name string) error
 	RemoveAll(path string) error
 	Rename(oldpath, newpath string) error
+	Setenv(key, value string) error
 	Stat(name string) (*fsproxy.FileInfoInstance, error)
 	TempDir() string
+	Unsetenv(key string) error
 }
 
 // OsProxy is a struct that implements Os.
@@ -83,6 +85,11 @@ func (*OsProxy) Rename(oldpath, newpath string) error {
 	return os.Rename(oldpath, newpath)
 }
 
+// Setenv is a proxy for os.Setenv.
+func (*OsProxy) Setenv(key, value string) error {
+	return os.Setenv(key, value)
+}
+
 // Stat is a proxy for os.Stat.
 func (*OsProxy) Stat(name string) (*fsproxy.FileInfoInstance, error) {
 	fileInfo, err := os.Stat(name)
@@ -92,4 +99,9 @@ func (*OsProxy) Stat(name string) (*fsproxy.FileInfoInstance, error) {
 // TempDir is a proxy for os.TempDir.
 func (*OsProxy) TempDir() string {
 	return os.TempDir()
+}
+
+// Unsetenv is a proxy for os.Unsetenv.
+func (*OsProxy) Unsetenv(key string) error {
+	return os.Unsetenv(key)
 }
