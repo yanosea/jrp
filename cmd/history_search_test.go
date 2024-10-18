@@ -26,7 +26,8 @@ import (
 
 	"github.com/yanosea/jrp/mock/app/library/dbfiledirpathprovider"
 	"github.com/yanosea/jrp/mock/app/library/utility"
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
+	"github.com/yanosea/jrp/test/library/testutility"
 	"go.uber.org/mock/gomock"
 )
 
@@ -63,7 +64,7 @@ func TestNewHistorySearchCommand(t *testing.T) {
 
 func Test_historySearchOption_historySearchRunE(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -109,7 +110,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -1306,7 +1307,7 @@ func Test_historySearchOption_historySearchRunE(t *testing.T) {
 
 func Test_historySearchOption_historySearch(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -1346,7 +1347,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -2439,7 +2440,7 @@ func Test_historySearchOption_historySearch(t *testing.T) {
 
 func Test_historySearchOption_writeHistorySearchResult(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -2473,7 +2474,7 @@ func Test_historySearchOption_writeHistorySearchResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string

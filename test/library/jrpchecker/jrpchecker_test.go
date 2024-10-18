@@ -1,4 +1,4 @@
-package testutility
+package jrpchecker
 
 import (
 	"database/sql"
@@ -23,7 +23,7 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestNewJrpChecker(t *testing.T) {
+func TestNew(t *testing.T) {
 	fmtProxy := fmtproxy.New()
 	sortProxy := sortproxy.New()
 	sqlProxy := sqlproxy.New()
@@ -62,8 +62,8 @@ func TestNewJrpChecker(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewJrpChecker(tt.args.fmtProxy, tt.args.sortProxy, tt.args.sqlProxy, tt.args.strconvProxy, tt.args.stringsProxy); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewJrpChecker() : got =\n%v, want =\n%v", got, tt.want)
+			if got := New(tt.args.fmtProxy, tt.args.sortProxy, tt.args.sqlProxy, tt.args.strconvProxy, tt.args.stringsProxy); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("New() : got =\n%v, want =\n%v", got, tt.want)
 			}
 		})
 	}
@@ -335,7 +335,7 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 				defer mockCtrl.Finish()
 				tt.setup(mockCtrl, &tt.fields)
 			}
-			j := NewJrpChecker(
+			j := New(
 				tt.fields.FmtProxy,
 				tt.fields.SortProxy,
 				tt.fields.SqlProxy,
@@ -626,7 +626,7 @@ func TestJrpChecker_IsExist(t *testing.T) {
 				defer mockCtrl.Finish()
 				tt.setup(mockCtrl, &tt.fields)
 			}
-			j := NewJrpChecker(
+			j := New(
 				tt.fields.FmtProxy,
 				tt.fields.SortProxy,
 				tt.fields.SqlProxy,
@@ -917,7 +917,7 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				defer mockCtrl.Finish()
 				tt.setup(mockCtrl, &tt.fields)
 			}
-			j := NewJrpChecker(
+			j := New(
 				tt.fields.FmtProxy,
 				tt.fields.SortProxy,
 				tt.fields.SqlProxy,
@@ -1128,7 +1128,7 @@ func TestJrpChecker_IsSameJrps(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			j := NewJrpChecker(
+			j := New(
 				tt.fields.FmtProxy,
 				tt.fields.SortProxy,
 				tt.fields.SqlProxy,

@@ -17,12 +17,13 @@ import (
 	"github.com/yanosea/jrp/app/proxy/user"
 	"github.com/yanosea/jrp/cmd/constant"
 
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
+	"github.com/yanosea/jrp/test/library/testutility"
 )
 
 func Test_main(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -54,7 +55,7 @@ func Test_main(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name                  string

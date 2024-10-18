@@ -10,7 +10,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/os"
 	"github.com/yanosea/jrp/app/proxy/strconv"
 
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
 )
 
 func TestNew(t *testing.T) {
@@ -52,7 +52,7 @@ func TestNew(t *testing.T) {
 }
 
 func TestUtility_PrintlnWithWriter(t *testing.T) {
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osproxy.New(),
@@ -66,7 +66,7 @@ func TestUtility_PrintlnWithWriter(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string

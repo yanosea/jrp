@@ -1,4 +1,4 @@
-package testutility
+package filehider
 
 import (
 	"github.com/yanosea/jrp/app/proxy/filepath"
@@ -20,8 +20,8 @@ type FileHider struct {
 	HiddenFiles   []string
 }
 
-// NewFileHider is a constructor for FileHider.
-func NewFileHider(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os, stringsProxy stringsproxy.Strings) *FileHider {
+// New is a constructor for FileHider.
+func New(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os, stringsProxy stringsproxy.Strings) *FileHider {
 	return &FileHider{
 		FilePathProxy: filePathProxy,
 		OsProxy:       osProxy,

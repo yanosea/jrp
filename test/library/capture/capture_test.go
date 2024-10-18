@@ -1,4 +1,4 @@
-package testutility
+package capture
 
 import (
 	"errors"
@@ -15,7 +15,7 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestNewCapturer(t *testing.T) {
+func TestNew(t *testing.T) {
 	outBufferProxy := bufferproxy.New()
 	errorBufferProxy := bufferproxy.New()
 	osProxy := osproxy.New()
@@ -46,12 +46,12 @@ func TestNewCapturer(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewCapturer(
+			if got := New(
 				tt.args.outBuffer,
 				tt.args.errorBuffer,
 				tt.args.osProxy,
 			); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewCapturer() : got =\n%v, want =\n%v", got, tt.want)
+				t.Errorf("New() : got =\n%v, want =\n%v", got, tt.want)
 			}
 		})
 	}
@@ -161,7 +161,7 @@ func TestCapturer_CaptureOutput(t *testing.T) {
 			if tt.setup != nil {
 				tt.setup(mockCtrl, &tt.fields)
 			}
-			c := NewCapturer(tt.fields.outBuffer, tt.fields.errorBuffer, tt.fields.osProxy)
+			c := New(tt.fields.outBuffer, tt.fields.errorBuffer, tt.fields.osProxy)
 			gotStdOut, gotStdErr, err := c.CaptureOutput(tt.args.t, tt.args.fnc)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Capturer.CaptureOutput() : error =\n%v, wantErr =\n%v", err, tt.wantErr)

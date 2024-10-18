@@ -1,4 +1,4 @@
-package testutility
+package testenvsetter
 
 import (
 	"github.com/yanosea/jrp/app/library/dbfiledirpathprovider"
@@ -7,6 +7,8 @@ import (
 
 // TestEnvSetterInterface is an interface for setting test environment.
 type TestEnvSetterInterface interface {
+	SetTestEnv() error
+	UnsetTestEnv() error
 }
 
 // TestEnvSetter is a struct for setting test environment.
@@ -14,8 +16,8 @@ type TestEnvSetter struct {
 	OsProxy osproxy.Os
 }
 
-// NewTestEnvSetter is a constructor for TestEnvSetter.
-func NewTestEnvSetter(osProxy osproxy.Os) *TestEnvSetter {
+// New is a constructor for TestEnvSetter.
+func New(osProxy osproxy.Os) *TestEnvSetter {
 	return &TestEnvSetter{
 		OsProxy: osProxy,
 	}

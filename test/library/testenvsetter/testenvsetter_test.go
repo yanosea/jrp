@@ -1,4 +1,4 @@
-package testutility
+package testenvsetter
 
 import (
 	"errors"
@@ -14,7 +14,7 @@ import (
 	"go.uber.org/mock/gomock"
 )
 
-func TestNewTestEnvSetter(t *testing.T) {
+func TestNew(t *testing.T) {
 	osProxy := osproxy.New()
 
 	type args struct {
@@ -37,8 +37,8 @@ func TestNewTestEnvSetter(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewTestEnvSetter(tt.args.osProxy); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("NewTestEnvSetter() : got =\n%v, want =\n%v", got, tt.want)
+			if got := New(tt.args.osProxy); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("New() : got =\n%v, want =\n%v", got, tt.want)
 			}
 		})
 	}
@@ -59,7 +59,7 @@ func TestTestEnvSetter_SetTestEnv(t *testing.T) {
 	if err != nil {
 		t.Errorf("DBFilePathProvider.GetJrpDBFileDirPath() : got =\n%v, want =\n%v", err, nil)
 	}
-	testEnvSetter := NewTestEnvSetter(osProxy)
+	testEnvSetter := New(osProxy)
 
 	type fields struct {
 		OsProxy osproxy.Os
@@ -137,7 +137,7 @@ func TestTestEnvSetter_SetTestEnv(t *testing.T) {
 				defer mockCtrl.Finish()
 				tt.setup(mockCtrl, &tt.fields)
 			}
-			tr := NewTestEnvSetter(tt.fields.OsProxy)
+			tr := New(tt.fields.OsProxy)
 			if err := tr.SetTestEnv(); (err != nil) != tt.wantErr {
 				t.Errorf("TestEnvSetter.SetTestEnv() : got =\n%v, want =\n%v", err, tt.wantErr)
 			}
@@ -169,7 +169,7 @@ func TestTestEnvSetter_UnsetTestEnv(t *testing.T) {
 		osProxy,
 		userproxy.New(),
 	)
-	testEnvSetter := NewTestEnvSetter(osProxy)
+	testEnvSetter := New(osProxy)
 	if err := testEnvSetter.UnsetTestEnv(); err != nil {
 		t.Errorf("TestEnvSetter.UnsetTestEnv() : got =\n%v, want =\n%v", err, nil)
 	}
@@ -262,7 +262,7 @@ func TestTestEnvSetter_UnsetTestEnv(t *testing.T) {
 				defer mockCtrl.Finish()
 				tt.setup(mockCtrl, &tt.fields)
 			}
-			tr := NewTestEnvSetter(tt.fields.OsProxy)
+			tr := New(tt.fields.OsProxy)
 			if err := tr.UnsetTestEnv(); (err != nil) != tt.wantErr {
 				t.Errorf("TestEnvSetter.UnsetTestEnv() : got =\n%v, want =\n%v", err, tt.wantErr)
 			}

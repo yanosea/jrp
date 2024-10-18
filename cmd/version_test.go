@@ -12,7 +12,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/os"
 	"github.com/yanosea/jrp/app/proxy/strconv"
 
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
 )
 
 func TestNewVersionCommand(t *testing.T) {
@@ -99,7 +99,7 @@ func TestGlobalOption_versionRunE(t *testing.T) {
 
 func TestGlobalOption_version(t *testing.T) {
 	osProxy := osproxy.New()
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osProxy,
@@ -111,7 +111,7 @@ func TestGlobalOption_version(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string

@@ -19,7 +19,7 @@ import (
 
 	"github.com/yanosea/jrp/mock/app/proxy/sort"
 	"github.com/yanosea/jrp/mock/app/proxy/sql"
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/jrpchecker"
 	"go.uber.org/mock/gomock"
 )
 
@@ -86,7 +86,7 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -871,7 +871,7 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -1266,7 +1266,7 @@ func TestJrpRepository_GetHistoryWithNumber(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -2127,7 +2127,7 @@ func TestJrpRepository_SearchAllHistory(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -3110,7 +3110,7 @@ func TestJrpRepository_SearchHistoryWithNumber(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -4396,7 +4396,7 @@ func TestJrpRepository_RemoveHistoryByIDs(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -5348,7 +5348,7 @@ func TestJrpRepository_RemoveHistoryAll(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -6380,7 +6380,7 @@ func TestJrpRepository_GetAllFavorite(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -6920,7 +6920,7 @@ func TestJrpRepository_GetFavoriteWithNumber(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -8010,7 +8010,7 @@ func TestJrpRepository_SearchAllFavorite(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -9670,7 +9670,7 @@ func TestJrpRepository_SearchFavoriteWithNumber(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -12147,7 +12147,7 @@ func TestJrpRepository_AddFavoriteByIDs(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),
@@ -12803,7 +12803,7 @@ func TestJrpRepository_RemoveFavoriteByIDs(t *testing.T) {
 		sqlproxy.New(),
 		stringsproxy.New(),
 	)
-	jrpChecker := testutility.NewJrpChecker(
+	jrpChecker := jrpchecker.New(
 		fmtproxy.New(),
 		sortproxy.New(),
 		sqlproxy.New(),

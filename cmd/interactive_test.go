@@ -37,7 +37,8 @@ import (
 	mockjrprepository "github.com/yanosea/jrp/mock/app/database/jrp/repository"
 	"github.com/yanosea/jrp/mock/app/library/dbfiledirpathprovider"
 	"github.com/yanosea/jrp/mock/app/proxy/keyboard"
-	"github.com/yanosea/jrp/test/testutility"
+	"github.com/yanosea/jrp/test/library/capture"
+	"github.com/yanosea/jrp/test/library/testutility"
 	"go.uber.org/mock/gomock"
 )
 
@@ -1701,7 +1702,7 @@ func Test_interactiveOption_interactiveGenerate(t *testing.T) {
 }
 
 func Test_interactiveOption_writeInteractiveGenerateResult(t *testing.T) {
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osproxy.New(),
@@ -1711,7 +1712,7 @@ func Test_interactiveOption_writeInteractiveGenerateResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -1903,7 +1904,7 @@ func Test_interactiveOption_writeInteractiveGenerateResult(t *testing.T) {
 }
 
 func Test_interactiveOption_writeInteractiveGeneratedJrp(t *testing.T) {
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osproxy.New(),
@@ -1914,7 +1915,7 @@ func Test_interactiveOption_writeInteractiveGeneratedJrp(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -2294,7 +2295,7 @@ func Test_interactiveOption_interactiveSave(t *testing.T) {
 }
 
 func Test_interactiveOption_writeInteractiveSaveResult(t *testing.T) {
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osproxy.New(),
@@ -2304,7 +2305,7 @@ func Test_interactiveOption_writeInteractiveSaveResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -3143,7 +3144,7 @@ func Test_interactiveOption_interactiveFavorite(t *testing.T) {
 }
 
 func Test_interactiveOption_writeInteractiveFavoriteResult(t *testing.T) {
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osproxy.New(),
@@ -3153,7 +3154,7 @@ func Test_interactiveOption_writeInteractiveFavoriteResult(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
@@ -3977,7 +3978,7 @@ func Test_interactiveOption_getInteractiveInteractiveAnswer(t *testing.T) {
 }
 
 func Test_interactiveOption_writePhase(t *testing.T) {
-	capturer := testutility.NewCapturer(
+	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
 		osproxy.New(),
@@ -3987,7 +3988,7 @@ func Test_interactiveOption_writePhase(t *testing.T) {
 	type fields struct {
 		t        *testing.T
 		fnc      func()
-		capturer *testutility.Capturer
+		capturer *capture.Capturer
 	}
 	tests := []struct {
 		name       string
