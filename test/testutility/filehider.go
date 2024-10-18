@@ -20,8 +20,8 @@ type FileHider struct {
 	HiddenFiles   []string
 }
 
-// NewFileMover is a constructor for FileMover.
-func NewFileMover(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os, stringsProxy stringsproxy.Strings) *FileHider {
+// NewFileHider is a constructor for FileHider.
+func NewFileHider(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os, stringsProxy stringsproxy.Strings) *FileHider {
 	return &FileHider{
 		FilePathProxy: filePathProxy,
 		OsProxy:       osProxy,
