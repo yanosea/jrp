@@ -51,3 +51,17 @@ func (mr *MockStringsMockRecorder) Join(elems, sep any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Join", reflect.TypeOf((*MockStrings)(nil).Join), elems, sep)
 }
+
+// TrimPrefix mocks base method.
+func (m *MockStrings) TrimPrefix(s, prefix string) string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "TrimPrefix", s, prefix)
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// TrimPrefix indicates an expected call of TrimPrefix.
+func (mr *MockStringsMockRecorder) TrimPrefix(s, prefix any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "TrimPrefix", reflect.TypeOf((*MockStrings)(nil).TrimPrefix), s, prefix)
+}

@@ -38,6 +38,34 @@ func (m *MockFilePath) EXPECT() *MockFilePathMockRecorder {
 	return m.recorder
 }
 
+// Base mocks base method.
+func (m *MockFilePath) Base(path string) string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Base", path)
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// Base indicates an expected call of Base.
+func (mr *MockFilePathMockRecorder) Base(path any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Base", reflect.TypeOf((*MockFilePath)(nil).Base), path)
+}
+
+// Dir mocks base method.
+func (m *MockFilePath) Dir(path string) string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Dir", path)
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// Dir indicates an expected call of Dir.
+func (mr *MockFilePathMockRecorder) Dir(path any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Dir", reflect.TypeOf((*MockFilePath)(nil).Dir), path)
+}
+
 // Join mocks base method.
 func (m *MockFilePath) Join(elem ...string) string {
 	m.ctrl.T.Helper()

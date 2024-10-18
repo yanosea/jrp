@@ -170,6 +170,20 @@ func (mr *MockOsMockRecorder) RemoveAll(path any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveAll", reflect.TypeOf((*MockOs)(nil).RemoveAll), path)
 }
 
+// Rename mocks base method.
+func (m *MockOs) Rename(oldpath, newpath string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Rename", oldpath, newpath)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Rename indicates an expected call of Rename.
+func (mr *MockOsMockRecorder) Rename(oldpath, newpath any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Rename", reflect.TypeOf((*MockOs)(nil).Rename), oldpath, newpath)
+}
+
 // Stat mocks base method.
 func (m *MockOs) Stat(name string) (*fsproxy.FileInfoInstance, error) {
 	m.ctrl.T.Helper()
