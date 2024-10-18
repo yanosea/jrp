@@ -2296,6 +2296,7 @@ func New() FilePath <span class="cov8" title="1">{
         return &amp;FilePathProxy{}
 }</span>
 
+// Base is a proxy for filepath.Base.
 func (*FilePathProxy) Base(path string) string <span class="cov8" title="1">{
         return filepath.Base(path)
 }</span>
@@ -7665,8 +7666,12 @@ func NewFileMover(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os, stri
 
 // HideFile hides file by renaming it to hidden file and returns hidden file's index.
 func (f *FileHider) HideFile(filePath string) (int, error) <span class="cov8" title="1">{
+        // check if file exists
+        if _, err := f.OsProxy.Stat(filePath); f.OsProxy.IsNotExist(err) </span><span class="cov8" title="1">{
+                return -1, err
+        }</span>
         // extract the directory and file name
-        dir := f.FilePathProxy.Dir(filePath)
+        <span class="cov8" title="1">dir := f.FilePathProxy.Dir(filePath)
         fileName := f.FilePathProxy.Base(filePath)
         // create hidden file path
         hiddenFilePath := f.FilePathProxy.Join(dir, "."+fileName)
@@ -7684,8 +7689,12 @@ func (f *FileHider) HideFile(filePath string) (int, error) <span class="cov8" ti
 func (f *FileHider) RestoreFile(index int) error <span class="cov8" title="1">{
         // get hidden file path
         hiddenFilePath := f.HiddenFiles[index]
+        // check if file exists
+        if _, err := f.OsProxy.Stat(hiddenFilePath); f.OsProxy.IsNotExist(err) </span><span class="cov8" title="1">{
+                return err
+        }</span>
         // remove the leading dot from the file name
-        restoredFilePath := f.FilePathProxy.Join(
+        <span class="cov8" title="1">restoredFilePath := f.FilePathProxy.Join(
                 f.FilePathProxy.Dir(hiddenFilePath),
                 f.StringsProxy.TrimPrefix(f.FilePathProxy.Base(hiddenFilePath), "."),
         )
