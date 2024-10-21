@@ -20,12 +20,12 @@ Available Subcommands:
 
 Flags:
   -n, --number       🔢 number of phrases to generate (default 1, e.g: 10)
-  -p  --prefix       💬 prefix of phrase(s) to generate
-  -s  --suffix       💬 suffix of phrase(s) to generate
+  -p  --prefix       🔡 prefix of phrase(s) to generate
+  -s  --suffix       🔡 suffix of phrase(s) to generate
   -d  --dry-run      🧪 generate phrase(s) without saving to the history
   -P, --plain        📝 plain text output instead of table output
   -i, --interactive  💬 generate Japanese random phrase(s) interactively
-  -t, --timeout      ⏱️  timeout in seconds for the interactive mode (default 30, e.g: 10)
+  -t, --timeout      ⌛ timeout in seconds for the interactive mode (default 30, e.g: 10)
   -h, --help         🤝 help for generate
 
 Arguments:

@@ -24,20 +24,20 @@ Usage:
   jrp f        [command]
 
 Available Subommands:
-  show    ⭐📖 Show the favorited phrase(s). You can abbreviate "show" sub command. ("jrp favorite" and "jrp favorite show" are the same.)
-  add     ⭐📌 Favorite (add) phrase(s) in the history of the "generate" command.
-  search  ⭐🔍 Search the favorited phrase(s).
-  remove  ⭐🧹 Remove the favorited phrase(s).
-  clear   ⭐✨ Clear the favorited phrase(s).
+  show,   sh, s  ⭐📖 Show the favorited phrase(s). You can abbreviate "show" sub command. ("jrp favorite" and "jrp favorite show" are the same.)
+  add,    ad, a  ⭐📌 Favorite (add) phrase(s) in the history of the "generate" command.
+  search, se, S  ⭐🔍 Search the favorited phrase(s).
+  remove, rm, r  ⭐🧹 Remove the favorited phrase(s).
+  clear,  cl, c  ⭐✨ Clear the favorited phrase(s).
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -n, --number  🔢 number how many phrases to show (default 10, e.g: 50)
   -a, --all     📁 show all favorited phrase(s)
   -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for favorite
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50)
+  number  🔢 number how many phrases to show (default 10, e.g: 50)
 
 Use "jrp favorite [command] --help" for more information about a command.
 `
