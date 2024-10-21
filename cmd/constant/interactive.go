@@ -23,10 +23,10 @@ Usage:
   jrp i           [flags]
 
 Flags:
-  -p  --prefix   💬 prefix of phrase(s) to generate
-  -s  --suffix   💬 suffix of phrase(s) to generate
+  -p  --prefix   🔡 prefix of phrase(s) to generate
+  -s  --suffix   🔡 suffix of phrase(s) to generate
   -P, --plain    📝 plain text output instead of table output
-  -t  --timeout  ⏱️  timeout second for the interactive mode (default 30, e.g: 10)
+  -t  --timeout  ⌛ timeout second for the interactive mode (default 30, e.g: 10)
   -h, --help     🤝 help for interactive
 `
 	INTERACTIVE_FLAG_PREFIX              = "prifix"

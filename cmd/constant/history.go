@@ -23,19 +23,19 @@ Usage:
   jrp h       [command]
 
 Available Subommands:
-  show    📜📖 Show the history of the "generate" command. You can abbreviate "show" sub command. ("jrp history" and "jrp history show" are the same.)
-  search  📜🔍 Search the history of the "generate" command.
-  remove  📜🧹 Remove the history of the "generate" command.
-  clear   📜✨ Clear the history of the "generate" command.
+  show,   sh, s  📜📖 Show the history of the "generate" command. You can abbreviate "show" sub command. ("jrp history" and "jrp history show" are the same.)
+  search, se, S  📜🔍 Search the history of the "generate" command.
+  remove, rm, r  📜🧹 Remove the history of the "generate" command.
+  clear,  cl, c  📜✨ Clear the history of the "generate" command.
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -n, --number  🔢 number how many phrases to show (default 10, e.g: 50)
   -a, --all     📁 show all history
   -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for history
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50)
+  number  🔢 number how many phrases to show (default 10, e.g: 50)
 
 Use "jrp history [command] --help" for more information about a command.
 `
