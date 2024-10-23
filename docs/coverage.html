@@ -3629,20 +3629,20 @@ Usage:
   jrp f        [command]
 
 Available Subommands:
-  show    ⭐📖 Show the favorited phrase(s). You can abbreviate "show" sub command. ("jrp favorite" and "jrp favorite show" are the same.)
-  add     ⭐📌 Favorite (add) phrase(s) in the history of the "generate" command.
-  search  ⭐🔍 Search the favorited phrase(s).
-  remove  ⭐🧹 Remove the favorited phrase(s).
-  clear   ⭐✨ Clear the favorited phrase(s).
+  show,   sh, s  ⭐📖 Show the favorited phrase(s). You can abbreviate "show" sub command. ("jrp favorite" and "jrp favorite show" are the same.)
+  add,    ad, a  ⭐📌 Favorite (add) phrase(s) in the history of the "generate" command.
+  search, se, S  ⭐🔍 Search the favorited phrase(s).
+  remove, rm, r  ⭐🧹 Remove the favorited phrase(s).
+  clear,  cl, c  ⭐✨ Clear the favorited phrase(s).
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -n, --number  🔢 number how many phrases to show (default 10, e.g: 50)
   -a, --all     📁 show all favorited phrase(s)
   -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for favorite
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50)
+  number  🔢 number how many phrases to show (default 10, e.g: 50)
 
 Use "jrp favorite [command] --help" for more information about a command.
 `
@@ -3814,13 +3814,13 @@ Usage:
 
 Flags:
   -A, --and     🧠 search phrase(s) by AND condition
-  -n, --number  📏 number how many results to show (default 10, e.g: 50)
+  -n, --number  🔢 number how many results to show (default 10, e.g: 50)
   -a, --all     📁 show all results
   -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for search
 
 Arguments:
-  keywords  💬 search phrase(s) by keywords (multiple keywords are separated by space)
+  keywords  🔡 search phrase(s) by keywords (multiple keywords are separated by space)
 `
         FAVORITE_SEARCH_FLAG_AND                = "and"
         FAVORITE_SEARCH_FLAG_AND_SHORTHAND      = "A"
@@ -3868,13 +3868,13 @@ Usage:
   jrp favorite s    [flag]
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -n, --number  🔢 number how many phrases to show (default 10, e.g: 50)
   -a, --all     📁 show all favorited phrase(s)
   -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for show
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50)
+  number  🔢 number how many phrases to show (default 10, e.g: 50)
 `
         FAVORITE_SHOW_FLAG_NUMBER             = "number"
         FAVORITE_SHOW_FLAG_NUMBER_SHORTHAND   = "n"
@@ -3919,12 +3919,12 @@ Available Subcommands:
 
 Flags:
   -n, --number       🔢 number of phrases to generate (default 1, e.g: 10)
-  -p  --prefix       💬 prefix of phrase(s) to generate
-  -s  --suffix       💬 suffix of phrase(s) to generate
+  -p  --prefix       🔡 prefix of phrase(s) to generate
+  -s  --suffix       🔡 suffix of phrase(s) to generate
   -d  --dry-run      🧪 generate phrase(s) without saving to the history
   -P, --plain        📝 plain text output instead of table output
   -i, --interactive  💬 generate Japanese random phrase(s) interactively
-  -t, --timeout      ⏱️  timeout in seconds for the interactive mode (default 30, e.g: 10)
+  -t, --timeout      ⌛ timeout in seconds for the interactive mode (default 30, e.g: 10)
   -h, --help         🤝 help for generate
 
 Arguments:
@@ -3997,19 +3997,19 @@ Usage:
   jrp h       [command]
 
 Available Subommands:
-  show    📜📖 Show the history of the "generate" command. You can abbreviate "show" sub command. ("jrp history" and "jrp history show" are the same.)
-  search  📜🔍 Search the history of the "generate" command.
-  remove  📜🧹 Remove the history of the "generate" command.
-  clear   📜✨ Clear the history of the "generate" command.
+  show,   sh, s  📜📖 Show the history of the "generate" command. You can abbreviate "show" sub command. ("jrp history" and "jrp history show" are the same.)
+  search, se, S  📜🔍 Search the history of the "generate" command.
+  remove, rm, r  📜🧹 Remove the history of the "generate" command.
+  clear,  cl, c  📜✨ Clear the history of the "generate" command.
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -n, --number  🔢 number how many phrases to show (default 10, e.g: 50)
   -a, --all     📁 show all history
   -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for history
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50)
+  number  🔢 number how many phrases to show (default 10, e.g: 50)
 
 Use "jrp history [command] --help" for more information about a command.
 `
@@ -4156,13 +4156,13 @@ Usage:
 
 Flags:
   -A, --and     🧠 search phrase(s) by AND condition
-  -n, --number  📏 number how many results to show (default 10, e.g: 50)
+  -n, --number  🔢 number how many results to show (default 10, e.g: 50)
   -a, --all     📁 show all results
   -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for search
 
 Arguments:
-  keywords  💬 search phrase(s) by keywords (multiple keywords are separated by space)
+  keywords  🔡 search phrase(s) by keywords (multiple keywords are separated by space)
 `
         HISTORY_SEARCH_FLAG_AND                = "and"
         HISTORY_SEARCH_FLAG_AND_SHORTHAND      = "A"
@@ -4210,13 +4210,13 @@ Usage:
   jrp history s    [flag]
 
 Flags:
-  -n, --number  📏 number how many phrases to show (default 10, e.g: 50)
+  -n, --number  🔢 number how many phrases to show (default 10, e.g: 50)
   -a, --all     📁 show all history
   -P, --plain   📝 plain text output instead of table output
   -h, --help    🤝 help for show
 
 Arguments:
-  number  📏 number how many phrases to show (default 10, e.g: 50)
+  number  🔢 number how many phrases to show (default 10, e.g: 50)
 `
         HISTORY_SHOW_FLAG_NUMBER             = "number"
         HISTORY_SHOW_FLAG_NUMBER_SHORTHAND   = "n"
@@ -4264,10 +4264,10 @@ Usage:
   jrp i           [flags]
 
 Flags:
-  -p  --prefix   💬 prefix of phrase(s) to generate
-  -s  --suffix   💬 suffix of phrase(s) to generate
+  -p  --prefix   🔡 prefix of phrase(s) to generate
+  -s  --suffix   🔡 suffix of phrase(s) to generate
   -P, --plain    📝 plain text output instead of table output
-  -t  --timeout  ⏱️  timeout second for the interactive mode (default 30, e.g: 10)
+  -t  --timeout  ⌛ timeout second for the interactive mode (default 30, e.g: 10)
   -h, --help     🤝 help for interactive
 `
         INTERACTIVE_FLAG_PREFIX              = "prifix"
