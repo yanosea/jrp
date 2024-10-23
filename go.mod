@@ -11,7 +11,7 @@ require (
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
 	go.uber.org/mock v0.4.0
-	modernc.org/sqlite v1.31.1
+	modernc.org/sqlite v1.33.1
 )
 
 require (
