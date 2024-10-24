@@ -2,6 +2,7 @@ package testenvsetter
 
 import (
 	"github.com/yanosea/jrp/app/library/dbfiledirpathprovider"
+	"github.com/yanosea/jrp/app/proxy/filepath"
 	"github.com/yanosea/jrp/app/proxy/os"
 )
 
@@ -13,13 +14,15 @@ type TestEnvSetterInterface interface {
 
 // TestEnvSetter is a struct for setting test environment.
 type TestEnvSetter struct {
-	OsProxy osproxy.Os
+	FilePathProxy filepathproxy.FilePath
+	OsProxy       osproxy.Os
 }
 
 // New is a constructor for TestEnvSetter.
-func New(osProxy osproxy.Os) *TestEnvSetter {
+func New(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os) *TestEnvSetter {
 	return &TestEnvSetter{
-		OsProxy: osProxy,
+		FilePathProxy: filePathProxy,
+		OsProxy:       osProxy,
 	}
 }
 
@@ -27,12 +30,13 @@ func New(osProxy osproxy.Os) *TestEnvSetter {
 func (t *TestEnvSetter) SetTestEnv() error {
 	//get temporary directory
 	tempDir := t.OsProxy.TempDir()
+	jrpTempDir := t.FilePathProxy.Join(tempDir, "jrp")
 	//set JRP_ENV_WNJPN_DB_FILE_DIR to temporary directory
-	if err := t.OsProxy.Setenv(dbfiledirpathprovider.JRP_ENV_WNJPN_DB_FILE_DIR, tempDir); err != nil {
+	if err := t.OsProxy.Setenv(dbfiledirpathprovider.JRP_ENV_WNJPN_DB_FILE_DIR, jrpTempDir); err != nil {
 		return err
 	}
 	//set JRP_ENV_JRP_DB_FILE_DIR to temporary directory
-	if err := t.OsProxy.Setenv(dbfiledirpathprovider.JRP_ENV_JRP_DB_FILE_DIR, tempDir); err != nil {
+	if err := t.OsProxy.Setenv(dbfiledirpathprovider.JRP_ENV_JRP_DB_FILE_DIR, jrpTempDir); err != nil {
 		return err
 	}
 

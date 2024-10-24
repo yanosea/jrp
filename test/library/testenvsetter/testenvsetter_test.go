@@ -15,10 +15,12 @@ import (
 )
 
 func TestNew(t *testing.T) {
+	filePathProxy := filepathproxy.New()
 	osProxy := osproxy.New()
 
 	type args struct {
-		osProxy osproxy.Os
+		filePathProxy filepathproxy.FilePath
+		osProxy       osproxy.Os
 	}
 	tests := []struct {
 		name string
@@ -28,16 +30,18 @@ func TestNew(t *testing.T) {
 		{
 			name: "positive testing",
 			args: args{
-				osProxy: osProxy,
+				filePathProxy: filePathProxy,
+				osProxy:       osProxy,
 			},
 			want: &TestEnvSetter{
-				OsProxy: osProxy,
+				FilePathProxy: filePathProxy,
+				OsProxy:       osProxy,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := New(tt.args.osProxy); !reflect.DeepEqual(got, tt.want) {
+			if got := New(tt.args.filePathProxy, tt.args.osProxy); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("New() : got =\n%v, want =\n%v", got, tt.want)
 			}
 		})
@@ -45,9 +49,10 @@ func TestNew(t *testing.T) {
 }
 
 func TestTestEnvSetter_SetTestEnv(t *testing.T) {
+	filePathProxy := filepathproxy.New()
 	osProxy := osproxy.New()
 	dbFilePathProvider := dbfiledirpathprovider.New(
-		filepathproxy.New(),
+		filePathProxy,
 		osProxy,
 		userproxy.New(),
 	)
@@ -59,10 +64,11 @@ func TestTestEnvSetter_SetTestEnv(t *testing.T) {
 	if err != nil {
 		t.Errorf("DBFilePathProvider.GetJrpDBFileDirPath() : got =\n%v, want =\n%v", err, nil)
 	}
-	testEnvSetter := New(osProxy)
+	testEnvSetter := New(filePathProxy, osProxy)
 
 	type fields struct {
-		OsProxy osproxy.Os
+		FilePathProxy filepathproxy.FilePath
+		OsProxy       osproxy.Os
 	}
 	tests := []struct {
 		name                   string
@@ -76,7 +82,8 @@ func TestTestEnvSetter_SetTestEnv(t *testing.T) {
 		{
 			name: "positive testing",
 			fields: fields{
-				OsProxy: osproxy.New(),
+				FilePathProxy: filepathproxy.New(),
+				OsProxy:       osproxy.New(),
 			},
 			wantWnJpnDBFileDirPath: osProxy.TempDir(),
 			wantJrpDBFileDirPath:   osProxy.TempDir(),
@@ -91,7 +98,8 @@ func TestTestEnvSetter_SetTestEnv(t *testing.T) {
 		{
 			name: "negative testing (OsProxy.Setenv(dbfiledirpathprovider.JRP_ENV_WNJPN_DB_FILE_DIR) failed)",
 			fields: fields{
-				OsProxy: nil,
+				FilePathProxy: filepathproxy.New(),
+				OsProxy:       nil,
 			},
 			wantWnJpnDBFileDirPath: defaultWnJpnDBFileDirPath,
 			wantJrpDBFileDirPath:   defaultJrpDBFileDirPath,
@@ -111,7 +119,8 @@ func TestTestEnvSetter_SetTestEnv(t *testing.T) {
 		{
 			name: "negative testing (OsProxy.Setenv(dbfiledirpathprovider.JRP_ENV_JRP_DB_FILE_DIR) failed)",
 			fields: fields{
-				OsProxy: nil,
+				FilePathProxy: filepathproxy.New(),
+				OsProxy:       nil,
 			},
 			wantWnJpnDBFileDirPath: defaultWnJpnDBFileDirPath,
 			wantJrpDBFileDirPath:   defaultJrpDBFileDirPath,
@@ -137,7 +146,7 @@ func TestTestEnvSetter_SetTestEnv(t *testing.T) {
 				defer mockCtrl.Finish()
 				tt.setup(mockCtrl, &tt.fields)
 			}
-			tr := New(tt.fields.OsProxy)
+			tr := New(tt.fields.FilePathProxy, tt.fields.OsProxy)
 			if err := tr.SetTestEnv(); (err != nil) != tt.wantErr {
 				t.Errorf("TestEnvSetter.SetTestEnv() : got =\n%v, want =\n%v", err, tt.wantErr)
 			}
@@ -163,13 +172,14 @@ func TestTestEnvSetter_SetTestEnv(t *testing.T) {
 }
 
 func TestTestEnvSetter_UnsetTestEnv(t *testing.T) {
+	filePathProxy := filepathproxy.New()
 	osProxy := osproxy.New()
 	dbFilePathProvider := dbfiledirpathprovider.New(
-		filepathproxy.New(),
+		filePathProxy,
 		osProxy,
 		userproxy.New(),
 	)
-	testEnvSetter := New(osProxy)
+	testEnvSetter := New(filePathProxy, osProxy)
 	if err := testEnvSetter.UnsetTestEnv(); err != nil {
 		t.Errorf("TestEnvSetter.UnsetTestEnv() : got =\n%v, want =\n%v", err, nil)
 	}
@@ -183,7 +193,8 @@ func TestTestEnvSetter_UnsetTestEnv(t *testing.T) {
 	}
 
 	type fields struct {
-		OsProxy osproxy.Os
+		FilePathProxy filepathproxy.FilePath
+		OsProxy       osproxy.Os
 	}
 	tests := []struct {
 		name                   string
@@ -197,7 +208,8 @@ func TestTestEnvSetter_UnsetTestEnv(t *testing.T) {
 		{
 			name: "positive testing",
 			fields: fields{
-				OsProxy: osproxy.New(),
+				FilePathProxy: filepathproxy.New(),
+				OsProxy:       osproxy.New(),
 			},
 			wantWnJpnDBFileDirPath: defaultWnJpnDBFileDirPath,
 			wantJrpDBFileDirPath:   defaultJrpDBFileDirPath,
@@ -212,7 +224,8 @@ func TestTestEnvSetter_UnsetTestEnv(t *testing.T) {
 		{
 			name: "negative testing (OsProxy.Unsetenv(dbfiledirpathprovider.JRP_ENV_WNJPN_DB_FILE_DIR) failed)",
 			fields: fields{
-				OsProxy: nil,
+				FilePathProxy: filepathproxy.New(),
+				OsProxy:       nil,
 			},
 			wantWnJpnDBFileDirPath: osProxy.TempDir(),
 			wantJrpDBFileDirPath:   osProxy.TempDir(),
@@ -234,7 +247,8 @@ func TestTestEnvSetter_UnsetTestEnv(t *testing.T) {
 		{
 			name: "negative testing (OsProxy.Unsetenv(dbfiledirpathprovider.JRP_ENV_JRP_DB_FILE_DIR) failed)",
 			fields: fields{
-				OsProxy: nil,
+				FilePathProxy: filepathproxy.New(),
+				OsProxy:       nil,
 			},
 			wantWnJpnDBFileDirPath: osProxy.TempDir(),
 			wantJrpDBFileDirPath:   osProxy.TempDir(),
@@ -262,7 +276,7 @@ func TestTestEnvSetter_UnsetTestEnv(t *testing.T) {
 				defer mockCtrl.Finish()
 				tt.setup(mockCtrl, &tt.fields)
 			}
-			tr := New(tt.fields.OsProxy)
+			tr := New(tt.fields.FilePathProxy, tt.fields.OsProxy)
 			if err := tr.UnsetTestEnv(); (err != nil) != tt.wantErr {
 				t.Errorf("TestEnvSetter.UnsetTestEnv() : got =\n%v, want =\n%v", err, tt.wantErr)
 			}
