@@ -9,6 +9,7 @@ import (
 	"github.com/yanosea/jrp/app/database/jrp/model"
 	"github.com/yanosea/jrp/app/database/jrp/repository"
 	"github.com/yanosea/jrp/app/library/dbfiledirpathprovider"
+	"github.com/yanosea/jrp/app/library/utility"
 	"github.com/yanosea/jrp/app/proxy/filepath"
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/os"
@@ -20,6 +21,7 @@ import (
 	"github.com/yanosea/jrp/app/proxy/user"
 
 	"github.com/yanosea/jrp/mock/app/proxy/sql"
+	"github.com/yanosea/jrp/test/library/testenvsetter"
 	"go.uber.org/mock/gomock"
 )
 
@@ -72,6 +74,18 @@ func TestNew(t *testing.T) {
 func TestJrpChecker_GetJrpSeq(t *testing.T) {
 	filepathProxy := filepathproxy.New()
 	osProxy := osproxy.New()
+	testEnvSetter := testenvsetter.New(
+		filepathProxy,
+		osProxy,
+	)
+	if err := testEnvSetter.SetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.SetTestEnv() : error =\n%v", err)
+	}
+	util := utility.New(
+		fmtproxy.New(),
+		osProxy,
+		strconvproxy.New(),
+	)
 	dbFileDirPathProvider := dbfiledirpathprovider.New(
 		filepathProxy,
 		osProxy,
@@ -80,6 +94,9 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 	jrpDBFileDirPath, err := dbFileDirPathProvider.GetJrpDBFileDirPath()
 	if err != nil {
 		t.Errorf("DBFileDirPathProvider.GetJrpDBFileDirPath() : error =\n%v", err)
+	}
+	if err := util.CreateDirIfNotExist(jrpDBFileDirPath); err != nil {
+		t.Errorf("Utility.CreateDirIfNotExist() : error =\n%v", err)
 	}
 	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, repository.JRP_DB_FILE_NAME)
 	sqlProxy := sqlproxy.New()
@@ -355,11 +372,26 @@ func TestJrpChecker_GetJrpSeq(t *testing.T) {
 			}
 		})
 	}
+	if err := testEnvSetter.UnsetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.UnsetTestEnv() : error =\n%v", err)
+	}
 }
 
 func TestJrpChecker_IsExist(t *testing.T) {
 	filepathProxy := filepathproxy.New()
 	osProxy := osproxy.New()
+	testEnvSetter := testenvsetter.New(
+		filepathProxy,
+		osProxy,
+	)
+	if err := testEnvSetter.SetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.SetTestEnv() : error =\n%v", err)
+	}
+	util := utility.New(
+		fmtproxy.New(),
+		osProxy,
+		strconvproxy.New(),
+	)
 	dbFileDirPathProvider := dbfiledirpathprovider.New(
 		filepathProxy,
 		osProxy,
@@ -368,6 +400,9 @@ func TestJrpChecker_IsExist(t *testing.T) {
 	jrpDBFileDirPath, err := dbFileDirPathProvider.GetJrpDBFileDirPath()
 	if err != nil {
 		t.Errorf("DBFileDirPathProvider.GetJrpDBFileDirPath() : error =\n%v", err)
+		if err := util.CreateDirIfNotExist(jrpDBFileDirPath); err != nil {
+			t.Errorf("Utility.CreateDirIfNotExist() : error =\n%v", err)
+		}
 	}
 	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, repository.JRP_DB_FILE_NAME)
 	sqlProxy := sqlproxy.New()
@@ -646,11 +681,26 @@ func TestJrpChecker_IsExist(t *testing.T) {
 			}
 		})
 	}
+	if err := testEnvSetter.UnsetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.UnsetTestEnv() : error =\n%v", err)
+	}
 }
 
 func TestJrpChecker_IsFavorited(t *testing.T) {
 	filepathProxy := filepathproxy.New()
 	osProxy := osproxy.New()
+	testEnvSetter := testenvsetter.New(
+		filepathProxy,
+		osProxy,
+	)
+	if err := testEnvSetter.SetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.SetTestEnv() : error =\n%v", err)
+	}
+	util := utility.New(
+		fmtproxy.New(),
+		osProxy,
+		strconvproxy.New(),
+	)
 	dbFileDirPathProvider := dbfiledirpathprovider.New(
 		filepathProxy,
 		osProxy,
@@ -659,6 +709,9 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 	jrpDBFileDirPath, err := dbFileDirPathProvider.GetJrpDBFileDirPath()
 	if err != nil {
 		t.Errorf("DBFileDirPathProvider.GetJrpDBFileDirPath() : error =\n%v", err)
+	}
+	if err := util.CreateDirIfNotExist(jrpDBFileDirPath); err != nil {
+		t.Errorf("Utility.CreateDirIfNotExist() : error =\n%v", err)
 	}
 	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, repository.JRP_DB_FILE_NAME)
 	sqlProxy := sqlproxy.New()
@@ -910,6 +963,9 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 			},
 		},
 	}
+	if osProxy.RemoveAll(jrpDBFilePath) != nil {
+		t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			if tt.setup != nil {
@@ -936,6 +992,9 @@ func TestJrpChecker_IsFavorited(t *testing.T) {
 				tt.cleanup()
 			}
 		})
+	}
+	if err := testEnvSetter.UnsetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.UnsetTestEnv() : error =\n%v", err)
 	}
 }
 

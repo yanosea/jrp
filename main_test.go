@@ -1,11 +1,9 @@
-// Package main is the entry point of jrp.
 package main
 
 import (
 	"testing"
 
 	jrprepository "github.com/yanosea/jrp/app/database/jrp/repository"
-	wnjpnrepository "github.com/yanosea/jrp/app/database/wnjpn/repository"
 	"github.com/yanosea/jrp/app/library/dbfiledirpathprovider"
 	"github.com/yanosea/jrp/app/proxy/buffer"
 	"github.com/yanosea/jrp/app/proxy/color"
@@ -18,11 +16,20 @@ import (
 	"github.com/yanosea/jrp/cmd/constant"
 
 	"github.com/yanosea/jrp/test/library/capture"
+	"github.com/yanosea/jrp/test/library/testenvsetter"
 	"github.com/yanosea/jrp/test/library/testutility"
 )
 
 func Test_main(t *testing.T) {
+	filepathProxy := filepathproxy.New()
 	osProxy := osproxy.New()
+	testEnvSetter := testenvsetter.New(
+		filepathProxy,
+		osProxy,
+	)
+	if err := testEnvSetter.SetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.SetTestEnv() : error =\n%v", err)
+	}
 	capturer := capture.New(
 		bufferproxy.New(),
 		bufferproxy.New(),
@@ -33,12 +40,10 @@ func Test_main(t *testing.T) {
 		osProxy,
 		userproxy.New(),
 	)
-	filepathProxy := filepathproxy.New()
-	wnjpnDBFileDirPath, err := dbFileDirPathProvider.GetWNJpnDBFileDirPath()
+	wnJpnDBFileDirPath, err := dbFileDirPathProvider.GetWNJpnDBFileDirPath()
 	if err != nil {
 		t.Errorf("DBFileDirPathProvider.GetWnjpnDBFileDirPath() : error =\n%v", err)
 	}
-	wnjpnDBFilePath := filepathProxy.Join(wnjpnDBFileDirPath, wnjpnrepository.WNJPN_DB_FILE_NAME)
 	jrpDBFileDirPath, err := dbFileDirPathProvider.GetJrpDBFileDirPath()
 	if err != nil {
 		t.Errorf("DBFileDirPathProvider.GetJrpDBFileDirPath() : error =\n%v", err)
@@ -164,8 +169,7 @@ func Test_main(t *testing.T) {
 					main()
 				},
 				capturer: capturer,
-			},
-			args:                  []string{"path/to/jrp", "history", "-a"},
+			}, args: []string{"path/to/jrp", "history", "-a"},
 			wantStdOut:            testutility.TEST_OUTPUT_ANY,
 			wantStdErr:            "",
 			wantJrpCount:          11,
@@ -341,10 +345,10 @@ func Test_main(t *testing.T) {
 			wantErr:               false,
 		},
 	}
-	if err := osProxy.RemoveAll(wnjpnDBFilePath); err != nil {
+	if osProxy.RemoveAll(wnJpnDBFileDirPath) != nil {
 		t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 	}
-	if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+	if osProxy.RemoveAll(jrpDBFileDirPath) != nil {
 		t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 	}
 	for _, tt := range tests {
@@ -367,26 +371,33 @@ func Test_main(t *testing.T) {
 			if tt.wantStdErr != testutility.TEST_OUTPUT_ANY && stderr != tt.wantStdErr {
 				t.Errorf("main() : stderr =\n%v, wantStdErr =\n%v", stderr, tt.wantStdErr)
 			}
-			jrps, err := jrpRepository.GetAllHistory(jrpDBFilePath)
-			if err != nil {
-				t.Errorf("JrpRepository.GetAllHistory() : error =\n%v", err)
+			if tt.wantJrpCount != 0 {
+				jrps, err := jrpRepository.GetAllHistory(jrpDBFilePath)
+				if err != nil {
+					t.Errorf("JrpRepository.GetAllHistory() : error =\n%v", err)
+				}
+				if len(jrps) != tt.wantJrpCount {
+					t.Errorf("JrpRepository.GetAllHistory() : len(jrps) =\n%v, wantJrpCount =\n%v", len(jrps), tt.wantJrpCount)
+				}
 			}
-			if len(jrps) != tt.wantJrpCount {
-				t.Errorf("JrpRepository.GetAllHistory() : len(jrps) =\n%v, wantJrpCount =\n%v", len(jrps), tt.wantJrpCount)
-			}
-			favoritedJrps, err := jrpRepository.GetAllFavorite(jrpDBFilePath)
-			if err != nil {
-				t.Errorf("JrpRepository.GetAllFavorite() : error =\n%v", err)
-			}
-			if len(favoritedJrps) != tt.wantFavoritedJrpCount {
-				t.Errorf("JrpRepository.GetAllFavorite() : len(favoritedJrps) =\n%v, wantFavoritedJrpCount =\n%v", len(favoritedJrps), tt.wantFavoritedJrpCount)
+			if tt.wantFavoritedJrpCount != 0 {
+				favoritedJrps, err := jrpRepository.GetAllFavorite(jrpDBFilePath)
+				if err != nil {
+					t.Errorf("JrpRepository.GetAllFavorite() : error =\n%v", err)
+				}
+				if len(favoritedJrps) != tt.wantFavoritedJrpCount {
+					t.Errorf("JrpRepository.GetAllFavorite() : len(favoritedJrps) =\n%v, wantFavoritedJrpCount =\n%v", len(favoritedJrps), tt.wantFavoritedJrpCount)
+				}
 			}
 		})
 	}
-	if err := osProxy.RemoveAll(jrpDBFilePath); err != nil {
+	if osProxy.RemoveAll(jrpDBFileDirPath) != nil {
 		t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
 	}
-	if err := osProxy.RemoveAll(wnjpnDBFilePath); err != nil {
+	if osProxy.RemoveAll(wnJpnDBFileDirPath) != nil {
 		t.Errorf("OsProxy.RemoveAll() : error =\n%v", err)
+	}
+	if err := testEnvSetter.UnsetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.UnsetTestEnv() : error =\n%v", err)
 	}
 }
