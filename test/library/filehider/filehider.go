@@ -32,15 +32,24 @@ func New(filePathProxy filepathproxy.FilePath, osProxy osproxy.Os, stringsProxy 
 
 // HideFile hides file by renaming it to hidden file and returns hidden file's index.
 func (f *FileHider) HideFile(filePath string) (int, error) {
-	// check if file exists
-	if _, err := f.OsProxy.Stat(filePath); f.OsProxy.IsNotExist(err) {
-		return -1, err
-	}
 	// extract the directory and file name
 	dir := f.FilePathProxy.Dir(filePath)
 	fileName := f.FilePathProxy.Base(filePath)
 	// create hidden file path
 	hiddenFilePath := f.FilePathProxy.Join(dir, "."+fileName)
+	// check if file exists
+	if _, errOrg := f.OsProxy.Stat(filePath); f.OsProxy.IsNotExist(errOrg) {
+		if _, errHidden := f.OsProxy.Stat(hiddenFilePath); f.OsProxy.IsNotExist(errHidden) {
+			// return error if both file and hidden file do not exist
+			return -1, errOrg
+		}
+		for i, hiddenFile := range f.HiddenFiles {
+			if hiddenFile == hiddenFilePath {
+				// return hidden file's index if hidden file exists
+				return i, nil
+			}
+		}
+	}
 	// rename file to hidden file
 	if err := f.OsProxy.Rename(filePath, hiddenFilePath); err != nil {
 		return -1, err

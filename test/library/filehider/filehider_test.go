@@ -135,6 +135,62 @@ func TestFileHider_HideFile(t *testing.T) {
 			},
 		},
 		{
+			name: "positive testing (alreadey hidden 1 file)",
+			fields: fields{
+				FilePathProxy: filepathproxy.New(),
+				OsProxy:       osproxy.New(),
+				StringsProxy:  stringsproxy.New(),
+				HiddenFiles:   []string{},
+			},
+			args: args{
+				filePathSlice: []string{filepathProxy.Join(tempDir, "test.txt")},
+			},
+			want:            []int{0},
+			wantHiddenFiles: []string{filepathProxy.Join(tempDir, ".test.txt")},
+			wantErr:         false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if _, err := osProxy.Create(filepathProxy.Join(tempDir, ".test.txt")); err != nil {
+					t.Errorf("Os.Create() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.Remove(filepathProxy.Join(tempDir, ".test.txt")); err != nil {
+					t.Errorf("Os.Remove() : error =\n%v", err)
+				}
+			},
+		},
+		{
+			name: "positive testing (already hidden 2 files)",
+			fields: fields{
+				FilePathProxy: filepathproxy.New(),
+				OsProxy:       osproxy.New(),
+				StringsProxy:  stringsproxy.New(),
+				HiddenFiles:   []string{},
+			},
+			args: args{
+				filePathSlice: []string{filepathProxy.Join(tempDir, "test1.txt"), filepathProxy.Join(tempDir, "test2.txt")},
+			},
+			want:            []int{0, 1},
+			wantHiddenFiles: []string{filepathProxy.Join(tempDir, ".test1.txt"), filepathProxy.Join(tempDir, ".test2.txt")},
+			wantErr:         false,
+			setup: func(_ *gomock.Controller, _ *fields) {
+				if _, err := osProxy.Create(filepathProxy.Join(tempDir, ".test1.txt")); err != nil {
+					t.Errorf("Os.Create() : error =\n%v", err)
+				}
+				if _, err := osProxy.Create(filepathProxy.Join(tempDir, ".test2.txt")); err != nil {
+					t.Errorf("Os.Create() : error =\n%v", err)
+				}
+			},
+			cleanup: func() {
+				if err := osProxy.Remove(filepathProxy.Join(tempDir, ".test1.txt")); err != nil {
+					t.Errorf("Os.Remove() : error =\n%v", err)
+				}
+				if err := osProxy.Remove(filepathProxy.Join(tempDir, ".test2.txt")); err != nil {
+					t.Errorf("Os.Remove() : error =\n%v", err)
+				}
+			},
+		},
+		{
 			name: "negative testing (file not found)",
 			fields: fields{
 				FilePathProxy: filepathproxy.New(),
