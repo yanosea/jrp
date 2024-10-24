@@ -7,6 +7,7 @@ import (
 
 	"github.com/yanosea/jrp/app/database/jrp/model"
 	"github.com/yanosea/jrp/app/library/dbfiledirpathprovider"
+	"github.com/yanosea/jrp/app/library/utility"
 	"github.com/yanosea/jrp/app/proxy/filepath"
 	"github.com/yanosea/jrp/app/proxy/fmt"
 	"github.com/yanosea/jrp/app/proxy/os"
@@ -20,6 +21,7 @@ import (
 	"github.com/yanosea/jrp/mock/app/proxy/sort"
 	"github.com/yanosea/jrp/mock/app/proxy/sql"
 	"github.com/yanosea/jrp/test/library/jrpchecker"
+	"github.com/yanosea/jrp/test/library/testenvsetter"
 	"go.uber.org/mock/gomock"
 )
 
@@ -68,6 +70,18 @@ func TestNew(t *testing.T) {
 func TestJrpRepository_SaveHistory(t *testing.T) {
 	filepathProxy := filepathproxy.New()
 	osProxy := osproxy.New()
+	testEnvSetter := testenvsetter.New(
+		filepathProxy,
+		osProxy,
+	)
+	if err := testEnvSetter.SetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.SetTestEnv() : error =\n%v", err)
+	}
+	util := utility.New(
+		fmtproxy.New(),
+		osProxy,
+		strconvproxy.New(),
+	)
 	dbFileDirPathProvider := dbfiledirpathprovider.New(
 		filepathProxy,
 		osProxy,
@@ -76,6 +90,9 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 	jrpDBFileDirPath, err := dbFileDirPathProvider.GetJrpDBFileDirPath()
 	if err != nil {
 		t.Errorf("DBFileDirPathProvider.GetJrpDBFileDirPath() : error =\n%v", err)
+	}
+	if err := util.CreateDirIfNotExist(jrpDBFileDirPath); err != nil {
+		t.Errorf("Utility.CreateDirIfNotExist() : error =\n%v", err)
 	}
 	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, JRP_DB_FILE_NAME)
 	sqlProxy := sqlproxy.New()
@@ -848,11 +865,26 @@ func TestJrpRepository_SaveHistory(t *testing.T) {
 			}
 		})
 	}
+	if err := testEnvSetter.UnsetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.UnsetTestEnv() : error =\n%v", err)
+	}
 }
 
 func TestJrpRepository_GetAllHistory(t *testing.T) {
 	filepathProxy := filepathproxy.New()
 	osProxy := osproxy.New()
+	testEnvSetter := testenvsetter.New(
+		filepathProxy,
+		osProxy,
+	)
+	if err := testEnvSetter.SetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.SetTestEnv() : error =\n%v", err)
+	}
+	util := utility.New(
+		fmtproxy.New(),
+		osProxy,
+		strconvproxy.New(),
+	)
 	dbFileDirPathProvider := dbfiledirpathprovider.New(
 		filepathProxy,
 		osProxy,
@@ -861,6 +893,9 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 	jrpDBFileDirPath, err := dbFileDirPathProvider.GetJrpDBFileDirPath()
 	if err != nil {
 		t.Errorf("DBFileDirPathProvider.GetJrpDBFileDirPath() : error =\n%v", err)
+	}
+	if err := util.CreateDirIfNotExist(jrpDBFileDirPath); err != nil {
+		t.Errorf("Utility.CreateDirIfNotExist() : error =\n%v", err)
 	}
 	jrpDBFilePath := filepathProxy.Join(jrpDBFileDirPath, JRP_DB_FILE_NAME)
 	sqlProxy := sqlproxy.New()
@@ -1242,6 +1277,9 @@ func TestJrpRepository_GetAllHistory(t *testing.T) {
 				tt.cleanup()
 			}
 		})
+	}
+	if err := testEnvSetter.UnsetTestEnv(); err != nil {
+		t.Errorf("TestEnvSetter.UnsetTestEnv() : error =\n%v", err)
 	}
 }
 
