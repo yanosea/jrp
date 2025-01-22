@@ -21,50 +21,48 @@
 
 ## ℹ️ About
 
-`jrp` is the CLI jokeey tool to generate Japanese random phrase(s).  
-You can save the generated phrase(s) to the history and manage them.  
-Also, you can save the generated phrase(s) to the favorite and manage them.
+`jrp` is the CLI jokeey tool to generate Japanese random phrases.  
+You can save the generated phrases to the history and manage them.  
+Also, you can favorite the generated phrases and manage them.
 
 This tool uses [WordNet Japan sqlite database file](https://bond-lab.github.io/wnja/jpn/downloads.html).
 
 ## 💻 Usage
 
 ```
-Usage:
-  jrp [flags]
-  jrp [command]
-
 Available Subcommands:
   download,    dl,   d  📦 Download WordNet Japan sqlite database file from the official web site.
-  generate,    gen,  g  ✨ Generate Japanese random phrase(s).
-  history,     hist, h  📜 Manage the history of the "generate" command.
-  favorite,    fav,  f  ⭐ Manage the favorited phrase(s) of the history of "generate" command.
-  interactive, int,  i  💬 Generate Japanese random phrase(s) interactively.
+  generate,    gen,  g  ✨ Generate Japanese random phrases.
+                           You can abbreviate "generate" sub command. ("jrp" and "jrp generate" are the same.)
+  interactive, int,  i  💬 Generate Japanese random phrases interactively.
+  history,     hist, h  📜 Manage the histories of the "generate" command.
+  favorite,    fav,  f  ⭐ Favorite the histories of the "generate" command.
+  unfavorite,  unf,  u  ❌ Unfavorite the favorited histories of the "generate" command.
+  completion   comp, c  🔧 Generate the autocompletion script for the specified shell.
+  version      ver,  v  🔖 Show the version of jrp.
   help                  🤝 Help for jrp.
-  completion            🔧 Generate the autocompletion script for the specified shell.
-  version               🔖 Show the version of jrp.
 
 Flags:
-  -n, --number       🔢 number of phrases to generate (default 1, e.g: 10)
-  -p, --prefix       🔡 prefix of phrase(s) to generate
-  -s, --suffix       🔡 suffix of phrase(s) to generate
-  -d, --dry-run      🧪 generate phrase(s) without saving to the history
-  -P, --plain        📝 plain text output instead of table output
-  -i, --interactive  💬 generate Japanese random phrase(s) interactively
-  -t, --timeout      ⌛ timeout in seconds for the interactive mode (default 30, e.g: 10)
+  -n, --number       🔢 number of phrases to generate (default 1, e.g. : 10)
+  -p, --prefix       🔡 prefix of phrases to generate
+  -s, --suffix       🔡 suffix of phrases to generate
+  -d, --dry-run      🧪 generate phrases without saving as the histories
+  -f, --format       📝 format of the output (default "table", e.g. : "plain")
+  -i, --interactive  💬 generate Japanese random phrases interactively
+  -t, --timeout      ⌛ timeout in seconds for the interactive mode (default 30, e.g. : 10)
   -h, --help         🤝 help for jrp
   -v, --version      🔖 version for jrp
 
-Arguments:
-  number  🔢 number of phrases to generate (e.g: 10)
+Argument:
+  number  🔢 number of phrases to generate (e.g. : 10)
 ```
 
 ## 💬 Interactive mode
 
 ![demo_interactive](docs/demo_interactive.gif "demo_interactive")
 
-`jrp` can generate Japanese random phrase(s) interactively.  
-You can favorite, save, skip, and exit interactively while generating phrase(s).
+`jrp` can generate Japanese random phrases interactively.  
+You can favorite, save, skip, and exit interactively while generating phrases.
 
 To use this mode, run either command below.
 
@@ -97,20 +95,20 @@ Press either key below for your action.
 
 ## 🌍 Environments
 
-### 📁 Directory to store WordNet Japan sqlite database file
+### 📁 Connection string of WordNet Japan database
 
-Default : `$XDG_DATA_HOME/jrp` or `$HOME/.local/share/jrp`
+Default : `$XDG_DATA_HOME/jrp/wnjpn.db` or `$HOME/.local/share/jrp/wnjpn.db`
 
 ```sh
-export JRP_WNJPN_DB_FILE_DIR=/path/to/your/directory
+export JRP_WNJPN_DB=/path/to/your/directory/wnjpn.db
 ```
 
-### 📁 Directory to store jrp sqlite database file
+### 📁 Connection string of jrp database
 
-Default : `$XDG_DATA_HOME/jrp` or `$HOME/.local/share/jrp`
+Default : `$XDG_DATA_HOME/jrp/jrp.db` or `$HOME/.local/share/jrp/jrp.db`
 
 ```sh
-export JRP_DB_FILE_DIR=/path/to/your/directory
+export JRP_DB=/path/to/your/directory/jrp.db
 ```
 
 ## 🔧 Installation
@@ -118,7 +116,7 @@ export JRP_DB_FILE_DIR=/path/to/your/directory
 ### 🐭 Using go
 
 ```sh
-go install github.com/yanosea/jrp@latest
+go install github.com/yanosea/jrp/app/presentation/cli/jrp@latest 
 ```
 
 ### 🍺 Using homebrew
@@ -139,7 +137,7 @@ Go to the [Releases](https://github.com/yanosea/jrp/releases) and download the l
 Reinstall `jrp`!
 
 ```sh
-go install github.com/yanosea/jrp@latest
+go install github.com/yanosea/jrp/app/presentation/cli/jrp@latest 
 ```
 
 ### 🍺 Using homebrew
@@ -161,7 +159,7 @@ Download the latest binary from the [Releases](https://github.com/yanosea/jrp/re
 
 ```sh
 rm $GOPATH/bin/jrp
-sudo rm -fr $GOPATH/pkg/mod/github.com/yanosea/jrp@*
+rm -fr $GOPATH/pkg/mod/github.com/yanosea/jrp@*
 ```
 
 #### 🍺 Using homebrew

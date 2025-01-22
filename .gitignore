@@ -1,9 +1,9 @@
-# IGNORE FOLDER
+# IGNORE DIRECTORY
 # IGNORE FILE
-jrp
-jrp.exe
+app/presentation/cli/jrp/jrp
+app/presentation/cli/jrp/jrp.exe
+container.exist
+main
+test.run
 .DS_Store
 *.log
-
-# NOT IGNORE FOLDER
-!jrp/

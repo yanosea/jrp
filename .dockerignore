@@ -1,0 +1,11 @@
+# IGNORE FOLDER
+.git
+# IGNORE FILE
+app/presentation/cli/jrp/jrp
+app/presentation/cli/jrp/jrp.exe
+container.exist
+docs/demo*.gif
+main
+test.run
+.DS_Store
+*.log

@@ -1,0 +1,137 @@
+# config
+[config]
+skip_core_tasks = true
+# update
+## `./CREDITS`
+[tasks."update.credits"]
+description = "update `./CREDITS`"
+script = '''
+gocredits -skip-missing . > ./CREDITS
+'''
+## mocks
+[tasks."update.mocks"]
+description = "update mocks"
+script = '''
+# ./app/application
+mockgen -source=./app/application/wnjpn/word_query_service.go -destination=./app/application/wnjpn/word_query_service_mock.go -package=wnjpn
+# ./app/infrastructure
+mockgen -source=./app/infrastructure/database/connection.go -destination=./app/infrastructure/database/connection_mock.go -package=database
+mockgen -source=./app/infrastructure/database/connection_manager.go -destination=./app/infrastructure/database/connection_manager_mock.go -package=database
+# ./app/domain
+mockgen -source=./app/domain/jrp/history/history_repository.go -destination=./app/domain/jrp/history/history_repository_mock.go -package=history
+# ./app/presentation/cli/jrp/command
+mockgen -source=./app/presentation/cli/jrp/command/command.go -destination=./app/presentation/cli/jrp/command/command_mock.go -package=command
+# ./pkg/proxy
+mockgen -source=./pkg/proxy/buffer.go -destination=./pkg/proxy/buffer_mock.go -package=proxy
+mockgen -source=./pkg/proxy/cobra.go -destination=./pkg/proxy/cobra_mock.go -package=proxy
+mockgen -source=./pkg/proxy/debug.go -destination=./pkg/proxy/debug_mock.go -package=proxy
+mockgen -source=./pkg/proxy/envconfig.go -destination=./pkg/proxy/envconfig_mock.go -package=proxy
+mockgen -source=./pkg/proxy/gzip.go -destination=./pkg/proxy/gzip_mock.go -package=proxy
+mockgen -source=./pkg/proxy/http.go -destination=./pkg/proxy/http_mock.go -package=proxy
+mockgen -source=./pkg/proxy/io.go -destination=./pkg/proxy/io_mock.go -package=proxy
+mockgen -source=./pkg/proxy/keyboard.go -destination=./pkg/proxy/keyboard_mock.go -package=proxy
+mockgen -source=./pkg/proxy/os.go -destination=./pkg/proxy/os_mock.go -package=proxy
+mockgen -source=./pkg/proxy/pflag.go -destination=./pkg/proxy/pflag_mock.go -package=proxy
+mockgen -source=./pkg/proxy/promptui.go -destination=./pkg/proxy/promptui_mock.go -package=proxy
+mockgen -source=./pkg/proxy/rand.go -destination=./pkg/proxy/rand_mock.go -package=proxy
+mockgen -source=./pkg/proxy/spinner.go -destination=./pkg/proxy/spinner_mock.go -package=proxy
+mockgen -source=./pkg/proxy/sql.go -destination=./pkg/proxy/sql_mock.go -package=proxy
+mockgen -source=./pkg/proxy/tablewriter.go -destination=./pkg/proxy/tablewriter_mock.go -package=proxy
+# ./pkg/utility
+mockgen -source=./pkg/utility/capture.go -destination=./pkg/utility/capture_mock.go -package=utility
+mockgen -source=./pkg/utility/download_util.go -destination=./pkg/utility/download_util_mock.go -package=utility
+mockgen -source=./pkg/utility/file_util.go -destination=./pkg/utility/file_util_mock.go -package=utility
+mockgen -source=./pkg/utility/keyboard_util.go -destination=./pkg/utility/keyboard_util_mock.go -package=utility
+mockgen -source=./pkg/utility/prompt_util.go -destination=./pkg/utility/prompt_util_mock.go -package=utility
+mockgen -source=./pkg/utility/rand_util.go -destination=./pkg/utility/rand_util_mock.go -package=utility
+mockgen -source=./pkg/utility/spinner_util.go -destination=./pkg/utility/spinner_util_mock.go -package=utility
+mockgen -source=./pkg/utility/strings_util.go -destination=./pkg/utility/strings_util_mock.go -package=utility
+mockgen -source=./pkg/utility/tablewriter_util.go -destination=./pkg/utility/tablewriter_util_mock.go -package=utility
+mockgen -source=./pkg/utility/version_util.go -destination=./pkg/utility/version_util_mock.go -package=utility
+'''
+# container
+## build container
+[tasks."container.build"]
+description = "build container"
+script='''
+set -e
+if [ -f "./container.exist" ]; then
+  echo "container already exist"
+  exit 1
+fi
+docker-compose -f docker-compose.yml build --no-cache
+touch ./container.exist
+'''
+## down container
+[tasks."container.down"]
+description = "down container"
+script='''
+set -e
+docker-compose down
+docker image prune -af
+if [ -f "./container.exist" ]; then
+  rm ./container.exist
+fi
+'''
+# test
+## in local
+[tasks."test.local"]
+description = "execute tests in local"
+script='''
+set -e
+if [ -f "./test.run" ]; then
+  echo "test already running"
+  exit 1
+fi
+touch test.run
+go test -v -p 1 ./... -cover -coverprofile=./cover.out
+grep -v -E "(_mock\.go|/mock/|/proxy/)" ./cover.out > ./cover.out.tmp && mv ./cover.out.tmp ./cover.out
+go tool cover -html=./cover.out -o ./docs/coverage.html
+rm ./cover.out
+if [ -f "./test.run" ]; then
+  rm ./test.run
+fi
+'''
+## in container
+[tasks."test.container"]
+description = "execute tests in container"
+script='''
+set -e
+if ! [ -f "./container.exist" ]; then
+  echo "container not exist"
+  exit 1
+fi
+if [ -f "./test.run" ]; then
+  echo "test already running"
+  exit 1
+fi
+touch test.run
+docker-compose -f docker-compose.yml up --abort-on-container-exit jrp-test-container
+CONTAINER_ID=$(docker ps -a -q --filter "name=jrp-test-container" --filter "status=exited")
+docker cp ${CONTAINER_ID}:/jrp/docs/coverage.html ./docs/coverage.html
+rm ./test.run
+'''
+## in container (once)
+[tasks."test.container.once"]
+description = "execute tests in container"
+script='''
+set -e
+if [ -f "./container.exist" ]; then
+  echo "container already exist"
+  exit 1
+fi
+if [ -f "./test.run" ]; then
+  echo "test already running"
+  exit 1
+fi
+touch ./container.exist
+touch test.run
+docker-compose -f docker-compose.yml build --no-cache
+docker-compose -f docker-compose.yml up --abort-on-container-exit jrp-test-container
+CONTAINER_ID=$(docker ps -a -q --filter "name=jrp-test-container" --filter "status=exited")
+docker cp ${CONTAINER_ID}:/jrp/docs/coverage.html ./docs/coverage.html
+docker-compose down
+docker image prune -af
+rm ./test.run
+rm ./container.exist
+'''
