@@ -1,0 +1,6 @@
+services:
+  jrp-test-container:
+    container_name: jrp-test-container
+    build:
+      context: .
+      dockerfile: ./ops/docker/app/Dockerfile
