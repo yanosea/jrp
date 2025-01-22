@@ -1,10 +1,6 @@
 version: 2
 updates:
   - package-ecosystem: "gomod"
-    directory: "/app"
-    schedule:
-      interval: "weekly"
-  - package-ecosystem: "gomod"
-    directory: "/pkg"
+    directory: "/"
     schedule:
       interval: "weekly"
