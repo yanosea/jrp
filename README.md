@@ -116,7 +116,7 @@ export JRP_DB=/path/to/your/directory/jrp.db
 ### 🐭 Using go
 
 ```sh
-go install github.com/yanosea/jrp/app/presentation/cli/jrp@latest 
+go install github.com/yanosea/jrp/v2/app/presentation/cli/jrp@latest
 ```
 
 ### 🍺 Using homebrew
@@ -137,7 +137,7 @@ Go to the [Releases](https://github.com/yanosea/jrp/releases) and download the l
 Reinstall `jrp`!
 
 ```sh
-go install github.com/yanosea/jrp/app/presentation/cli/jrp@latest 
+go install github.com/yanosea/jrp/v2/app/presentation/cli/jrp@latest
 ```
 
 ### 🍺 Using homebrew
@@ -159,7 +159,8 @@ Download the latest binary from the [Releases](https://github.com/yanosea/jrp/re
 
 ```sh
 rm $GOPATH/bin/jrp
-rm -fr $GOPATH/pkg/mod/github.com/yanosea/jrp@*
+# maybe you have to execute with sudo
+rm -fr $GOPATH/pkg/mod/github.com/yanosea/jrp*
 ```
 
 #### 🍺 Using homebrew
