@@ -1,7 +1,7 @@
 package completion
 
 import (
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // NewCompletionCommand returns a new instance of the completion command.

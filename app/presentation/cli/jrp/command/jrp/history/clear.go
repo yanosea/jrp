@@ -3,12 +3,12 @@ package history
 import (
 	c "github.com/spf13/cobra"
 
-	jrpApp "github.com/yanosea/jrp/app/application/jrp"
-	"github.com/yanosea/jrp/app/infrastructure/jrp/repository"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/formatter"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/presenter"
+	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
+	"github.com/yanosea/jrp/v2/app/infrastructure/jrp/repository"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/formatter"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/presenter"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // ClearOptions provides the options for the clear command.

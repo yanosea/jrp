@@ -5,7 +5,7 @@ import (
 
 	c "github.com/spf13/cobra"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // NewCompletionPowerShellCommand returns a new instance of the completion powershell command.

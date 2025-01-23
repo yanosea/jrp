@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/yanosea/jrp/app/application/wnjpn"
-	"github.com/yanosea/jrp/app/infrastructure/database"
+	"github.com/yanosea/jrp/v2/app/application/wnjpn"
+	"github.com/yanosea/jrp/v2/app/infrastructure/database"
 )
 
 // WordQueryService is a struct that implements the WordQueryService interface.

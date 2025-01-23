@@ -4,11 +4,11 @@ import (
 	"path/filepath"
 	"strings"
 
-	baseConfig "github.com/yanosea/jrp/app/config"
-	"github.com/yanosea/jrp/app/infrastructure/database"
+	baseConfig "github.com/yanosea/jrp/v2/app/config"
+	"github.com/yanosea/jrp/v2/app/infrastructure/database"
 
-	"github.com/yanosea/jrp/pkg/proxy"
-	"github.com/yanosea/jrp/pkg/utility"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 )
 
 // JrpCliConfigurator is an interface that gets the configuration of the Jrp cli application.

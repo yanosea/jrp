@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	historyDomain "github.com/yanosea/jrp/app/domain/jrp/history"
-	"github.com/yanosea/jrp/app/infrastructure/database"
+	historyDomain "github.com/yanosea/jrp/v2/app/domain/jrp/history"
+	"github.com/yanosea/jrp/v2/app/infrastructure/database"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 
 	"go.uber.org/mock/gomock"
 )

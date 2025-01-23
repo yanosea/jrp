@@ -7,7 +7,7 @@ import (
 	"reflect"
 	"testing"
 
-	historyDomain "github.com/yanosea/jrp/app/domain/jrp/history"
+	historyDomain "github.com/yanosea/jrp/v2/app/domain/jrp/history"
 
 	"go.uber.org/mock/gomock"
 )

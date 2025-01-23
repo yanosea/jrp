@@ -1,7 +1,7 @@
 package utility
 
 import (
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // VersionUtil is an interface that provides the version of the application.

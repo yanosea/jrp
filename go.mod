@@ -1,4 +1,4 @@
-module github.com/yanosea/jrp
+module github.com/yanosea/jrp/v2
 
 go 1.23
 

@@ -13,8 +13,8 @@ import (
 	context "context"
 	reflect "reflect"
 
-	proxy "github.com/yanosea/jrp/pkg/proxy"
-	utility "github.com/yanosea/jrp/pkg/utility"
+	proxy "github.com/yanosea/jrp/v2/pkg/proxy"
+	utility "github.com/yanosea/jrp/v2/pkg/utility"
 	gomock "go.uber.org/mock/gomock"
 )
 

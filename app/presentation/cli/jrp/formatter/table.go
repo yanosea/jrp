@@ -7,10 +7,10 @@ import (
 	"strings"
 	"time"
 
-	jrpApp "github.com/yanosea/jrp/app/application/jrp"
+	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
 
-	"github.com/yanosea/jrp/pkg/proxy"
-	"github.com/yanosea/jrp/pkg/utility"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 )
 
 // TableFormatter is a struct that formats the output of jrp cli.

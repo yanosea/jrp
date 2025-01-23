@@ -10,10 +10,10 @@ import (
 
 	"github.com/fatih/color"
 
-	jrpApp "github.com/yanosea/jrp/app/application/jrp"
-	"github.com/yanosea/jrp/app/infrastructure/database"
-	"github.com/yanosea/jrp/pkg/proxy"
-	"github.com/yanosea/jrp/pkg/utility"
+	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
+	"github.com/yanosea/jrp/v2/app/infrastructure/database"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 	"go.uber.org/mock/gomock"
 )
 

@@ -6,7 +6,7 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 
 	"go.uber.org/mock/gomock"
 )

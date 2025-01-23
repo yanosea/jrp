@@ -3,7 +3,7 @@ package formatter
 import (
 	"fmt"
 
-	jrpApp "github.com/yanosea/jrp/app/application/jrp"
+	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
 )
 
 // PlainFormatter is a struct that formats the output of jrp cli.

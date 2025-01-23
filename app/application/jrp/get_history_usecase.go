@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	historyDomain "github.com/yanosea/jrp/app/domain/jrp/history"
+	historyDomain "github.com/yanosea/jrp/v2/app/domain/jrp/history"
 )
 
 // getHistoryUseCase is a struct that contains the use case of the getting jrp from the table history in jrp sqlite database.

@@ -13,7 +13,7 @@ import (
 	io "io"
 	reflect "reflect"
 
-	proxy "github.com/yanosea/jrp/pkg/proxy"
+	proxy "github.com/yanosea/jrp/v2/pkg/proxy"
 	gomock "go.uber.org/mock/gomock"
 )
 

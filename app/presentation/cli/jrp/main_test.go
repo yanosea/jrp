@@ -7,10 +7,10 @@ import (
 
 	"github.com/fatih/color"
 
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/command"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command"
 
-	"github.com/yanosea/jrp/pkg/proxy"
-	"github.com/yanosea/jrp/pkg/utility"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 
 	"go.uber.org/mock/gomock"
 )

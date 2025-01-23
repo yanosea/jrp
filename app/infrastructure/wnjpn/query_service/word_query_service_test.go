@@ -8,11 +8,11 @@ import (
 	"reflect"
 	"testing"
 
-	jrpApp "github.com/yanosea/jrp/app/application/jrp"
-	wnjpnApp "github.com/yanosea/jrp/app/application/wnjpn"
-	"github.com/yanosea/jrp/app/infrastructure/database"
+	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
+	wnjpnApp "github.com/yanosea/jrp/v2/app/application/wnjpn"
+	"github.com/yanosea/jrp/v2/app/infrastructure/database"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 
 	"go.uber.org/mock/gomock"
 )

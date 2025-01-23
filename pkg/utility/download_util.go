@@ -1,7 +1,7 @@
 package utility
 
 import (
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // DownloadUtil is an interface that contains the utility functions for downloading files.

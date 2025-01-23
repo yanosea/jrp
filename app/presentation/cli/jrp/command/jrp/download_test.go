@@ -8,13 +8,13 @@ import (
 
 	"github.com/fatih/color"
 
-	jrpApp "github.com/yanosea/jrp/app/application/jrp"
-	baseConfig "github.com/yanosea/jrp/app/config"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/config"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/presenter"
+	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
+	baseConfig "github.com/yanosea/jrp/v2/app/config"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/config"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/presenter"
 
-	"github.com/yanosea/jrp/pkg/proxy"
-	"github.com/yanosea/jrp/pkg/utility"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 
 	"go.uber.org/mock/gomock"
 )

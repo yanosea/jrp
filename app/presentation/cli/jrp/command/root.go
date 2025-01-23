@@ -3,13 +3,13 @@ package command
 import (
 	c "github.com/spf13/cobra"
 
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/command/jrp"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/command/jrp/completion"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/command/jrp/generate"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/command/jrp/history"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/config"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/completion"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/generate"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/history"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/config"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // RootOptions provides the options for the root command.

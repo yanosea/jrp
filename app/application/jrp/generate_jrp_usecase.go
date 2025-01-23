@@ -3,8 +3,8 @@ package jrp
 import (
 	"time"
 
-	"github.com/yanosea/jrp/pkg/proxy"
-	"github.com/yanosea/jrp/pkg/utility"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 )
 
 // generateJrpUseCase is a struct that contains the use case of the generation jrp.

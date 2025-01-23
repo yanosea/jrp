@@ -4,10 +4,10 @@ import (
 	"context"
 	"os"
 
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/command"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command"
 
-	"github.com/yanosea/jrp/pkg/proxy"
-	"github.com/yanosea/jrp/pkg/utility"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 )
 
 // JrpCliParams is a struct that represents the options of jrp cli.
