@@ -12,13 +12,13 @@ import (
 	"github.com/fatih/color"
 	c "github.com/spf13/cobra"
 
-	historyDomain "github.com/yanosea/jrp/app/domain/jrp/history"
-	"github.com/yanosea/jrp/app/infrastructure/database"
-	"github.com/yanosea/jrp/app/infrastructure/jrp/repository"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/presenter"
+	historyDomain "github.com/yanosea/jrp/v2/app/domain/jrp/history"
+	"github.com/yanosea/jrp/v2/app/infrastructure/database"
+	"github.com/yanosea/jrp/v2/app/infrastructure/jrp/repository"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/presenter"
 
-	"github.com/yanosea/jrp/pkg/proxy"
-	"github.com/yanosea/jrp/pkg/utility"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 
 	"go.uber.org/mock/gomock"
 )

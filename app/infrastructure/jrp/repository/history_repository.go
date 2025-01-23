@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/yanosea/jrp/app/domain/jrp/history"
-	"github.com/yanosea/jrp/app/infrastructure/database"
+	"github.com/yanosea/jrp/v2/app/domain/jrp/history"
+	"github.com/yanosea/jrp/v2/app/infrastructure/database"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // HistoryRepository is a struct that implements the HistoryRepository interface.

@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	jrpApp "github.com/yanosea/jrp/app/application/jrp"
+	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
 
-	"github.com/yanosea/jrp/pkg/utility"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 )
 
 func TestNewTableFormatter(t *testing.T) {

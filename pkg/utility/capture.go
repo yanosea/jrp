@@ -3,7 +3,7 @@ package utility
 import (
 	"os"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // Capturer is an interface that captures the output of a function.

@@ -5,7 +5,7 @@ import (
 
 	"github.com/olekukonko/tablewriter"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // TableWriterUtil is an interface that contains the utility functions for writing tables.

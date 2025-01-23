@@ -9,13 +9,13 @@ import (
 
 	c "github.com/spf13/cobra"
 
-	jrpApp "github.com/yanosea/jrp/app/application/jrp"
-	wnjpnApp "github.com/yanosea/jrp/app/application/wnjpn"
-	"github.com/yanosea/jrp/app/infrastructure/database"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/presenter"
+	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
+	wnjpnApp "github.com/yanosea/jrp/v2/app/application/wnjpn"
+	"github.com/yanosea/jrp/v2/app/infrastructure/database"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/presenter"
 
-	"github.com/yanosea/jrp/pkg/proxy"
-	"github.com/yanosea/jrp/pkg/utility"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 
 	"go.uber.org/mock/gomock"
 )

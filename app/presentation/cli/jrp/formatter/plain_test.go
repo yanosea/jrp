@@ -4,7 +4,7 @@ import (
 	"reflect"
 	"testing"
 
-	jrpApp "github.com/yanosea/jrp/app/application/jrp"
+	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
 )
 
 func TestNewPlainFormatter(t *testing.T) {

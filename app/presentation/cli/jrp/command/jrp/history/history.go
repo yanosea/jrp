@@ -3,7 +3,7 @@ package history
 import (
 	c "github.com/spf13/cobra"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // HistoryOptions provides the options for the generate command.

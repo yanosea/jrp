@@ -8,14 +8,14 @@ import (
 
 	c "github.com/spf13/cobra"
 
-	jrpApp "github.com/yanosea/jrp/app/application/jrp"
-	baseConfig "github.com/yanosea/jrp/app/config"
-	"github.com/yanosea/jrp/app/infrastructure/database"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/command/jrp"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/command/jrp/generate"
-	"github.com/yanosea/jrp/app/presentation/cli/jrp/config"
+	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
+	baseConfig "github.com/yanosea/jrp/v2/app/config"
+	"github.com/yanosea/jrp/v2/app/infrastructure/database"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/generate"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/config"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 func TestNewRootCommand(t *testing.T) {

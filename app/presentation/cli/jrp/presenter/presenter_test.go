@@ -4,8 +4,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/yanosea/jrp/pkg/proxy"
-	"github.com/yanosea/jrp/pkg/utility"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/utility"
 )
 
 func TestPrint(t *testing.T) {

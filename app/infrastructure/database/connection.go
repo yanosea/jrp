@@ -3,7 +3,7 @@ package database
 import (
 	"sync"
 
-	"github.com/yanosea/jrp/pkg/proxy"
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // DBConnection is an interface that contains the database connection.

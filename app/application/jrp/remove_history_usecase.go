@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 
-	historyDomain "github.com/yanosea/jrp/app/domain/jrp/history"
+	historyDomain "github.com/yanosea/jrp/v2/app/domain/jrp/history"
 )
 
 // removeHistoryUseCase is a struct that contains the use case of the removing jrp from the table history in jrp sqlite database.
