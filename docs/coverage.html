@@ -1683,7 +1683,26 @@ func (h *historyRepository) FindTopNByPhraseContainsOrderByIdAsc(
 
 // SaveAll is a method that saves all the jrp to the history table.
 func (h *historyRepository) SaveAll(ctx context.Context, jrps []*history.History) ([]*history.History, error) <span class="cov8" title="1">{
-        var deferErr error
+        if len(jrps) == 0 </span><span class="cov8" title="1">{
+                return jrps, nil
+        }</span>
+
+        <span class="cov8" title="1">valueStrings := make([]string, 0, len(jrps))
+        valueArgs := make([]interface{}, 0, len(jrps)*6)
+
+        for _, jrp := range jrps </span><span class="cov8" title="1">{
+                valueStrings = append(valueStrings, "(?, ?, ?, ?, ?, ?)")
+                valueArgs = append(valueArgs,
+                        jrp.Phrase,
+                        jrp.Prefix,
+                        jrp.Suffix,
+                        jrp.IsFavorited,
+                        jrp.CreatedAt,
+                        jrp.UpdatedAt,
+                )
+        }</span>
+
+        <span class="cov8" title="1">var deferErr error
         db, err := getJrpDB(ctx, h.connManager)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
@@ -1703,34 +1722,21 @@ func (h *historyRepository) SaveAll(ctx context.Context, jrps []*history.History
                 deferErr = tx.Rollback()
         }</span>()
 
-        <span class="cov8" title="1">stmt, err := db.PrepareContext(ctx, InsertQuery)
+        <span class="cov8" title="1">query := fmt.Sprintf(InsertQuery, strings.Join(valueStrings, ","))
+        result, err := tx.ExecContext(ctx, query, valueArgs...)
         if err != nil </span><span class="cov8" title="1">{
                 return nil, err
         }</span>
-        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
-                deferErr = stmt.Close()
-        }</span>()
 
-        <span class="cov8" title="1">for _, jrp := range jrps </span><span class="cov8" title="1">{
-                res, err := stmt.ExecContext(
-                        ctx,
-                        jrp.Phrase,
-                        jrp.Prefix,
-                        jrp.Suffix,
-                        jrp.IsFavorited,
-                        jrp.CreatedAt,
-                        jrp.UpdatedAt,
-                )
-                if err != nil </span><span class="cov8" title="1">{
-                        return nil, err
-                }</span>
+        <span class="cov8" title="1">lastID, err := result.LastInsertId()
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+        <span class="cov8" title="1">firstID := lastID - int64(len(jrps)) + 1
 
-                <span class="cov8" title="1">i, err := res.LastInsertId()
-                if err != nil </span><span class="cov8" title="1">{
-                        return nil, err
-                }</span>
-                <span class="cov8" title="1">jrp.ID = int(i)</span>
-        }
+        for i, jrp := range jrps </span><span class="cov8" title="1">{
+                jrp.ID = int(firstID) + i
+        }</span>
 
         <span class="cov8" title="1">if err := tx.Commit(); err != nil </span><span class="cov8" title="1">{
                 return nil, err
