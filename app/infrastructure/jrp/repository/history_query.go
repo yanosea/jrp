@@ -217,7 +217,7 @@ FROM (
 ORDER BY
   latest_records.ID ASC;
 `
-	// InsertQuery is a query that inserts a record into the history table.
+	// InsertQuery is a query that inserts records into the history table.
 	InsertQuery = `
 INSERT INTO
   history (
@@ -227,14 +227,7 @@ INSERT INTO
     , IsFavorited
     , CreatedAt
     , UpdatedAt
-  ) VALUES (
-    ?
-    , ?
-    , ?
-    , ?
-    , ?
-    , ?
-  );
+  ) VALUES %s;
 `
 	// UpdateIsFavoritedByIdInQuery is a query that updates the is favorited by ID in.
 	UpdateIsFavoritedByIdInQuery = `

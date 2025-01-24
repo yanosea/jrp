@@ -539,6 +539,25 @@ func (h *historyRepository) FindTopNByPhraseContainsOrderByIdAsc(
 
 // SaveAll is a method that saves all the jrp to the history table.
 func (h *historyRepository) SaveAll(ctx context.Context, jrps []*history.History) ([]*history.History, error) {
+	if len(jrps) == 0 {
+		return jrps, nil
+	}
+
+	valueStrings := make([]string, 0, len(jrps))
+	valueArgs := make([]interface{}, 0, len(jrps)*6)
+
+	for _, jrp := range jrps {
+		valueStrings = append(valueStrings, "(?, ?, ?, ?, ?, ?)")
+		valueArgs = append(valueArgs,
+			jrp.Phrase,
+			jrp.Prefix,
+			jrp.Suffix,
+			jrp.IsFavorited,
+			jrp.CreatedAt,
+			jrp.UpdatedAt,
+		)
+	}
+
 	var deferErr error
 	db, err := getJrpDB(ctx, h.connManager)
 	if err != nil {
@@ -559,33 +578,20 @@ func (h *historyRepository) SaveAll(ctx context.Context, jrps []*history.History
 		deferErr = tx.Rollback()
 	}()
 
-	stmt, err := db.PrepareContext(ctx, InsertQuery)
+	query := fmt.Sprintf(InsertQuery, strings.Join(valueStrings, ","))
+	result, err := tx.ExecContext(ctx, query, valueArgs...)
 	if err != nil {
 		return nil, err
 	}
-	defer func() {
-		deferErr = stmt.Close()
-	}()
 
-	for _, jrp := range jrps {
-		res, err := stmt.ExecContext(
-			ctx,
-			jrp.Phrase,
-			jrp.Prefix,
-			jrp.Suffix,
-			jrp.IsFavorited,
-			jrp.CreatedAt,
-			jrp.UpdatedAt,
-		)
-		if err != nil {
-			return nil, err
-		}
+	lastID, err := result.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	firstID := lastID - int64(len(jrps)) + 1
 
-		i, err := res.LastInsertId()
-		if err != nil {
-			return nil, err
-		}
-		jrp.ID = int(i)
+	for i, jrp := range jrps {
+		jrp.ID = int(firstID) + i
 	}
 
 	if err := tx.Commit(); err != nil {

@@ -5964,7 +5964,7 @@ func Test_historyRepository_SaveAll(t *testing.T) {
 			cleanup: nil,
 		},
 		{
-			name: "negative testing (db.PrepareContext() failed)",
+			name: "negative testing (tx.ExecContext() failed)",
 			fields: fields{
 				connManager: nil,
 			},
@@ -5992,56 +5992,11 @@ func Test_historyRepository_SaveAll(t *testing.T) {
 			wantErr:  true,
 			setup: func(mockCtrl *gomock.Controller, tt *fields) {
 				mockTx := proxy.NewMockTx(mockCtrl)
+				mockTx.EXPECT().ExecContext(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, errors.New("Tx.ExecContext() failed"))
 				mockTx.EXPECT().Rollback().Return(nil)
 				mockDB := proxy.NewMockDB(mockCtrl)
 				mockDB.EXPECT().ExecContext(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, nil)
 				mockDB.EXPECT().BeginTx(gomock.Any(), gomock.Any()).Return(mockTx, nil)
-				mockDB.EXPECT().PrepareContext(gomock.Any(), gomock.Any()).Return(nil, errors.New("DB.PrepareContext() failed"))
-				mockConnection := database.NewMockDBConnection(mockCtrl)
-				mockConnection.EXPECT().Open().Return(mockDB, nil)
-				mockConnManager := database.NewMockConnectionManager(mockCtrl)
-				mockConnManager.EXPECT().GetConnection(database.JrpDB).Return(mockConnection, nil)
-				tt.connManager = mockConnManager
-			},
-			cleanup: nil,
-		},
-		{
-			name: "negative testing (stmt.ExecContext() failed)",
-			fields: fields{
-				connManager: nil,
-			},
-			args: args{
-				ctx: context.Background(),
-				jrps: []*historyDomain.History{
-					{
-						Phrase: "test",
-						Prefix: sql.NullString{
-							String: "prefix",
-							Valid:  true,
-						},
-						Suffix: sql.NullString{
-							String: "suffix",
-							Valid:  true,
-						},
-						IsFavorited: 0,
-						CreatedAt:   now,
-						UpdatedAt:   now,
-					},
-				},
-			},
-			testData: nil,
-			want:     nil,
-			wantErr:  true,
-			setup: func(mockCtrl *gomock.Controller, tt *fields) {
-				mockStmt := proxy.NewMockStmt(mockCtrl)
-				mockStmt.EXPECT().ExecContext(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, errors.New("Stmt.ExecContext() failed"))
-				mockStmt.EXPECT().Close().Return(nil)
-				mockTx := proxy.NewMockTx(mockCtrl)
-				mockTx.EXPECT().Rollback().Return(nil)
-				mockDB := proxy.NewMockDB(mockCtrl)
-				mockDB.EXPECT().ExecContext(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, nil)
-				mockDB.EXPECT().BeginTx(gomock.Any(), gomock.Any()).Return(mockTx, nil)
-				mockDB.EXPECT().PrepareContext(gomock.Any(), gomock.Any()).Return(mockStmt, nil)
 				mockConnection := database.NewMockDBConnection(mockCtrl)
 				mockConnection.EXPECT().Open().Return(mockDB, nil)
 				mockConnManager := database.NewMockConnectionManager(mockCtrl)
@@ -6080,15 +6035,12 @@ func Test_historyRepository_SaveAll(t *testing.T) {
 			setup: func(mockCtrl *gomock.Controller, tt *fields) {
 				mockResult := proxy.NewMockResult(mockCtrl)
 				mockResult.EXPECT().LastInsertId().Return(int64(0), errors.New("Result.LastInsertId() failed"))
-				mockStmt := proxy.NewMockStmt(mockCtrl)
-				mockStmt.EXPECT().ExecContext(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(mockResult, nil)
-				mockStmt.EXPECT().Close().Return(nil)
 				mockTx := proxy.NewMockTx(mockCtrl)
+				mockTx.EXPECT().ExecContext(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(mockResult, nil)
 				mockTx.EXPECT().Rollback().Return(nil)
 				mockDB := proxy.NewMockDB(mockCtrl)
 				mockDB.EXPECT().ExecContext(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, nil)
 				mockDB.EXPECT().BeginTx(gomock.Any(), gomock.Any()).Return(mockTx, nil)
-				mockDB.EXPECT().PrepareContext(gomock.Any(), gomock.Any()).Return(mockStmt, nil)
 				mockConnection := database.NewMockDBConnection(mockCtrl)
 				mockConnection.EXPECT().Open().Return(mockDB, nil)
 				mockConnManager := database.NewMockConnectionManager(mockCtrl)
@@ -6127,16 +6079,13 @@ func Test_historyRepository_SaveAll(t *testing.T) {
 			setup: func(mockCtrl *gomock.Controller, tt *fields) {
 				mockResult := proxy.NewMockResult(mockCtrl)
 				mockResult.EXPECT().LastInsertId().Return(int64(1), nil)
-				mockStmt := proxy.NewMockStmt(mockCtrl)
-				mockStmt.EXPECT().ExecContext(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(mockResult, nil)
-				mockStmt.EXPECT().Close().Return(nil)
 				mockTx := proxy.NewMockTx(mockCtrl)
+				mockTx.EXPECT().ExecContext(gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any(), gomock.Any()).Return(mockResult, nil)
 				mockTx.EXPECT().Commit().Return(errors.New("Tx.Commit() failed"))
 				mockTx.EXPECT().Rollback().Return(nil)
 				mockDB := proxy.NewMockDB(mockCtrl)
 				mockDB.EXPECT().ExecContext(gomock.Any(), gomock.Any(), gomock.Any()).Return(nil, nil)
 				mockDB.EXPECT().BeginTx(gomock.Any(), gomock.Any()).Return(mockTx, nil)
-				mockDB.EXPECT().PrepareContext(gomock.Any(), gomock.Any()).Return(mockStmt, nil)
 				mockConnection := database.NewMockDBConnection(mockCtrl)
 				mockConnection.EXPECT().Open().Return(mockDB, nil)
 				mockConnManager := database.NewMockConnectionManager(mockCtrl)
