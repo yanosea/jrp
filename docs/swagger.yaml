@@ -1,0 +1,29 @@
+basePath: /api
+definitions:
+  github_com_yanosea_jrp_v2_app_presentation_api_jrp-server_formatter.JrpJsonOutputDto:
+    description: response format for jrp
+    properties:
+      phrase:
+        description: '@Description Generated Japanese phrase'
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: jrp api server
+  title: JRP API
+paths:
+  /jrp:
+    get:
+      description: returns a randomly generated Japanese phrase.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_yanosea_jrp_v2_app_presentation_api_jrp-server_formatter.JrpJsonOutputDto'
+      summary: get a random Japanese phrase.
+      tags:
+      - jrp
+swagger: "2.0"

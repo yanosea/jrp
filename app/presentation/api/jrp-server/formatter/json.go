@@ -17,8 +17,10 @@ type ResponseOutputDto struct {
 	Body []byte `json:"body"`
 }
 
+// @Description response format for jrp
 // JrpJsonOutputDto is a struct that represents the output json of jrp server.
 type JrpJsonOutputDto struct {
+	// @Description Generated Japanese phrase
 	Phrase string `json:"phrase"`
 }
 

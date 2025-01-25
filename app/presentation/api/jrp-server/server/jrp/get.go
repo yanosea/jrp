@@ -10,7 +10,7 @@ import (
 	wnjpnApp "github.com/yanosea/jrp/v2/app/application/wnjpn"
 	"github.com/yanosea/jrp/v2/app/infrastructure/database"
 	"github.com/yanosea/jrp/v2/app/infrastructure/wnjpn/query_service"
-	"github.com/yanosea/jrp/v2/app/presentation/api/jrp/formatter"
+	"github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/formatter"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
@@ -24,6 +24,12 @@ func BindGetJrpHandler(g proxy.Group) {
 	g.GET("/jrp", getJrp)
 }
 
+// @Summary get a random Japanese phrase.
+// @Description returns a randomly generated Japanese phrase.
+// @Tags jrp
+// @Produce json
+// @Success 200 {object} formatter.JrpJsonOutputDto
+// @Router /jrp [get]
 // getJrp is a handler that returns a random Japanese phrase.
 func getJrp(c echo.Context) error {
 	connManager := database.GetConnectionManager()

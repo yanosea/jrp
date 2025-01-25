@@ -87,19 +87,19 @@
 				
 				<option value="file15">github.com/yanosea/jrp/v2/app/infrastructure/wnjpn/query_service/word_query_service.go (100.0%)</option>
 				
-				<option value="file16">github.com/yanosea/jrp/v2/app/presentation/api/jrp/config/config.go (100.0%)</option>
+				<option value="file16">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/config/config.go (100.0%)</option>
 				
-				<option value="file17">github.com/yanosea/jrp/v2/app/presentation/api/jrp/formatter/formatter.go (100.0%)</option>
+				<option value="file17">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/formatter/formatter.go (100.0%)</option>
 				
-				<option value="file18">github.com/yanosea/jrp/v2/app/presentation/api/jrp/formatter/json.go (100.0%)</option>
+				<option value="file18">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/formatter/json.go (100.0%)</option>
 				
-				<option value="file19">github.com/yanosea/jrp/v2/app/presentation/api/jrp/main.go (100.0%)</option>
+				<option value="file19">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/main.go (100.0%)</option>
 				
-				<option value="file20">github.com/yanosea/jrp/v2/app/presentation/api/jrp/server/jrp/get.go (100.0%)</option>
+				<option value="file20">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/jrp/get.go (100.0%)</option>
 				
-				<option value="file21">github.com/yanosea/jrp/v2/app/presentation/api/jrp/server/route.go (100.0%)</option>
+				<option value="file21">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/route.go (100.0%)</option>
 				
-				<option value="file22">github.com/yanosea/jrp/v2/app/presentation/api/jrp/server/server.go (100.0%)</option>
+				<option value="file22">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/server.go (100.0%)</option>
 				
 				<option value="file23">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/command.go (100.0%)</option>
 				
@@ -155,27 +155,29 @@
 				
 				<option value="file49">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/presenter/spinner.go (100.0%)</option>
 				
-				<option value="file50">github.com/yanosea/jrp/v2/pkg/utility/capture.go (100.0%)</option>
+				<option value="file50">github.com/yanosea/jrp/v2/docs/docs.go (100.0%)</option>
 				
-				<option value="file51">github.com/yanosea/jrp/v2/pkg/utility/download_util.go (100.0%)</option>
+				<option value="file51">github.com/yanosea/jrp/v2/pkg/utility/capture.go (100.0%)</option>
 				
-				<option value="file52">github.com/yanosea/jrp/v2/pkg/utility/file_util.go (100.0%)</option>
+				<option value="file52">github.com/yanosea/jrp/v2/pkg/utility/download_util.go (100.0%)</option>
 				
-				<option value="file53">github.com/yanosea/jrp/v2/pkg/utility/json_util.go (100.0%)</option>
+				<option value="file53">github.com/yanosea/jrp/v2/pkg/utility/file_util.go (100.0%)</option>
 				
-				<option value="file54">github.com/yanosea/jrp/v2/pkg/utility/keyboard_util.go (100.0%)</option>
+				<option value="file54">github.com/yanosea/jrp/v2/pkg/utility/json_util.go (100.0%)</option>
 				
-				<option value="file55">github.com/yanosea/jrp/v2/pkg/utility/prompt_util.go (100.0%)</option>
+				<option value="file55">github.com/yanosea/jrp/v2/pkg/utility/keyboard_util.go (100.0%)</option>
 				
-				<option value="file56">github.com/yanosea/jrp/v2/pkg/utility/rand_util.go (100.0%)</option>
+				<option value="file56">github.com/yanosea/jrp/v2/pkg/utility/prompt_util.go (100.0%)</option>
 				
-				<option value="file57">github.com/yanosea/jrp/v2/pkg/utility/spinner_util.go (100.0%)</option>
+				<option value="file57">github.com/yanosea/jrp/v2/pkg/utility/rand_util.go (100.0%)</option>
 				
-				<option value="file58">github.com/yanosea/jrp/v2/pkg/utility/strings_util.go (100.0%)</option>
+				<option value="file58">github.com/yanosea/jrp/v2/pkg/utility/spinner_util.go (100.0%)</option>
 				
-				<option value="file59">github.com/yanosea/jrp/v2/pkg/utility/tablewriter_util.go (100.0%)</option>
+				<option value="file59">github.com/yanosea/jrp/v2/pkg/utility/strings_util.go (100.0%)</option>
 				
-				<option value="file60">github.com/yanosea/jrp/v2/pkg/utility/version_util.go (100.0%)</option>
+				<option value="file60">github.com/yanosea/jrp/v2/pkg/utility/tablewriter_util.go (100.0%)</option>
+				
+				<option value="file61">github.com/yanosea/jrp/v2/pkg/utility/version_util.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -2049,8 +2051,10 @@ type ResponseOutputDto struct {
         Body []byte `json:"body"`
 }
 
+// @Description response format for jrp
 // JrpJsonOutputDto is a struct that represents the output json of jrp server.
 type JrpJsonOutputDto struct {
+        // @Description Generated Japanese phrase
         Phrase string `json:"phrase"`
 }
 
@@ -2087,10 +2091,16 @@ func (f *JsonFormatter) Format(result interface{}) ([]byte, error) <span class="
 		
 		<pre class="file" id="file19" style="display: none">package main
 
+// @title JRP API
+// @description jrp api server
+// @host localhost:8080
+// @BasePath /api
+
 import (
         "os"
 
-        "github.com/yanosea/jrp/v2/app/presentation/api/jrp/server"
+        "github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server"
+        _ "github.com/yanosea/jrp/v2/docs"
 
         "github.com/yanosea/jrp/v2/pkg/proxy"
         "github.com/yanosea/jrp/v2/pkg/utility"
@@ -2153,7 +2163,7 @@ import (
         wnjpnApp "github.com/yanosea/jrp/v2/app/application/wnjpn"
         "github.com/yanosea/jrp/v2/app/infrastructure/database"
         "github.com/yanosea/jrp/v2/app/infrastructure/wnjpn/query_service"
-        "github.com/yanosea/jrp/v2/app/presentation/api/jrp/formatter"
+        "github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/formatter"
 
         "github.com/yanosea/jrp/v2/pkg/proxy"
 )
@@ -2167,6 +2177,12 @@ func BindGetJrpHandler(g proxy.Group) <span class="cov8" title="1">{
         g.GET("/jrp", getJrp)
 }</span>
 
+// @Summary get a random Japanese phrase.
+// @Description returns a randomly generated Japanese phrase.
+// @Tags jrp
+// @Produce json
+// @Success 200 {object} formatter.JrpJsonOutputDto
+// @Router /jrp [get]
 // getJrp is a handler that returns a random Japanese phrase.
 func getJrp(c echo.Context) error <span class="cov8" title="1">{
         connManager := database.GetConnectionManager()
@@ -2227,13 +2243,16 @@ func getJrp(c echo.Context) error <span class="cov8" title="1">{
 		<pre class="file" id="file21" style="display: none">package server
 
 import (
-        "github.com/yanosea/jrp/v2/app/presentation/api/jrp/server/jrp"
+        "github.com/swaggo/echo-swagger"
+
+        "github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/jrp"
 
         "github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
 // Bind binds the routes to the server.
 func Bind(e proxy.Echo) <span class="cov8" title="1">{
+        e.Get("/swagger/*", echoSwagger.WrapHandler)
         apiGroup := e.Group("/api")
         jrp.BindGetJrpHandler(apiGroup)
 }</span>
@@ -2247,7 +2266,7 @@ import (
         "github.com/labstack/echo/v4/middleware"
 
         "github.com/yanosea/jrp/v2/app/infrastructure/database"
-        "github.com/yanosea/jrp/v2/app/presentation/api/jrp/config"
+        "github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/config"
 
         "github.com/yanosea/jrp/v2/pkg/proxy"
         "github.com/yanosea/jrp/v2/pkg/utility"
@@ -5484,7 +5503,78 @@ func StopSpinner() <span class="cov8" title="1">{
 }
 </pre>
 		
-		<pre class="file" id="file50" style="display: none">package utility
+		<pre class="file" id="file50" style="display: none">// Package docs Code generated by swaggo/swag. DO NOT EDIT
+package docs
+
+import "github.com/swaggo/swag"
+
+const docTemplate = `{
+    "schemes": {{ marshal .Schemes }},
+    "swagger": "2.0",
+    "info": {
+        "description": "{{escape .Description}}",
+        "title": "{{.Title}}",
+        "contact": {},
+        "version": "{{.Version}}"
+    },
+    "host": "{{.Host}}",
+    "basePath": "{{.BasePath}}",
+    "paths": {
+        "/jrp": {
+            "get": {
+                "description": "returns a randomly generated Japanese phrase.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "jrp"
+                ],
+                "summary": "get a random Japanese phrase.",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/github_com_yanosea_jrp_v2_app_presentation_api_jrp_formatter.JrpJsonOutputDto"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "github_com_yanosea_jrp_v2_app_presentation_api_jrp_formatter.JrpJsonOutputDto": {
+            "description": "response format for jrp",
+            "type": "object",
+            "properties": {
+                "phrase": {
+                    "description": "@Description Generated Japanese phrase",
+                    "type": "string"
+                }
+            }
+        }
+    }
+}`
+
+// SwaggerInfo holds exported Swagger Info so clients can modify it
+var SwaggerInfo = &amp;swag.Spec{
+        Version:          "",
+        Host:             "localhost:8080",
+        BasePath:         "/api",
+        Schemes:          []string{},
+        Title:            "JRP API",
+        Description:      "jrp api server",
+        InfoInstanceName: "swagger",
+        SwaggerTemplate:  docTemplate,
+        LeftDelim:        "{{",
+        RightDelim:       "}}",
+}
+
+func init() <span class="cov8" title="1">{
+        swag.Register(SwaggerInfo.InstanceName(), SwaggerInfo)
+}</span>
+</pre>
+		
+		<pre class="file" id="file51" style="display: none">package utility
 
 import (
         "os"
@@ -5553,7 +5643,7 @@ func (c *capturer) CaptureOutput(fnc func()) (string, string, error) <span class
 }
 </pre>
 		
-		<pre class="file" id="file51" style="display: none">package utility
+		<pre class="file" id="file52" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -5586,7 +5676,7 @@ func (d *downloadUtil) Download(url string) (proxy.Response, error) <span class=
 }
 </pre>
 		
-		<pre class="file" id="file52" style="display: none">package utility
+		<pre class="file" id="file53" style="display: none">package utility
 
 import (
         "io"
@@ -5739,7 +5829,7 @@ func (f *fileUtil) UnhideFile(hiddenFilePath string) error <span class="cov8" ti
 }
 </pre>
 		
-		<pre class="file" id="file53" style="display: none">package utility
+		<pre class="file" id="file54" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -5768,7 +5858,7 @@ func (ju *jsonUtil) Marshal(v interface{}) ([]byte, error) <span class="cov8" ti
 }</span>
 </pre>
 		
-		<pre class="file" id="file54" style="display: none">package utility
+		<pre class="file" id="file55" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -5816,7 +5906,7 @@ func (k *keyboardUtil) OpenKeyboard() error <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file55" style="display: none">package utility
+		<pre class="file" id="file56" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -5849,7 +5939,7 @@ func (p *promptUtil) GetPrompt(label string) proxy.Prompt <span class="cov8" tit
 }</span>
 </pre>
 		
-		<pre class="file" id="file56" style="display: none">package utility
+		<pre class="file" id="file57" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -5881,7 +5971,7 @@ func (ru *randUtil) GenerateRandomNumber(max int) int <span class="cov8" title="
 }
 </pre>
 		
-		<pre class="file" id="file57" style="display: none">package utility
+		<pre class="file" id="file58" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -5920,7 +6010,7 @@ func (s *spinnerUtil) GetSpinner(isReversed bool, color string, suffix string) (
 }
 </pre>
 		
-		<pre class="file" id="file58" style="display: none">package utility
+		<pre class="file" id="file59" style="display: none">package utility
 
 import (
         "strings"
@@ -5957,7 +6047,7 @@ func (s *stringsUtil) RemoveTabs(str string) string <span class="cov8" title="1"
 }</span>
 </pre>
 		
-		<pre class="file" id="file59" style="display: none">package utility
+		<pre class="file" id="file60" style="display: none">package utility
 
 import (
         "io"
@@ -6002,7 +6092,7 @@ func (t *tableWriterUtil) GetNewDefaultTable(writer io.Writer) proxy.Table <span
 }</span>
 </pre>
 		
-		<pre class="file" id="file60" style="display: none">package utility
+		<pre class="file" id="file61" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"

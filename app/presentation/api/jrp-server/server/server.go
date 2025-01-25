@@ -6,7 +6,7 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/yanosea/jrp/v2/app/infrastructure/database"
-	"github.com/yanosea/jrp/v2/app/presentation/api/jrp/config"
+	"github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/config"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
 	"github.com/yanosea/jrp/v2/pkg/utility"

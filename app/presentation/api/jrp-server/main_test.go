@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/yanosea/jrp/v2/app/presentation/api/jrp/server"
+	"github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
 
@@ -37,6 +37,7 @@ func Test_main(t *testing.T) {
 				mockEcho.EXPECT().Use(gomock.Any())
 				mockEcho.EXPECT().Group("/api").Return(mockGroup)
 				mockEcho.EXPECT().Start(":8080")
+				mockEcho.EXPECT().Get("/swagger/*", gomock.Any())
 				mockLogger := proxy.NewMockLogger(mockCtrl)
 				mockEchos := proxy.NewMockEchos(mockCtrl)
 				mockEchos.EXPECT().NewEcho().Return(mockEcho, mockLogger)
