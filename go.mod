@@ -13,14 +13,14 @@ require (
 	github.com/olekukonko/tablewriter v0.0.5
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/pflag v1.0.5
+	github.com/swaggo/echo-swagger v1.4.1
+	github.com/swaggo/swag v1.16.4
 	go.uber.org/mock v0.4.0
 	modernc.org/sqlite v1.34.4
 )
 
 require (
 	github.com/KyleBanks/depth v1.2.1 // indirect
-	github.com/PuerkitoBio/purell v1.2.1 // indirect
-	github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 // indirect
 	github.com/chzyer/readline v0.0.0-20180603132655-2972be24d48e // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
@@ -38,9 +38,7 @@ require (
 	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	github.com/swaggo/echo-swagger v1.4.1 // indirect
 	github.com/swaggo/files/v2 v2.0.2 // indirect
-	github.com/swaggo/swag v1.16.4 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	golang.org/x/crypto v0.32.0 // indirect
