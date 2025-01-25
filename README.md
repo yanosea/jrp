@@ -134,7 +134,7 @@ Go to the [Releases](https://github.com/yanosea/jrp/releases) and download the l
 
 ### ✨ Update
 
-### 🐭 Using go
+#### 🐭 Using go
 
 Reinstall `jrp`!
 
@@ -258,6 +258,20 @@ git clone github.com/yanosea/jrp
 cd jrp
 go run app/presentation/api/jrp-server/main.go
 ```
+
+### ✨ Update
+
+#### 🐭 Using go
+
+Reinstall `jrp-server`!
+
+```sh
+go install github.com/yanosea/jrp/v2/app/presentation/api/jrp-server@latest
+```
+
+#### 🚀 With source code
+
+Pull the latest changes into your local repository.
 
 ### 🧹 Uninstallation
 
