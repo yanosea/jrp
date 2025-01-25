@@ -21,13 +21,15 @@
 
 ## ℹ️ About
 
-`jrp` is the CLI jokeey tool to generate Japanese random phrases.  
-You can save the generated phrases to the history and manage them.  
-Also, you can favorite the generated phrases and manage them.
-
+`jrp` generates Japanese random phrases.  
 This tool uses [WordNet Japan sqlite database file](https://bond-lab.github.io/wnja/jpn/downloads.html).
 
-## 💻 Usage
+## 📟 CLI
+
+You can generate and save the generated phrases to the history and manage them via the CLI.  
+Also, you can favorite the generated phrases and manage them.
+
+### 💻 Usage
 
 ```
 Available Subcommands:
@@ -57,7 +59,7 @@ Argument:
   number  🔢 number of phrases to generate (e.g. : 10)
 ```
 
-## 💬 Interactive mode
+### 💬 Interactive mode
 
 ![demo_interactive](docs/demo_interactive.gif "demo_interactive")
 
@@ -93,9 +95,9 @@ Press either key below for your action.
 - `other`
   - Skip, exit.
 
-## 🌍 Environments
+### 🌍 Environments
 
-### 📁 Connection string of WordNet Japan database
+#### 📁 Connection string of WordNet Japan database
 
 Default : `$XDG_DATA_HOME/jrp/wnjpn.db` or `$HOME/.local/share/jrp/wnjpn.db`
 
@@ -103,7 +105,7 @@ Default : `$XDG_DATA_HOME/jrp/wnjpn.db` or `$HOME/.local/share/jrp/wnjpn.db`
 export JRP_WNJPN_DB=/path/to/your/directory/wnjpn.db
 ```
 
-### 📁 Connection string of jrp database
+#### 📁 Connection string of jrp database
 
 Default : `$XDG_DATA_HOME/jrp/jrp.db` or `$HOME/.local/share/jrp/jrp.db`
 
@@ -111,26 +113,26 @@ Default : `$XDG_DATA_HOME/jrp/jrp.db` or `$HOME/.local/share/jrp/jrp.db`
 export JRP_DB=/path/to/your/directory/jrp.db
 ```
 
-## 🔧 Installation
+### 🔧 Installation
 
-### 🐭 Using go
+#### 🐭 Using go
 
 ```sh
 go install github.com/yanosea/jrp/v2/app/presentation/cli/jrp@latest
 ```
 
-### 🍺 Using homebrew
+#### 🍺 Using homebrew
 
 ```sh
 brew tap yanosea/tap
 brew install yanosea/tap/jrp
 ```
 
-### 📦 Download from release
+#### 📦 Download from release
 
 Go to the [Releases](https://github.com/yanosea/jrp/releases) and download the latest binary for your platform.
 
-## ✨ Update
+### ✨ Update
 
 ### 🐭 Using go
 
@@ -140,22 +142,22 @@ Reinstall `jrp`!
 go install github.com/yanosea/jrp/v2/app/presentation/cli/jrp@latest
 ```
 
-### 🍺 Using homebrew
+#### 🍺 Using homebrew
 
 ```sh
 brew update
 brew upgrade jrp
 ```
 
-### 📦 Download from release
+#### 📦 Download from release
 
 Download the latest binary from the [Releases](https://github.com/yanosea/jrp/releases) page and replace the old binary in your `$PATH`.
 
-## 🧹 Uninstallation
+### 🧹 Uninstallation
 
-### 🔧 Uninstall jrp
+#### 🔧 Uninstall jrp
 
-#### 🐭 Using go
+##### 🐭 Using go
 
 ```sh
 rm $GOPATH/bin/jrp
@@ -163,32 +165,123 @@ rm $GOPATH/bin/jrp
 rm -fr $GOPATH/pkg/mod/github.com/yanosea/jrp*
 ```
 
-#### 🍺 Using homebrew
+##### 🍺 Using homebrew
 
 ```sh
 brew uninstall jrp
 brew untap yanosea/tap/jrp
 ```
 
-#### 📦 Download from release
+##### 📦 Download from release
 
 Remove the binary you downloaded and placed in your `$PATH`.
 
-### 🗑️ Remove data files
+#### 🗑️ Remove data files
 
 If you've set jrp envs, please replace `$HOME/.local/share/jrp` with envs you've set.  
 These below commands are in the case of default. Ofcourse you can remove whole the directory.
 
-#### 💾 Remove WordNet Japan sqlite database file
+##### 💾 Remove WordNet Japan sqlite database file
 
 ```sh
 rm $HOME/.local/share/jrp/wnjpn.db
 ```
 
-#### 💾 Remove jrp sqlite database file
+##### 💾 Remove jrp sqlite database file
 
 ```sh
 rm $HOME/.local/share/jrp/jrp.db
+```
+
+## 🌐 API Server
+
+`jrp` also provides RESTful API server that you can use to get Japanese random phrases.
+
+### 💻 Usage
+
+```sh
+# If you installed with go, you can run the server with the command below.
+jrp-server
+# If you cloned the repository, you can run the server with the command below.
+go run app/presentation/api/jrp-server/main.go
+```
+
+```sh
+# Then, you can access the API server with the URL below.
+curl http://localhost:8080/api/jrp
+```
+
+### 📚 API Documentation
+
+Swagger documentation is available at: `http://localhost:8080/swagger/index.html`
+
+#### Available Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/jrp` | Get a generated Japanese random phrase |
+
+### ⚡ Caution
+
+You have to download the WordNet Japan sqlite database file from [WordNet Japan](https://bond-lab.github.io/wnja/jpn/downloads.html) before running the server.
+
+### 🌍 Environments
+
+#### 🚢 Port number
+
+Default : `8080`
+
+```sh
+export JRP_SERVER_PORT=8080
+```
+
+#### 📁 Connection string of WordNet Japan database
+
+Default : `$XDG_DATA_HOME/jrp/wnjpn.db` or `$HOME/.local/share/jrp/wnjpn.db`
+
+```sh
+export JRP_SERVER_WNJPN_DB=/path/to/your/directory/wnjpn.db
+```
+
+### 🔧 Installation
+
+#### 🐭 Using go
+
+```sh
+go install github.com/yanosea/jrp/v2/app/presentation/api/jrp-server@latest
+```
+
+#### 🚀 With source code
+
+```sh
+git clone github.com/yanosea/jrp
+cd jrp
+go run app/presentation/api/jrp-server/main.go
+```
+
+### 🧹 Uninstallation
+
+#### 🔧 Uninstall jrp-server
+
+##### 🐭 Using go
+
+```sh
+rm $GOPATH/bin/jrp
+# maybe you have to execute with sudo
+rm -fr $GOPATH/pkg/mod/github.com/yanosea/jrp*
+```
+
+##### 🚀 With source code
+
+Remove the directory you cloned.
+
+#### 🗑️ Remove WordNet Japan sqlite database file
+
+If you've set jrp-server envs, please replace `$HOME/.local/share/jrp` with envs you've set.  
+These below commands are in the case of default. Ofcourse you can remove whole the directory.
+
+```sh
+rm $HOME/.local/share/jrp/wnjpn.db
 ```
 
 ## 📃 License
