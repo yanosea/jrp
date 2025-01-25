@@ -35,7 +35,6 @@ func Test_newCli(t *testing.T) {
 			},
 			want: &cli{
 				Cobra:       cobra,
-				Version:     "",
 				RootCommand: nil,
 			},
 		},
@@ -85,7 +84,6 @@ func Test_cli_Init(t *testing.T) {
 				fnc: func(_ *gomock.Controller) {
 					c := &cli{
 						Cobra:             cobra,
-						Version:           "",
 						RootCommand:       nil,
 						ConnectionManager: nil,
 					}
@@ -161,7 +159,6 @@ func Test_cli_Init(t *testing.T) {
 					mockEnvconfig.EXPECT().Process("", gomock.Any()).Return(errors.New("EnvconfigProxy.Process() failed"))
 					c := &cli{
 						Cobra:             cobra,
-						Version:           "",
 						RootCommand:       nil,
 						ConnectionManager: nil,
 					}
@@ -237,7 +234,6 @@ func Test_cli_Init(t *testing.T) {
 					mockConnectionManager.EXPECT().InitializeConnection(gomock.Any()).Return(errors.New("ConnectionManager.InitializeConnection() failed"))
 					c := &cli{
 						Cobra:             cobra,
-						Version:           "",
 						RootCommand:       nil,
 						ConnectionManager: mockConnectionManager,
 					}
@@ -314,7 +310,6 @@ func Test_cli_Init(t *testing.T) {
 					mockConnectionManager.EXPECT().InitializeConnection(gomock.Any()).Return(errors.New("ConnectionManager.InitializeConnection() failed"))
 					c := &cli{
 						Cobra:             cobra,
-						Version:           "",
 						RootCommand:       nil,
 						ConnectionManager: mockConnectionManager,
 					}
@@ -445,7 +440,6 @@ func Test_cli_Run(t *testing.T) {
 					mockConnectionManager.EXPECT().CloseAllConnections().Return(nil)
 					c := &cli{
 						Cobra:             proxy.NewCobra(),
-						Version:           "",
 						RootCommand:       mockCommand,
 						ConnectionManager: mockConnectionManager,
 					}
@@ -478,7 +472,6 @@ func Test_cli_Run(t *testing.T) {
 					mockConnectionManager.EXPECT().CloseAllConnections().Return(nil)
 					c := &cli{
 						Cobra:             proxy.NewCobra(),
-						Version:           "",
 						RootCommand:       mockCommand,
 						ConnectionManager: mockConnectionManager,
 					}
@@ -511,7 +504,6 @@ func Test_cli_Run(t *testing.T) {
 					mockConnectionManager.EXPECT().CloseAllConnections().Return(errors.New("ConnectionManager.CloseAllConnections() failed"))
 					c := &cli{
 						Cobra:             proxy.NewCobra(),
-						Version:           "0.0.0",
 						RootCommand:       mockCommand,
 						ConnectionManager: mockConnectionManager,
 					}
