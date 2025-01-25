@@ -456,19 +456,19 @@ func NewGetHistoryUseCase(
 
 // GetHistoryUseCaseOutputDto is a DTO struct that contains the output data of the GetHistoryUseCase.
 type GetHistoryUseCaseOutputDto struct {
-        // ID is the identifier of the phrase
+        // ID is the identifier of the phrase.
         ID int
-        // Phrase is the generated phrase
+        // Phrase is the generated phrase.
         Phrase string
-        // Prefix is the prefix when the phrase is generated
+        // Prefix is the prefix when the phrase is generated.
         Prefix string
-        // Suffix is the suffix when the phrase is generated
+        // Suffix is the suffix when the phrase is generated.
         Suffix string
-        // IsFavorited is the flag to indicate whether the phrase is favorited
+        // IsFavorited is the flag to indicate whether the phrase is favorited.
         IsFavorited int
-        // CreatedAt is the timestamp when the phrase is created
+        // CreatedAt is the timestamp when the phrase is created.
         CreatedAt time.Time
-        // UpdatedAt is the timestamp when the phrase is updated
+        // UpdatedAt is the timestamp when the phrase is updated.
         UpdatedAt time.Time
 }
 
@@ -603,35 +603,35 @@ func NewSaveHistoryUseCase(
 
 // SaveHistoryUseCaseInputDto is a DTO struct that contains the output data of the SaveHistoryUseCase.
 type SaveHistoryUseCaseInputDto struct {
-        // Phrase is the generated phrase
+        // Phrase is the generated phrase.
         Phrase string
-        // Prefix is the prefix when the phrase is generated
+        // Prefix is the prefix when the phrase is generated.
         Prefix string
-        // Suffix is the suffix when the phrase is generated
+        // Suffix is the suffix when the phrase is generated.
         Suffix string
-        // IsFavorited is the flag to indicate whether the phrase is favorited
+        // IsFavorited is the flag to indicate whether the phrase is favorited.
         IsFavorited int
-        // CreatedAt is the timestamp when the phrase is created
+        // CreatedAt is the timestamp when the phrase is created.
         CreatedAt time.Time
-        // UpdatedAt is the timestamp when the phrase is updated
+        // UpdatedAt is the timestamp when the phrase is updated.
         UpdatedAt time.Time
 }
 
 // SaveHistoryUseCaseOutputDto is a DTO struct that contains the output data of the SaveHistoryUseCase.
 type SaveHistoryUseCaseOutputDto struct {
-        // ID is the identifier of the phrase
+        // ID is the identifier of the phrase.
         ID int
-        // Phrase is the generated phrase
+        // Phrase is the generated phrase.
         Phrase string
-        // Prefix is the prefix when the phrase is generated
+        // Prefix is the prefix when the phrase is generated.
         Prefix string
-        // Suffix is the suffix when the phrase is generated
+        // Suffix is the suffix when the phrase is generated.
         Suffix string
-        // IsFavorited is the flag to indicate whether the phrase is favorited
+        // IsFavorited is the flag to indicate whether the phrase is favorited.
         IsFavorited int
-        // CreatedAt is the timestamp when the phrase is created
+        // CreatedAt is the timestamp when the phrase is created.
         CreatedAt time.Time
-        // UpdatedAt is the timestamp when the phrase is updated
+        // UpdatedAt is the timestamp when the phrase is updated.
         UpdatedAt time.Time
 }
 
@@ -698,19 +698,19 @@ func NewSearchHistoryUseCase(
 
 // SearchHistoryUseCaseOutputDto is a DTO struct that contains the output data of the SearchHistoryUseCase.
 type SearchHistoryUseCaseOutputDto struct {
-        // ID is the identifier of the phrase
+        // ID is the identifier of the phrase.
         ID int
-        // Phrase is the generated phrase
+        // Phrase is the generated phrase.
         Phrase string
-        // Prefix is the prefix when the phrase is generated
+        // Prefix is the prefix when the phrase is generated.
         Prefix string
-        // Suffix is the suffix when the phrase is generated
+        // Suffix is the suffix when the phrase is generated.
         Suffix string
-        // IsFavorited is the flag to indicate whether the phrase is favorited
+        // IsFavorited is the flag to indicate whether the phrase is favorited.
         IsFavorited int
-        // CreatedAt is the timestamp when the phrase is created
+        // CreatedAt is the timestamp when the phrase is created.
         CreatedAt time.Time
-        // UpdatedAt is the timestamp when the phrase is updated
+        // UpdatedAt is the timestamp when the phrase is updated.
         UpdatedAt time.Time
 }
 
@@ -899,21 +899,21 @@ import (
         "time"
 )
 
-// History is a struct that represents history table in the jrp database
+// History is a struct that represents history table in the jrp database.
 type History struct {
-        // ID is the primary key of the history table
+        // ID is the primary key of the history table.
         ID int
-        // Phrase is the generated phrase
+        // Phrase is the generated phrase.
         Phrase string
-        // Prefix is the prefix when the phrase is generated
+        // Prefix is the prefix when the phrase is generated.
         Prefix sql.NullString
-        // Suffix is the suffix when the phrase is generated
+        // Suffix is the suffix when the phrase is generated.
         Suffix sql.NullString
-        // IsFavorited is the flag to indicate whether the phrase is favorited
+        // IsFavorited is the flag to indicate whether the phrase is favorited.
         IsFavorited int
-        // CreatedAt is the timestamp when the phrase is created
+        // CreatedAt is the timestamp when the phrase is created.
         CreatedAt time.Time
-        // UpdatedAt is the timestamp when the phrase is updated
+        // UpdatedAt is the timestamp when the phrase is updated.
         UpdatedAt time.Time
 }
 
@@ -1917,9 +1917,9 @@ import (
 )
 
 var (
-        // output is the output string
+        // output is the output string.
         output = ""
-        // NewCli is a variable holding the current Cli creation function
+        // NewCli is a variable holding the current Cli creation function.
         NewCli CreateCliFunc = newCli
 )
 
@@ -1931,20 +1931,19 @@ type Cli interface {
 // cli is a struct that represents the command line interface of jrp cli.
 type cli struct {
         Cobra             proxy.Cobra
-        Version           string
         RootCommand       proxy.Command
         ConnectionManager database.ConnectionManager
 }
 
-// CreateCliFunc is a function type for creating new Cli instances
+// CreateCliFunc is a function type for creating new Cli instances.
 type CreateCliFunc func(cobra proxy.Cobra) Cli
 
-// newCli is the default implementation of CreateCliFunc
+// newCli is the default implementation of CreateCliFunc.
 func newCli(cobra proxy.Cobra) Cli <span class="cov8" title="1">{
         return &amp;cli{
-                Cobra:       cobra,
-                Version:     "",
-                RootCommand: nil,
+                Cobra:             cobra,
+                RootCommand:       nil,
+                ConnectionManager: nil,
         }
 }</span>
 
@@ -1996,11 +1995,9 @@ func (c *cli) Init(
                 }</span>
         }
 
-        <span class="cov8" title="1">ver := versionUtil.GetVersion(version)
-
-        c.RootCommand = NewRootCommand(
+        <span class="cov8" title="1">c.RootCommand = NewRootCommand(
                 c.Cobra,
-                ver,
+                versionUtil.GetVersion(version),
                 conf,
                 &amp;output,
         )
@@ -4956,7 +4953,7 @@ func CloseKeyboard() <span class="cov8" title="1">{
         Ku.CloseKeyboard()
 }</span>
 
-// GetKey
+// GetKey gets a key from the keyboard.
 func GetKey(timeoutSec int) (string, error) <span class="cov8" title="1">{
         return Ku.GetKey(timeoutSec)
 }</span>
@@ -5554,7 +5551,7 @@ func NewVersionUtil(
 
 // GetVersion returns the version of the application.
 func (v *versionUtil) GetVersion(version string) string <span class="cov8" title="1">{
-        // if version is embedded, return it
+        // if version is embedded, return it.
         if version != "" </span><span class="cov8" title="1">{
                 return version
         }</span>
