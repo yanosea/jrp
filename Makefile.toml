@@ -19,16 +19,20 @@ mockgen -source=./app/infrastructure/database/connection.go -destination=./app/i
 mockgen -source=./app/infrastructure/database/connection_manager.go -destination=./app/infrastructure/database/connection_manager_mock.go -package=database
 # ./app/domain
 mockgen -source=./app/domain/jrp/history/history_repository.go -destination=./app/domain/jrp/history/history_repository_mock.go -package=history
+# ./app/presentation/api/jrp/server
+mockgen -source=./app/presentation/api/jrp/server/server.go -destination=./app/presentation/api/jrp/server/server_mock.go -package=server
 # ./app/presentation/cli/jrp/command
 mockgen -source=./app/presentation/cli/jrp/command/command.go -destination=./app/presentation/cli/jrp/command/command_mock.go -package=command
 # ./pkg/proxy
 mockgen -source=./pkg/proxy/buffer.go -destination=./pkg/proxy/buffer_mock.go -package=proxy
 mockgen -source=./pkg/proxy/cobra.go -destination=./pkg/proxy/cobra_mock.go -package=proxy
 mockgen -source=./pkg/proxy/debug.go -destination=./pkg/proxy/debug_mock.go -package=proxy
+mockgen -source=./pkg/proxy/echo.go -destination=./pkg/proxy/echo_mock.go -package=proxy
 mockgen -source=./pkg/proxy/envconfig.go -destination=./pkg/proxy/envconfig_mock.go -package=proxy
 mockgen -source=./pkg/proxy/gzip.go -destination=./pkg/proxy/gzip_mock.go -package=proxy
 mockgen -source=./pkg/proxy/http.go -destination=./pkg/proxy/http_mock.go -package=proxy
 mockgen -source=./pkg/proxy/io.go -destination=./pkg/proxy/io_mock.go -package=proxy
+mockgen -source=./pkg/proxy/json.go -destination=./pkg/proxy/json_mock.go -package=proxy
 mockgen -source=./pkg/proxy/keyboard.go -destination=./pkg/proxy/keyboard_mock.go -package=proxy
 mockgen -source=./pkg/proxy/os.go -destination=./pkg/proxy/os_mock.go -package=proxy
 mockgen -source=./pkg/proxy/pflag.go -destination=./pkg/proxy/pflag_mock.go -package=proxy
@@ -41,6 +45,7 @@ mockgen -source=./pkg/proxy/tablewriter.go -destination=./pkg/proxy/tablewriter_
 mockgen -source=./pkg/utility/capture.go -destination=./pkg/utility/capture_mock.go -package=utility
 mockgen -source=./pkg/utility/download_util.go -destination=./pkg/utility/download_util_mock.go -package=utility
 mockgen -source=./pkg/utility/file_util.go -destination=./pkg/utility/file_util_mock.go -package=utility
+mockgen -source=./pkg/utility/json_util.go -destination=./pkg/utility/json_util_mock.go -package=utility
 mockgen -source=./pkg/utility/keyboard_util.go -destination=./pkg/utility/keyboard_util_mock.go -package=utility
 mockgen -source=./pkg/utility/prompt_util.go -destination=./pkg/utility/prompt_util_mock.go -package=utility
 mockgen -source=./pkg/utility/rand_util.go -destination=./pkg/utility/rand_util_mock.go -package=utility
