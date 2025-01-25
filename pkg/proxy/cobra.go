@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// Cobra is an interface that provides a proxy of the methods of cobra
+// Cobra is an interface that provides a proxy of the methods of cobra.
 type Cobra interface {
 	ExactArgs(n int) cobra.PositionalArgs
 	MaximumNArgs(n int) cobra.PositionalArgs

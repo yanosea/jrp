@@ -57,7 +57,7 @@ func (d *dbProxy) ExecContext(ctx context.Context, query string, args ...interfa
 	return &resultProxy{result: result}, err
 }
 
-// PrepareContext creates a prepared statement for later queries or executions
+// PrepareContext creates a prepared statement for later queries or executions.
 func (d *dbProxy) PrepareContext(ctx context.Context, query string) (Stmt, error) {
 	stmt, err := d.db.PrepareContext(ctx, query)
 	return &stmtProxy{stmt: stmt}, err

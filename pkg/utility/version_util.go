@@ -25,7 +25,7 @@ func NewVersionUtil(
 
 // GetVersion returns the version of the application.
 func (v *versionUtil) GetVersion(version string) string {
-	// if version is embedded, return it
+	// if version is embedded, return it.
 	if version != "" {
 		return version
 	}
