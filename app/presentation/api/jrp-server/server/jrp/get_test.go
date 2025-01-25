@@ -13,7 +13,7 @@ import (
 	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
 	wnjpnApp "github.com/yanosea/jrp/v2/app/application/wnjpn"
 	"github.com/yanosea/jrp/v2/app/infrastructure/database"
-	"github.com/yanosea/jrp/v2/app/presentation/api/jrp/formatter"
+	"github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/formatter"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
 	"github.com/yanosea/jrp/v2/pkg/utility"

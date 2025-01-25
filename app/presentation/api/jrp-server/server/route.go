@@ -3,7 +3,7 @@ package server
 import (
 	"github.com/swaggo/echo-swagger"
 
-	"github.com/yanosea/jrp/v2/app/presentation/api/jrp/server/jrp"
+	"github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/jrp"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
 )

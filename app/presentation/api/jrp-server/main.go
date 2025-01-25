@@ -8,7 +8,7 @@ package main
 import (
 	"os"
 
-	"github.com/yanosea/jrp/v2/app/presentation/api/jrp/server"
+	"github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server"
 	_ "github.com/yanosea/jrp/v2/docs"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"

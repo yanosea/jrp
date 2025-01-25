@@ -87,19 +87,19 @@
 				
 				<option value="file15">github.com/yanosea/jrp/v2/app/infrastructure/wnjpn/query_service/word_query_service.go (100.0%)</option>
 				
-				<option value="file16">github.com/yanosea/jrp/v2/app/presentation/api/jrp/config/config.go (100.0%)</option>
+				<option value="file16">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/config/config.go (100.0%)</option>
 				
-				<option value="file17">github.com/yanosea/jrp/v2/app/presentation/api/jrp/formatter/formatter.go (100.0%)</option>
+				<option value="file17">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/formatter/formatter.go (100.0%)</option>
 				
-				<option value="file18">github.com/yanosea/jrp/v2/app/presentation/api/jrp/formatter/json.go (100.0%)</option>
+				<option value="file18">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/formatter/json.go (100.0%)</option>
 				
-				<option value="file19">github.com/yanosea/jrp/v2/app/presentation/api/jrp/main.go (100.0%)</option>
+				<option value="file19">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/main.go (100.0%)</option>
 				
-				<option value="file20">github.com/yanosea/jrp/v2/app/presentation/api/jrp/server/jrp/get.go (100.0%)</option>
+				<option value="file20">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/jrp/get.go (100.0%)</option>
 				
-				<option value="file21">github.com/yanosea/jrp/v2/app/presentation/api/jrp/server/route.go (100.0%)</option>
+				<option value="file21">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/route.go (100.0%)</option>
 				
-				<option value="file22">github.com/yanosea/jrp/v2/app/presentation/api/jrp/server/server.go (100.0%)</option>
+				<option value="file22">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/server.go (100.0%)</option>
 				
 				<option value="file23">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/command.go (100.0%)</option>
 				
@@ -2099,7 +2099,7 @@ func (f *JsonFormatter) Format(result interface{}) ([]byte, error) <span class="
 import (
         "os"
 
-        "github.com/yanosea/jrp/v2/app/presentation/api/jrp/server"
+        "github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server"
         _ "github.com/yanosea/jrp/v2/docs"
 
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -2163,7 +2163,7 @@ import (
         wnjpnApp "github.com/yanosea/jrp/v2/app/application/wnjpn"
         "github.com/yanosea/jrp/v2/app/infrastructure/database"
         "github.com/yanosea/jrp/v2/app/infrastructure/wnjpn/query_service"
-        "github.com/yanosea/jrp/v2/app/presentation/api/jrp/formatter"
+        "github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/formatter"
 
         "github.com/yanosea/jrp/v2/pkg/proxy"
 )
@@ -2245,7 +2245,7 @@ func getJrp(c echo.Context) error <span class="cov8" title="1">{
 import (
         "github.com/swaggo/echo-swagger"
 
-        "github.com/yanosea/jrp/v2/app/presentation/api/jrp/server/jrp"
+        "github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/jrp"
 
         "github.com/yanosea/jrp/v2/pkg/proxy"
 )
@@ -2266,7 +2266,7 @@ import (
         "github.com/labstack/echo/v4/middleware"
 
         "github.com/yanosea/jrp/v2/app/infrastructure/database"
-        "github.com/yanosea/jrp/v2/app/presentation/api/jrp/config"
+        "github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/config"
 
         "github.com/yanosea/jrp/v2/pkg/proxy"
         "github.com/yanosea/jrp/v2/pkg/utility"

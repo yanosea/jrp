@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/yanosea/jrp/v2/app/presentation/api/jrp/server"
+	"github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
 

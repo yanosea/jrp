@@ -29,7 +29,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/github_com_yanosea_jrp_v2_app_presentation_api_jrp_formatter.JrpJsonOutputDto"
+                            "$ref": "#/definitions/github_com_yanosea_jrp_v2_app_presentation_api_jrp-server_formatter.JrpJsonOutputDto"
                         }
                     }
                 }
@@ -37,7 +37,7 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "github_com_yanosea_jrp_v2_app_presentation_api_jrp_formatter.JrpJsonOutputDto": {
+        "github_com_yanosea_jrp_v2_app_presentation_api_jrp-server_formatter.JrpJsonOutputDto": {
             "description": "response format for jrp",
             "type": "object",
             "properties": {

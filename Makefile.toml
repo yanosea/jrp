@@ -6,7 +6,7 @@ skip_core_tasks = true
 [tasks."run.server"]
 description = "run api server"
 script = '''
-go run ./app/presentation/api/jrp/main.go
+go run ./app/presentation/api/jrp-server/main.go
 '''
 # update
 ## `./CREDITS`
@@ -26,8 +26,8 @@ mockgen -source=./app/infrastructure/database/connection.go -destination=./app/i
 mockgen -source=./app/infrastructure/database/connection_manager.go -destination=./app/infrastructure/database/connection_manager_mock.go -package=database
 # ./app/domain
 mockgen -source=./app/domain/jrp/history/history_repository.go -destination=./app/domain/jrp/history/history_repository_mock.go -package=history
-# ./app/presentation/api/jrp/server
-mockgen -source=./app/presentation/api/jrp/server/server.go -destination=./app/presentation/api/jrp/server/server_mock.go -package=server
+# ./app/presentation/api/jrp-server/server
+mockgen -source=./app/presentation/api/jrp-server/server/server.go -destination=./app/presentation/api/jrp-server/server/server_mock.go -package=server
 # ./app/presentation/cli/jrp/command
 mockgen -source=./app/presentation/cli/jrp/command/command.go -destination=./app/presentation/cli/jrp/command/command_mock.go -package=command
 # ./pkg/proxy
@@ -65,7 +65,7 @@ mockgen -source=./pkg/utility/version_util.go -destination=./pkg/utility/version
 [tasks."update.swagger"]
 description = "update swagger files"
 script = '''
-swag init -g ./app/presentation/api/jrp/main.go --parseDependency --output ./docs
+swag init -g ./app/presentation/api/jrp-server/main.go --parseDependency --output ./docs
 '''
 # container
 ## build container
