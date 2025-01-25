@@ -25,6 +25,7 @@ func (*echosProxy) NewEcho() (Echo, Logger) {
 
 // Echo is an interface that provides a proxy of the methods of echo.Echo.
 type Echo interface {
+	Get(path string, h e.HandlerFunc, m ...e.MiddlewareFunc)
 	Group(prefix string, m ...e.MiddlewareFunc) Group
 	Start(address string) error
 	Use(middleware ...e.MiddlewareFunc)
@@ -33,6 +34,11 @@ type Echo interface {
 // ehco is a proxy struct that implements the Echo interface.
 type ehco struct {
 	*e.Echo
+}
+
+// Get adds a GET route to the echo server.
+func (e *ehco) Get(path string, h e.HandlerFunc, m ...e.MiddlewareFunc) {
+	e.Echo.GET(path, h, m...)
 }
 
 // Group returns a new instance of the Group interface.

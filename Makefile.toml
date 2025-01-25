@@ -1,6 +1,13 @@
 # config
 [config]
 skip_core_tasks = true
+# run
+## api server
+[tasks."run.server"]
+description = "run api server"
+script = '''
+go run ./app/presentation/api/jrp/main.go
+'''
 # update
 ## `./CREDITS`
 [tasks."update.credits"]
@@ -53,6 +60,12 @@ mockgen -source=./pkg/utility/spinner_util.go -destination=./pkg/utility/spinner
 mockgen -source=./pkg/utility/strings_util.go -destination=./pkg/utility/strings_util_mock.go -package=utility
 mockgen -source=./pkg/utility/tablewriter_util.go -destination=./pkg/utility/tablewriter_util_mock.go -package=utility
 mockgen -source=./pkg/utility/version_util.go -destination=./pkg/utility/version_util_mock.go -package=utility
+'''
+## swagger
+[tasks."update.swagger"]
+description = "update swagger files"
+script = '''
+swag init -g ./app/presentation/api/jrp/main.go --parseDependency --output ./docs
 '''
 # container
 ## build container

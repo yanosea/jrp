@@ -27,6 +27,7 @@ func TestBind(t *testing.T) {
 				mockGroup.EXPECT().GET("/jrp", gomock.Any())
 				mockEcho := proxy.NewMockEcho(mockCtrl)
 				mockEcho.EXPECT().Group("/api").Return(mockGroup)
+				mockEcho.EXPECT().Get("/swagger/*", gomock.Any())
 				tt.e = mockEcho
 			},
 		},

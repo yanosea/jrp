@@ -77,6 +77,23 @@ func (m *MockEcho) EXPECT() *MockEchoMockRecorder {
 	return m.recorder
 }
 
+// Get mocks base method.
+func (m_2 *MockEcho) Get(path string, h echo.HandlerFunc, m ...echo.MiddlewareFunc) {
+	m_2.ctrl.T.Helper()
+	varargs := []any{path, h}
+	for _, a := range m {
+		varargs = append(varargs, a)
+	}
+	m_2.ctrl.Call(m_2, "Get", varargs...)
+}
+
+// Get indicates an expected call of Get.
+func (mr *MockEchoMockRecorder) Get(path, h any, m ...any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	varargs := append([]any{path, h}, m...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockEcho)(nil).Get), varargs...)
+}
+
 // Group mocks base method.
 func (m_2 *MockEcho) Group(prefix string, m ...echo.MiddlewareFunc) Group {
 	m_2.ctrl.T.Helper()

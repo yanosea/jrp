@@ -24,6 +24,12 @@ func BindGetJrpHandler(g proxy.Group) {
 	g.GET("/jrp", getJrp)
 }
 
+// @Summary get a random Japanese phrase.
+// @Description returns a randomly generated Japanese phrase.
+// @Tags jrp
+// @Produce json
+// @Success 200 {object} formatter.JrpJsonOutputDto
+// @Router /jrp [get]
 // getJrp is a handler that returns a random Japanese phrase.
 func getJrp(c echo.Context) error {
 	connManager := database.GetConnectionManager()
