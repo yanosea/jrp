@@ -15,7 +15,7 @@ func CloseKeyboard() {
 	Ku.CloseKeyboard()
 }
 
-// GetKey
+// GetKey gets a key from the keyboard.
 func GetKey(timeoutSec int) (string, error) {
 	return Ku.GetKey(timeoutSec)
 }

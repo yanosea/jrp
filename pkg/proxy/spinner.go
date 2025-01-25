@@ -6,7 +6,7 @@ import (
 	"github.com/briandowns/spinner"
 )
 
-// Spinners is an interface that provides a proxy of the methods of spinner
+// Spinners is an interface that provides a proxy of the methods of spinner.
 type Spinners interface {
 	NewSpinner() Spinner
 }

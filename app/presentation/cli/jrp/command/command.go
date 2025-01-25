@@ -14,9 +14,9 @@ import (
 )
 
 var (
-	// output is the output string
+	// output is the output string.
 	output = ""
-	// NewCli is a variable holding the current Cli creation function
+	// NewCli is a variable holding the current Cli creation function.
 	NewCli CreateCliFunc = newCli
 )
 
@@ -28,20 +28,19 @@ type Cli interface {
 // cli is a struct that represents the command line interface of jrp cli.
 type cli struct {
 	Cobra             proxy.Cobra
-	Version           string
 	RootCommand       proxy.Command
 	ConnectionManager database.ConnectionManager
 }
 
-// CreateCliFunc is a function type for creating new Cli instances
+// CreateCliFunc is a function type for creating new Cli instances.
 type CreateCliFunc func(cobra proxy.Cobra) Cli
 
-// newCli is the default implementation of CreateCliFunc
+// newCli is the default implementation of CreateCliFunc.
 func newCli(cobra proxy.Cobra) Cli {
 	return &cli{
-		Cobra:       cobra,
-		Version:     "",
-		RootCommand: nil,
+		Cobra:             cobra,
+		RootCommand:       nil,
+		ConnectionManager: nil,
 	}
 }
 
@@ -93,11 +92,9 @@ func (c *cli) Init(
 		}
 	}
 
-	ver := versionUtil.GetVersion(version)
-
 	c.RootCommand = NewRootCommand(
 		c.Cobra,
-		ver,
+		versionUtil.GetVersion(version),
 		conf,
 		&output,
 	)
