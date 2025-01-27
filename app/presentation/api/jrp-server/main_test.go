@@ -35,6 +35,7 @@ func Test_main(t *testing.T) {
 				mockEcho := proxy.NewMockEcho(mockCtrl)
 				mockEcho.EXPECT().Use(gomock.Any())
 				mockEcho.EXPECT().Use(gomock.Any())
+				mockEcho.EXPECT().Use(gomock.Any())
 				mockEcho.EXPECT().Group("/api").Return(mockGroup)
 				mockEcho.EXPECT().Start(":8080")
 				mockEcho.EXPECT().Get("/swagger/*", gomock.Any())
