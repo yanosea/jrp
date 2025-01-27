@@ -3,6 +3,7 @@ package server
 import (
 	"errors"
 
+	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 
 	"github.com/yanosea/jrp/v2/app/infrastructure/database"
@@ -65,6 +66,12 @@ func (s *server) Init(
 	}
 
 	s.Port = conf.JrpPort
+	if s.Port == "8080" {
+		s.Route.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+			AllowOrigins: []string{"*"},
+			AllowMethods: []string{echo.GET},
+		}))
+	}
 
 	if s.ConnectionManager == nil {
 		s.ConnectionManager = database.NewConnectionManager(sql)
