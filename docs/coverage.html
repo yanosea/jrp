@@ -2263,6 +2263,7 @@ func Bind(e proxy.Echo) <span class="cov8" title="1">{
 import (
         "errors"
 
+        "github.com/labstack/echo/v4"
         "github.com/labstack/echo/v4/middleware"
 
         "github.com/yanosea/jrp/v2/app/infrastructure/database"
@@ -2325,8 +2326,14 @@ func (s *server) Init(
         }</span>
 
         <span class="cov8" title="1">s.Port = conf.JrpPort
+        if s.Port == "8080" </span><span class="cov8" title="1">{
+                s.Route.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+                        AllowOrigins: []string{"*"},
+                        AllowMethods: []string{echo.GET},
+                }))
+        }</span>
 
-        if s.ConnectionManager == nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if s.ConnectionManager == nil </span><span class="cov8" title="1">{
                 s.ConnectionManager = database.NewConnectionManager(sql)
         }</span>
 
