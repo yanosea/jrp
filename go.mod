@@ -3,7 +3,7 @@ module github.com/yanosea/jrp/v2
 go 1.23
 
 require (
-	github.com/briandowns/spinner v1.23.1
+	github.com/briandowns/spinner v1.23.2
 	github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203
 	github.com/fatih/color v1.18.0
 	github.com/kelseyhightower/envconfig v1.4.0
