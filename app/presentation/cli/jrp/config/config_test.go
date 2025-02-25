@@ -74,11 +74,11 @@ func Test_cliConfigurator_GetConfig(t *testing.T) {
 				}},
 			want: &JrpCliConfig{
 				JrpConfig: baseConfig.JrpConfig{
-					JrpDBType:   database.SQLite,
-					JrpDBDsn:    "~/.local/share/jrp/jrp.db",
 					WNJpnDBType: database.SQLite,
 					WNJpnDBDsn:  "~/.local/share/jrp/wnjpn.db",
 				},
+				JrpDBType: database.SQLite,
+				JrpDBDsn:  "~/.local/share/jrp/jrp.db",
 			},
 			wantErr: false,
 			setup: func(mockCtrl *gomock.Controller, tt *fields) {
