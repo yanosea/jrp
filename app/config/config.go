@@ -20,8 +20,6 @@ type BaseConfigurator struct {
 
 // JrpConfig is a struct that contains the configuration of the Jrp application.
 type JrpConfig struct {
-	JrpDBType   database.DBType
-	JrpDBDsn    string
 	WNJpnDBType database.DBType
 	WNJpnDBDsn  string
 }

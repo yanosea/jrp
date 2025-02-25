@@ -35,11 +35,11 @@ func TestNewDownloadCommand(t *testing.T) {
 				cobra: proxy.NewCobra(),
 				conf: &config.JrpCliConfig{
 					JrpConfig: baseConfig.JrpConfig{
-						JrpDBType:   "sqlite",
-						JrpDBDsn:    filepath.Join(os.TempDir(), "jrp.db"),
 						WNJpnDBType: "sqlite",
 						WNJpnDBDsn:  filepath.Join(os.TempDir(), "wnjpn.db"),
 					},
+					JrpDBType: "sqlite",
+					JrpDBDsn:  filepath.Join(os.TempDir(), "jrp.db"),
 				},
 				output: new(string),
 			},
@@ -83,11 +83,11 @@ func Test_runDownload(t *testing.T) {
 			args: args{
 				conf: &config.JrpCliConfig{
 					JrpConfig: baseConfig.JrpConfig{
-						JrpDBType:   "sqlite",
-						JrpDBDsn:    filepath.Join(os.TempDir(), "jrp.db"),
 						WNJpnDBType: "sqlite",
 						WNJpnDBDsn:  filepath.Join(os.TempDir(), "wnjpn.db"),
 					},
+					JrpDBType: "sqlite",
+					JrpDBDsn:  filepath.Join(os.TempDir(), "jrp.db"),
 				},
 				output: &output,
 			},
@@ -106,11 +106,11 @@ func Test_runDownload(t *testing.T) {
 			args: args{
 				conf: &config.JrpCliConfig{
 					JrpConfig: baseConfig.JrpConfig{
-						JrpDBType:   "sqlite",
-						JrpDBDsn:    filepath.Join(os.TempDir(), "jrp.db"),
 						WNJpnDBType: "sqlite",
 						WNJpnDBDsn:  filepath.Join(os.TempDir(), "wnjpn.db"),
 					},
+					JrpDBType: "sqlite",
+					JrpDBDsn:  filepath.Join(os.TempDir(), "jrp.db"),
 				},
 				output: &output,
 			},
@@ -129,11 +129,11 @@ func Test_runDownload(t *testing.T) {
 			args: args{
 				conf: &config.JrpCliConfig{
 					JrpConfig: baseConfig.JrpConfig{
-						JrpDBType:   "sqlite",
-						JrpDBDsn:    filepath.Join(os.TempDir(), "jrp.db"),
 						WNJpnDBType: "test",
 						WNJpnDBDsn:  filepath.Join(os.TempDir(), "wnjpn.db"),
 					},
+					JrpDBType: "sqlite",
+					JrpDBDsn:  filepath.Join(os.TempDir(), "jrp.db"),
 				},
 				output: &output,
 			},
@@ -149,11 +149,11 @@ func Test_runDownload(t *testing.T) {
 			args: args{
 				conf: &config.JrpCliConfig{
 					JrpConfig: baseConfig.JrpConfig{
-						JrpDBType:   "sqlite",
-						JrpDBDsn:    filepath.Join(os.TempDir(), "jrp.db"),
 						WNJpnDBType: "sqlite",
 						WNJpnDBDsn:  filepath.Join(os.TempDir(), "wnjpn.db"),
 					},
+					JrpDBType: "sqlite",
+					JrpDBDsn:  filepath.Join(os.TempDir(), "jrp.db"),
 				},
 				output: &output,
 			},
@@ -178,11 +178,11 @@ func Test_runDownload(t *testing.T) {
 			args: args{
 				conf: &config.JrpCliConfig{
 					JrpConfig: baseConfig.JrpConfig{
-						JrpDBType:   "sqlite",
-						JrpDBDsn:    filepath.Join(os.TempDir(), "jrp.db"),
 						WNJpnDBType: "sqlite",
 						WNJpnDBDsn:  filepath.Join(os.TempDir(), "wnjpn.db"),
 					},
+					JrpDBType: "sqlite",
+					JrpDBDsn:  filepath.Join(os.TempDir(), "jrp.db"),
 				},
 				output: &output,
 			},

@@ -43,11 +43,11 @@ func TestNewRootCommand(t *testing.T) {
 				version: "0.0.0",
 				conf: &config.JrpCliConfig{
 					JrpConfig: baseConfig.JrpConfig{
-						JrpDBType:   "sqlite",
-						JrpDBDsn:    filepath.Join(os.TempDir(), "jrp.db"),
 						WNJpnDBType: "sqlite",
 						WNJpnDBDsn:  filepath.Join(os.TempDir(), "wnjpn.db"),
 					},
+					JrpDBType: "sqlite",
+					JrpDBDsn:  filepath.Join(os.TempDir(), "jrp.db"),
 				},
 				output: &output,
 			},

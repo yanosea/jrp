@@ -37,6 +37,8 @@ func NewJrpCliConfigurator(
 // JrpCliConfig is a struct that contains the configuration of the Jrp cli application.
 type JrpCliConfig struct {
 	baseConfig.JrpConfig
+	JrpDBType database.DBType
+	JrpDBDsn  string
 }
 
 // envConfig is a struct that contains the environment variables.
@@ -56,11 +58,11 @@ func (c *cliConfigurator) GetConfig() (*JrpCliConfig, error) {
 
 	config := &JrpCliConfig{
 		JrpConfig: baseConfig.JrpConfig{
-			JrpDBType:   env.JrpDBType,
-			JrpDBDsn:    env.JrpDBDsn,
 			WNJpnDBType: env.WnJpnDBType,
 			WNJpnDBDsn:  env.WnJpnDBDsn,
 		},
+		JrpDBType: env.JrpDBType,
+		JrpDBDsn:  env.JrpDBDsn,
 	}
 
 	if config.JrpDBType == database.SQLite || config.WNJpnDBType == database.SQLite {
