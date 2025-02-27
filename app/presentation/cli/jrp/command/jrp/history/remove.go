@@ -151,9 +151,9 @@ Also, you can remove the histories even if it is favorited by using the "-f" or 
 ` + removeUsageTemplate
 	// removeUsageTemplate is the usage template of the remove command.
 	removeUsageTemplate = `Usage:
-  jrp history remove [flag]
-  jrp history rm     [flag]
-  jrp history r      [flag]
+  jrp history remove [flag] [arguments]
+  jrp history rm     [flag] [arguments]
+  jrp history r      [flag] [arguments]
 
 Flags:
   -a, --all    ✨ remove all histories

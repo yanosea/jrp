@@ -159,9 +159,9 @@ If you use the flag, the number flag or argument will be ignored.
 ` + showUsageTemplate
 	// showUsageTemplate is the usage template of the show command.
 	showUsageTemplate = `Usage:
-  jrp history show [flag]
-  jrp history sh   [flag]
-  jrp history s    [flag]
+  jrp history show [flag] [argument]
+  jrp history sh   [flag] [argument]
+  jrp history s    [flag] [argument]
 
 Flags:
   -n, --number     🔢 number how many histories to show (default 10, e.g. : 50)

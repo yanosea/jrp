@@ -159,9 +159,9 @@ If you use the flag, the number flag will be ignored.
 ` + searchUsageTemplate
 	// searchUsageTemplate is the usage template of the search command.
 	searchUsageTemplate = `Usage:
-  jrp history search [flag]
-  jrp history se     [flag]
-  jrp history S      [flag]
+  jrp history search [flag] [arguments]
+  jrp history se     [flag] [arguments]
+  jrp history S      [flag] [arguments]
 
 Flags:
   -A, --and        🧠 search histories by AND condition

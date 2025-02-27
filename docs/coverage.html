@@ -3068,9 +3068,9 @@ Also, you can favorite all the histories with the "-a" or "--all" flag.
 ` + favoriteUsageTemplate
         // favoriteUsageTemplate is the usage template of the favorite command.
         favoriteUsageTemplate = `Usage:
-  jrp favorite [flag]
-  jrp favorite [flag]
-  jrp favorite [flag]
+  jrp favorite [flag] [arguments]
+  jrp fav      [flag] [arguments]
+  jrp f        [flag] [arguments]
 
 Flags:
   -a, --all    ⭐ favorite all the histories
@@ -3364,9 +3364,9 @@ Those commands below are the same.
 ` + generateUsageTemplate
         // generateUsageTemplate is the usage template of the generate command.
         generateUsageTemplate = `Usage:
-  jrp generate [flags]
-  jrp gen      [flags]
-  jrp g        [flags]
+  jrp generate [flags] [argument]
+  jrp gen      [flags] [argument]
+  jrp g        [flags] [argument]
 
 Available Subcommands:
   interactive, int, i  💬 Generate Japanese random phrases interactively.
@@ -3951,9 +3951,9 @@ If you use the flag, the number flag or argument will be ignored.
 ` + historyUsageTemplate
         // historyUsageTemplate is the usage template of the history command.
         historyUsageTemplate = `Usage:
-  jrp history [flag]
-  jrp hist    [flag]
-  jrp h       [flag]
+  jrp history [flag] [argument]
+  jrp hist    [flag] [argument]
+  jrp h       [flag] [argument]
   jrp history [command]
   jrp hist    [command]
   jrp h       [command]
@@ -4133,9 +4133,9 @@ Also, you can remove the histories even if it is favorited by using the "-f" or 
 ` + removeUsageTemplate
         // removeUsageTemplate is the usage template of the remove command.
         removeUsageTemplate = `Usage:
-  jrp history remove [flag]
-  jrp history rm     [flag]
-  jrp history r      [flag]
+  jrp history remove [flag] [arguments]
+  jrp history rm     [flag] [arguments]
+  jrp history r      [flag] [arguments]
 
 Flags:
   -a, --all    ✨ remove all histories
@@ -4310,9 +4310,9 @@ If you use the flag, the number flag will be ignored.
 ` + searchUsageTemplate
         // searchUsageTemplate is the usage template of the search command.
         searchUsageTemplate = `Usage:
-  jrp history search [flag]
-  jrp history se     [flag]
-  jrp history S      [flag]
+  jrp history search [flag] [arguments]
+  jrp history se     [flag] [arguments]
+  jrp history S      [flag] [arguments]
 
 Flags:
   -A, --and        🧠 search histories by AND condition
@@ -4489,9 +4489,9 @@ If you use the flag, the number flag or argument will be ignored.
 ` + showUsageTemplate
         // showUsageTemplate is the usage template of the show command.
         showUsageTemplate = `Usage:
-  jrp history show [flag]
-  jrp history sh   [flag]
-  jrp history s    [flag]
+  jrp history show [flag] [argument]
+  jrp history sh   [flag] [argument]
+  jrp history s    [flag] [argument]
 
 Flags:
   -n, --number     🔢 number how many histories to show (default 10, e.g. : 50)
@@ -4647,9 +4647,9 @@ Also, you can unfavorite all the favorited histories with the "-a" or "--all" fl
 ` + unfavoriteUsageTemplate
         // unfavoriteUsageTemplate is the usage template of the unfavorite command.
         unfavoriteUsageTemplate = `Usage:
-  jrp favorite [flag]
-  jrp favorite [flag]
-  jrp favorite [flag]
+  jrp unfavorite [flag] [arguments]
+  jrp unf        [flag] [arguments]
+  jrp u          [flag] [arguments]
 
 Flags:
   -a, --all    ✨ unfavorite all the favorited histories
@@ -4925,6 +4925,7 @@ Those commands below are the same.
         rootUsageTemplate = `Usage:
   jrp [flags]
   jrp [command]
+  jrp [argument]
 
 Available Subcommands:
   download,    dl,   d  📦 Download WordNet Japan sqlite database file from the official web site.
