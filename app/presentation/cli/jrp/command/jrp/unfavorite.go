@@ -139,9 +139,9 @@ Also, you can unfavorite all the favorited histories with the "-a" or "--all" fl
 ` + unfavoriteUsageTemplate
 	// unfavoriteUsageTemplate is the usage template of the unfavorite command.
 	unfavoriteUsageTemplate = `Usage:
-  jrp favorite [flag]
-  jrp favorite [flag]
-  jrp favorite [flag]
+  jrp unfavorite [flag] [arguments]
+  jrp unf        [flag] [arguments]
+  jrp u          [flag] [arguments]
 
 Flags:
   -a, --all    ✨ unfavorite all the favorited histories

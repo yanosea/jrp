@@ -124,9 +124,9 @@ If you use the flag, the number flag or argument will be ignored.
 ` + historyUsageTemplate
 	// historyUsageTemplate is the usage template of the history command.
 	historyUsageTemplate = `Usage:
-  jrp history [flag]
-  jrp hist    [flag]
-  jrp h       [flag]
+  jrp history [flag] [argument]
+  jrp hist    [flag] [argument]
+  jrp h       [flag] [argument]
   jrp history [command]
   jrp hist    [command]
   jrp h       [command]

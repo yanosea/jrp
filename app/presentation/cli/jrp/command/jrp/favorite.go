@@ -140,9 +140,9 @@ Also, you can favorite all the histories with the "-a" or "--all" flag.
 ` + favoriteUsageTemplate
 	// favoriteUsageTemplate is the usage template of the favorite command.
 	favoriteUsageTemplate = `Usage:
-  jrp favorite [flag]
-  jrp favorite [flag]
-  jrp favorite [flag]
+  jrp favorite [flag] [arguments]
+  jrp fav      [flag] [arguments]
+  jrp f        [flag] [arguments]
 
 Flags:
   -a, --all    ⭐ favorite all the histories

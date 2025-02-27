@@ -279,9 +279,9 @@ Those commands below are the same.
 ` + generateUsageTemplate
 	// generateUsageTemplate is the usage template of the generate command.
 	generateUsageTemplate = `Usage:
-  jrp generate [flags]
-  jrp gen      [flags]
-  jrp g        [flags]
+  jrp generate [flags] [argument]
+  jrp gen      [flags] [argument]
+  jrp g        [flags] [argument]
 
 Available Subcommands:
   interactive, int, i  💬 Generate Japanese random phrases interactively.

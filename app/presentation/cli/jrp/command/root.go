@@ -190,6 +190,7 @@ Those commands below are the same.
 	rootUsageTemplate = `Usage:
   jrp [flags]
   jrp [command]
+  jrp [argument]
 
 Available Subcommands:
   download,    dl,   d  📦 Download WordNet Japan sqlite database file from the official web site.
