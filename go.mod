@@ -1,6 +1,7 @@
 module github.com/yanosea/jrp/v2
 
-go 1.23
+go 1.23.0
+
 require (
 	github.com/briandowns/spinner v1.23.2
 	github.com/eiannone/keyboard v0.0.0-20220611211555-0d226195f203
