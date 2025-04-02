@@ -157,7 +157,7 @@
 				
 				<option value="file50">github.com/yanosea/jrp/v2/docs/docs.go (0.0%)</option>
 				
-				<option value="file51">github.com/yanosea/jrp/v2/pkg/utility/capture.go (91.7%)</option>
+				<option value="file51">github.com/yanosea/jrp/v2/pkg/utility/capture.go (100.0%)</option>
 				
 				<option value="file52">github.com/yanosea/jrp/v2/pkg/utility/download_util.go (100.0%)</option>
 				
@@ -5636,6 +5636,8 @@ type Capturer interface {
 
 // capturer is a struct that implements the Captures interface.
 type capturer struct {
+        // os is an interface for operating system functions.
+        os proxy.Os
         // stdBuffer is a buffer for standard output.
         stdBuffer proxy.Buffer
         // errBuffer is a buffer for error output.
@@ -5644,10 +5646,12 @@ type capturer struct {
 
 // NewCapturer returns a new instance of the capturer struct.
 func NewCapturer(
+        os proxy.Os,
         stdBuffer proxy.Buffer,
         errBuffer proxy.Buffer,
 ) *capturer <span class="cov8" title="1">{
         return &amp;capturer{
+                os:        os,
                 stdBuffer: stdBuffer,
                 errBuffer: errBuffer,
         }
@@ -5662,17 +5666,23 @@ func (c *capturer) CaptureOutput(fnc func()) (string, string, error) <span class
                 os.Stderr = origStderr
         }</span>()
 
-        <span class="cov8" title="1">rOut, wOut, _ := os.Pipe()
-        rErr, wErr, _ := os.Pipe()
-        os.Stdout = wOut
-        os.Stderr = wErr
+        <span class="cov8" title="1">rOut, wOut, err := c.os.Pipe()
+        if err != nil </span><span class="cov8" title="1">{
+                return "", "", err
+        }</span>
+        <span class="cov8" title="1">rErr, wErr, err := c.os.Pipe()
+        if err != nil </span><span class="cov8" title="1">{
+                return "", "", err
+        }</span>
+        <span class="cov8" title="1">os.Stdout = wOut.(interface{ AsOsFile() *os.File }).AsOsFile()
+        os.Stderr = wErr.(interface{ AsOsFile() *os.File }).AsOsFile()
 
         fnc()
 
-        if err := wOut.Close(); err != nil </span><span class="cov0" title="0">{
+        if err := wOut.Close(); err != nil </span><span class="cov8" title="1">{
                 return "", "", err
         }</span>
-        <span class="cov8" title="1">if err := wErr.Close(); err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if err := wErr.Close(); err != nil </span><span class="cov8" title="1">{
                 return "", "", err
         }</span>
 

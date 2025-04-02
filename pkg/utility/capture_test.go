@@ -95,6 +95,110 @@ func TestCapturer_CaptureOutput(t *testing.T) {
 			setup:      nil,
 		},
 		{
+			name: "negative testing (rOut, wOut, err := c.os.Pipe() failed)",
+			fields: fields{
+				os:        nil,
+				StdBuffer: stdBuffer,
+				ErrBuffer: errBuffer,
+			},
+			args: args{
+				fnc: func() {},
+			},
+			wantStdOut: "",
+			wantStdErr: "",
+			wantErr:    true,
+			setup: func(mockCtrl *gomock.Controller, tt *fields) {
+				mockOs := proxy.NewMockOs(mockCtrl)
+				mockOs.EXPECT().Pipe().Return(
+					nil, nil, errors.New("Os.Pipe() failed"),
+				)
+				tt.os = mockOs
+			},
+		},
+		{
+			name: "negative testing (rErr, wErr, err := c.os.Pipe() failed)",
+			fields: fields{
+				os:        nil,
+				StdBuffer: stdBuffer,
+				ErrBuffer: errBuffer,
+			},
+			args: args{
+				fnc: func() {},
+			},
+			wantStdOut: "",
+			wantStdErr: "",
+			wantErr:    true,
+			setup: func(mockCtrl *gomock.Controller, tt *fields) {
+				mockOs := proxy.NewMockOs(mockCtrl)
+				mockFile1 := proxy.NewMockFile(mockCtrl)
+				mockFile2 := proxy.NewMockFile(mockCtrl)
+				mockOs.EXPECT().Pipe().Return(mockFile1, mockFile2, nil)
+				mockOs.EXPECT().Pipe().Return(
+					nil, nil, errors.New("Os.Pipe() failed"),
+				)
+				tt.os = mockOs
+			},
+		},
+		{
+			name: "negative testing (wOut.Close() failed)",
+			fields: fields{
+				os:        nil,
+				StdBuffer: stdBuffer,
+				ErrBuffer: errBuffer,
+			},
+			args: args{
+				fnc: func() {},
+			},
+			wantStdOut: "",
+			wantStdErr: "",
+			wantErr:    true,
+			setup: func(mockCtrl *gomock.Controller, tt *fields) {
+				mockOs := proxy.NewMockOs(mockCtrl)
+				mockStdoutReader := proxy.NewMockFile(mockCtrl)
+				mockStdoutWriter := proxy.NewMockFile(mockCtrl)
+				mockStdoutReader.EXPECT().AsOsFile().Return(nil).AnyTimes()
+				mockStdoutWriter.EXPECT().AsOsFile().Return(nil).AnyTimes()
+				mockStdoutWriter.EXPECT().Close().Return(errors.New("Close() failed"))
+				mockOs.EXPECT().Pipe().Return(mockStdoutReader, mockStdoutWriter, nil)
+				mockStderrReader := proxy.NewMockFile(mockCtrl)
+				mockStderrWriter := proxy.NewMockFile(mockCtrl)
+				mockStderrReader.EXPECT().AsOsFile().Return(nil).AnyTimes()
+				mockStderrWriter.EXPECT().AsOsFile().Return(nil).AnyTimes()
+				mockOs.EXPECT().Pipe().Return(mockStderrReader, mockStderrWriter, nil)
+				tt.os = mockOs
+			},
+		},
+		{
+			name: "negative testing (wErr.Close() failed)",
+			fields: fields{
+				os:        nil,
+				StdBuffer: stdBuffer,
+				ErrBuffer: errBuffer,
+			},
+			args: args{
+				fnc: func() {},
+			},
+			wantStdOut: "",
+			wantStdErr: "",
+			wantErr:    true,
+			setup: func(mockCtrl *gomock.Controller, tt *fields) {
+				mockOs := proxy.NewMockOs(mockCtrl)
+				mockStdoutReader := proxy.NewMockFile(mockCtrl)
+				mockStdoutWriter := proxy.NewMockFile(mockCtrl)
+				mockStdoutReader.EXPECT().AsOsFile().Return(nil).AnyTimes()
+				mockStdoutWriter.EXPECT().AsOsFile().Return(nil).AnyTimes()
+				mockStdoutWriter.EXPECT().Close().Return(nil)
+				mockOs.EXPECT().Pipe().Return(mockStdoutReader, mockStdoutWriter, nil)
+				mockStderrReader := proxy.NewMockFile(mockCtrl)
+				mockStderrWriter := proxy.NewMockFile(mockCtrl)
+				mockStderrReader.EXPECT().AsOsFile().Return(nil).AnyTimes()
+				mockStderrWriter.EXPECT().AsOsFile().Return(nil).AnyTimes()
+				mockStderrWriter.EXPECT().Close().Return(errors.New("Close() failed"))
+				mockOs.EXPECT().Pipe().Return(mockStderrReader, mockStderrWriter, nil)
+				tt.os = mockOs
+			},
+		},
+		{
 			name: "negative testing (c.OutBuffer.ReadFrom(rOut) failed)",
 			fields: fields{
 				os:        os,
