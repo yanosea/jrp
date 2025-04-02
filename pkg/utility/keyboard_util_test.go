@@ -58,7 +58,7 @@ func Test_keyboardUtil_CloseKeyboard(t *testing.T) {
 			},
 			setup: func(mockCtrl *gomock.Controller, tt *fields) {
 				mockKeyboard := proxy.NewMockKeyboard(mockCtrl)
-				mockKeyboard.EXPECT().Close().Return()
+				mockKeyboard.EXPECT().Close().Return(nil)
 				tt.keyboard = mockKeyboard
 			},
 		},

@@ -803,7 +803,6 @@ func Test_runInteractive(t *testing.T) {
 				mockKeyboardUtil := utility.NewMockKeyboardUtil(mockCtrl)
 				mockKeyboardUtil.EXPECT().OpenKeyboard().Return(nil)
 				mockKeyboardUtil.EXPECT().GetKey(interactiveOps.Timeout).Return("", errors.New("KeyboardUtil.GetKey() failed"))
-				mockKeyboardUtil.EXPECT().CloseKeyboard()
 				presenter.Ku = mockKeyboardUtil
 				cmd := &c.Command{}
 				cmd.SetContext(context.Background())

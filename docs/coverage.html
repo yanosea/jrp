@@ -101,7 +101,7 @@
 				
 				<option value="file22">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/server.go (100.0%)</option>
 				
-				<option value="file23">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/command.go (100.0%)</option>
+				<option value="file23">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/command.go (87.2%)</option>
 				
 				<option value="file24">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/completion/bash.go (100.0%)</option>
 				
@@ -119,7 +119,7 @@
 				
 				<option value="file31">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/generate/generate.go (100.0%)</option>
 				
-				<option value="file32">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/generate/interactive.go (100.0%)</option>
+				<option value="file32">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/generate/interactive.go (89.7%)</option>
 				
 				<option value="file33">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/history/clear.go (100.0%)</option>
 				
@@ -155,9 +155,9 @@
 				
 				<option value="file49">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/presenter/spinner.go (100.0%)</option>
 				
-				<option value="file50">github.com/yanosea/jrp/v2/docs/docs.go (100.0%)</option>
+				<option value="file50">github.com/yanosea/jrp/v2/docs/docs.go (0.0%)</option>
 				
-				<option value="file51">github.com/yanosea/jrp/v2/pkg/utility/capture.go (100.0%)</option>
+				<option value="file51">github.com/yanosea/jrp/v2/pkg/utility/capture.go (91.7%)</option>
 				
 				<option value="file52">github.com/yanosea/jrp/v2/pkg/utility/download_util.go (100.0%)</option>
 				
@@ -2342,7 +2342,7 @@ func (s *server) Init(
         }
 
         if conf.WNJpnDBType == database.SQLite &amp;&amp; !fileUtil.IsExist(conf.WNJpnDBDsn) </span><span class="cov8" title="1">{
-                s.Logger.Fatal(errors.New("WordNet Japanese database is not found..."))
+                s.Logger.Fatal(errors.New("wnjpn database file not found"))
                 return 1
         }</span>
 
@@ -2432,9 +2432,11 @@ func (c *cli) Init(
         conf, err := configurator.GetConfig()
         if err != nil </span><span class="cov8" title="1">{
                 output = formatter.AppendErrorToOutput(err, output)
-                presenter.Print(os.Stderr, output)
-                return 1
-        }</span>
+                if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov0" title="0">{
+                        return 1
+                }</span>
+                <span class="cov8" title="1">return 1</span>
+        }
 
         <span class="cov8" title="1">if c.ConnectionManager == nil </span><span class="cov8" title="1">{
                 c.ConnectionManager = database.NewConnectionManager(sql)
@@ -2449,9 +2451,11 @@ func (c *cli) Init(
                         },
                 ); err != nil </span><span class="cov8" title="1">{
                         output = formatter.AppendErrorToOutput(err, output)
-                        presenter.Print(os.Stderr, output)
-                        return 1
-                }</span>
+                        if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov0" title="0">{
+                                return 1
+                        }</span>
+                        <span class="cov8" title="1">return 1</span>
+                }
         }
 
         <span class="cov8" title="1">if conf.WNJpnDBType == database.SQLite &amp;&amp; fileUtil.IsExist(conf.WNJpnDBDsn) </span><span class="cov8" title="1">{
@@ -2463,9 +2467,11 @@ func (c *cli) Init(
                         },
                 ); err != nil </span><span class="cov8" title="1">{
                         output = formatter.AppendErrorToOutput(err, output)
-                        presenter.Print(os.Stderr, output)
-                        return 1
-                }</span>
+                        if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov0" title="0">{
+                                return 1
+                        }</span>
+                        <span class="cov8" title="1">return 1</span>
+                }
         }
 
         <span class="cov8" title="1">c.RootCommand = NewRootCommand(
@@ -2484,9 +2490,11 @@ func (c *cli) Run(ctx context.Context) (exitCode int) <span class="cov8" title="
                 if c.ConnectionManager != nil </span><span class="cov8" title="1">{
                         if err := c.ConnectionManager.CloseAllConnections(); err != nil </span><span class="cov8" title="1">{
                                 output = formatter.AppendErrorToOutput(err, output)
-                                presenter.Print(os.Stderr, output)
-                                exitCode = 1
-                        }</span>
+                                if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov0" title="0">{
+                                        exitCode = 1
+                                }</span>
+                                <span class="cov8" title="1">exitCode = 1</span>
+                        }
                 }
         }()
 
@@ -2497,9 +2505,11 @@ func (c *cli) Run(ctx context.Context) (exitCode int) <span class="cov8" title="
                 exitCode = 1
         }</span>
 
-        <span class="cov8" title="1">presenter.Print(out, output)
+        <span class="cov8" title="1">if err := presenter.Print(out, output); err != nil </span><span class="cov0" title="0">{
+                exitCode = 1
+        }</span>
 
-        return</span>
+        <span class="cov8" title="1">return</span>
 }
 </pre>
 		
@@ -3267,7 +3277,7 @@ func runGenerate(
                 return err
         }</span>
 
-        <span class="cov8" title="1">var number int = GenerateOps.Number
+        <span class="cov8" title="1">var number = GenerateOps.Number
         if len(args) &gt; 0 </span><span class="cov8" title="1">{
                 argNumber, err := strconv.Atoi(args[0])
                 if err != nil </span><span class="cov8" title="1">{
@@ -3534,9 +3544,11 @@ func runInteractive(
 
         <span class="cov8" title="1">phase := 1
         for </span><span class="cov8" title="1">{
-                presenter.Print(os.Stdout, formatter.Blue("🔄 Phase : "+strconv.Itoa(phase)))
+                if err := presenter.Print(os.Stdout, formatter.Blue("🔄 Phase : "+strconv.Itoa(phase))); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
 
-                var gjiDtos []*jrpApp.GenerateJrpUseCaseInputDto
+                <span class="cov8" title="1">var gjiDtos []*jrpApp.GenerateJrpUseCaseInputDto
                 for _, fwDto := range fwoDtos </span><span class="cov8" title="1">{
                         gjiDto := &amp;jrpApp.GenerateJrpUseCaseInputDto{
                                 WordID: fwDto.WordID,
@@ -3567,43 +3579,54 @@ func runInteractive(
                         return err
                 }</span>
                 <span class="cov8" title="1">o := f.Format(gjoDtos)
-                presenter.Print(os.Stdout, "\n")
-                presenter.Print(os.Stdout, o)
-                presenter.Print(os.Stdout, "\n")
-                presenter.Print(os.Stdout, formatter.Yellow(interactivePromptLabel))
+                if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, o); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, formatter.Yellow(interactivePromptLabel)); err != nil </span><span class="cov0" title="0">{
+                        return err
+                }</span>
 
-                if err := presenter.OpenKeyboard(); err != nil </span><span class="cov8" title="1">{
+                <span class="cov8" title="1">if err := presenter.OpenKeyboard(); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
                 <span class="cov8" title="1">answer, err := presenter.GetKey(interactiveOps.Timeout)
-                presenter.CloseKeyboard()
                 if err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">if err := presenter.CloseKeyboard(); err != nil </span><span class="cov0" title="0">{
                         return err
                 }</span>
 
                 <span class="cov8" title="1">var save bool
                 var cont bool
-                if answer == "u" || answer == "U" </span><span class="cov8" title="1">{
+                switch answer </span>{
+                case "u", "U":<span class="cov8" title="1">
                         gjoDtos[0].IsFavorited = 1
                         save = true
-                        cont = true
-                }</span> else<span class="cov8" title="1"> if answer == "i" || answer == "I" </span><span class="cov8" title="1">{
+                        cont = true</span>
+                case "i", "I":<span class="cov8" title="1">
                         gjoDtos[0].IsFavorited = 1
                         save = true
-                        cont = false
-                }</span> else<span class="cov8" title="1"> if answer == "j" || answer == "J" </span><span class="cov8" title="1">{
+                        cont = false</span>
+                case "j", "J":<span class="cov8" title="1">
                         save = true
-                        cont = true
-                }</span> else<span class="cov8" title="1"> if answer == "k" || answer == "K" </span><span class="cov8" title="1">{
+                        cont = true</span>
+                case "k", "K":<span class="cov8" title="1">
                         save = true
-                        cont = false
-                }</span> else<span class="cov8" title="1"> if answer == "m" || answer == "M" </span><span class="cov8" title="1">{
+                        cont = false</span>
+                case "m", "M":<span class="cov8" title="1">
                         save = false
-                        cont = true
-                }</span> else<span class="cov8" title="1"> {
+                        cont = true</span>
+                default:<span class="cov8" title="1">
                         save = false
-                        cont = false
-                }</span>
+                        cont = false</span>
+                }
 
                 <span class="cov8" title="1">if save </span><span class="cov8" title="1">{
                         var shiDtos []*jrpApp.SaveHistoryUseCaseInputDto
@@ -3628,20 +3651,34 @@ func runInteractive(
                         }</span>
 
                         <span class="cov8" title="1">if answer == "u" || answer == "U" || answer == "i" || answer == "I" </span><span class="cov8" title="1">{
-                                presenter.Print(os.Stdout, formatter.Green("✅ Favorited successfully!"))
-                                presenter.Print(os.Stdout, "\n")
-                        }</span> else<span class="cov8" title="1"> {
-                                presenter.Print(os.Stdout, formatter.Green("✅ Saved successfully!"))
-                                presenter.Print(os.Stdout, "\n")
-                        }</span>
+                                if err := presenter.Print(os.Stdout, formatter.Green("✅ Favorited successfully!")); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        } else<span class="cov8" title="1"> {
+                                if err := presenter.Print(os.Stdout, formatter.Green("✅ Saved successfully!")); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov0" title="0">{
+                                        return err
+                                }</span>
+                        }
                 } else<span class="cov8" title="1"> {
-                        presenter.Print(os.Stdout, formatter.Yellow("⏩ Skip!"))
-                        presenter.Print(os.Stdout, "\n")
-                }</span>
+                        if err := presenter.Print(os.Stdout, formatter.Yellow("⏩ Skip!")); err != nil </span><span class="cov0" title="0">{
+                                return err
+                        }</span>
+                        <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov0" title="0">{
+                                return err
+                        }</span>
+                }
 
                 <span class="cov8" title="1">if !cont </span><span class="cov8" title="1">{
-                        presenter.Print(os.Stdout, "🚪 Exit!")
-                        break</span>
+                        if err := presenter.Print(os.Stdout, "🚪 Exit!"); err != nil </span><span class="cov0" title="0">{
+                                return err
+                        }</span>
+                        <span class="cov8" title="1">break</span>
                 }
 
                 <span class="cov8" title="1">phase++</span>
@@ -4424,7 +4461,7 @@ func runShow(
         args []string,
         output *string,
 ) error <span class="cov8" title="1">{
-        var number int = showOps.Number
+        var number = showOps.Number
         isDefaultNumber := number == 10
         if len(args) &gt; 0 </span><span class="cov8" title="1">{
                 argNumber, err := strconv.Atoi(args[0])
@@ -5425,8 +5462,8 @@ var (
 )
 
 // CloseKeyboard closes the keyboard.
-func CloseKeyboard() <span class="cov8" title="1">{
-        Ku.CloseKeyboard()
+func CloseKeyboard() error <span class="cov8" title="1">{
+        return Ku.CloseKeyboard()
 }</span>
 
 // GetKey gets a key from the keyboard.
@@ -5448,11 +5485,13 @@ import (
 )
 
 // Print is a function that writes the output to the writer.
-func Print(writer io.Writer, output string) <span class="cov8" title="1">{
+func Print(writer io.Writer, output string) error <span class="cov8" title="1">{
         if output != "" &amp;&amp; output != "\n" </span><span class="cov8" title="1">{
-                fmt.Fprintf(writer, "%s\n", output)
+                _, err := fmt.Fprintf(writer, "%s\n", output)
+                return err
         }</span> else<span class="cov8" title="1"> {
-                fmt.Fprintln(writer)
+                _, err := fmt.Fprintln(writer)
+                return err
         }</span>
 }
 </pre>
@@ -5577,7 +5616,7 @@ var SwaggerInfo = &amp;swag.Spec{
         RightDelim:       "}}",
 }
 
-func init() <span class="cov8" title="1">{
+func init() <span class="cov0" title="0">{
         swag.Register(SwaggerInfo.InstanceName(), SwaggerInfo)
 }</span>
 </pre>
@@ -5630,10 +5669,14 @@ func (c *capturer) CaptureOutput(fnc func()) (string, string, error) <span class
 
         fnc()
 
-        wOut.Close()
-        wErr.Close()
+        if err := wOut.Close(); err != nil </span><span class="cov0" title="0">{
+                return "", "", err
+        }</span>
+        <span class="cov8" title="1">if err := wErr.Close(); err != nil </span><span class="cov0" title="0">{
+                return "", "", err
+        }</span>
 
-        if _, err := c.stdBuffer.ReadFrom(rOut); err != nil </span><span class="cov8" title="1">{
+        <span class="cov8" title="1">if _, err := c.stdBuffer.ReadFrom(rOut); err != nil </span><span class="cov8" title="1">{
                 return "", "", err
         }</span>
 
@@ -5874,7 +5917,7 @@ import (
 
 // KeyboardUtil provides the utility for the keyboard.
 type KeyboardUtil interface {
-        CloseKeyboard()
+        CloseKeyboard() error
         GetKey(timeoutSec int) (string, error)
         OpenKeyboard() error
 }
@@ -5894,8 +5937,8 @@ func NewKeyboardUtil(
 }</span>
 
 // CloseKeyboard closes the keyboard.
-func (k *keyboardUtil) CloseKeyboard() <span class="cov8" title="1">{
-        k.keyboard.Close()
+func (k *keyboardUtil) CloseKeyboard() error <span class="cov8" title="1">{
+        return k.keyboard.Close()
 }</span>
 
 // GetKey returns a key from the keyboard.
