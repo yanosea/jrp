@@ -101,7 +101,7 @@
 				
 				<option value="file22">github.com/yanosea/jrp/v2/app/presentation/api/jrp-server/server/server.go (100.0%)</option>
 				
-				<option value="file23">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/command.go (87.2%)</option>
+				<option value="file23">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/command.go (100.0%)</option>
 				
 				<option value="file24">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/completion/bash.go (100.0%)</option>
 				
@@ -119,7 +119,7 @@
 				
 				<option value="file31">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/generate/generate.go (100.0%)</option>
 				
-				<option value="file32">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/generate/interactive.go (89.7%)</option>
+				<option value="file32">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/generate/interactive.go (100.0%)</option>
 				
 				<option value="file33">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/command/jrp/history/clear.go (100.0%)</option>
 				
@@ -155,29 +155,27 @@
 				
 				<option value="file49">github.com/yanosea/jrp/v2/app/presentation/cli/jrp/presenter/spinner.go (100.0%)</option>
 				
-				<option value="file50">github.com/yanosea/jrp/v2/docs/docs.go (0.0%)</option>
+				<option value="file50">github.com/yanosea/jrp/v2/pkg/utility/capture.go (100.0%)</option>
 				
-				<option value="file51">github.com/yanosea/jrp/v2/pkg/utility/capture.go (100.0%)</option>
+				<option value="file51">github.com/yanosea/jrp/v2/pkg/utility/download_util.go (100.0%)</option>
 				
-				<option value="file52">github.com/yanosea/jrp/v2/pkg/utility/download_util.go (100.0%)</option>
+				<option value="file52">github.com/yanosea/jrp/v2/pkg/utility/file_util.go (100.0%)</option>
 				
-				<option value="file53">github.com/yanosea/jrp/v2/pkg/utility/file_util.go (100.0%)</option>
+				<option value="file53">github.com/yanosea/jrp/v2/pkg/utility/json_util.go (100.0%)</option>
 				
-				<option value="file54">github.com/yanosea/jrp/v2/pkg/utility/json_util.go (100.0%)</option>
+				<option value="file54">github.com/yanosea/jrp/v2/pkg/utility/keyboard_util.go (100.0%)</option>
 				
-				<option value="file55">github.com/yanosea/jrp/v2/pkg/utility/keyboard_util.go (100.0%)</option>
+				<option value="file55">github.com/yanosea/jrp/v2/pkg/utility/prompt_util.go (100.0%)</option>
 				
-				<option value="file56">github.com/yanosea/jrp/v2/pkg/utility/prompt_util.go (100.0%)</option>
+				<option value="file56">github.com/yanosea/jrp/v2/pkg/utility/rand_util.go (100.0%)</option>
 				
-				<option value="file57">github.com/yanosea/jrp/v2/pkg/utility/rand_util.go (100.0%)</option>
+				<option value="file57">github.com/yanosea/jrp/v2/pkg/utility/spinner_util.go (100.0%)</option>
 				
-				<option value="file58">github.com/yanosea/jrp/v2/pkg/utility/spinner_util.go (100.0%)</option>
+				<option value="file58">github.com/yanosea/jrp/v2/pkg/utility/strings_util.go (100.0%)</option>
 				
-				<option value="file59">github.com/yanosea/jrp/v2/pkg/utility/strings_util.go (100.0%)</option>
+				<option value="file59">github.com/yanosea/jrp/v2/pkg/utility/tablewriter_util.go (100.0%)</option>
 				
-				<option value="file60">github.com/yanosea/jrp/v2/pkg/utility/tablewriter_util.go (100.0%)</option>
-				
-				<option value="file61">github.com/yanosea/jrp/v2/pkg/utility/version_util.go (100.0%)</option>
+				<option value="file60">github.com/yanosea/jrp/v2/pkg/utility/version_util.go (100.0%)</option>
 				
 				</select>
 			</div>
@@ -2432,7 +2430,7 @@ func (c *cli) Init(
         conf, err := configurator.GetConfig()
         if err != nil </span><span class="cov8" title="1">{
                 output = formatter.AppendErrorToOutput(err, output)
-                if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov0" title="0">{
+                if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov8" title="1">{
                         return 1
                 }</span>
                 <span class="cov8" title="1">return 1</span>
@@ -2451,7 +2449,7 @@ func (c *cli) Init(
                         },
                 ); err != nil </span><span class="cov8" title="1">{
                         output = formatter.AppendErrorToOutput(err, output)
-                        if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov0" title="0">{
+                        if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov8" title="1">{
                                 return 1
                         }</span>
                         <span class="cov8" title="1">return 1</span>
@@ -2467,7 +2465,7 @@ func (c *cli) Init(
                         },
                 ); err != nil </span><span class="cov8" title="1">{
                         output = formatter.AppendErrorToOutput(err, output)
-                        if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov0" title="0">{
+                        if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov8" title="1">{
                                 return 1
                         }</span>
                         <span class="cov8" title="1">return 1</span>
@@ -2490,7 +2488,7 @@ func (c *cli) Run(ctx context.Context) (exitCode int) <span class="cov8" title="
                 if c.ConnectionManager != nil </span><span class="cov8" title="1">{
                         if err := c.ConnectionManager.CloseAllConnections(); err != nil </span><span class="cov8" title="1">{
                                 output = formatter.AppendErrorToOutput(err, output)
-                                if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov0" title="0">{
+                                if err := presenter.Print(os.Stderr, output); err != nil </span><span class="cov8" title="1">{
                                         exitCode = 1
                                 }</span>
                                 <span class="cov8" title="1">exitCode = 1</span>
@@ -2505,7 +2503,7 @@ func (c *cli) Run(ctx context.Context) (exitCode int) <span class="cov8" title="
                 exitCode = 1
         }</span>
 
-        <span class="cov8" title="1">if err := presenter.Print(out, output); err != nil </span><span class="cov0" title="0">{
+        <span class="cov8" title="1">if err := presenter.Print(out, output); err != nil </span><span class="cov8" title="1">{
                 exitCode = 1
         }</span>
 
@@ -3544,7 +3542,7 @@ func runInteractive(
 
         <span class="cov8" title="1">phase := 1
         for </span><span class="cov8" title="1">{
-                if err := presenter.Print(os.Stdout, formatter.Blue("🔄 Phase : "+strconv.Itoa(phase))); err != nil </span><span class="cov0" title="0">{
+                if err := presenter.Print(os.Stdout, formatter.Blue("🔄 Phase : "+strconv.Itoa(phase))); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
 
@@ -3579,16 +3577,16 @@ func runInteractive(
                         return err
                 }</span>
                 <span class="cov8" title="1">o := f.Format(gjoDtos)
-                if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov0" title="0">{
+                if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
-                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, o); err != nil </span><span class="cov0" title="0">{
+                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, o); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
-                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov0" title="0">{
+                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
-                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, formatter.Yellow(interactivePromptLabel)); err != nil </span><span class="cov0" title="0">{
+                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, formatter.Yellow(interactivePromptLabel)); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
 
@@ -3599,7 +3597,7 @@ func runInteractive(
                 if err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
-                <span class="cov8" title="1">if err := presenter.CloseKeyboard(); err != nil </span><span class="cov0" title="0">{
+                <span class="cov8" title="1">if err := presenter.CloseKeyboard(); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
 
@@ -3651,31 +3649,31 @@ func runInteractive(
                         }</span>
 
                         <span class="cov8" title="1">if answer == "u" || answer == "U" || answer == "i" || answer == "I" </span><span class="cov8" title="1">{
-                                if err := presenter.Print(os.Stdout, formatter.Green("✅ Favorited successfully!")); err != nil </span><span class="cov0" title="0">{
+                                if err := presenter.Print(os.Stdout, formatter.Green("✅ Favorited successfully!")); err != nil </span><span class="cov8" title="1">{
                                         return err
                                 }</span>
-                                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov0" title="0">{
+                                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov8" title="1">{
                                         return err
                                 }</span>
                         } else<span class="cov8" title="1"> {
-                                if err := presenter.Print(os.Stdout, formatter.Green("✅ Saved successfully!")); err != nil </span><span class="cov0" title="0">{
+                                if err := presenter.Print(os.Stdout, formatter.Green("✅ Saved successfully!")); err != nil </span><span class="cov8" title="1">{
                                         return err
                                 }</span>
-                                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov0" title="0">{
+                                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov8" title="1">{
                                         return err
                                 }</span>
                         }
                 } else<span class="cov8" title="1"> {
-                        if err := presenter.Print(os.Stdout, formatter.Yellow("⏩ Skip!")); err != nil </span><span class="cov0" title="0">{
+                        if err := presenter.Print(os.Stdout, formatter.Yellow("⏩ Skip!")); err != nil </span><span class="cov8" title="1">{
                                 return err
                         }</span>
-                        <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov0" title="0">{
+                        <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov8" title="1">{
                                 return err
                         }</span>
                 }
 
                 <span class="cov8" title="1">if !cont </span><span class="cov8" title="1">{
-                        if err := presenter.Print(os.Stdout, "🚪 Exit!"); err != nil </span><span class="cov0" title="0">{
+                        if err := presenter.Print(os.Stdout, "🚪 Exit!"); err != nil </span><span class="cov8" title="1">{
                                 return err
                         }</span>
                         <span class="cov8" title="1">break</span>
@@ -5484,8 +5482,11 @@ import (
         "io"
 )
 
+// PrintFunc is a function type that defines the signature for printing output.
+type PrintFunc func(writer io.Writer, output string) error
+
 // Print is a function that writes the output to the writer.
-func Print(writer io.Writer, output string) error <span class="cov8" title="1">{
+var Print PrintFunc = func(writer io.Writer, output string) error <span class="cov8" title="1">{
         if output != "" &amp;&amp; output != "\n" </span><span class="cov8" title="1">{
                 _, err := fmt.Fprintf(writer, "%s\n", output)
                 return err
@@ -5550,78 +5551,7 @@ func StopSpinner() <span class="cov8" title="1">{
 }
 </pre>
 		
-		<pre class="file" id="file50" style="display: none">// Package docs Code generated by swaggo/swag. DO NOT EDIT
-package docs
-
-import "github.com/swaggo/swag"
-
-const docTemplate = `{
-    "schemes": {{ marshal .Schemes }},
-    "swagger": "2.0",
-    "info": {
-        "description": "{{escape .Description}}",
-        "title": "{{.Title}}",
-        "contact": {},
-        "version": "{{.Version}}"
-    },
-    "host": "{{.Host}}",
-    "basePath": "{{.BasePath}}",
-    "paths": {
-        "/jrp": {
-            "get": {
-                "description": "returns a randomly generated Japanese phrase.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "jrp"
-                ],
-                "summary": "get a random Japanese phrase.",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/github_com_yanosea_jrp_v2_app_presentation_api_jrp-server_formatter.JrpJsonOutputDto"
-                        }
-                    }
-                }
-            }
-        }
-    },
-    "definitions": {
-        "github_com_yanosea_jrp_v2_app_presentation_api_jrp-server_formatter.JrpJsonOutputDto": {
-            "description": "response format for jrp",
-            "type": "object",
-            "properties": {
-                "phrase": {
-                    "description": "@Description Generated Japanese phrase",
-                    "type": "string"
-                }
-            }
-        }
-    }
-}`
-
-// SwaggerInfo holds exported Swagger Info so clients can modify it
-var SwaggerInfo = &amp;swag.Spec{
-        Version:          "",
-        Host:             "localhost:8080",
-        BasePath:         "/api",
-        Schemes:          []string{},
-        Title:            "JRP API",
-        Description:      "jrp api server",
-        InfoInstanceName: "swagger",
-        SwaggerTemplate:  docTemplate,
-        LeftDelim:        "{{",
-        RightDelim:       "}}",
-}
-
-func init() <span class="cov0" title="0">{
-        swag.Register(SwaggerInfo.InstanceName(), SwaggerInfo)
-}</span>
-</pre>
-		
-		<pre class="file" id="file51" style="display: none">package utility
+		<pre class="file" id="file50" style="display: none">package utility
 
 import (
         "os"
@@ -5704,7 +5634,7 @@ func (c *capturer) CaptureOutput(fnc func()) (string, string, error) <span class
 }
 </pre>
 		
-		<pre class="file" id="file52" style="display: none">package utility
+		<pre class="file" id="file51" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -5737,7 +5667,7 @@ func (d *downloadUtil) Download(url string) (proxy.Response, error) <span class=
 }
 </pre>
 		
-		<pre class="file" id="file53" style="display: none">package utility
+		<pre class="file" id="file52" style="display: none">package utility
 
 import (
         "io"
@@ -5890,7 +5820,7 @@ func (f *fileUtil) UnhideFile(hiddenFilePath string) error <span class="cov8" ti
 }
 </pre>
 		
-		<pre class="file" id="file54" style="display: none">package utility
+		<pre class="file" id="file53" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -5919,7 +5849,7 @@ func (ju *jsonUtil) Marshal(v interface{}) ([]byte, error) <span class="cov8" ti
 }</span>
 </pre>
 		
-		<pre class="file" id="file55" style="display: none">package utility
+		<pre class="file" id="file54" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -5967,7 +5897,7 @@ func (k *keyboardUtil) OpenKeyboard() error <span class="cov8" title="1">{
 }</span>
 </pre>
 		
-		<pre class="file" id="file56" style="display: none">package utility
+		<pre class="file" id="file55" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -6000,7 +5930,7 @@ func (p *promptUtil) GetPrompt(label string) proxy.Prompt <span class="cov8" tit
 }</span>
 </pre>
 		
-		<pre class="file" id="file57" style="display: none">package utility
+		<pre class="file" id="file56" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -6032,7 +5962,7 @@ func (ru *randUtil) GenerateRandomNumber(max int) int <span class="cov8" title="
 }
 </pre>
 		
-		<pre class="file" id="file58" style="display: none">package utility
+		<pre class="file" id="file57" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"
@@ -6071,7 +6001,7 @@ func (s *spinnerUtil) GetSpinner(isReversed bool, color string, suffix string) (
 }
 </pre>
 		
-		<pre class="file" id="file59" style="display: none">package utility
+		<pre class="file" id="file58" style="display: none">package utility
 
 import (
         "strings"
@@ -6108,7 +6038,7 @@ func (s *stringsUtil) RemoveTabs(str string) string <span class="cov8" title="1"
 }</span>
 </pre>
 		
-		<pre class="file" id="file60" style="display: none">package utility
+		<pre class="file" id="file59" style="display: none">package utility
 
 import (
         "io"
@@ -6153,7 +6083,7 @@ func (t *tableWriterUtil) GetNewDefaultTable(writer io.Writer) proxy.Table <span
 }</span>
 </pre>
 		
-		<pre class="file" id="file61" style="display: none">package utility
+		<pre class="file" id="file60" style="display: none">package utility
 
 import (
         "github.com/yanosea/jrp/v2/pkg/proxy"

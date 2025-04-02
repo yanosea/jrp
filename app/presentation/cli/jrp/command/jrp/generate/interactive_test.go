@@ -3,8 +3,10 @@ package generate
 import (
 	"context"
 	"errors"
+	"io"
 	"os"
 	"path/filepath"
+	"strings"
 	"testing"
 
 	c "github.com/spf13/cobra"
@@ -12,6 +14,7 @@ import (
 	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
 	wnjpnApp "github.com/yanosea/jrp/v2/app/application/wnjpn"
 	"github.com/yanosea/jrp/v2/app/infrastructure/database"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/formatter"
 	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/presenter"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
@@ -112,6 +115,7 @@ func Test_runInteractive(t *testing.T) {
 	origKu := presenter.Ku
 	origFunc := database.GetConnectionManagerFunc
 	origNewFetchWordsUseCase := wnjpnApp.NewFetchWordsUseCase
+	origPrint := presenter.Print
 	duc := jrpApp.NewDownloadUseCase()
 	if err := duc.Run(filepath.Join(os.TempDir(), "wnjpn.db")); err != nil && err.Error() != "wnjpn.db already exists" {
 		t.Errorf("Failed to download WordNet Japan DB file: %v", err)
@@ -683,6 +687,55 @@ func Test_runInteractive(t *testing.T) {
 			},
 		},
 		{
+			name: "negative testing (presenter.Print(os.Stdout, formatter.Blue(\"🔄 Phase : \"+strconv.Itoa(phase)))) failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				presenter.Print = func(writer io.Writer, output string) error {
+					if strings.Contains(output, "Phase") {
+						return errors.New("Print() failed")
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
+				output = ""
+			},
+		},
+		{
 			name: "negative testing (formatter.NewFormatter(interactiveOps.Format) failed)",
 			args: args{
 				cmd:    &c.Command{},
@@ -723,6 +776,218 @@ func Test_runInteractive(t *testing.T) {
 					t.Errorf("Failed to remove test database: %v", err)
 				}
 				interactiveOps = origInteractiveOps
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"\n\")) failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				printCount := 0
+				presenter.Print = func(writer io.Writer, output string) error {
+					if strings.Contains(output, "Phase") {
+						return origPrint(writer, output)
+					}
+					if output == "\n" {
+						printCount++
+						if printCount == 1 {
+							return errors.New("Print(\\n) failed")
+						}
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, o)) failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				printCount := 0
+				presenter.Print = func(writer io.Writer, output string) error {
+					if strings.Contains(output, "Phase") || output == "\n" {
+						return origPrint(writer, output)
+					}
+					printCount++
+					if printCount == 1 {
+						return errors.New("Print(o) failed")
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"\n\"))) failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				newlineCount := 0
+				presenter.Print = func(writer io.Writer, output string) error {
+					if output == "\n" {
+						newlineCount++
+						if newlineCount == 2 {
+							return errors.New("Print(\\n) failed")
+						}
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, formatter.Yellow(interactivePromptLabel))) failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				presenter.Print = func(writer io.Writer, output string) error {
+					if strings.Contains(output, "Press either key below") {
+						return errors.New("Print(interactivePromptLabel) failed")
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
 				output = ""
 			},
 		},
@@ -822,6 +1087,54 @@ func Test_runInteractive(t *testing.T) {
 			},
 		},
 		{
+			name: "negative testing (presenter.CloseKeyboard() failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				mockKeyboardUtil := utility.NewMockKeyboardUtil(mockCtrl)
+				mockKeyboardUtil.EXPECT().OpenKeyboard().Return(nil).Times(1)
+				mockKeyboardUtil.EXPECT().GetKey(interactiveOps.Timeout).Return("m", nil).Times(1)
+				mockKeyboardUtil.EXPECT().CloseKeyboard().Return(errors.New("KeyboardUtil.CloseKeyboard() failed")).Times(1)
+				presenter.Ku = mockKeyboardUtil
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Ku = origKu
+				output = ""
+			},
+		},
+		{
 			name: "negative testing (shuc.Run() failed)",
 			args: args{
 				cmd:    &c.Command{},
@@ -856,6 +1169,408 @@ func Test_runInteractive(t *testing.T) {
 				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
 					t.Errorf("Failed to remove test database: %v", err)
 				}
+				presenter.Ku = origKu
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, formatter.Green(\"✅ Favorited successfully!\"))) failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				mockKeyboardUtil := utility.NewMockKeyboardUtil(mockCtrl)
+				mockKeyboardUtil.EXPECT().OpenKeyboard().Return(nil)
+				mockKeyboardUtil.EXPECT().GetKey(interactiveOps.Timeout).Return("u", nil)
+				mockKeyboardUtil.EXPECT().CloseKeyboard()
+				presenter.Ku = mockKeyboardUtil
+				presenter.Print = func(writer io.Writer, output string) error {
+					if strings.Contains(output, "Favorited successfully") {
+						return errors.New("Print(Favorited successfully) failed")
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
+				presenter.Ku = origKu
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"\n\"))) after favorited failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				mockKeyboardUtil := utility.NewMockKeyboardUtil(mockCtrl)
+				mockKeyboardUtil.EXPECT().OpenKeyboard().Return(nil)
+				mockKeyboardUtil.EXPECT().GetKey(interactiveOps.Timeout).Return("u", nil)
+				mockKeyboardUtil.EXPECT().CloseKeyboard()
+				presenter.Ku = mockKeyboardUtil
+				var successMsgShown bool
+				presenter.Print = func(writer io.Writer, output string) error {
+					if strings.Contains(output, "Favorited successfully") {
+						successMsgShown = true
+						return origPrint(writer, output)
+					}
+					if output == "\n" && successMsgShown {
+						return errors.New("Print(\\n) after favorited failed")
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
+				presenter.Ku = origKu
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, formatter.Green(\"✅ Saved successfully!\")) failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				mockKeyboardUtil := utility.NewMockKeyboardUtil(mockCtrl)
+				mockKeyboardUtil.EXPECT().OpenKeyboard().Return(nil)
+				mockKeyboardUtil.EXPECT().GetKey(interactiveOps.Timeout).Return("j", nil)
+				mockKeyboardUtil.EXPECT().CloseKeyboard()
+				presenter.Ku = mockKeyboardUtil
+				presenter.Print = func(writer io.Writer, output string) error {
+					if strings.Contains(output, "Saved successfully") {
+						return errors.New("Print(Saved successfully) failed")
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
+				presenter.Ku = origKu
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"\n\"))) after saved failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				mockKeyboardUtil := utility.NewMockKeyboardUtil(mockCtrl)
+				mockKeyboardUtil.EXPECT().OpenKeyboard().Return(nil)
+				mockKeyboardUtil.EXPECT().GetKey(interactiveOps.Timeout).Return("j", nil)
+				mockKeyboardUtil.EXPECT().CloseKeyboard()
+				presenter.Ku = mockKeyboardUtil
+				var successMsgShown bool
+				presenter.Print = func(writer io.Writer, output string) error {
+					if strings.Contains(output, "Saved successfully") {
+						successMsgShown = true
+						return origPrint(writer, output)
+					}
+					if output == "\n" && successMsgShown {
+						return errors.New("Print(\\n) after saved failed")
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
+				presenter.Ku = origKu
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, formatter.Yellow(\"⏩ Skip!\")) failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				var printCalls int
+				mockKeyboardUtil := utility.NewMockKeyboardUtil(mockCtrl)
+				mockKeyboardUtil.EXPECT().OpenKeyboard().Return(nil).Times(1)
+				mockKeyboardUtil.EXPECT().GetKey(gomock.Any()).Return("m", nil).Times(1)
+				mockKeyboardUtil.EXPECT().CloseKeyboard().Times(1)
+				presenter.Ku = mockKeyboardUtil
+				presenter.Print = func(writer io.Writer, output string) error {
+					printCalls++
+					if output == formatter.Yellow("⏩ Skip!") {
+						return errors.New("Print(Skip) failed")
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
+				presenter.Ku = origKu
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"\n\")) after Skip failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				mockKeyboardUtil := utility.NewMockKeyboardUtil(mockCtrl)
+				mockKeyboardUtil.EXPECT().OpenKeyboard().Return(nil).Times(1)
+				mockKeyboardUtil.EXPECT().GetKey(gomock.Any()).Return("m", nil).Times(1)
+				mockKeyboardUtil.EXPECT().CloseKeyboard().Times(1)
+				presenter.Ku = mockKeyboardUtil
+				var skipMsgShown bool
+				presenter.Print = func(writer io.Writer, output string) error {
+					if strings.Contains(output, "Skip") {
+						skipMsgShown = true
+						return origPrint(writer, output)
+					}
+					if output == "\n" && skipMsgShown {
+						return errors.New("Print(\\n) after skip failed")
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
+				presenter.Ku = origKu
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"🚪 Exit!\") failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				mockKeyboardUtil := utility.NewMockKeyboardUtil(mockCtrl)
+				mockKeyboardUtil.EXPECT().OpenKeyboard().Return(nil)
+				mockKeyboardUtil.EXPECT().GetKey(interactiveOps.Timeout).Return(",", nil)
+				mockKeyboardUtil.EXPECT().CloseKeyboard()
+				presenter.Ku = mockKeyboardUtil
+				presenter.Print = func(writer io.Writer, output string) error {
+					if strings.Contains(output, "Exit") {
+						return errors.New("Print(Exit) failed")
+					}
+					return origPrint(writer, output)
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				presenter.Print = origPrint
 				presenter.Ku = origKu
 				output = ""
 			},
