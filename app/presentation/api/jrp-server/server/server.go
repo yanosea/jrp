@@ -84,7 +84,7 @@ func (s *server) Init(
 	}
 
 	if conf.WNJpnDBType == database.SQLite && !fileUtil.IsExist(conf.WNJpnDBDsn) {
-		s.Logger.Fatal(errors.New("WordNet Japanese database is not found..."))
+		s.Logger.Fatal(errors.New("wnjpn database file not found"))
 		return 1
 	}
 

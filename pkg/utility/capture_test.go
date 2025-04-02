@@ -74,8 +74,12 @@ func TestCapturer_CaptureOutput(t *testing.T) {
 			},
 			args: args{
 				fnc: func() {
-					fmt.Fprint(os.Stdout, "stdout")
-					fmt.Fprint(os.Stderr, "stderr")
+					if _, err := fmt.Fprint(os.Stdout, "stdout"); err != nil {
+						t.Errorf("failed to write to stdout: %v", err)
+					}
+					if _, err := fmt.Fprint(os.Stderr, "stderr"); err != nil {
+						t.Errorf("failed to write to stderr: %v", err)
+					}
 				},
 			},
 			wantStdOut: "stdout",
@@ -91,8 +95,12 @@ func TestCapturer_CaptureOutput(t *testing.T) {
 			},
 			args: args{
 				fnc: func() {
-					fmt.Fprint(os.Stdout, "stdout")
-					fmt.Fprint(os.Stderr, "stderr")
+					if _, err := fmt.Fprint(os.Stdout, "stdout"); err != nil {
+						t.Errorf("failed to write to stdout: %v", err)
+					}
+					if _, err := fmt.Fprint(os.Stderr, "stderr"); err != nil {
+						t.Errorf("failed to write to stderr: %v", err)
+					}
 				},
 			},
 			wantStdOut: "",
@@ -115,8 +123,12 @@ func TestCapturer_CaptureOutput(t *testing.T) {
 			},
 			args: args{
 				fnc: func() {
-					fmt.Fprint(os.Stdout, "stdout")
-					fmt.Fprint(os.Stderr, "stderr")
+					if _, err := fmt.Fprint(os.Stdout, "stdout"); err != nil {
+						t.Errorf("failed to write to stdout: %v", err)
+					}
+					if _, err := fmt.Fprint(os.Stderr, "stderr"); err != nil {
+						t.Errorf("failed to write to stderr: %v", err)
+					}
 				},
 			},
 			wantStdOut: "",

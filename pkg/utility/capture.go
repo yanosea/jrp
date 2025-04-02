@@ -46,8 +46,12 @@ func (c *capturer) CaptureOutput(fnc func()) (string, string, error) {
 
 	fnc()
 
-	wOut.Close()
-	wErr.Close()
+	if err := wOut.Close(); err != nil {
+		return "", "", err
+	}
+	if err := wErr.Close(); err != nil {
+		return "", "", err
+	}
 
 	if _, err := c.stdBuffer.ReadFrom(rOut); err != nil {
 		return "", "", err

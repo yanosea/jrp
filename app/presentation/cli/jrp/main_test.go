@@ -18,10 +18,18 @@ import (
 func Test_main(t *testing.T) {
 	stdBuffer := proxy.NewBuffer()
 	errBuffer := proxy.NewBuffer()
-	os.Setenv("JRP_DB_TYPE", "sqlite")
-	os.Setenv("JRP_DB", filepath.Join(os.TempDir(), "jrp.db"))
-	os.Setenv("JRP_WNJPN_DB_TYPE", "sqlite")
-	os.Setenv("JRP_WNJPN_DB", filepath.Join(os.TempDir(), "wnjpn.db"))
+	if err := os.Setenv("JRP_DB_TYPE", "sqlite"); err != nil {
+		t.Fatalf("Failed to set environment variable: %v", err)
+	}
+	if err := os.Setenv("JRP_DB", filepath.Join(os.TempDir(), "jrp.db")); err != nil {
+		t.Fatalf("Failed to set environment variable: %v", err)
+	}
+	if err := os.Setenv("JRP_WNJPN_DB_TYPE", "sqlite"); err != nil {
+		t.Fatalf("Failed to set environment variable: %v", err)
+	}
+	if err := os.Setenv("JRP_WNJPN_DB", filepath.Join(os.TempDir(), "wnjpn.db")); err != nil {
+		t.Fatalf("Failed to set environment variable: %v", err)
+	}
 	origExit := exit
 	exit = func(code int) {}
 	defer func() {

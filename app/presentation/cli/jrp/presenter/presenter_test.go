@@ -35,7 +35,9 @@ func TestPrint(t *testing.T) {
 			},
 			args: args{
 				fnc: func() {
-					Print(os.Stdout, "test stdout")
+					if err := Print(os.Stdout, "test stdout"); err != nil {
+						t.Errorf("Print() error = %v", err)
+					}
 				},
 			},
 			wantStdOut: "test stdout\n",
@@ -50,7 +52,9 @@ func TestPrint(t *testing.T) {
 			},
 			args: args{
 				fnc: func() {
-					Print(os.Stdout, "")
+					if err := Print(os.Stdout, ""); err != nil {
+						t.Errorf("Print() error = %v", err)
+					}
 				},
 			},
 			wantStdOut: "\n",
@@ -65,7 +69,9 @@ func TestPrint(t *testing.T) {
 			},
 			args: args{
 				fnc: func() {
-					Print(os.Stderr, "test stderr")
+					if err := Print(os.Stderr, "test stderr"); err != nil {
+						t.Errorf("Print() error = %v", err)
+					}
 				},
 			},
 			wantStdOut: "",
@@ -80,7 +86,9 @@ func TestPrint(t *testing.T) {
 			},
 			args: args{
 				fnc: func() {
-					Print(os.Stderr, "")
+					if err := Print(os.Stderr, ""); err != nil {
+						t.Errorf("Print() error = %v", err)
+					}
 				},
 			},
 			wantStdOut: "",

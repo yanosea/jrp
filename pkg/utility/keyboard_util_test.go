@@ -73,7 +73,9 @@ func Test_keyboardUtil_CloseKeyboard(t *testing.T) {
 			k := &keyboardUtil{
 				keyboard: tt.fields.keyboard,
 			}
-			k.CloseKeyboard()
+			if err := k.CloseKeyboard(); err != nil {
+				t.Errorf("keyboardUtil.CloseKeyboard() error = %v", err)
+			}
 		})
 	}
 }

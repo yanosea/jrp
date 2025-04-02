@@ -43,7 +43,9 @@ func TestCloseKeyboard(t *testing.T) {
 			}
 		}()
 		t.Run(tt.name, func(t *testing.T) {
-			CloseKeyboard()
+			if err := CloseKeyboard(); err != nil {
+				t.Errorf("CloseKeyboard() error = %v", err)
+			}
 		})
 	}
 }

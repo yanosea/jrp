@@ -39,9 +39,11 @@ func (m *MockKeyboardUtil) EXPECT() *MockKeyboardUtilMockRecorder {
 }
 
 // CloseKeyboard mocks base method.
-func (m *MockKeyboardUtil) CloseKeyboard() {
+func (m *MockKeyboardUtil) CloseKeyboard() error {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "CloseKeyboard")
+	ret := m.ctrl.Call(m, "CloseKeyboard")
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // CloseKeyboard indicates an expected call of CloseKeyboard.
