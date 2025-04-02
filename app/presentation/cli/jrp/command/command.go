@@ -56,7 +56,9 @@ func (c *cli) Init(
 	conf, err := configurator.GetConfig()
 	if err != nil {
 		output = formatter.AppendErrorToOutput(err, output)
-		presenter.Print(os.Stderr, output)
+		if err := presenter.Print(os.Stderr, output); err != nil {
+			return 1
+		}
 		return 1
 	}
 
@@ -73,7 +75,9 @@ func (c *cli) Init(
 			},
 		); err != nil {
 			output = formatter.AppendErrorToOutput(err, output)
-			presenter.Print(os.Stderr, output)
+			if err := presenter.Print(os.Stderr, output); err != nil {
+				return 1
+			}
 			return 1
 		}
 	}
@@ -87,7 +91,9 @@ func (c *cli) Init(
 			},
 		); err != nil {
 			output = formatter.AppendErrorToOutput(err, output)
-			presenter.Print(os.Stderr, output)
+			if err := presenter.Print(os.Stderr, output); err != nil {
+				return 1
+			}
 			return 1
 		}
 	}
@@ -108,7 +114,9 @@ func (c *cli) Run(ctx context.Context) (exitCode int) {
 		if c.ConnectionManager != nil {
 			if err := c.ConnectionManager.CloseAllConnections(); err != nil {
 				output = formatter.AppendErrorToOutput(err, output)
-				presenter.Print(os.Stderr, output)
+				if err := presenter.Print(os.Stderr, output); err != nil {
+					exitCode = 1
+				}
 				exitCode = 1
 			}
 		}
@@ -121,7 +129,9 @@ func (c *cli) Run(ctx context.Context) (exitCode int) {
 		exitCode = 1
 	}
 
-	presenter.Print(out, output)
+	if err := presenter.Print(out, output); err != nil {
+		exitCode = 1
+	}
 
 	return
 }

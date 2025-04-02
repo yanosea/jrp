@@ -9,7 +9,7 @@ import (
 
 // Keyboard is an interface that provides a proxy of the methods of keyboard.
 type Keyboard interface {
-	Close()
+	Close() error
 	GetKey(timeoutSec int) (rune, keyboard.Key, error)
 	Open() error
 }
@@ -28,8 +28,8 @@ func (k *keyboardProxy) Open() error {
 }
 
 // Close is a proxy method that calls the Close method of the keyboard.
-func (k *keyboardProxy) Close() {
-	keyboard.Close()
+func (k *keyboardProxy) Close() error {
+	return keyboard.Close()
 }
 
 // GetKey is a proxy method that calls the GetKey method of the keyboard.

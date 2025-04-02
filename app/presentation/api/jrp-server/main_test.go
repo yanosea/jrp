@@ -13,8 +13,12 @@ import (
 )
 
 func Test_main(t *testing.T) {
-	os.Setenv("JRP_SERVER_WNJPN_DB_TYPE", "sqlite")
-	os.Setenv("JRP_SERVER_WNJPN_DB", filepath.Join(os.TempDir(), "wnjpn.db"))
+	if err := os.Setenv("JRP_SERVER_WNJPN_DB_TYPE", "sqlite"); err != nil {
+		t.Fatalf("failed to set env var: %v", err)
+	}
+	if err := os.Setenv("JRP_SERVER_WNJPN_DB", filepath.Join(os.TempDir(), "wnjpn.db")); err != nil {
+		t.Fatalf("failed to set env var: %v", err)
+	}
 	origExit := exit
 	exit = func(code int) {}
 	defer func() {

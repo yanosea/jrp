@@ -11,6 +11,7 @@ type Os interface {
 	IsNotExist(err error) bool
 	MkdirAll(path string, perm os.FileMode) error
 	Open(name string) (File, error)
+	Pipe() (File, File, error)
 	RemoveAll(path string) error
 	Rename(oldpath, newpath string) error
 	Stat(name string) (os.FileInfo, error)
@@ -53,6 +54,15 @@ func (osProxy) Open(name string) (File, error) {
 	return &fileProxy{file}, err
 }
 
+// Pipe creates a synchronous in-memory pipe.
+func (osProxy) Pipe() (File, File, error) {
+	read, write, err := os.Pipe()
+	if err != nil {
+		return nil, nil, err
+	}
+	return &fileProxy{read}, &fileProxy{write}, nil
+}
+
 // RemoveAll removes path and any children it contains.
 func (osProxy) RemoveAll(path string) error {
 	return os.RemoveAll(path)
@@ -80,6 +90,7 @@ func (osProxy) UserHomeDir() (string, error) {
 
 // File is an interface that provides a proxy of the methods of os.File.
 type File interface {
+	AsOsFile() *os.File
 	Close() error
 	Read(b []byte) (n int, err error)
 	Write(b []byte) (n int, err error)
@@ -88,6 +99,11 @@ type File interface {
 // fileProxy is a proxy struct that implements the File interface.
 type fileProxy struct {
 	file *os.File
+}
+
+// This method allows fileProxy to be type asserted to *os.File
+func (f *fileProxy) AsOsFile() *os.File {
+	return f.file
 }
 
 // Close closes the File, rendering it unusable for I/O.

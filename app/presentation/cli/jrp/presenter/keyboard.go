@@ -11,8 +11,8 @@ var (
 )
 
 // CloseKeyboard closes the keyboard.
-func CloseKeyboard() {
-	Ku.CloseKeyboard()
+func CloseKeyboard() error {
+	return Ku.CloseKeyboard()
 }
 
 // GetKey gets a key from the keyboard.

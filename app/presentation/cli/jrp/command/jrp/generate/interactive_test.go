@@ -683,6 +683,10 @@ func Test_runInteractive(t *testing.T) {
 			},
 		},
 		{
+			name: "negative testing (presenter.Print(os.Stdout, formatter.Blue(\"🔄 Phase : \"+strconv.Itoa(phase)))) failed)",
+			// TODO : implement this test case
+		},
+		{
 			name: "negative testing (formatter.NewFormatter(interactiveOps.Format) failed)",
 			args: args{
 				cmd:    &c.Command{},
@@ -725,6 +729,22 @@ func Test_runInteractive(t *testing.T) {
 				interactiveOps = origInteractiveOps
 				output = ""
 			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"\n\")) failed)",
+			// TODO : implement this test case
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, o)) failed)",
+			// TODO : implement this test case
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"\n\"))) failed)",
+			// TODO : implement this test case
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, formatter.Yellow(interactivePromptLabel))) failed)",
+			// TODO : implement this test case
 		},
 		{
 			name: "negative testing (presenter.OpenKeyboard() failed)",
@@ -803,7 +823,6 @@ func Test_runInteractive(t *testing.T) {
 				mockKeyboardUtil := utility.NewMockKeyboardUtil(mockCtrl)
 				mockKeyboardUtil.EXPECT().OpenKeyboard().Return(nil)
 				mockKeyboardUtil.EXPECT().GetKey(interactiveOps.Timeout).Return("", errors.New("KeyboardUtil.GetKey() failed"))
-				mockKeyboardUtil.EXPECT().CloseKeyboard()
 				presenter.Ku = mockKeyboardUtil
 				cmd := &c.Command{}
 				cmd.SetContext(context.Background())
@@ -860,6 +879,34 @@ func Test_runInteractive(t *testing.T) {
 				presenter.Ku = origKu
 				output = ""
 			},
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, formatter.Green(\"✅ Favorited successfully!\"))) failed)",
+			// TODO : implement this test case
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"\n\"))) failed)",
+			// TODO : implement this test case
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, formatter.Green(\"✅ Saved successfully!\")) failed)",
+			// TODO : implement this test case
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"\n\"))) failed)",
+			// TODO : implement this test case
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, formatter.Yellow(\"⏩ Skip!\")) failed)",
+			// TODO : implement this test case
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"\n\"))) failed)",
+			// TODO : implement this test case
+		},
+		{
+			name: "negative testing (presenter.Print(os.Stdout, \"🚪 Exit!\") failed)",
+			// TODO : implement this test case
 		},
 	}
 	for _, tt := range tests {

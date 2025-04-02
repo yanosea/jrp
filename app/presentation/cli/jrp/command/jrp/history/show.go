@@ -94,7 +94,7 @@ func runShow(
 	args []string,
 	output *string,
 ) error {
-	var number int = showOps.Number
+	var number = showOps.Number
 	isDefaultNumber := number == 10
 	if len(args) > 0 {
 		argNumber, err := strconv.Atoi(args[0])

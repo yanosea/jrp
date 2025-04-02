@@ -6,10 +6,12 @@ import (
 )
 
 // Print is a function that writes the output to the writer.
-func Print(writer io.Writer, output string) {
+func Print(writer io.Writer, output string) error {
 	if output != "" && output != "\n" {
-		fmt.Fprintf(writer, "%s\n", output)
+		_, err := fmt.Fprintf(writer, "%s\n", output)
+		return err
 	} else {
-		fmt.Fprintln(writer)
+		_, err := fmt.Fprintln(writer)
+		return err
 	}
 }

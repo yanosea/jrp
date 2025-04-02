@@ -6,7 +6,7 @@ import (
 
 // KeyboardUtil provides the utility for the keyboard.
 type KeyboardUtil interface {
-	CloseKeyboard()
+	CloseKeyboard() error
 	GetKey(timeoutSec int) (string, error)
 	OpenKeyboard() error
 }
@@ -26,8 +26,8 @@ func NewKeyboardUtil(
 }
 
 // CloseKeyboard closes the keyboard.
-func (k *keyboardUtil) CloseKeyboard() {
-	k.keyboard.Close()
+func (k *keyboardUtil) CloseKeyboard() error {
+	return k.keyboard.Close()
 }
 
 // GetKey returns a key from the keyboard.
