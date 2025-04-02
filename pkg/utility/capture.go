@@ -13,6 +13,8 @@ type Capturer interface {
 
 // capturer is a struct that implements the Captures interface.
 type capturer struct {
+	// os is an interface for operating system functions.
+	os proxy.Os
 	// stdBuffer is a buffer for standard output.
 	stdBuffer proxy.Buffer
 	// errBuffer is a buffer for error output.
@@ -21,10 +23,12 @@ type capturer struct {
 
 // NewCapturer returns a new instance of the capturer struct.
 func NewCapturer(
+	os proxy.Os,
 	stdBuffer proxy.Buffer,
 	errBuffer proxy.Buffer,
 ) *capturer {
 	return &capturer{
+		os:        os,
 		stdBuffer: stdBuffer,
 		errBuffer: errBuffer,
 	}
@@ -39,10 +43,10 @@ func (c *capturer) CaptureOutput(fnc func()) (string, string, error) {
 		os.Stderr = origStderr
 	}()
 
-	rOut, wOut, _ := os.Pipe()
-	rErr, wErr, _ := os.Pipe()
-	os.Stdout = wOut
-	os.Stderr = wErr
+	rOut, wOut, _ := c.os.Pipe()
+	rErr, wErr, _ := c.os.Pipe()
+	os.Stdout = wOut.(interface{ AsOsFile() *os.File }).AsOsFile()
+	os.Stderr = wErr.(interface{ AsOsFile() *os.File }).AsOsFile()
 
 	fnc()
 

@@ -49,6 +49,7 @@ func Test_newCli(t *testing.T) {
 }
 
 func Test_cli_Init(t *testing.T) {
+	os := proxy.NewOs()
 	stdBuffer := proxy.NewBuffer()
 	errBuffer := proxy.NewBuffer()
 	cobra := proxy.NewCobra()
@@ -58,6 +59,7 @@ func Test_cli_Init(t *testing.T) {
 	}
 
 	type fields struct {
+		os        proxy.Os
 		StdBuffer proxy.Buffer
 		ErrBuffer proxy.Buffer
 	}
@@ -77,6 +79,7 @@ func Test_cli_Init(t *testing.T) {
 		{
 			name: "positive testing",
 			fields: fields{
+				os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
@@ -150,6 +153,7 @@ func Test_cli_Init(t *testing.T) {
 		{
 			name: "negative testing (configurator.GetConfig() failed)",
 			fields: fields{
+				os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
@@ -225,6 +229,7 @@ func Test_cli_Init(t *testing.T) {
 		{
 			name: "negative testing (JrpDB InitializeConnection failed)",
 			fields: fields{
+				os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
@@ -300,6 +305,7 @@ func Test_cli_Init(t *testing.T) {
 		{
 			name: "negative testing (WNJpnDB InitializeConnection failed)",
 			fields: fields{
+				os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
@@ -387,7 +393,7 @@ func Test_cli_Init(t *testing.T) {
 					tt.cleanup()
 				}
 			}()
-			c := utility.NewCapturer(tt.fields.StdBuffer, tt.fields.ErrBuffer)
+			c := utility.NewCapturer(tt.fields.os, tt.fields.StdBuffer, tt.fields.ErrBuffer)
 			gotStdOut, gotStdErr, err := c.CaptureOutput(func() {
 				tt.args.fnc(mockCtrl)
 			})
@@ -406,10 +412,12 @@ func Test_cli_Init(t *testing.T) {
 }
 
 func Test_cli_Run(t *testing.T) {
+	os := proxy.NewOs()
 	stdBuffer := proxy.NewBuffer()
 	errBuffer := proxy.NewBuffer()
 
 	type fields struct {
+		os        proxy.Os
 		StdBuffer proxy.Buffer
 		ErrBuffer proxy.Buffer
 	}
@@ -429,6 +437,7 @@ func Test_cli_Run(t *testing.T) {
 		{
 			name: "positive testing",
 			fields: fields{
+				os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
@@ -461,6 +470,7 @@ func Test_cli_Run(t *testing.T) {
 		{
 			name: "negative testing (c.RootCommand.ExecuteContext() failed)",
 			fields: fields{
+				os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
@@ -493,6 +503,7 @@ func Test_cli_Run(t *testing.T) {
 		{
 			name: "negative testing (c.ConnectionManager.CloseAllConnections() failed)",
 			fields: fields{
+				os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
@@ -528,7 +539,7 @@ func Test_cli_Run(t *testing.T) {
 			mockCtrl := gomock.NewController(t)
 			defer mockCtrl.Finish()
 			output = ""
-			c := utility.NewCapturer(tt.fields.StdBuffer, tt.fields.ErrBuffer)
+			c := utility.NewCapturer(tt.fields.os, tt.fields.StdBuffer, tt.fields.ErrBuffer)
 			gotStdOut, gotStdErr, err := c.CaptureOutput(func() {
 				tt.args.fnc(mockCtrl)
 			})

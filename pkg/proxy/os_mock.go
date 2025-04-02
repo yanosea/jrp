@@ -111,6 +111,22 @@ func (mr *MockOsMockRecorder) Open(name any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Open", reflect.TypeOf((*MockOs)(nil).Open), name)
 }
 
+// Pipe mocks base method.
+func (m *MockOs) Pipe() (File, File, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Pipe")
+	ret0, _ := ret[0].(File)
+	ret1, _ := ret[1].(File)
+	ret2, _ := ret[2].(error)
+	return ret0, ret1, ret2
+}
+
+// Pipe indicates an expected call of Pipe.
+func (mr *MockOsMockRecorder) Pipe() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Pipe", reflect.TypeOf((*MockOs)(nil).Pipe))
+}
+
 // RemoveAll mocks base method.
 func (m *MockOs) RemoveAll(path string) error {
 	m.ctrl.T.Helper()
@@ -204,6 +220,20 @@ func NewMockFile(ctrl *gomock.Controller) *MockFile {
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockFile) EXPECT() *MockFileMockRecorder {
 	return m.recorder
+}
+
+// AsOsFile mocks base method.
+func (m *MockFile) AsOsFile() *os.File {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AsOsFile")
+	ret0, _ := ret[0].(*os.File)
+	return ret0
+}
+
+// AsOsFile indicates an expected call of AsOsFile.
+func (mr *MockFileMockRecorder) AsOsFile() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AsOsFile", reflect.TypeOf((*MockFile)(nil).AsOsFile))
 }
 
 // Close mocks base method.

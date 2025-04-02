@@ -1,7 +1,7 @@
 package main
 
 import (
-	"os"
+	o "os"
 	"path/filepath"
 	"testing"
 
@@ -16,18 +16,19 @@ import (
 )
 
 func Test_main(t *testing.T) {
+	os := proxy.NewOs()
 	stdBuffer := proxy.NewBuffer()
 	errBuffer := proxy.NewBuffer()
-	if err := os.Setenv("JRP_DB_TYPE", "sqlite"); err != nil {
+	if err := o.Setenv("JRP_DB_TYPE", "sqlite"); err != nil {
 		t.Fatalf("Failed to set environment variable: %v", err)
 	}
-	if err := os.Setenv("JRP_DB", filepath.Join(os.TempDir(), "jrp.db")); err != nil {
+	if err := o.Setenv("JRP_DB", filepath.Join(o.TempDir(), "jrp.db")); err != nil {
 		t.Fatalf("Failed to set environment variable: %v", err)
 	}
-	if err := os.Setenv("JRP_WNJPN_DB_TYPE", "sqlite"); err != nil {
+	if err := o.Setenv("JRP_WNJPN_DB_TYPE", "sqlite"); err != nil {
 		t.Fatalf("Failed to set environment variable: %v", err)
 	}
-	if err := os.Setenv("JRP_WNJPN_DB", filepath.Join(os.TempDir(), "wnjpn.db")); err != nil {
+	if err := o.Setenv("JRP_WNJPN_DB", filepath.Join(o.TempDir(), "wnjpn.db")); err != nil {
 		t.Fatalf("Failed to set environment variable: %v", err)
 	}
 	origExit := exit
@@ -35,9 +36,10 @@ func Test_main(t *testing.T) {
 	defer func() {
 		exit = origExit
 	}()
-	origArgs := os.Args
+	origArgs := o.Args
 
 	type fields struct {
+		Os        proxy.Os
 		StdBuffer proxy.Buffer
 		ErrBuffer proxy.Buffer
 	}
@@ -58,14 +60,15 @@ func Test_main(t *testing.T) {
 		{
 			name: "initial execution (jrp)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					os.Args = []string{"/path/to/jrp"}
+					o.Args = []string{"/path/to/jrp"}
 					defer func() {
-						os.Args = origArgs
+						o.Args = origArgs
 					}()
 					main()
 				},
@@ -74,7 +77,7 @@ func Test_main(t *testing.T) {
 			wantStdOut: color.YellowString("⚡ You have to execute \"download\" to use jrp...") + "\n",
 			wantStdErr: "",
 			setup: func(_ *gomock.Controller) {
-				if err := os.Remove(filepath.Join(os.TempDir(), "wnjpn.db")); err != nil && !os.IsNotExist(err) {
+				if err := o.Remove(filepath.Join(o.TempDir(), "wnjpn.db")); err != nil && !o.IsNotExist(err) {
 					t.Errorf("Failed to remove test database: %v", err)
 				}
 			},
@@ -83,14 +86,15 @@ func Test_main(t *testing.T) {
 		{
 			name: "download execution (jrp download)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					os.Args = []string{"/path/to/jrp", "download"}
+					o.Args = []string{"/path/to/jrp", "download"}
 					defer func() {
-						os.Args = origArgs
+						o.Args = origArgs
 					}()
 					main()
 				},
@@ -98,7 +102,7 @@ func Test_main(t *testing.T) {
 			wantStdOut: color.GreenString("✅ Downloaded successfully! Now, you are ready to use jrp!") + "\n",
 			wantStdErr: "",
 			setup: func(_ *gomock.Controller) {
-				if err := os.Remove(filepath.Join(os.TempDir(), "wnjpn.db")); err != nil && !os.IsNotExist(err) {
+				if err := o.Remove(filepath.Join(o.TempDir(), "wnjpn.db")); err != nil && !o.IsNotExist(err) {
 					t.Errorf("Failed to remove test database: %v", err)
 				}
 			},
@@ -107,14 +111,15 @@ func Test_main(t *testing.T) {
 		{
 			name: "re:download execution (jrp download)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					os.Args = []string{"/path/to/jrp", "download"}
+					o.Args = []string{"/path/to/jrp", "download"}
 					defer func() {
-						os.Args = origArgs
+						o.Args = origArgs
 					}()
 					main()
 				},
@@ -128,14 +133,15 @@ func Test_main(t *testing.T) {
 		{
 			name: "generate execution (jrp generate)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					os.Args = []string{"/path/to/jrp", "generate"}
+					o.Args = []string{"/path/to/jrp", "generate"}
 					defer func() {
-						os.Args = origArgs
+						o.Args = origArgs
 					}()
 					main()
 				},
@@ -149,14 +155,15 @@ func Test_main(t *testing.T) {
 		{
 			name: "generate execution with arg 10 (jrp generate 10)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					os.Args = []string{"/path/to/jrp", "generate", "10"}
+					o.Args = []string{"/path/to/jrp", "generate", "10"}
 					defer func() {
-						os.Args = origArgs
+						o.Args = origArgs
 					}()
 					main()
 				},
@@ -170,14 +177,15 @@ func Test_main(t *testing.T) {
 		{
 			name: "history execution with all options (jrp history --all)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					os.Args = []string{"/path/to/jrp", "history", "--all"}
+					o.Args = []string{"/path/to/jrp", "history", "--all"}
 					defer func() {
-						os.Args = origArgs
+						o.Args = origArgs
 					}()
 					main()
 				},
@@ -191,14 +199,15 @@ func Test_main(t *testing.T) {
 		{
 			name: "favorite execution with with arg 1 (jrp favorite 1)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					os.Args = []string{"/path/to/jrp", "favorite", "1"}
+					o.Args = []string{"/path/to/jrp", "favorite", "1"}
 					defer func() {
-						os.Args = origArgs
+						o.Args = origArgs
 					}()
 					main()
 				},
@@ -212,14 +221,15 @@ func Test_main(t *testing.T) {
 		{
 			name: "unfavorite execution with with arg 1 (jrp unfavorite 1)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					os.Args = []string{"/path/to/jrp", "unfavorite", "1"}
+					o.Args = []string{"/path/to/jrp", "unfavorite", "1"}
 					defer func() {
-						os.Args = origArgs
+						o.Args = origArgs
 					}()
 					main()
 				},
@@ -233,14 +243,15 @@ func Test_main(t *testing.T) {
 		{
 			name: "clear execution with force option and no-confirm option (jrp history clear --force --no-confirm)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					os.Args = []string{"/path/to/jrp", "history", "clear", "--force", "--no-confirm"}
+					o.Args = []string{"/path/to/jrp", "history", "clear", "--force", "--no-confirm"}
 					defer func() {
-						os.Args = origArgs
+						o.Args = origArgs
 					}()
 					main()
 				},
@@ -250,7 +261,7 @@ func Test_main(t *testing.T) {
 			wantStdErr: "",
 			setup:      nil,
 			cleanup: func() {
-				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+				if err := o.Remove(filepath.Join(o.TempDir(), "jrp.db")); err != nil && !o.IsNotExist(err) {
 					t.Errorf("Failed to remove test database: %v", err)
 				}
 			},
@@ -258,14 +269,15 @@ func Test_main(t *testing.T) {
 		{
 			name: "negative testing (cli.Init() failed)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					os.Args = []string{"/path/to/jrp"}
+					o.Args = []string{"/path/to/jrp"}
 					defer func() {
-						os.Args = origArgs
+						o.Args = origArgs
 					}()
 					main()
 				},
@@ -300,7 +312,7 @@ func Test_main(t *testing.T) {
 					tt.cleanup()
 				}
 			}()
-			c := utility.NewCapturer(tt.fields.StdBuffer, tt.fields.ErrBuffer)
+			c := utility.NewCapturer(tt.fields.Os, tt.fields.StdBuffer, tt.fields.ErrBuffer)
 			gotStdOut, gotStdErr, err := c.CaptureOutput(tt.args.fnc)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Capturer.CaptureOutput() error = %v, wantErr %v", err, tt.wantErr)

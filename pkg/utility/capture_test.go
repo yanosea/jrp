@@ -3,7 +3,7 @@ package utility
 import (
 	"errors"
 	"fmt"
-	"os"
+	o "os"
 	"reflect"
 	"testing"
 
@@ -13,10 +13,12 @@ import (
 )
 
 func TestNew(t *testing.T) {
+	os := proxy.NewOs()
 	stdBuffer := proxy.NewBuffer()
 	errBuffer := proxy.NewBuffer()
 
 	type args struct {
+		os        proxy.Os
 		sdtBuffer proxy.Buffer
 		errBuffer proxy.Buffer
 	}
@@ -28,10 +30,12 @@ func TestNew(t *testing.T) {
 		{
 			name: "positive testing",
 			args: args{
+				os:        os,
 				sdtBuffer: stdBuffer,
 				errBuffer: errBuffer,
 			},
 			want: &capturer{
+				os:        os,
 				stdBuffer: stdBuffer,
 				errBuffer: errBuffer,
 			},
@@ -39,7 +43,7 @@ func TestNew(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewCapturer(tt.args.sdtBuffer, tt.args.errBuffer); !reflect.DeepEqual(got, tt.want) {
+			if got := NewCapturer(tt.args.os, tt.args.sdtBuffer, tt.args.errBuffer); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("New() = %v, want %v", got, tt.want)
 			}
 		})
@@ -47,10 +51,12 @@ func TestNew(t *testing.T) {
 }
 
 func TestCapturer_CaptureOutput(t *testing.T) {
+	os := proxy.NewOs()
 	stdBuffer := proxy.NewBuffer()
 	errBuffer := proxy.NewBuffer()
 
 	type fields struct {
+		os        proxy.Os
 		StdBuffer proxy.Buffer
 		ErrBuffer proxy.Buffer
 	}
@@ -69,15 +75,16 @@ func TestCapturer_CaptureOutput(t *testing.T) {
 		{
 			name: "positive testing",
 			fields: fields{
+				os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					if _, err := fmt.Fprint(os.Stdout, "stdout"); err != nil {
+					if _, err := fmt.Fprint(o.Stdout, "stdout"); err != nil {
 						t.Errorf("failed to write to stdout: %v", err)
 					}
-					if _, err := fmt.Fprint(os.Stderr, "stderr"); err != nil {
+					if _, err := fmt.Fprint(o.Stderr, "stderr"); err != nil {
 						t.Errorf("failed to write to stderr: %v", err)
 					}
 				},
@@ -90,15 +97,16 @@ func TestCapturer_CaptureOutput(t *testing.T) {
 		{
 			name: "negative testing (c.OutBuffer.ReadFrom(rOut) failed)",
 			fields: fields{
+				os:        os,
 				StdBuffer: nil,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					if _, err := fmt.Fprint(os.Stdout, "stdout"); err != nil {
+					if _, err := fmt.Fprint(o.Stdout, "stdout"); err != nil {
 						t.Errorf("failed to write to stdout: %v", err)
 					}
-					if _, err := fmt.Fprint(os.Stderr, "stderr"); err != nil {
+					if _, err := fmt.Fprint(o.Stderr, "stderr"); err != nil {
 						t.Errorf("failed to write to stderr: %v", err)
 					}
 				},
@@ -118,15 +126,16 @@ func TestCapturer_CaptureOutput(t *testing.T) {
 		{
 			name: "negative testing (c.ErrBuffer.ReadFrom(rErr) failed)",
 			fields: fields{
+				os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: nil,
 			},
 			args: args{
 				fnc: func() {
-					if _, err := fmt.Fprint(os.Stdout, "stdout"); err != nil {
+					if _, err := fmt.Fprint(o.Stdout, "stdout"); err != nil {
 						t.Errorf("failed to write to stdout: %v", err)
 					}
-					if _, err := fmt.Fprint(os.Stderr, "stderr"); err != nil {
+					if _, err := fmt.Fprint(o.Stderr, "stderr"); err != nil {
 						t.Errorf("failed to write to stderr: %v", err)
 					}
 				},
@@ -152,6 +161,7 @@ func TestCapturer_CaptureOutput(t *testing.T) {
 				tt.setup(mockCtrl, &tt.fields)
 			}
 			c := &capturer{
+				os:        tt.fields.os,
 				stdBuffer: tt.fields.StdBuffer,
 				errBuffer: tt.fields.ErrBuffer,
 			}

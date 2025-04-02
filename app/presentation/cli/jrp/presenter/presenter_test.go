@@ -1,7 +1,7 @@
 package presenter
 
 import (
-	"os"
+	o "os"
 	"testing"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
@@ -9,10 +9,12 @@ import (
 )
 
 func TestPrint(t *testing.T) {
+	os := proxy.NewOs()
 	stdBuffer := proxy.NewBuffer()
 	errBuffer := proxy.NewBuffer()
 
 	type fields struct {
+		Os        proxy.Os
 		StdBuffer proxy.Buffer
 		ErrBuffer proxy.Buffer
 	}
@@ -30,12 +32,13 @@ func TestPrint(t *testing.T) {
 		{
 			name: "positive testing (stdout, not \\n)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					if err := Print(os.Stdout, "test stdout"); err != nil {
+					if err := Print(o.Stdout, "test stdout"); err != nil {
 						t.Errorf("Print() error = %v", err)
 					}
 				},
@@ -47,12 +50,13 @@ func TestPrint(t *testing.T) {
 		{
 			name: "positive testing (stdout, \\n)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					if err := Print(os.Stdout, ""); err != nil {
+					if err := Print(o.Stdout, ""); err != nil {
 						t.Errorf("Print() error = %v", err)
 					}
 				},
@@ -64,12 +68,13 @@ func TestPrint(t *testing.T) {
 		{
 			name: "positive testing (stderr, not \\n)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					if err := Print(os.Stderr, "test stderr"); err != nil {
+					if err := Print(o.Stderr, "test stderr"); err != nil {
 						t.Errorf("Print() error = %v", err)
 					}
 				},
@@ -81,12 +86,13 @@ func TestPrint(t *testing.T) {
 		{
 			name: "positive testing (stderr, \\n)",
 			fields: fields{
+				Os:        os,
 				StdBuffer: stdBuffer,
 				ErrBuffer: errBuffer,
 			},
 			args: args{
 				fnc: func() {
-					if err := Print(os.Stderr, ""); err != nil {
+					if err := Print(o.Stderr, ""); err != nil {
 						t.Errorf("Print() error = %v", err)
 					}
 				},
@@ -98,7 +104,7 @@ func TestPrint(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := utility.NewCapturer(tt.fields.StdBuffer, tt.fields.ErrBuffer)
+			c := utility.NewCapturer(tt.fields.Os, tt.fields.StdBuffer, tt.fields.ErrBuffer)
 			gotStdOut, gotStdErr, err := c.CaptureOutput(tt.args.fnc)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("Capturer.CaptureOutput() error = %v, wantErr %v", err, tt.wantErr)
