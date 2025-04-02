@@ -43,8 +43,14 @@ func (c *capturer) CaptureOutput(fnc func()) (string, string, error) {
 		os.Stderr = origStderr
 	}()
 
-	rOut, wOut, _ := c.os.Pipe()
-	rErr, wErr, _ := c.os.Pipe()
+	rOut, wOut, err := c.os.Pipe()
+	if err != nil {
+		return "", "", err
+	}
+	rErr, wErr, err := c.os.Pipe()
+	if err != nil {
+		return "", "", err
+	}
 	os.Stdout = wOut.(interface{ AsOsFile() *os.File }).AsOsFile()
 	os.Stderr = wErr.(interface{ AsOsFile() *os.File }).AsOsFile()
 
