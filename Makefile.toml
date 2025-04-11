@@ -103,7 +103,7 @@ if [ -f "./test.run" ]; then
 fi
 touch test.run
 go test -v -p 1 ./... -cover -coverprofile=./cover.out
-grep -v -E "(_mock\.go|/mock/|/proxy/)" ./cover.out > ./cover.out.tmp && mv ./cover.out.tmp ./cover.out
+grep -v -E "(_mock\.go|/mock/|/proxy/|/docs/docs\.go)" ./cover.out > ./cover.out.tmp && mv ./cover.out.tmp ./cover.out
 go tool cover -html=./cover.out -o ./docs/coverage.html
 rm ./cover.out
 if [ -f "./test.run" ]; then

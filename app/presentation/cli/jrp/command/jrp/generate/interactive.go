@@ -143,7 +143,9 @@ func runInteractive(
 
 	phase := 1
 	for {
-		presenter.Print(os.Stdout, formatter.Blue("🔄 Phase : "+strconv.Itoa(phase)))
+		if err := presenter.Print(os.Stdout, formatter.Blue("🔄 Phase : "+strconv.Itoa(phase))); err != nil {
+			return err
+		}
 
 		var gjiDtos []*jrpApp.GenerateJrpUseCaseInputDto
 		for _, fwDto := range fwoDtos {
@@ -176,40 +178,51 @@ func runInteractive(
 			return err
 		}
 		o := f.Format(gjoDtos)
-		presenter.Print(os.Stdout, "\n")
-		presenter.Print(os.Stdout, o)
-		presenter.Print(os.Stdout, "\n")
-		presenter.Print(os.Stdout, formatter.Yellow(interactivePromptLabel))
+		if err := presenter.Print(os.Stdout, "\n"); err != nil {
+			return err
+		}
+		if err := presenter.Print(os.Stdout, o); err != nil {
+			return err
+		}
+		if err := presenter.Print(os.Stdout, "\n"); err != nil {
+			return err
+		}
+		if err := presenter.Print(os.Stdout, formatter.Yellow(interactivePromptLabel)); err != nil {
+			return err
+		}
 
 		if err := presenter.OpenKeyboard(); err != nil {
 			return err
 		}
 		answer, err := presenter.GetKey(interactiveOps.Timeout)
-		presenter.CloseKeyboard()
 		if err != nil {
+			return err
+		}
+		if err := presenter.CloseKeyboard(); err != nil {
 			return err
 		}
 
 		var save bool
 		var cont bool
-		if answer == "u" || answer == "U" {
+		switch answer {
+		case "u", "U":
 			gjoDtos[0].IsFavorited = 1
 			save = true
 			cont = true
-		} else if answer == "i" || answer == "I" {
+		case "i", "I":
 			gjoDtos[0].IsFavorited = 1
 			save = true
 			cont = false
-		} else if answer == "j" || answer == "J" {
+		case "j", "J":
 			save = true
 			cont = true
-		} else if answer == "k" || answer == "K" {
+		case "k", "K":
 			save = true
 			cont = false
-		} else if answer == "m" || answer == "M" {
+		case "m", "M":
 			save = false
 			cont = true
-		} else {
+		default:
 			save = false
 			cont = false
 		}
@@ -237,19 +250,33 @@ func runInteractive(
 			}
 
 			if answer == "u" || answer == "U" || answer == "i" || answer == "I" {
-				presenter.Print(os.Stdout, formatter.Green("✅ Favorited successfully!"))
-				presenter.Print(os.Stdout, "\n")
+				if err := presenter.Print(os.Stdout, formatter.Green("✅ Favorited successfully!")); err != nil {
+					return err
+				}
+				if err := presenter.Print(os.Stdout, "\n"); err != nil {
+					return err
+				}
 			} else {
-				presenter.Print(os.Stdout, formatter.Green("✅ Saved successfully!"))
-				presenter.Print(os.Stdout, "\n")
+				if err := presenter.Print(os.Stdout, formatter.Green("✅ Saved successfully!")); err != nil {
+					return err
+				}
+				if err := presenter.Print(os.Stdout, "\n"); err != nil {
+					return err
+				}
 			}
 		} else {
-			presenter.Print(os.Stdout, formatter.Yellow("⏩ Skip!"))
-			presenter.Print(os.Stdout, "\n")
+			if err := presenter.Print(os.Stdout, formatter.Yellow("⏩ Skip!")); err != nil {
+				return err
+			}
+			if err := presenter.Print(os.Stdout, "\n"); err != nil {
+				return err
+			}
 		}
 
 		if !cont {
-			presenter.Print(os.Stdout, "🚪 Exit!")
+			if err := presenter.Print(os.Stdout, "🚪 Exit!"); err != nil {
+				return err
+			}
 			break
 		}
 

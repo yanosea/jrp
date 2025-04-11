@@ -182,7 +182,7 @@ func runGenerate(
 		return err
 	}
 
-	var number int = GenerateOps.Number
+	var number = GenerateOps.Number
 	if len(args) > 0 {
 		argNumber, err := strconv.Atoi(args[0])
 		if err != nil {
