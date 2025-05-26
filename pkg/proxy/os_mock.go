@@ -20,6 +20,7 @@ import (
 type MockOs struct {
 	ctrl     *gomock.Controller
 	recorder *MockOsMockRecorder
+	isgomock struct{}
 }
 
 // MockOsMockRecorder is the mock recorder for MockOs.
@@ -203,6 +204,7 @@ func (mr *MockOsMockRecorder) UserHomeDir() *gomock.Call {
 type MockFile struct {
 	ctrl     *gomock.Controller
 	recorder *MockFileMockRecorder
+	isgomock struct{}
 }
 
 // MockFileMockRecorder is the mock recorder for MockFile.

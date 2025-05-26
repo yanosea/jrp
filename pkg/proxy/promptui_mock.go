@@ -19,6 +19,7 @@ import (
 type MockPromptui struct {
 	ctrl     *gomock.Controller
 	recorder *MockPromptuiMockRecorder
+	isgomock struct{}
 }
 
 // MockPromptuiMockRecorder is the mock recorder for MockPromptui.
@@ -56,6 +57,7 @@ func (mr *MockPromptuiMockRecorder) NewPrompt() *gomock.Call {
 type MockPrompt struct {
 	ctrl     *gomock.Controller
 	recorder *MockPromptMockRecorder
+	isgomock struct{}
 }
 
 // MockPromptMockRecorder is the mock recorder for MockPrompt.

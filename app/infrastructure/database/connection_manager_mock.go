@@ -19,6 +19,7 @@ import (
 type MockConnectionManager struct {
 	ctrl     *gomock.Controller
 	recorder *MockConnectionManagerMockRecorder
+	isgomock struct{}
 }
 
 // MockConnectionManagerMockRecorder is the mock recorder for MockConnectionManager.
