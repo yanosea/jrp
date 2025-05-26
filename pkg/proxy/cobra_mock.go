@@ -21,6 +21,7 @@ import (
 type MockCobra struct {
 	ctrl     *gomock.Controller
 	recorder *MockCobraMockRecorder
+	isgomock struct{}
 }
 
 // MockCobraMockRecorder is the mock recorder for MockCobra.
@@ -86,6 +87,7 @@ func (mr *MockCobraMockRecorder) NewCommand() *gomock.Call {
 type MockCommand struct {
 	ctrl     *gomock.Controller
 	recorder *MockCommandMockRecorder
+	isgomock struct{}
 }
 
 // MockCommandMockRecorder is the mock recorder for MockCommand.

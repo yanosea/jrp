@@ -19,6 +19,7 @@ import (
 type MockHttp struct {
 	ctrl     *gomock.Controller
 	recorder *MockHttpMockRecorder
+	isgomock struct{}
 }
 
 // MockHttpMockRecorder is the mock recorder for MockHttp.
@@ -57,6 +58,7 @@ func (mr *MockHttpMockRecorder) Get(url any) *gomock.Call {
 type MockResponse struct {
 	ctrl     *gomock.Controller
 	recorder *MockResponseMockRecorder
+	isgomock struct{}
 }
 
 // MockResponseMockRecorder is the mock recorder for MockResponse.
@@ -108,6 +110,7 @@ func (mr *MockResponseMockRecorder) GetBody() *gomock.Call {
 type MockReadCloser struct {
 	ctrl     *gomock.Controller
 	recorder *MockReadCloserMockRecorder
+	isgomock struct{}
 }
 
 // MockReadCloserMockRecorder is the mock recorder for MockReadCloser.

@@ -21,6 +21,7 @@ import (
 type MockSql struct {
 	ctrl     *gomock.Controller
 	recorder *MockSqlMockRecorder
+	isgomock struct{}
 }
 
 // MockSqlMockRecorder is the mock recorder for MockSql.
@@ -59,6 +60,7 @@ func (mr *MockSqlMockRecorder) Open(driverName, dataSourceName any) *gomock.Call
 type MockDB struct {
 	ctrl     *gomock.Controller
 	recorder *MockDBMockRecorder
+	isgomock struct{}
 }
 
 // MockDBMockRecorder is the mock recorder for MockDB.
@@ -166,6 +168,7 @@ func (mr *MockDBMockRecorder) QueryContext(ctx, query any, args ...any) *gomock.
 type MockRows struct {
 	ctrl     *gomock.Controller
 	recorder *MockRowsMockRecorder
+	isgomock struct{}
 }
 
 // MockRowsMockRecorder is the mock recorder for MockRows.
@@ -235,6 +238,7 @@ func (mr *MockRowsMockRecorder) Scan(dest ...any) *gomock.Call {
 type MockResult struct {
 	ctrl     *gomock.Controller
 	recorder *MockResultMockRecorder
+	isgomock struct{}
 }
 
 // MockResultMockRecorder is the mock recorder for MockResult.
@@ -288,6 +292,7 @@ func (mr *MockResultMockRecorder) RowsAffected() *gomock.Call {
 type MockTx struct {
 	ctrl     *gomock.Controller
 	recorder *MockTxMockRecorder
+	isgomock struct{}
 }
 
 // MockTxMockRecorder is the mock recorder for MockTx.
@@ -359,6 +364,7 @@ func (mr *MockTxMockRecorder) Rollback() *gomock.Call {
 type MockStmt struct {
 	ctrl     *gomock.Controller
 	recorder *MockStmtMockRecorder
+	isgomock struct{}
 }
 
 // MockStmtMockRecorder is the mock recorder for MockStmt.

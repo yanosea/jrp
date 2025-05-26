@@ -20,6 +20,7 @@ import (
 type MockEchos struct {
 	ctrl     *gomock.Controller
 	recorder *MockEchosMockRecorder
+	isgomock struct{}
 }
 
 // MockEchosMockRecorder is the mock recorder for MockEchos.
@@ -58,6 +59,7 @@ func (mr *MockEchosMockRecorder) NewEcho() *gomock.Call {
 type MockEcho struct {
 	ctrl     *gomock.Controller
 	recorder *MockEchoMockRecorder
+	isgomock struct{}
 }
 
 // MockEchoMockRecorder is the mock recorder for MockEcho.
@@ -147,6 +149,7 @@ func (mr *MockEchoMockRecorder) Use(middleware ...any) *gomock.Call {
 type MockLogger struct {
 	ctrl     *gomock.Controller
 	recorder *MockLoggerMockRecorder
+	isgomock struct{}
 }
 
 // MockLoggerMockRecorder is the mock recorder for MockLogger.
@@ -182,6 +185,7 @@ func (mr *MockLoggerMockRecorder) Fatal(err any) *gomock.Call {
 type MockGroup struct {
 	ctrl     *gomock.Controller
 	recorder *MockGroupMockRecorder
+	isgomock struct{}
 }
 
 // MockGroupMockRecorder is the mock recorder for MockGroup.
