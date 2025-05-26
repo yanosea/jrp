@@ -20,6 +20,7 @@ import (
 type MockTableWriter struct {
 	ctrl     *gomock.Controller
 	recorder *MockTableWriterMockRecorder
+	isgomock struct{}
 }
 
 // MockTableWriterMockRecorder is the mock recorder for MockTableWriter.
@@ -57,6 +58,7 @@ func (mr *MockTableWriterMockRecorder) NewTable(writer any) *gomock.Call {
 type MockTable struct {
 	ctrl     *gomock.Controller
 	recorder *MockTableMockRecorder
+	isgomock struct{}
 }
 
 // MockTableMockRecorder is the mock recorder for MockTable.

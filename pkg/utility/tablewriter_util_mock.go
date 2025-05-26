@@ -21,6 +21,7 @@ import (
 type MockTableWriterUtil struct {
 	ctrl     *gomock.Controller
 	recorder *MockTableWriterUtilMockRecorder
+	isgomock struct{}
 }
 
 // MockTableWriterUtilMockRecorder is the mock recorder for MockTableWriterUtil.

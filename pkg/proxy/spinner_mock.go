@@ -19,6 +19,7 @@ import (
 type MockSpinners struct {
 	ctrl     *gomock.Controller
 	recorder *MockSpinnersMockRecorder
+	isgomock struct{}
 }
 
 // MockSpinnersMockRecorder is the mock recorder for MockSpinners.
@@ -56,6 +57,7 @@ func (mr *MockSpinnersMockRecorder) NewSpinner() *gomock.Call {
 type MockSpinner struct {
 	ctrl     *gomock.Controller
 	recorder *MockSpinnerMockRecorder
+	isgomock struct{}
 }
 
 // MockSpinnerMockRecorder is the mock recorder for MockSpinner.
