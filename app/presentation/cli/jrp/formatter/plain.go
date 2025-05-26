@@ -1,6 +1,7 @@
 package formatter
 
 import (
+	"errors"
 	"fmt"
 
 	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
@@ -15,7 +16,7 @@ func NewPlainFormatter() *PlainFormatter {
 }
 
 // Format formats the output of jrp cli.
-func (f *PlainFormatter) Format(result interface{}) string {
+func (f *PlainFormatter) Format(result interface{}) (string, error) {
 	var formatted string
 	switch v := result.(type) {
 	case *jrpApp.GetVersionUseCaseOutputDto:
@@ -42,7 +43,8 @@ func (f *PlainFormatter) Format(result interface{}) string {
 			}
 		}
 	default:
-		formatted = ""
+		return "", errors.New("invalid result type")
 	}
-	return formatted
+
+	return formatted, nil
 }

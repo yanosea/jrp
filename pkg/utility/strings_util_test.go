@@ -122,6 +122,43 @@ func Test_stringsUtil_RemoveSpaces(t *testing.T) {
 	}
 }
 
+func Test_stringsUtil_RemoveTableLines(t *testing.T) {
+	type args struct {
+		str string
+	}
+	tests := []struct {
+		name string
+		s    *stringsUtil
+		args args
+		want string
+	}{
+		{
+			name: "positive testing (string with table lines)",
+			s:    &stringsUtil{},
+			args: args{
+				str: "┌─────┬─────┐\n│ Col1│ Col2│\n├─────┼─────┤\n│ Val1│ Val2│\n└─────┴─────┘",
+			},
+			want: "\n Col1 Col2\n\n Val1 Val2\n",
+		},
+		{
+			name: "positive testing (string without table lines)",
+			s:    &stringsUtil{},
+			args: args{
+				str: "Col1Col2Val1Val2",
+			},
+			want: "Col1Col2Val1Val2",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &stringsUtil{}
+			if got := s.RemoveTableLines(tt.args.str); got != tt.want {
+				t.Errorf("stringsUtil.RemoveTableLines() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func Test_stringsUtil_RemoveTabs(t *testing.T) {
 	type args struct {
 		str string

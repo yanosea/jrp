@@ -67,6 +67,20 @@ func (mr *MockStringsUtilMockRecorder) RemoveSpaces(s any) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveSpaces", reflect.TypeOf((*MockStringsUtil)(nil).RemoveSpaces), s)
 }
 
+// RemoveTableLines mocks base method.
+func (m *MockStringsUtil) RemoveTableLines(s string) string {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RemoveTableLines", s)
+	ret0, _ := ret[0].(string)
+	return ret0
+}
+
+// RemoveTableLines indicates an expected call of RemoveTableLines.
+func (mr *MockStringsUtilMockRecorder) RemoveTableLines(s any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RemoveTableLines", reflect.TypeOf((*MockStringsUtil)(nil).RemoveTableLines), s)
+}
+
 // RemoveTabs mocks base method.
 func (m *MockStringsUtil) RemoveTabs(s string) string {
 	m.ctrl.T.Helper()

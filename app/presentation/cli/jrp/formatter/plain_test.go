@@ -31,10 +31,11 @@ func TestPlainFormatter_Format(t *testing.T) {
 		result interface{}
 	}
 	tests := []struct {
-		name string
-		f    *PlainFormatter
-		args args
-		want string
+		name    string
+		f       *PlainFormatter
+		args    args
+		want    string
+		wantErr bool
 	}{
 		{
 			name: "positive testing (result is *jrpApp.GetVersionUseCaseOutputDto)",
@@ -44,7 +45,8 @@ func TestPlainFormatter_Format(t *testing.T) {
 					Version: "0.0.0",
 				},
 			},
-			want: "jrp version 0.0.0",
+			want:    "jrp version 0.0.0",
+			wantErr: false,
 		},
 		{
 			name: "positive testing (result is []*jrpApp.GenerateJrpUseCaseOutputDto)",
@@ -59,7 +61,8 @@ func TestPlainFormatter_Format(t *testing.T) {
 					},
 				},
 			},
-			want: "phrase1\nphrase2",
+			want:    "phrase1\nphrase2",
+			wantErr: false,
 		},
 		{
 			name: "positive testing (result is []*jrpApp.GetHistoryUseCaseOutputDto)",
@@ -74,7 +77,8 @@ func TestPlainFormatter_Format(t *testing.T) {
 					},
 				},
 			},
-			want: "phrase1\nphrase2",
+			want:    "phrase1\nphrase2",
+			wantErr: false,
 		},
 		{
 			name: "positive testing (result is []*jrpApp.SearchHistoryUseCaseOutputDto)",
@@ -89,7 +93,8 @@ func TestPlainFormatter_Format(t *testing.T) {
 					},
 				},
 			},
-			want: "phrase1\nphrase2",
+			want:    "phrase1\nphrase2",
+			wantErr: false,
 		},
 		{
 			name: "negative testing (result is invalid)",
@@ -97,13 +102,16 @@ func TestPlainFormatter_Format(t *testing.T) {
 			args: args{
 				result: "invalid",
 			},
-			want: "",
+			want:    "",
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			f := &PlainFormatter{}
-			if got := f.Format(tt.args.result); got != tt.want {
+			if got, err := f.Format(tt.args.result); (err != nil) != tt.wantErr {
+				t.Errorf("PlainFormatter.Format() error = %v, wantErr %v", err, tt.wantErr)
+			} else if !tt.wantErr && got != tt.want {
 				t.Errorf("PlainFormatter.Format() = %v, want %v", got, tt.want)
 			}
 		})

@@ -7,7 +7,7 @@ import (
 
 // Formatter is an interface that formats the output of jrp cli.
 type Formatter interface {
-	Format(result interface{}) string
+	Format(result interface{}) (string, error)
 }
 
 // NewFormatter returns a new instance of the Formatter interface.

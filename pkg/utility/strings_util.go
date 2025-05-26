@@ -8,6 +8,7 @@ import (
 type StringsUtil interface {
 	RemoveNewLines(s string) string
 	RemoveSpaces(s string) string
+	RemoveTableLines(s string) string
 	RemoveTabs(s string) string
 }
 
@@ -27,6 +28,17 @@ func (s *stringsUtil) RemoveNewLines(str string) string {
 // RemoveSpaces removes all spaces from the given strings.
 func (s *stringsUtil) RemoveSpaces(str string) string {
 	return strings.ReplaceAll(str, " ", "")
+}
+
+// RemoveTableLines removes all table border characters from the given strings.
+func (s *stringsUtil) RemoveTableLines(str string) string {
+	tableBorderChars := []string{"─", "│", "┌", "┐", "└", "┘", "├", "┤", "┬", "┴", "┼"}
+	result := str
+	for _, char := range tableBorderChars {
+		result = strings.ReplaceAll(result, char, "")
+	}
+
+	return result
 }
 
 // RemoveTabs removes all tabs from the given strings.

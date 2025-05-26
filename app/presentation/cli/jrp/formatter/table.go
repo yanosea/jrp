@@ -1,6 +1,7 @@
 package formatter
 
 import (
+	"errors"
 	"fmt"
 	"slices"
 	"strconv"
@@ -22,8 +23,8 @@ func NewTableFormatter() *TableFormatter {
 }
 
 var (
-	// t is a variable to store the table writer with the default values for injecting the dependencies in testing.
-	t = utility.NewTableWriterUtil(proxy.NewTableWriter())
+	// Tu is a variable to store the table writer with the default values for injecting the dependencies in testing.
+	Tu = utility.NewTableWriterUtil(proxy.NewTableWriter())
 )
 
 // tableData is a struct that holds the data of a table.
@@ -33,24 +34,24 @@ type tableData struct {
 }
 
 // Format formats the output of jrp cli.
-func (f *TableFormatter) Format(result interface{}) string {
+func (f *TableFormatter) Format(result any) (string, error) {
 	var data tableData
 
 	switch v := result.(type) {
 	case []*jrpApp.GenerateJrpUseCaseOutputDto:
 		data = f.formatGenerateJrp(v)
 	case []*jrpApp.GetHistoryUseCaseOutputDto:
-		data = f.formatHistory(v, func(h interface{}) (int, string, string, string, int, time.Time, time.Time) {
+		data = f.formatHistory(v, func(h any) (int, string, string, string, int, time.Time, time.Time) {
 			dto := h.(*jrpApp.GetHistoryUseCaseOutputDto)
 			return dto.ID, dto.Phrase, dto.Prefix, dto.Suffix, dto.IsFavorited, dto.CreatedAt, dto.UpdatedAt
 		})
 	case []*jrpApp.SearchHistoryUseCaseOutputDto:
-		data = f.formatHistory(v, func(h interface{}) (int, string, string, string, int, time.Time, time.Time) {
+		data = f.formatHistory(v, func(h any) (int, string, string, string, int, time.Time, time.Time) {
 			dto := h.(*jrpApp.SearchHistoryUseCaseOutputDto)
 			return dto.ID, dto.Phrase, dto.Prefix, dto.Suffix, dto.IsFavorited, dto.CreatedAt, dto.UpdatedAt
 		})
 	default:
-		return ""
+		return "", errors.New("invalid result type")
 	}
 
 	return f.getTableString(data)
@@ -76,19 +77,15 @@ func (f *TableFormatter) formatGenerateJrp(items []*jrpApp.GenerateJrpUseCaseOut
 		rows = append(rows, row)
 	}
 
-	if !noId {
-		rows = f.addTotalRow(rows)
-	}
-
 	return tableData{header: header, rows: rows}
 }
 
 // formatHistory formats the output of the GetHistory and SearchHistory use cases.
-func (f *TableFormatter) formatHistory(items interface{}, getData func(interface{}) (int, string, string, string, int, time.Time, time.Time)) tableData {
+func (f *TableFormatter) formatHistory(items any, getData func(any) (int, string, string, string, int, time.Time, time.Time)) tableData {
 	header := []string{"id", "phrase", "prefix", "suffix", "is_favorited", "created_at", "updated_at"}
 	var rows [][]string
 
-	addRows := func(v interface{}) {
+	addRows := func(v any) {
 		switch v := v.(type) {
 		case []*jrpApp.GetHistoryUseCaseOutputDto:
 			for _, item := range v {
@@ -134,40 +131,51 @@ func (f *TableFormatter) formatHistory(items interface{}, getData func(interface
 		return tableData{}
 	}
 
-	rows = f.addTotalRow(rows)
 	return tableData{header: header, rows: rows}
 }
 
-// addTotalRow adds a total row to the table.
-func (f *TableFormatter) addTotalRow(rows [][]string) [][]string {
+// getTotalFooter returns a total footer of the table.
+func (f *TableFormatter) getTotalFooter(rows [][]string) []string {
 	if len(rows) == 0 {
-		return [][]string{}
-	}
-
-	emptyRow := make([]string, len(rows[0]))
-	for i := range emptyRow {
-		emptyRow[i] = ""
+		return nil
 	}
 
 	totalRow := make([]string, len(rows[0]))
-	totalRow[0] = fmt.Sprintf("TOTAL : %d jrps!", len(rows))
+	for i := range totalRow {
+		totalRow[i] = ""
+	}
+	lastColIndex := len(totalRow) - 1
+	totalRow[lastColIndex] = fmt.Sprintf("TOTAL : %d jrps!", len(rows))
 
-	rows = append(rows, emptyRow)
-	rows = append(rows, totalRow)
-
-	return rows
+	return totalRow
 }
 
 // getTableString returns a string representation of a table.
-func (f *TableFormatter) getTableString(data tableData) string {
+func (f *TableFormatter) getTableString(data tableData) (string, error) {
 	if len(data.header) == 0 || len(data.rows) == 0 {
-		return ""
+		return "", nil
 	}
 
 	tableString := &strings.Builder{}
-	table := t.GetNewDefaultTable(tableString)
-	table.SetHeader(data.header)
-	table.AppendBulk(data.rows)
-	table.Render()
-	return strings.TrimSuffix(tableString.String(), "\n")
+	table := Tu.GetNewDefaultTable(tableString)
+	table.Header(data.header)
+	shouldHaveFooter := true
+	if len(data.header) > 0 && data.header[0] != "id" {
+		shouldHaveFooter = false
+	}
+	if shouldHaveFooter {
+		footer := f.getTotalFooter(data.rows)
+		if footer != nil {
+			table.Footer(footer)
+		}
+	}
+
+	if err := table.Bulk(data.rows); err != nil {
+		return "", err
+	}
+	if err := table.Render(); err != nil {
+		return "", err
+	}
+
+	return strings.TrimSuffix(tableString.String(), "\n"), nil
 }
