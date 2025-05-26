@@ -20,6 +20,7 @@ import (
 type MockDebug struct {
 	ctrl     *gomock.Controller
 	recorder *MockDebugMockRecorder
+	isgomock struct{}
 }
 
 // MockDebugMockRecorder is the mock recorder for MockDebug.

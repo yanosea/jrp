@@ -19,6 +19,7 @@ import (
 type MockFlagSet struct {
 	ctrl     *gomock.Controller
 	recorder *MockFlagSetMockRecorder
+	isgomock struct{}
 }
 
 // MockFlagSetMockRecorder is the mock recorder for MockFlagSet.

@@ -20,6 +20,7 @@ import (
 type MockGzip struct {
 	ctrl     *gomock.Controller
 	recorder *MockGzipMockRecorder
+	isgomock struct{}
 }
 
 // MockGzipMockRecorder is the mock recorder for MockGzip.
@@ -58,6 +59,7 @@ func (mr *MockGzipMockRecorder) NewReader(r any) *gomock.Call {
 type MockGzipReader struct {
 	ctrl     *gomock.Controller
 	recorder *MockGzipReaderMockRecorder
+	isgomock struct{}
 }
 
 // MockGzipReaderMockRecorder is the mock recorder for MockGzipReader.

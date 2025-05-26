@@ -20,6 +20,7 @@ import (
 type MockPromptUtil struct {
 	ctrl     *gomock.Controller
 	recorder *MockPromptUtilMockRecorder
+	isgomock struct{}
 }
 
 // MockPromptUtilMockRecorder is the mock recorder for MockPromptUtil.
