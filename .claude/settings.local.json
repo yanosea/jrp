@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(gh run view:*)",
+      "WebFetch(domain:goreleaser.com)",
+      "WebSearch"
+    ]
+  }
+}
