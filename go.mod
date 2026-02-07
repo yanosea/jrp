@@ -1,6 +1,6 @@
 module github.com/yanosea/jrp/v2
 
-go 1.24.1
+go 1.25.5
 
 require (
 	github.com/briandowns/spinner v1.23.2
