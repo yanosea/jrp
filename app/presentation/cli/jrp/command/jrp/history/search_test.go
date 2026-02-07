@@ -3,6 +3,7 @@ package history
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"os"
 	"path/filepath"
 	"testing"
@@ -13,9 +14,12 @@ import (
 	historyDomain "github.com/yanosea/jrp/v2/app/domain/jrp/history"
 	"github.com/yanosea/jrp/v2/app/infrastructure/database"
 	"github.com/yanosea/jrp/v2/app/infrastructure/jrp/repository"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/formatter"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
 	"github.com/yanosea/jrp/v2/pkg/utility"
+
+	"go.uber.org/mock/gomock"
 )
 
 func TestNewSearchCommand(t *testing.T) {
@@ -85,6 +89,7 @@ func Test_runSearch(t *testing.T) {
 	var output string
 	su := utility.NewStringsUtil()
 	origSearchOps := searchOps
+	origNewFormatter := formatter.NewFormatter
 
 	type args struct {
 		cmd    *c.Command
@@ -97,7 +102,7 @@ func Test_runSearch(t *testing.T) {
 		testData []*historyDomain.History
 		want     string
 		wantErr  bool
-		setup    func(tt *args)
+		setup    func(mockCtrl *gomock.Controller, tt *args)
 		cleanup  func()
 	}{
 		{
@@ -126,7 +131,7 @@ func Test_runSearch(t *testing.T) {
 			},
 			want:    "IDPHRASEPREFIXSUFFIXISFAVORITEDCREATEDATUPDATEDAT1testprefixsuffix○" + now.Format("2006-01-02") + now.Format("15:04:05") + now.Format("2006-01-02") + now.Format("15:04:05") + "TOTAL:1jrps!",
 			wantErr: false,
-			setup: func(tt *args) {
+			setup: func(_ *gomock.Controller, tt *args) {
 				cm := database.NewConnectionManager(proxy.NewSql())
 				if err := cm.InitializeConnection(
 					database.ConnectionConfig{
@@ -161,7 +166,7 @@ func Test_runSearch(t *testing.T) {
 			},
 			want:    color.YellowString("⚡ No histories found..."),
 			wantErr: false,
-			setup: func(tt *args) {
+			setup: func(_ *gomock.Controller, tt *args) {
 				cm := database.NewConnectionManager(proxy.NewSql())
 				if err := cm.InitializeConnection(
 					database.ConnectionConfig{
@@ -197,7 +202,7 @@ func Test_runSearch(t *testing.T) {
 			testData: nil,
 			want:     color.YellowString("⚡ No keywords provided..."),
 			wantErr:  false,
-			setup: func(tt *args) {
+			setup: func(_ *gomock.Controller, tt *args) {
 				output = ""
 			},
 			cleanup: func() {
@@ -214,7 +219,7 @@ func Test_runSearch(t *testing.T) {
 			testData: nil,
 			want:     "",
 			wantErr:  true,
-			setup: func(tt *args) {
+			setup: func(_ *gomock.Controller, tt *args) {
 				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
 					t.Errorf("Failed to remove test database: %v", err)
 				}
@@ -260,7 +265,7 @@ func Test_runSearch(t *testing.T) {
 			},
 			want:    color.RedString("❌ Failed to create a formatter..."),
 			wantErr: true,
-			setup: func(tt *args) {
+			setup: func(_ *gomock.Controller, tt *args) {
 				searchOps.Format = "test"
 				cm := database.NewConnectionManager(proxy.NewSql())
 				if err := cm.InitializeConnection(
@@ -288,11 +293,71 @@ func Test_runSearch(t *testing.T) {
 				output = ""
 			},
 		},
+		{
+			name: "negative testing (f.Format() failed)",
+			args: args{
+				cmd:    &c.Command{},
+				args:   []string{"test"},
+				output: &output,
+			},
+			testData: []*historyDomain.History{
+				{
+					ID:     1,
+					Phrase: "test",
+					Prefix: sql.NullString{
+						String: "prefix",
+						Valid:  true,
+					},
+					Suffix: sql.NullString{
+						String: "suffix",
+						Valid:  true,
+					},
+					IsFavorited: 1,
+					CreatedAt:   now,
+					UpdatedAt:   now,
+				},
+			},
+			want:    "",
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				mockFormatter := formatter.NewMockFormatter(mockCtrl)
+				mockFormatter.EXPECT().Format(gomock.Any()).Return("", errors.New("format error"))
+				formatter.NewFormatter = func(format string) (formatter.Formatter, error) {
+					return mockFormatter, nil
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				formatter.NewFormatter = origNewFormatter
+				output = ""
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			mockCtrl := gomock.NewController(t)
+			defer mockCtrl.Finish()
 			if tt.setup != nil {
-				tt.setup(&tt.args)
+				tt.setup(mockCtrl, &tt.args)
 			}
 			defer func() {
 				if tt.cleanup != nil {

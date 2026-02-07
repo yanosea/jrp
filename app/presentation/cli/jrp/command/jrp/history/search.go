@@ -134,7 +134,10 @@ func runSearch(
 		*output = o
 		return err
 	}
-	o := f.Format(shoDtos)
+	o, err := f.Format(shoDtos)
+	if err != nil {
+		return err
+	}
 	*output = o
 
 	return nil

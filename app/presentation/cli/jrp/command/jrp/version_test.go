@@ -1,10 +1,13 @@
 package jrp
 
 import (
+	"errors"
 	"testing"
 
 	"github.com/fatih/color"
+	"go.uber.org/mock/gomock"
 
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/formatter"
 	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
 
@@ -44,6 +47,7 @@ func TestNewVersionCommand(t *testing.T) {
 func Test_runVersion(t *testing.T) {
 	var output string
 	origFormat := format
+	origNewFormatter := formatter.NewFormatter
 
 	type args struct {
 		version string
@@ -54,7 +58,7 @@ func Test_runVersion(t *testing.T) {
 		args    args
 		want    string
 		wantErr bool
-		setup   func()
+		setup   func(*gomock.Controller)
 		cleanup func()
 	}{
 		{
@@ -65,7 +69,7 @@ func Test_runVersion(t *testing.T) {
 			},
 			want:    "jrp version 0.0.0",
 			wantErr: false,
-			setup: func() {
+			setup: func(_ *gomock.Controller) {
 				output = ""
 			},
 			cleanup: func() {
@@ -80,7 +84,7 @@ func Test_runVersion(t *testing.T) {
 			},
 			want:    color.RedString("❌ Failed to create a formatter..."),
 			wantErr: true,
-			setup: func() {
+			setup: func(_ *gomock.Controller) {
 				format = "test"
 				output = ""
 			},
@@ -89,11 +93,34 @@ func Test_runVersion(t *testing.T) {
 				output = ""
 			},
 		},
+		{
+			name: "negative testing (f.Format() failed)",
+			args: args{
+				version: "0.0.0",
+				output:  &output,
+			},
+			want:    "",
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller) {
+				mockFormatter := formatter.NewMockFormatter(mockCtrl)
+				mockFormatter.EXPECT().Format(gomock.Any()).Return("", errors.New("format error"))
+				formatter.NewFormatter = func(format string) (formatter.Formatter, error) {
+					return mockFormatter, nil
+				}
+				output = ""
+			},
+			cleanup: func() {
+				formatter.NewFormatter = origNewFormatter
+				output = ""
+			},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			mockCtrl := gomock.NewController(t)
+			defer mockCtrl.Finish()
 			if tt.setup != nil {
-				tt.setup()
+				tt.setup(mockCtrl)
 			}
 			defer func() {
 				if tt.cleanup != nil {

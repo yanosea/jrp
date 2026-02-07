@@ -33,7 +33,7 @@ type tableData struct {
 }
 
 // Format formats the output of jrp cli.
-func (f *TableFormatter) Format(result interface{}) string {
+func (f *TableFormatter) Format(result interface{}) (string, error) {
 	var data tableData
 
 	switch v := result.(type) {
@@ -50,7 +50,7 @@ func (f *TableFormatter) Format(result interface{}) string {
 			return dto.ID, dto.Phrase, dto.Prefix, dto.Suffix, dto.IsFavorited, dto.CreatedAt, dto.UpdatedAt
 		})
 	default:
-		return ""
+		return "", nil
 	}
 
 	return f.getTableString(data)
@@ -159,15 +159,19 @@ func (f *TableFormatter) addTotalRow(rows [][]string) [][]string {
 }
 
 // getTableString returns a string representation of a table.
-func (f *TableFormatter) getTableString(data tableData) string {
+func (f *TableFormatter) getTableString(data tableData) (string, error) {
 	if len(data.header) == 0 || len(data.rows) == 0 {
-		return ""
+		return "", nil
 	}
 
 	tableString := &strings.Builder{}
 	table := t.GetNewDefaultTable(tableString)
 	table.Header(data.header)
-	table.Bulk(data.rows)
-	table.Render()
-	return strings.TrimSuffix(tableString.String(), "\n")
+	if err := table.Bulk(data.rows); err != nil {
+		return "", err
+	}
+	if err := table.Render(); err != nil {
+		return "", err
+	}
+	return strings.TrimSuffix(tableString.String(), "\n"), nil
 }

@@ -12,6 +12,7 @@ import (
 	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
 	wnjpnApp "github.com/yanosea/jrp/v2/app/application/wnjpn"
 	"github.com/yanosea/jrp/v2/app/infrastructure/database"
+	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/formatter"
 	"github.com/yanosea/jrp/v2/app/presentation/cli/jrp/presenter"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
@@ -107,6 +108,7 @@ func Test_runGenerate(t *testing.T) {
 	origKu := presenter.Ku
 	origFunc := database.GetConnectionManagerFunc
 	origNewFetchWordsUseCase := wnjpnApp.NewFetchWordsUseCase
+	origNewFormatter := formatter.NewFormatter
 	duc := jrpApp.NewDownloadUseCase()
 	if err := duc.Run(filepath.Join(os.TempDir(), "wnjpn.db")); err != nil && err.Error() != "wnjpn.db already exists" {
 		t.Errorf("Failed to download WordNet Japan DB file: %v", err)
@@ -740,6 +742,56 @@ func Test_runGenerate(t *testing.T) {
 					t.Errorf("Failed to remove test database: %v", err)
 				}
 				GenerateOps = origGenerateOps
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (f.Format() failed)",
+			args: args{
+				cmd:            &c.Command{},
+				args:           []string{},
+				interactiveCmd: NewInteractiveCommand(proxy.NewCobra(), &output),
+				output:         &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				mockFormatter := formatter.NewMockFormatter(mockCtrl)
+				mockFormatter.EXPECT().Format(gomock.Any()).Return("", errors.New("format error"))
+				formatter.NewFormatter = func(format string) (formatter.Formatter, error) {
+					return mockFormatter, nil
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				formatter.NewFormatter = origNewFormatter
 				output = ""
 			},
 		},

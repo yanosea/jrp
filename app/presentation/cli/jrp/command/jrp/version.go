@@ -46,7 +46,10 @@ func runVersion(version string, output *string) error {
 		*output = o
 		return err
 	}
-	o := f.Format(dto)
+	o, err := f.Format(dto)
+	if err != nil {
+		return err
+	}
 	*output = o
 
 	return nil

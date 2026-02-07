@@ -138,7 +138,10 @@ func runShow(
 		*output = o
 		return err
 	}
-	o := f.Format(ghoDtos)
+	o, err := f.Format(ghoDtos)
+	if err != nil {
+		return err
+	}
 	*output = o
 
 	return nil
