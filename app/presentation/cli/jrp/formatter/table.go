@@ -166,8 +166,8 @@ func (f *TableFormatter) getTableString(data tableData) string {
 
 	tableString := &strings.Builder{}
 	table := t.GetNewDefaultTable(tableString)
-	table.SetHeader(data.header)
-	table.AppendBulk(data.rows)
+	table.Header(data.header)
+	table.Bulk(data.rows)
 	table.Render()
 	return strings.TrimSuffix(tableString.String(), "\n")
 }

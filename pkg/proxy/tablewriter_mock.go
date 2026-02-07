@@ -13,6 +13,7 @@ import (
 	io "io"
 	reflect "reflect"
 
+	tablewriter "github.com/olekukonko/tablewriter"
 	gomock "go.uber.org/mock/gomock"
 )
 
@@ -41,17 +42,22 @@ func (m *MockTableWriter) EXPECT() *MockTableWriterMockRecorder {
 }
 
 // NewTable mocks base method.
-func (m *MockTableWriter) NewTable(writer io.Writer) Table {
+func (m *MockTableWriter) NewTable(writer io.Writer, opts ...tablewriter.Option) Table {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "NewTable", writer)
+	varargs := []any{writer}
+	for _, a := range opts {
+		varargs = append(varargs, a)
+	}
+	ret := m.ctrl.Call(m, "NewTable", varargs...)
 	ret0, _ := ret[0].(Table)
 	return ret0
 }
 
 // NewTable indicates an expected call of NewTable.
-func (mr *MockTableWriterMockRecorder) NewTable(writer any) *gomock.Call {
+func (mr *MockTableWriterMockRecorder) NewTable(writer any, opts ...any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewTable", reflect.TypeOf((*MockTableWriter)(nil).NewTable), writer)
+	varargs := append([]any{writer}, opts...)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewTable", reflect.TypeOf((*MockTableWriter)(nil).NewTable), varargs...)
 }
 
 // MockTable is a mock of Table interface.
@@ -78,170 +84,46 @@ func (m *MockTable) EXPECT() *MockTableMockRecorder {
 	return m.recorder
 }
 
-// AppendBulk mocks base method.
-func (m *MockTable) AppendBulk(rows [][]string) {
+// Bulk mocks base method.
+func (m *MockTable) Bulk(rows [][]string) error {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "AppendBulk", rows)
+	ret := m.ctrl.Call(m, "Bulk", rows)
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
-// AppendBulk indicates an expected call of AppendBulk.
-func (mr *MockTableMockRecorder) AppendBulk(rows any) *gomock.Call {
+// Bulk indicates an expected call of Bulk.
+func (mr *MockTableMockRecorder) Bulk(rows any) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AppendBulk", reflect.TypeOf((*MockTable)(nil).AppendBulk), rows)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Bulk", reflect.TypeOf((*MockTable)(nil).Bulk), rows)
+}
+
+// Header mocks base method.
+func (m *MockTable) Header(elements ...any) {
+	m.ctrl.T.Helper()
+	varargs := []any{}
+	for _, a := range elements {
+		varargs = append(varargs, a)
+	}
+	m.ctrl.Call(m, "Header", varargs...)
+}
+
+// Header indicates an expected call of Header.
+func (mr *MockTableMockRecorder) Header(elements ...any) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Header", reflect.TypeOf((*MockTable)(nil).Header), elements...)
 }
 
 // Render mocks base method.
-func (m *MockTable) Render() {
+func (m *MockTable) Render() error {
 	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "Render")
+	ret := m.ctrl.Call(m, "Render")
+	ret0, _ := ret[0].(error)
+	return ret0
 }
 
 // Render indicates an expected call of Render.
 func (mr *MockTableMockRecorder) Render() *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Render", reflect.TypeOf((*MockTable)(nil).Render))
-}
-
-// SetAlignment mocks base method.
-func (m *MockTable) SetAlignment(align int) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetAlignment", align)
-}
-
-// SetAlignment indicates an expected call of SetAlignment.
-func (mr *MockTableMockRecorder) SetAlignment(align any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetAlignment", reflect.TypeOf((*MockTable)(nil).SetAlignment), align)
-}
-
-// SetAutoFormatHeaders mocks base method.
-func (m *MockTable) SetAutoFormatHeaders(auto bool) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetAutoFormatHeaders", auto)
-}
-
-// SetAutoFormatHeaders indicates an expected call of SetAutoFormatHeaders.
-func (mr *MockTableMockRecorder) SetAutoFormatHeaders(auto any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetAutoFormatHeaders", reflect.TypeOf((*MockTable)(nil).SetAutoFormatHeaders), auto)
-}
-
-// SetAutoWrapText mocks base method.
-func (m *MockTable) SetAutoWrapText(auto bool) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetAutoWrapText", auto)
-}
-
-// SetAutoWrapText indicates an expected call of SetAutoWrapText.
-func (mr *MockTableMockRecorder) SetAutoWrapText(auto any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetAutoWrapText", reflect.TypeOf((*MockTable)(nil).SetAutoWrapText), auto)
-}
-
-// SetBorder mocks base method.
-func (m *MockTable) SetBorder(border bool) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetBorder", border)
-}
-
-// SetBorder indicates an expected call of SetBorder.
-func (mr *MockTableMockRecorder) SetBorder(border any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetBorder", reflect.TypeOf((*MockTable)(nil).SetBorder), border)
-}
-
-// SetCenterSeparator mocks base method.
-func (m *MockTable) SetCenterSeparator(sep string) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetCenterSeparator", sep)
-}
-
-// SetCenterSeparator indicates an expected call of SetCenterSeparator.
-func (mr *MockTableMockRecorder) SetCenterSeparator(sep any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetCenterSeparator", reflect.TypeOf((*MockTable)(nil).SetCenterSeparator), sep)
-}
-
-// SetColumnSeparator mocks base method.
-func (m *MockTable) SetColumnSeparator(sep string) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetColumnSeparator", sep)
-}
-
-// SetColumnSeparator indicates an expected call of SetColumnSeparator.
-func (mr *MockTableMockRecorder) SetColumnSeparator(sep any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetColumnSeparator", reflect.TypeOf((*MockTable)(nil).SetColumnSeparator), sep)
-}
-
-// SetHeader mocks base method.
-func (m *MockTable) SetHeader(keys []string) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetHeader", keys)
-}
-
-// SetHeader indicates an expected call of SetHeader.
-func (mr *MockTableMockRecorder) SetHeader(keys any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetHeader", reflect.TypeOf((*MockTable)(nil).SetHeader), keys)
-}
-
-// SetHeaderAlignment mocks base method.
-func (m *MockTable) SetHeaderAlignment(hAlign int) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetHeaderAlignment", hAlign)
-}
-
-// SetHeaderAlignment indicates an expected call of SetHeaderAlignment.
-func (mr *MockTableMockRecorder) SetHeaderAlignment(hAlign any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetHeaderAlignment", reflect.TypeOf((*MockTable)(nil).SetHeaderAlignment), hAlign)
-}
-
-// SetHeaderLine mocks base method.
-func (m *MockTable) SetHeaderLine(line bool) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetHeaderLine", line)
-}
-
-// SetHeaderLine indicates an expected call of SetHeaderLine.
-func (mr *MockTableMockRecorder) SetHeaderLine(line any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetHeaderLine", reflect.TypeOf((*MockTable)(nil).SetHeaderLine), line)
-}
-
-// SetNoWhiteSpace mocks base method.
-func (m *MockTable) SetNoWhiteSpace(allow bool) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetNoWhiteSpace", allow)
-}
-
-// SetNoWhiteSpace indicates an expected call of SetNoWhiteSpace.
-func (mr *MockTableMockRecorder) SetNoWhiteSpace(allow any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetNoWhiteSpace", reflect.TypeOf((*MockTable)(nil).SetNoWhiteSpace), allow)
-}
-
-// SetRowSeparator mocks base method.
-func (m *MockTable) SetRowSeparator(sep string) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetRowSeparator", sep)
-}
-
-// SetRowSeparator indicates an expected call of SetRowSeparator.
-func (mr *MockTableMockRecorder) SetRowSeparator(sep any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetRowSeparator", reflect.TypeOf((*MockTable)(nil).SetRowSeparator), sep)
-}
-
-// SetTablePadding mocks base method.
-func (m *MockTable) SetTablePadding(padding string) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "SetTablePadding", padding)
-}
-
-// SetTablePadding indicates an expected call of SetTablePadding.
-func (mr *MockTableMockRecorder) SetTablePadding(padding any) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetTablePadding", reflect.TypeOf((*MockTable)(nil).SetTablePadding), padding)
 }
