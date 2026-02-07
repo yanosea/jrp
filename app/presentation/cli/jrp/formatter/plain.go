@@ -15,7 +15,7 @@ func NewPlainFormatter() *PlainFormatter {
 }
 
 // Format formats the output of jrp cli.
-func (f *PlainFormatter) Format(result interface{}) string {
+func (f *PlainFormatter) Format(result interface{}) (string, error) {
 	var formatted string
 	switch v := result.(type) {
 	case *jrpApp.GetVersionUseCaseOutputDto:
@@ -44,5 +44,5 @@ func (f *PlainFormatter) Format(result interface{}) string {
 	default:
 		formatted = ""
 	}
-	return formatted
+	return formatted, nil
 }

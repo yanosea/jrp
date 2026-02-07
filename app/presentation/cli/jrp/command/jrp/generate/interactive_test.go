@@ -115,6 +115,7 @@ func Test_runInteractive(t *testing.T) {
 	origKu := presenter.Ku
 	origFunc := database.GetConnectionManagerFunc
 	origNewFetchWordsUseCase := wnjpnApp.NewFetchWordsUseCase
+	origNewFormatter := formatter.NewFormatter
 	origPrint := presenter.Print
 	duc := jrpApp.NewDownloadUseCase()
 	if err := duc.Run(filepath.Join(os.TempDir(), "wnjpn.db")); err != nil && err.Error() != "wnjpn.db already exists" {
@@ -1517,6 +1518,54 @@ func Test_runInteractive(t *testing.T) {
 				}
 				presenter.Print = origPrint
 				presenter.Ku = origKu
+				output = ""
+			},
+		},
+		{
+			name: "negative testing (f.Format() failed)",
+			args: args{
+				cmd:    &c.Command{},
+				output: &output,
+			},
+			wantErr: true,
+			setup: func(mockCtrl *gomock.Controller, tt *args) {
+				cm := database.NewConnectionManager(proxy.NewSql())
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.JrpDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "jrp.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				if err := cm.InitializeConnection(
+					database.ConnectionConfig{
+						DBName: database.WNJpnDB,
+						DBType: database.SQLite,
+						DSN:    filepath.Join(os.TempDir(), "wnjpn.db"),
+					},
+				); err != nil {
+					t.Errorf("Failed to initialize connection: %v", err)
+				}
+				mockFormatter := formatter.NewMockFormatter(mockCtrl)
+				mockFormatter.EXPECT().Format(gomock.Any()).Return("", errors.New("format error"))
+				formatter.NewFormatter = func(format string) (formatter.Formatter, error) {
+					return mockFormatter, nil
+				}
+				cmd := &c.Command{}
+				cmd.SetContext(context.Background())
+				tt.cmd = cmd
+				output = ""
+			},
+			cleanup: func() {
+				if err := database.ResetConnectionManager(); err != nil {
+					t.Errorf("Failed to reset connection manager: %v", err)
+				}
+				if err := os.Remove(filepath.Join(os.TempDir(), "jrp.db")); err != nil && !os.IsNotExist(err) {
+					t.Errorf("Failed to remove test database: %v", err)
+				}
+				formatter.NewFormatter = origNewFormatter
 				output = ""
 			},
 		},

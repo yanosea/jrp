@@ -23,6 +23,8 @@ update.mocks:
 	mockgen -source=./app/presentation/api/jrp-server/server/server.go -destination=./app/presentation/api/jrp-server/server/server_mock.go -package=server
 	# ./app/presentation/cli/jrp/command
 	mockgen -source=./app/presentation/cli/jrp/command/command.go -destination=./app/presentation/cli/jrp/command/command_mock.go -package=command
+	# ./app/presentation/cli/jrp/formatter
+	mockgen -source=./app/presentation/cli/jrp/formatter/formatter.go -destination=./app/presentation/cli/jrp/formatter/formatter_mock.go -package=formatter
 	# ./pkg/proxy
 	mockgen -source=./pkg/proxy/buffer.go -destination=./pkg/proxy/buffer_mock.go -package=proxy
 	mockgen -source=./pkg/proxy/cobra.go -destination=./pkg/proxy/cobra_mock.go -package=proxy

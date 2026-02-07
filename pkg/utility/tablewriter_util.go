@@ -4,6 +4,7 @@ import (
 	"io"
 
 	"github.com/olekukonko/tablewriter"
+	"github.com/olekukonko/tablewriter/tw"
 
 	"github.com/yanosea/jrp/v2/pkg/proxy"
 )
@@ -27,17 +28,18 @@ func NewTableWriterUtil(tableWriter proxy.TableWriter) TableWriterUtil {
 
 // GetNewDefaultTable returns a new instance of the default table.
 func (t *tableWriterUtil) GetNewDefaultTable(writer io.Writer) proxy.Table {
-	table := t.tableWriter.NewTable(writer)
-	table.SetAutoWrapText(false)
-	table.SetAutoFormatHeaders(true)
-	table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-	table.SetAlignment(tablewriter.ALIGN_LEFT)
-	table.SetCenterSeparator("")
-	table.SetColumnSeparator("")
-	table.SetRowSeparator("")
-	table.SetHeaderLine(false)
-	table.SetBorder(false)
-	table.SetTablePadding("\t")
-	table.SetNoWhiteSpace(true)
-	return table
+	return t.tableWriter.NewTable(writer,
+		tablewriter.WithRowAutoWrap(tw.WrapNone),
+		tablewriter.WithHeaderAutoFormat(tw.On),
+		tablewriter.WithHeaderAlignment(tw.AlignLeft),
+		tablewriter.WithRowAlignment(tw.AlignLeft),
+		tablewriter.WithPadding(tw.Padding{Left: "\t", Right: "", Overwrite: true}),
+		tablewriter.WithRendition(tw.Rendition{
+			Borders: tw.BorderNone,
+			Settings: tw.Settings{
+				Lines:      tw.LinesNone,
+				Separators: tw.SeparatorsNone,
+			},
+		}),
+	)
 }

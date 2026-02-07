@@ -256,7 +256,10 @@ func runGenerate(
 		*output = o
 		return err
 	}
-	o := f.Format(gjoDtos)
+	o, err := f.Format(gjoDtos)
+	if err != nil {
+		return err
+	}
 	*output = o
 
 	return nil

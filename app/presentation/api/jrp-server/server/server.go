@@ -54,7 +54,7 @@ func (s *server) Init(
 	sql proxy.Sql,
 ) int {
 	s.Route, s.Logger = s.Echos.NewEcho()
-	s.Route.Use(middleware.Logger())
+	s.Route.Use(middleware.RequestLogger())
 	s.Route.Use(middleware.Recover())
 	Bind(s.Route)
 

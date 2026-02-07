@@ -7,13 +7,14 @@ import (
 
 // Formatter is an interface that formats the output of jrp cli.
 type Formatter interface {
-	Format(result interface{}) string
+	Format(result interface{}) (string, error)
 }
 
-// NewFormatter returns a new instance of the Formatter interface.
-func NewFormatter(
-	format string,
-) (Formatter, error) {
+// NewFormatterFunc is a function type that defines the signature for creating a new Formatter.
+type NewFormatterFunc func(format string) (Formatter, error)
+
+// NewFormatter is a function that returns a new instance of the Formatter interface.
+var NewFormatter NewFormatterFunc = func(format string) (Formatter, error) {
 	var f Formatter
 	switch format {
 	case "plain":

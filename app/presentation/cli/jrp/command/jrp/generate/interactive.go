@@ -177,7 +177,10 @@ func runInteractive(
 			*output = o
 			return err
 		}
-		o := f.Format(gjoDtos)
+		o, err := f.Format(gjoDtos)
+		if err != nil {
+			return err
+		}
 		if err := presenter.Print(os.Stdout, "\n"); err != nil {
 			return err
 		}

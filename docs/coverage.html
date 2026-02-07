@@ -3349,8 +3349,11 @@ func runGenerate(
                 *output = o
                 return err
         }</span>
-        <span class="cov8" title="1">o := f.Format(gjoDtos)
-        *output = o
+        <span class="cov8" title="1">o, err := f.Format(gjoDtos)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">*output = o
 
         return nil</span>
 }
@@ -3576,8 +3579,11 @@ func runInteractive(
                         *output = o
                         return err
                 }</span>
-                <span class="cov8" title="1">o := f.Format(gjoDtos)
-                if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov8" title="1">{
+                <span class="cov8" title="1">o, err := f.Format(gjoDtos)
+                if err != nil </span><span class="cov8" title="1">{
+                        return err
+                }</span>
+                <span class="cov8" title="1">if err := presenter.Print(os.Stdout, "\n"); err != nil </span><span class="cov8" title="1">{
                         return err
                 }</span>
                 <span class="cov8" title="1">if err := presenter.Print(os.Stdout, o); err != nil </span><span class="cov8" title="1">{
@@ -4320,8 +4326,11 @@ func runSearch(
                 *output = o
                 return err
         }</span>
-        <span class="cov8" title="1">o := f.Format(shoDtos)
-        *output = o
+        <span class="cov8" title="1">o, err := f.Format(shoDtos)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">*output = o
 
         return nil</span>
 }
@@ -4503,8 +4512,11 @@ func runShow(
                 *output = o
                 return err
         }</span>
-        <span class="cov8" title="1">o := f.Format(ghoDtos)
-        *output = o
+        <span class="cov8" title="1">o, err := f.Format(ghoDtos)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">*output = o
 
         return nil</span>
 }
@@ -4745,8 +4757,11 @@ func runVersion(version string, output *string) error <span class="cov8" title="
                 *output = o
                 return err
         }</span>
-        <span class="cov8" title="1">o := f.Format(dto)
-        *output = o
+        <span class="cov8" title="1">o, err := f.Format(dto)
+        if err != nil </span><span class="cov8" title="1">{
+                return err
+        }</span>
+        <span class="cov8" title="1">*output = o
 
         return nil</span>
 }
@@ -5108,13 +5123,14 @@ import (
 
 // Formatter is an interface that formats the output of jrp cli.
 type Formatter interface {
-        Format(result interface{}) string
+        Format(result interface{}) (string, error)
 }
 
-// NewFormatter returns a new instance of the Formatter interface.
-func NewFormatter(
-        format string,
-) (Formatter, error) <span class="cov8" title="1">{
+// NewFormatterFunc is a function type that defines the signature for creating a new Formatter.
+type NewFormatterFunc func(format string) (Formatter, error)
+
+// NewFormatter is a function that returns a new instance of the Formatter interface.
+var NewFormatter NewFormatterFunc = func(format string) (Formatter, error) <span class="cov8" title="1">{
         var f Formatter
         switch format </span>{
         case "plain":<span class="cov8" title="1">
@@ -5169,7 +5185,7 @@ func NewPlainFormatter() *PlainFormatter <span class="cov8" title="1">{
 }</span>
 
 // Format formats the output of jrp cli.
-func (f *PlainFormatter) Format(result interface{}) string <span class="cov8" title="1">{
+func (f *PlainFormatter) Format(result interface{}) (string, error) <span class="cov8" title="1">{
         var formatted string
         switch v := result.(type) </span>{
         case *jrpApp.GetVersionUseCaseOutputDto:<span class="cov8" title="1">
@@ -5198,7 +5214,7 @@ func (f *PlainFormatter) Format(result interface{}) string <span class="cov8" ti
         default:<span class="cov8" title="1">
                 formatted = ""</span>
         }
-        <span class="cov8" title="1">return formatted</span>
+        <span class="cov8" title="1">return formatted, nil</span>
 }
 </pre>
 		
@@ -5237,7 +5253,7 @@ type tableData struct {
 }
 
 // Format formats the output of jrp cli.
-func (f *TableFormatter) Format(result interface{}) string <span class="cov8" title="1">{
+func (f *TableFormatter) Format(result interface{}) (string, error) <span class="cov8" title="1">{
         var data tableData
 
         switch v := result.(type) </span>{
@@ -5254,7 +5270,7 @@ func (f *TableFormatter) Format(result interface{}) string <span class="cov8" ti
                         return dto.ID, dto.Phrase, dto.Prefix, dto.Suffix, dto.IsFavorited, dto.CreatedAt, dto.UpdatedAt
                 }</span>)
         default:<span class="cov8" title="1">
-                return ""</span>
+                return "", nil</span>
         }
 
         <span class="cov8" title="1">return f.getTableString(data)</span>
@@ -5363,17 +5379,21 @@ func (f *TableFormatter) addTotalRow(rows [][]string) [][]string <span class="co
 }
 
 // getTableString returns a string representation of a table.
-func (f *TableFormatter) getTableString(data tableData) string <span class="cov8" title="1">{
+func (f *TableFormatter) getTableString(data tableData) (string, error) <span class="cov8" title="1">{
         if len(data.header) == 0 || len(data.rows) == 0 </span><span class="cov8" title="1">{
-                return ""
+                return "", nil
         }</span>
 
         <span class="cov8" title="1">tableString := &amp;strings.Builder{}
         table := t.GetNewDefaultTable(tableString)
-        table.SetHeader(data.header)
-        table.AppendBulk(data.rows)
-        table.Render()
-        return strings.TrimSuffix(tableString.String(), "\n")</span>
+        table.Header(data.header)
+        if err := table.Bulk(data.rows); err != nil </span><span class="cov8" title="1">{
+                return "", err
+        }</span>
+        <span class="cov8" title="1">if err := table.Render(); err != nil </span><span class="cov8" title="1">{
+                return "", err
+        }</span>
+        <span class="cov8" title="1">return strings.TrimSuffix(tableString.String(), "\n"), nil</span>
 }
 </pre>
 		
@@ -6044,6 +6064,7 @@ import (
         "io"
 
         "github.com/olekukonko/tablewriter"
+        "github.com/olekukonko/tablewriter/tw"
 
         "github.com/yanosea/jrp/v2/pkg/proxy"
 )
@@ -6067,19 +6088,20 @@ func NewTableWriterUtil(tableWriter proxy.TableWriter) TableWriterUtil <span cla
 
 // GetNewDefaultTable returns a new instance of the default table.
 func (t *tableWriterUtil) GetNewDefaultTable(writer io.Writer) proxy.Table <span class="cov8" title="1">{
-        table := t.tableWriter.NewTable(writer)
-        table.SetAutoWrapText(false)
-        table.SetAutoFormatHeaders(true)
-        table.SetHeaderAlignment(tablewriter.ALIGN_LEFT)
-        table.SetAlignment(tablewriter.ALIGN_LEFT)
-        table.SetCenterSeparator("")
-        table.SetColumnSeparator("")
-        table.SetRowSeparator("")
-        table.SetHeaderLine(false)
-        table.SetBorder(false)
-        table.SetTablePadding("\t")
-        table.SetNoWhiteSpace(true)
-        return table
+        return t.tableWriter.NewTable(writer,
+                tablewriter.WithRowAutoWrap(tw.WrapNone),
+                tablewriter.WithHeaderAutoFormat(tw.On),
+                tablewriter.WithHeaderAlignment(tw.AlignLeft),
+                tablewriter.WithRowAlignment(tw.AlignLeft),
+                tablewriter.WithPadding(tw.Padding{Left: "\t", Right: "", Overwrite: true}),
+                tablewriter.WithRendition(tw.Rendition{
+                        Borders: tw.BorderNone,
+                        Settings: tw.Settings{
+                                Lines:      tw.LinesNone,
+                                Separators: tw.SeparatorsNone,
+                        },
+                }),
+        )
 }</span>
 </pre>
 		

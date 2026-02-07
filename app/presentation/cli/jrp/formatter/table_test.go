@@ -1,14 +1,27 @@
 package formatter
 
 import (
+	"errors"
 	"reflect"
 	"testing"
 	"time"
 
 	jrpApp "github.com/yanosea/jrp/v2/app/application/jrp"
 
+	"github.com/yanosea/jrp/v2/pkg/proxy"
 	"github.com/yanosea/jrp/v2/pkg/utility"
+	"go.uber.org/mock/gomock"
 )
+
+// setTableWriterUtil sets the package-level table writer util variable.
+func setTableWriterUtil(tw utility.TableWriterUtil) {
+	t = tw
+}
+
+// getDefaultTableWriterUtil returns the default table writer util.
+func getDefaultTableWriterUtil() utility.TableWriterUtil {
+	return utility.NewTableWriterUtil(proxy.NewTableWriter())
+}
 
 func TestNewTableFormatter(t *testing.T) {
 	tests := []struct {
@@ -37,10 +50,11 @@ func TestTableFormatter_Format(t *testing.T) {
 		result interface{}
 	}
 	tests := []struct {
-		name string
-		f    *TableFormatter
-		args args
-		want string
+		name    string
+		f       *TableFormatter
+		args    args
+		want    string
+		wantErr bool
 	}{
 		{
 			name: "positive testing (result is []*jrpApp.GenerateJrpUseCaseOutputDto)",
@@ -67,7 +81,8 @@ func TestTableFormatter_Format(t *testing.T) {
 					},
 				},
 			},
-			want: "IDPHRASEPREFIXSUFFIXCREATEDAT1phrase1prefix1suffix12006-01-0215:04:052phrase2prefix2suffix22006-01-0215:04:05TOTAL:2jrps!",
+			want:    "IDPHRASEPREFIXSUFFIXCREATEDAT1phrase1prefix1suffix12006-01-0215:04:052phrase2prefix2suffix22006-01-0215:04:05TOTAL:2jrps!",
+			wantErr: false,
 		},
 		{
 			name: "positive testing (result is []*jrpApp.GetHistoryUseCaseOutputDto)",
@@ -94,7 +109,8 @@ func TestTableFormatter_Format(t *testing.T) {
 					},
 				},
 			},
-			want: "IDPHRASEPREFIXSUFFIXISFAVORITEDCREATEDATUPDATEDAT1phrase1prefix1suffix1○2006-01-0215:04:052006-01-0215:04:052phrase2prefix2suffix2○2006-01-0215:04:052006-01-0215:04:05TOTAL:2jrps!",
+			want:    "IDPHRASEPREFIXSUFFIXISFAVORITEDCREATEDATUPDATEDAT1phrase1prefix1suffix1○2006-01-0215:04:052006-01-0215:04:052phrase2prefix2suffix2○2006-01-0215:04:052006-01-0215:04:05TOTAL:2jrps!",
+			wantErr: false,
 		},
 		{
 			name: "positive testing (result is []*jrpApp.SearchHistoryUseCaseOutputDto)",
@@ -121,7 +137,8 @@ func TestTableFormatter_Format(t *testing.T) {
 					},
 				},
 			},
-			want: "IDPHRASEPREFIXSUFFIXISFAVORITEDCREATEDATUPDATEDAT1phrase1prefix1suffix1○2006-01-0215:04:052006-01-0215:04:052phrase2prefix2suffix2○2006-01-0215:04:052006-01-0215:04:05TOTAL:2jrps!",
+			want:    "IDPHRASEPREFIXSUFFIXISFAVORITEDCREATEDATUPDATEDAT1phrase1prefix1suffix1○2006-01-0215:04:052006-01-0215:04:052phrase2prefix2suffix2○2006-01-0215:04:052006-01-0215:04:05TOTAL:2jrps!",
+			wantErr: false,
 		},
 		{
 			name: "negative testing (result is invalid)",
@@ -129,14 +146,20 @@ func TestTableFormatter_Format(t *testing.T) {
 			args: args{
 				result: "invalid",
 			},
-			want: "",
+			want:    "",
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			f := &TableFormatter{}
-			if got := su.RemoveNewLines(su.RemoveSpaces(su.RemoveTabs(f.Format(tt.args.result)))); got != tt.want {
-				t.Errorf("TableFormatter.Format() = %v, want %v", got, tt.want)
+			got, err := f.Format(tt.args.result)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("TableFormatter.Format() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if su.RemoveNewLines(su.RemoveSpaces(su.RemoveTabs(got))) != tt.want {
+				t.Errorf("TableFormatter.Format() = %v, want %v", su.RemoveNewLines(su.RemoveSpaces(su.RemoveTabs(got))), tt.want)
 			}
 		})
 	}
@@ -386,10 +409,11 @@ func TestTableFormatter_getTableString(t *testing.T) {
 		data tableData
 	}
 	tests := []struct {
-		name string
-		f    *TableFormatter
-		args args
-		want string
+		name    string
+		f       *TableFormatter
+		args    args
+		want    string
+		wantErr bool
 	}{
 		{
 			name: "positive testing (data is empty)",
@@ -397,7 +421,8 @@ func TestTableFormatter_getTableString(t *testing.T) {
 			args: args{
 				data: tableData{},
 			},
-			want: "",
+			want:    "",
+			wantErr: false,
 		},
 		{
 			name: "positive testing (data.Header is empty, data.Rows is empty)",
@@ -408,7 +433,8 @@ func TestTableFormatter_getTableString(t *testing.T) {
 					rows:   [][]string{},
 				},
 			},
-			want: "",
+			want:    "",
+			wantErr: false,
 		},
 		{
 			name: "positive testing (data.Header is not empty, data.Rows is empty)",
@@ -419,7 +445,8 @@ func TestTableFormatter_getTableString(t *testing.T) {
 					rows:   [][]string{},
 				},
 			},
-			want: "",
+			want:    "",
+			wantErr: false,
 		},
 		{
 			name: "positive testing (data.Header is empty, data.Rows is not empty)",
@@ -435,7 +462,8 @@ func TestTableFormatter_getTableString(t *testing.T) {
 					},
 				},
 			},
-			want: "",
+			want:    "",
+			wantErr: false,
 		},
 		{
 			name: "positive testing (data.Header is not empty, data.Rows is not empty)",
@@ -451,15 +479,80 @@ func TestTableFormatter_getTableString(t *testing.T) {
 					},
 				},
 			},
-			want: "IDPHRASEPREFIXSUFFIXCREATEDAT1phrase1prefix1suffix12006-01-0215:04:052phrase2prefix2suffix22006-01-0215:04:05TOTAL:2jrps!",
+			want:    "IDPHRASEPREFIXSUFFIXCREATEDAT1phrase1prefix1suffix12006-01-0215:04:052phrase2prefix2suffix22006-01-0215:04:05TOTAL:2jrps!",
+			wantErr: false,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			f := &TableFormatter{}
-			if got := su.RemoveNewLines(su.RemoveSpaces(su.RemoveTabs(f.getTableString(tt.args.data)))); got != tt.want {
-				t.Errorf("TableFormatter.getTableString() = %v, want %v", got, tt.want)
+			got, err := f.getTableString(tt.args.data)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("TableFormatter.getTableString() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if su.RemoveNewLines(su.RemoveSpaces(su.RemoveTabs(got))) != tt.want {
+				t.Errorf("TableFormatter.getTableString() = %v, want %v", su.RemoveNewLines(su.RemoveSpaces(su.RemoveTabs(got))), tt.want)
 			}
 		})
+	}
+}
+
+func TestTableFormatter_getTableString_bulkError(t *testing.T) {
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	origT := getDefaultTableWriterUtil()
+	defer setTableWriterUtil(origT)
+
+	mockTable := proxy.NewMockTable(mockCtrl)
+	mockTable.EXPECT().Header(gomock.Any())
+	mockTable.EXPECT().Bulk(gomock.Any()).Return(errors.New("bulk error"))
+
+	mockTwu := utility.NewMockTableWriterUtil(mockCtrl)
+	mockTwu.EXPECT().GetNewDefaultTable(gomock.Any()).Return(mockTable)
+
+	setTableWriterUtil(mockTwu)
+
+	f := &TableFormatter{}
+	got, err := f.getTableString(tableData{
+		header: []string{"id"},
+		rows:   [][]string{{"1"}},
+	})
+	if err == nil {
+		t.Errorf("TableFormatter.getTableString() error = nil, wantErr true")
+	}
+	if got != "" {
+		t.Errorf("TableFormatter.getTableString() = %v, want empty", got)
+	}
+}
+
+func TestTableFormatter_getTableString_renderError(t *testing.T) {
+	mockCtrl := gomock.NewController(t)
+	defer mockCtrl.Finish()
+
+	origT := getDefaultTableWriterUtil()
+	defer setTableWriterUtil(origT)
+
+	mockTable := proxy.NewMockTable(mockCtrl)
+	mockTable.EXPECT().Header(gomock.Any())
+	mockTable.EXPECT().Bulk(gomock.Any()).Return(nil)
+	mockTable.EXPECT().Render().Return(errors.New("render error"))
+
+	mockTwu := utility.NewMockTableWriterUtil(mockCtrl)
+	mockTwu.EXPECT().GetNewDefaultTable(gomock.Any()).Return(mockTable)
+
+	setTableWriterUtil(mockTwu)
+
+	f := &TableFormatter{}
+	got, err := f.getTableString(tableData{
+		header: []string{"id"},
+		rows:   [][]string{{"1"}},
+	})
+	if err == nil {
+		t.Errorf("TableFormatter.getTableString() error = nil, wantErr true")
+	}
+	if got != "" {
+		t.Errorf("TableFormatter.getTableString() = %v, want empty", got)
 	}
 }
