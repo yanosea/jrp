@@ -33,7 +33,6 @@ func (t *tableWriterUtil) GetNewDefaultTable(writer io.Writer) proxy.Table {
 		tablewriter.WithHeaderAutoFormat(tw.On),
 		tablewriter.WithHeaderAlignment(tw.AlignLeft),
 		tablewriter.WithRowAlignment(tw.AlignLeft),
-		tablewriter.WithPadding(tw.Padding{Left: "\t", Right: "", Overwrite: true}),
 		tablewriter.WithRendition(tw.Rendition{
 			Borders: tw.BorderNone,
 			Settings: tw.Settings{
