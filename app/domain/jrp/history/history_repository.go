@@ -22,4 +22,3 @@ type HistoryRepository interface {
 	UpdateIsFavoritedByIdIn(ctx context.Context, isFavorited int, ids []int) (int, error)
 	UpdateIsFavoritedByIsFavoritedIs(ctx context.Context, isFavorited int, isFavoritedIs int) (int, error)
 }
-
