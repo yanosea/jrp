@@ -12,7 +12,7 @@ require (
 	github.com/manifoldco/promptui v0.9.0
 	github.com/olekukonko/tablewriter v1.1.3
 	github.com/spf13/cobra v1.10.2
-	github.com/spf13/pflag v1.0.9
+	github.com/spf13/pflag v1.0.10
 	github.com/swaggo/echo-swagger v1.4.1
 	github.com/swaggo/swag v1.16.6
 	go.uber.org/mock v0.6.0
