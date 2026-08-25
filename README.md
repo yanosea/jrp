@@ -280,7 +280,7 @@ Pull the latest changes into your local repository.
 ##### 🐭 Using go
 
 ```sh
-rm $GOPATH/bin/jrp
+rm $GOPATH/bin/jrp-server
 # maybe you have to execute with sudo
 rm -fr $GOPATH/pkg/mod/github.com/yanosea/jrp*
 ```
